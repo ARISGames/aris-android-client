@@ -1,0 +1,17 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Base.Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="ArisClassic" parent="AppTheme">
+        <item name="android:icon">@drawable/logo_icon</item>
+        <item name="android:logo">@drawable/logo_icon</item>
+        <item name="android:colorBackground">#ffffff</item>
+        <item name="android:label">@string/app_name_aris_classic</item>
+
+    </style>
+
+    <string name="app_name_aris_classic">Aris Classic</string>
+</resources>
