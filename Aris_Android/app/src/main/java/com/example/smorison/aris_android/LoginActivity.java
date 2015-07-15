@@ -3,11 +3,10 @@ package com.example.smorison.aris_android;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
+import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -17,15 +16,20 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -62,13 +66,13 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 
-		tabBar = getSupportActionBar();
 
 		// SEM
-		this.setTitle(getResources().getString(R.string.app_name_aris_classic));
-		tabBar.setLogo(R.drawable.logo_text_nav);
-		tabBar.setDisplayUseLogoEnabled(true);
-		tabBar.setDisplayShowHomeEnabled(true);
+
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+		toolbar.setLogo(R.drawable.logo_text_nav);
+//		getSupportActionBar().setCustomView(); // todo: create view that properly centers ARIS logo.
 
 
 		// Set up the login form.
@@ -87,7 +91,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 			}
 		});
 
-		Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+		ImageButton mEmailSignInButton = (ImageButton) findViewById(R.id.imgbtn_sign_in);
 		mEmailSignInButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -97,7 +101,25 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
 		mLoginFormView = findViewById(R.id.login_form);
 		mProgressView = findViewById(R.id.login_progress);
+
 	}
+
+//	@Override // attempt to hide the qr code background when the keyboard is up.
+//	public boolean onTouchEvent(MotionEvent event) {
+//		// Hide qr thingie when entering text fields.
+//		ImageView qrImage  = (ImageView) findViewById(R.id.imageView);
+//		InputMethodManager imm = (InputMethodManager)
+//				this.getSystemService(Context.INPUT_METHOD_SERVICE);
+//
+//		if (imm.isAcceptingText()) {
+//			qrImage.setVisibility(View.INVISIBLE);
+//		} else {
+//			qrImage.setVisibility(View.VISIBLE);
+//		}
+//
+//		return true;
+//	}
+
 
 	private void populateAutoComplete() {
 		getLoaderManager().initLoader(0, null, this);
@@ -257,6 +279,18 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 						android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
 		mEmailView.setAdapter(adapter);
+	}
+
+	public void createAccountClicked(View v) {
+		// start CreateAccountActivity
+		Intent i = new Intent(LoginActivity.this, CreateAccountActivity.class);
+		startActivity(i);
+	}
+
+	public void forgotPassClicked(View v) {
+		// start ForgotPasswordActivity
+		Intent i = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+		startActivity(i);
 	}
 
 	/**
