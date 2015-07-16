@@ -104,35 +104,5 @@
         </LinearLayout>
     </ScrollView>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/create_account"
-        android:id="@+id/tv_create_account"
-        android:linksClickable="true"
-        android:onClick="createAccountClicked"
-        android:textColor="#ff0e3e7e"
-        android:focusableInTouchMode="false"
-        android:clickable="true"
-        android:layout_above="@+id/tv_forgot_passwd"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/forgot_password"
-        android:id="@+id/tv_forgot_passwd"
-        android:linksClickable="true"
-        android:onClick="forgotPassClicked"
-        android:textColor="#ff0e3e7e"
-        android:clickable="true"
-        android:layout_alignBottom="@+id/login_form"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:layout_alignParentBottom="false"/>
-
 </RelativeLayout>
 

@@ -3,6 +3,7 @@ package edu.uoregon.casls.aris_android;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.ActivityOptions;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -37,6 +38,7 @@ import java.util.List;
 public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<Cursor> {
 
 	public android.support.v7.app.ActionBar tabBar;
+	public Bundle transitionAnimationBndl;
 
 	/**
 	 * A dummy authentication store containing known user names and passwords.
@@ -56,6 +58,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 	private View mProgressView;
 	private View mLoginFormView;
 
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -68,6 +71,9 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 		setSupportActionBar(toolbar);
 		toolbar.setLogo(R.drawable.logo_text_nav);
 //		getSupportActionBar().setCustomView(); // todo: create view that properly centers ARIS logo.
+//		overridePendingTransition(R.animator.slide_in_from_left, R.animator.slide_out_to_left);
+		transitionAnimationBndl = ActivityOptions.makeCustomAnimation(getApplicationContext(),
+			R.animator.slide_in_from_right, R.animator.slide_out_to_right).toBundle();
 
 
 		// Set up the login form.
@@ -97,6 +103,13 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 		mLoginFormView = findViewById(R.id.login_form);
 		mProgressView = findViewById(R.id.login_progress);
 
+	}
+
+	@Override
+	public void onResume() {
+
+//		overridePendingTransition(R.animator.slide_in_from_left, 0);
+		super.onResume();
 	}
 
 //	@Override // attempt to hide the qr code background when the keyboard is up.
@@ -276,16 +289,19 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 		mEmailView.setAdapter(adapter);
 	}
 
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public void createAccountClicked(View v) {
 		// start CreateAccountActivity
+
 		Intent i = new Intent(LoginActivity.this, CreateAccountActivity.class);
-		startActivity(i);
+		startActivity(i, transitionAnimationBndl);
 	}
 
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public void forgotPassClicked(View v) {
 		// start ForgotPasswordActivity
 		Intent i = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-		startActivity(i);
+		startActivity(i, transitionAnimationBndl);
 	}
 
 	/**

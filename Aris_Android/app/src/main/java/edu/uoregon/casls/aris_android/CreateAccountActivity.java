@@ -2,7 +2,6 @@ package edu.uoregon.casls.aris_android;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 
@@ -13,12 +12,16 @@ public class CreateAccountActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_account);
 
+		// built in toolbar - painfully difficult to customize, so using custom "titlebar.xml for this now.
+		// Todo: saving this code for now just in case I need to use it for something later. delete if unused.
 //		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //		setSupportActionBar(toolbar);
 //		toolbar.setLogo(R.drawable.logo_text_nav);
 //		getSupportActionBar().setDisplayShowTitleEnabled(false);
 //		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 //		getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+//		overridePendingTransition(R.animator.slide_in_from_right, R.animator.slide_out_to_left);
 	}
 
 //	@Override
@@ -45,7 +48,18 @@ public class CreateAccountActivity extends ActionBarActivity {
 
 	public void backButtonClick(View v) {
 		// kill activity - return to login
-		finish();
+		onBackPressed();
 	}
 
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+	}
+
+	@Override
+	public void finish() {
+		super.finish();
+		// tell transitioning activities how to slide. eg: overridePendingTransition(howThisMovesOut, howNewMovesIn) -sem
+		overridePendingTransition(R.animator.slide_out_to_left, R.animator.slide_in_from_left);
+	}
 }
