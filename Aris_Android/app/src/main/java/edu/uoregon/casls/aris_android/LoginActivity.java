@@ -71,9 +71,11 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 		setSupportActionBar(toolbar);
 		toolbar.setLogo(R.drawable.logo_text_nav);
 //		getSupportActionBar().setCustomView(); // todo: create view that properly centers ARIS logo.
-//		overridePendingTransition(R.animator.slide_in_from_left, R.animator.slide_out_to_left);
+//		overridePendingTransition(R.animator.slide_in_from_right, R.animator.slide_out_to_right);
+
+		// tell transitioning activities how to slide. eg: makeCustomAnimation(ctx, howNewMovesIn, howThisMovesOut) -sem
 		transitionAnimationBndl = ActivityOptions.makeCustomAnimation(getApplicationContext(),
-			R.animator.slide_in_from_right, R.animator.slide_out_to_right).toBundle();
+			R.animator.slide_in_from_right, R.animator.slide_out_to_left).toBundle();
 
 
 		// Set up the login form.
