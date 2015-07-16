@@ -5,19 +5,21 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,9 +29,19 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.apache.http.Header;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.RequestHandle;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 
 /**
@@ -37,8 +49,13 @@ import java.util.List;
  */
 public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<Cursor> {
 
+	private static final String HTTP_CLIENT_LOGIN_REQ_API = "v2.users.logIn";
+	private final static String TAG_SERVER_ERROR = "server_error";
+	private final static String TAG_ERROR = "error";
+
 	public android.support.v7.app.ActionBar tabBar;
-	public Bundle transitionAnimationBndl;
+	public Bundle mTransitionAnimationBndl;
+	private static SharedPreferences appPrefs;
 
 	/**
 	 * A dummy authentication store containing known user names and passwords.
@@ -50,13 +67,16 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
-	private UserLoginTask mAuthTask = null;
+//	private UserLoginTask mAuthTask = null;
 
 	// UI references.
-	private AutoCompleteTextView mEmailView;
-	private EditText mPasswordView;
+	private AutoCompleteTextView mAcTvEmail;
+	private EditText mEtUsername;
+	private EditText mEtPassword;
+	private View mLlBottomPageLinksView;
 	private View mProgressView;
 	private View mLoginFormView;
+	private int mLoginId = 0;
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	@Override
@@ -74,19 +94,22 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 //		overridePendingTransition(R.animator.slide_in_from_right, R.animator.slide_out_to_right);
 
 		// tell transitioning activities how to slide. eg: makeCustomAnimation(ctx, howNewMovesIn, howThisMovesOut) -sem
-		transitionAnimationBndl = ActivityOptions.makeCustomAnimation(getApplicationContext(),
+		mTransitionAnimationBndl = ActivityOptions.makeCustomAnimation(getApplicationContext(),
 			R.animator.slide_in_from_right, R.animator.slide_out_to_left).toBundle();
 
 
 		// Set up the login form.
-		mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-		populateAutoComplete();
+		// Not currently using email as login. this is for future capability expansion.
+//		mAcTvEmail = (AutoCompleteTextView) findViewById(R.id.email);
+//		populateAutoComplete();
 
-		mPasswordView = (EditText) findViewById(R.id.password);
-		mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+		mEtUsername = (EditText) findViewById(R.id.et_username);
+
+		mEtPassword = (EditText) findViewById(R.id.password);
+		mEtPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 			@Override
-			public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-				if (id == R.id.login || id == EditorInfo.IME_NULL) {
+			public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+				if (actionId == EditorInfo.IME_ACTION_DONE) {
 					attemptLogin();
 					return true;
 				}
@@ -102,15 +125,14 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 			}
 		});
 
-		mLoginFormView = findViewById(R.id.login_form);
+		mLlBottomPageLinksView = findViewById(R.id.ll_bottom_margin_links);
+		mLoginFormView = findViewById(R.id.scrollvw_for_login_form);
 		mProgressView = findViewById(R.id.login_progress);
 
 	}
 
 	@Override
 	public void onResume() {
-
-//		overridePendingTransition(R.animator.slide_in_from_left, 0);
 		super.onResume();
 	}
 
@@ -135,46 +157,59 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 		getLoaderManager().initLoader(0, null, this);
 	}
 
-
 	/**
 	 * Attempts to sign in or register the account specified by the login form.
 	 * If there are form errors (invalid email, missing fields, etc.), the
 	 * errors are presented and no actual login attempt is made.
 	 */
 	public void attemptLogin() {
-		if (mAuthTask != null) {
-			return;
-		}
+//		if (mAuthTask != null) {
+//			return;
+//		}
 
 		// Reset errors.
-		mEmailView.setError(null);
-		mPasswordView.setError(null);
+		mEtUsername.setError(null);
+//		mAcTvEmail.setError(null);
+		mEtPassword.setError(null);
 
 		// Store values at the time of the login attempt.
-		String email = mEmailView.getText().toString();
-		String password = mPasswordView.getText().toString();
+//		String email = mAcTvEmail.getText().toString();
+		String username = mEtUsername.getText().toString();
+		String password = mEtPassword.getText().toString();
 
 		boolean cancel = false;
 		View focusView = null;
 
-		// Check for a valid password, if the user entered one.
-		if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-			mPasswordView.setError(getString(R.string.error_invalid_password));
-			focusView = mPasswordView;
+		// Check for a valid username.
+		if (TextUtils.isEmpty(username)) {
+			mEtUsername.setError(getString(R.string.error_username_required));
+			focusView = mEtUsername;
+			cancel = true;
+		}
+		else if (!isUsernameValid(username)) {
+			mEtUsername.setError(getString(R.string.error_field_too_short));
+			focusView = mEtUsername;
 			cancel = true;
 		}
 
-		// Check for a valid email address.
-		if (TextUtils.isEmpty(email)) {
-			mEmailView.setError(getString(R.string.error_field_required));
-			focusView = mEmailView;
+		// Check for a valid password, if the user entered one.
+		if (TextUtils.isEmpty(password) /*&& !isPasswordValid(password)*/) {
+			mEtPassword.setError(getString(R.string.error_password_required));
+			focusView = mEtPassword;
 			cancel = true;
 		}
-		else if (!isEmailValid(email)) {
-			mEmailView.setError(getString(R.string.error_invalid_email));
-			focusView = mEmailView;
-			cancel = true;
-		}
+
+		// Check for a valid email address. -- email disabled
+//		if (TextUtils.isEmpty(email)) {
+//			mAcTvEmail.setError(getString(R.string.error_field_required));
+//			focusView = mAcTvEmail;
+//			cancel = true;
+//		}
+//		else if (!isEmailValid(email)) {
+//			mAcTvEmail.setError(getString(R.string.error_invalid_email));
+//			focusView = mAcTvEmail;
+//			cancel = true;
+//		}
 
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
@@ -185,18 +220,154 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
 			showProgress(true);
-			mAuthTask = new UserLoginTask(email, password);
-			mAuthTask.execute((Void) null);
+//			mAuthTask = new UserLoginTask(username, password);
+//			mAuthTask.execute((Void) null);
+			pollServer();
+		}
+	}
+
+	private void pollServer() {
+		RequestParams rqParams = new RequestParams();
+
+		final Context context = this;
+
+//		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		rqParams.put("request", HTTP_CLIENT_LOGIN_REQ_API);
+//		rqParams.put("reqCode", Integer.toString(HTTP_CLIENT_LOGIN_REQ_CODE));
+		rqParams.put("username", mEtUsername.getText().toString());
+		rqParams.put("password", mEtPassword.getText().toString());
+		rqParams.put("permission", "read_write");
+		rqParams.put("device_id", Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID)); // android call to get a device id. gets reset on device wipe.
+
+		if (AppUtils.isNetworkAvailable(getApplicationContext())) {
+			AsyncHttpClient client = new AsyncHttpClient();
+			RequestHandle rqHandle = client.post(AppUtils.SERVER_URL_MOBILE, rqParams, new TextHttpResponseHandler() {
+				@Override
+				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+//					if (progressDialog != null) {
+//						progressDialog.dismiss();
+//					}
+					showProgress(false);
+					processHttpResponse(HTTP_CLIENT_LOGIN_REQ_API, TAG_SERVER_ERROR, "{\"error\":\"error\"}");
+				}
+
+				@Override
+				public void onSuccess(int statusCode, Header[] headers, String responseString) {
+					processHttpResponse(HTTP_CLIENT_LOGIN_REQ_API, "success", responseString);
+				}
+
+				@Override
+				public void onStart() {
+//					progressDialog = new ProgressDialogShower(context, "Checking with Server...", "Please wait.", false, true);
+					showProgress(true);
+					super.onStart();
+				}
+
+				@Override
+				public void onFinish() {
+//					if (progressDialog != null) {
+//						progressDialog.dismiss();
+//					}
+					showProgress(false);
+					super.onFinish();
+				}
+			});
+		}
+		else {
+			Toast t = Toast.makeText(getApplicationContext(), "You are not connected to the internet currently. Please try again later.",
+					Toast.LENGTH_SHORT);
+			t.setGravity(Gravity.CENTER, 0, 0);
+			t.show();
+		}
+	}
+
+	protected void processHttpResponse(String callingReq, String returnStatus, String jsonResult) {
+
+		if (returnStatus.contentEquals(TAG_SERVER_ERROR)) {
+			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
+					Toast.LENGTH_SHORT);
+			t.setGravity(Gravity.CENTER, 0, 0);
+			t.show();
+		}
+		else if (callingReq == HTTP_CLIENT_LOGIN_REQ_API) {
+			// get result
+			//decode json and pull out result success, which in this case is a user ID greater than 0.
+			JSONObject jsonObject = null;
+			try {
+				jsonObject = new JSONObject(jsonResult);
+				if (jsonObject.has(TAG_SERVER_ERROR)) {
+					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
+							Toast.LENGTH_SHORT);
+					t.setGravity(Gravity.CENTER, 0, 0);
+					t.show();
+				}
+				else if (jsonObject.has(TAG_ERROR)) {
+					mEtPassword.setText("");
+					Toast t = Toast.makeText(getApplicationContext(), "We were unable to log you in to LFO To Go. Reason: " + jsonObject.getString("error"),
+							Toast.LENGTH_SHORT);
+					t.setGravity(Gravity.CENTER, 0, 0);
+					t.show();
+
+				}
+				else if (jsonObject.has("loginid")) {
+					mLoginId = jsonObject.getInt("loginid");
+					if (mLoginId > 0) { // Store mLoginId and PW and send them to the home screen/activity
+						SharedPreferences.Editor spEditor = appPrefs.edit();
+						spEditor.putInt("loginid", mLoginId);
+						spEditor.putString("username", mEtUsername.getText().toString());
+						spEditor.putString("password", mEtPassword.getText().toString());
+						spEditor.commit();
+
+						// go to home screen. (aka: passport)
+//						Intent homeIntent = new Intent(LoginActivity.this, HomeActivity.class);
+//						// remove this login activity from the stack when proceeding to home activity (so they don't use back button)
+//						homeIntent.putExtra("username", edTxtUsername.getText().toString());
+//						homeIntent.putExtra("loginid", mLoginId);
+//						homeIntent.putExtra("password", edTxtPassword.getText().toString());
+//						homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//						startActivity(homeIntent);
+						Toast t = Toast.makeText(getApplicationContext(), "Successful Login Temp Message.",
+								Toast.LENGTH_SHORT);
+
+
+					}
+				}
+				else { // Something unexpected happened. Bad server URL??
+					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again later.",
+							Toast.LENGTH_SHORT);
+					t.setGravity(Gravity.CENTER, 0, 0);
+					t.show();
+				}
+
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			// resultCode was NOT OK
+			Toast t = Toast.makeText(getApplicationContext(), "There was a problem logging in to the server. Make sure you are connected to the internet.",
+					Toast.LENGTH_SHORT);
+			t.setGravity(Gravity.CENTER, 0, 0);
+			t.show();
 		}
 	}
 
 	private boolean isEmailValid(String email) {
-		//TODO: Replace this with your own logic
-		return email.contains("@");
+		if (email == null) {
+			return false;
+		}
+		else {
+			return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+		}
+	}
+
+	private boolean isUsernameValid(String username) {
+		//TODO: Replace with more specific logic
+		return username.length() > 3;
 	}
 
 	private boolean isPasswordValid(String password) {
-		//TODO: Replace this with your own logic
+		//TODO: Replace with more specific logic
 		return password.length() > 4;
 	}
 
@@ -219,6 +390,14 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 					mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
 				}
 			});
+			mLlBottomPageLinksView.setVisibility(show ? View.GONE : View.VISIBLE);
+			mLlBottomPageLinksView.animate().setDuration(shortAnimTime).alpha(
+					show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					mLlBottomPageLinksView.setVisibility(show ? View.GONE : View.VISIBLE);
+				}
+			});
 
 			mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
 			mProgressView.animate().setDuration(shortAnimTime).alpha(
@@ -234,6 +413,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 			// and hide the relevant UI components.
 			mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
 			mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+			mLlBottomPageLinksView.setVisibility(show ? View.GONE : View.VISIBLE);
 		}
 	}
 
@@ -288,7 +468,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 				new ArrayAdapter<String>(LoginActivity.this,
 						android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
-		mEmailView.setAdapter(adapter);
+		mAcTvEmail.setAdapter(adapter);
 	}
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -296,72 +476,80 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 		// start CreateAccountActivity
 
 		Intent i = new Intent(LoginActivity.this, CreateAccountActivity.class);
-		startActivity(i, transitionAnimationBndl);
+		startActivity(i, mTransitionAnimationBndl);
 	}
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public void forgotPassClicked(View v) {
 		// start ForgotPasswordActivity
 		Intent i = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-		startActivity(i, transitionAnimationBndl);
+		startActivity(i, mTransitionAnimationBndl);
 	}
 
-	/**
-	 * Represents an asynchronous login/registration task used to authenticate
-	 * the user.
-	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-		private final String mEmail;
-		private final String mPassword;
-
-		UserLoginTask(String email, String password) {
-			mEmail = email;
-			mPassword = password;
-		}
-
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
-
-			try {
-				// Simulate network access.
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				return false;
-			}
-
-			for (String credential : DUMMY_CREDENTIALS) {
-				String[] pieces = credential.split(":");
-				if (pieces[0].equals(mEmail)) {
-					// Account exists, return true if the password matches.
-					return pieces[1].equals(mPassword);
-				}
-			}
-
-			// TODO: register the new account here.
-			return true;
-		}
-
-		@Override
-		protected void onPostExecute(final Boolean success) {
-			mAuthTask = null;
-			showProgress(false);
-
-			if (success) {
-				finish();
-			}
-			else {
-				mPasswordView.setError(getString(R.string.error_incorrect_password));
-				mPasswordView.requestFocus();
-			}
-		}
-
-		@Override
-		protected void onCancelled() {
-			mAuthTask = null;
-			showProgress(false);
-		}
+	public void loginButtonClick(View v) {
+		// user has clicked the login button
+		attemptLogin();
 	}
+
+//	/**
+//	 * Represents an asynchronous login/registration task used to authenticate
+//	 * the user.
+//	 */
+//	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+//
+//		private final String mUsername;
+//		private final String mPassword;
+//
+//		UserLoginTask(String username, String password) {
+//			mUsername = username;
+//			mPassword = password;
+//		}
+//
+//		@Override
+//		protected Boolean doInBackground(Void... params) {
+//			// TODO: attempt authentication against a network service.
+//
+//			try {
+//				// Simulate network access.
+//				Thread.sleep(2000);
+//			} catch (InterruptedException e) {
+//				return false;
+//			}
+//
+//			for (String credential : DUMMY_CREDENTIALS) {
+//				String[] pieces = credential.split(":");
+//				if (pieces[0].equals(mUsername)) {
+//					// Account exists, return true if the password matches.
+//					return pieces[1].equals(mPassword);
+//				}
+//			}
+//
+//			// TODO: register the new account here.
+//			return true;
+//		}
+//
+//		@Override
+//		protected void onPostExecute(final Boolean success) {
+//			mAuthTask = null;
+//			showProgress(false);
+//
+//			if (success) {
+//				// todo: success should take them into the app flow.
+//				Toast.makeText(LoginActivity.this, "Pretend login successful", Toast.LENGTH_SHORT).show();
+//
+////				finish();
+//			}
+//			else {
+//				LoginActivity.this.mEtPassword.setError(getString(R.string.error_incorrect_password));
+//				LoginActivity.this.mEtPassword.requestFocus();
+//			}
+//		}
+//
+//		@Override
+//		protected void onCancelled() {
+//			mAuthTask = null;
+//			showProgress(false);
+//		}
+//	}
 }
 

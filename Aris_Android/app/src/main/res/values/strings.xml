@@ -21,4 +21,10 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
+    <string name="username_prompt">ARIS_ID</string>
+    <string name="error_field_too_short">Must be at least 4 characters long</string>
+    <string name="error_password_required">Please enter a password</string>
+    <string name="error_username_required">Please enter a username</string>
+    <string name="prompt_email_to_reset">Email to Reset</string>
+    <string name="password_reset_message">An email will be sent to the above address with instructions on how to reset your password.</string>
 </resources>

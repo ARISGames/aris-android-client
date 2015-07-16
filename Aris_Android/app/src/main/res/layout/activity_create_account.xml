@@ -34,7 +34,7 @@
         android:layout_centerInParent="true"/>
 
     <ScrollView
-        android:id="@+id/login_form"
+        android:id="@+id/scrollvw_for_login_form"
         android:layout_below="@id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="488dp"
@@ -42,7 +42,7 @@
         android:fillViewport="false">
 
         <LinearLayout
-            android:id="@+id/email_login_form"
+            android:id="@+id/login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">

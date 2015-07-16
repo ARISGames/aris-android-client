@@ -37,26 +37,29 @@
         android:layout_centerInParent="true"/>
 
     <ScrollView
-        android:id="@+id/login_form"
+        android:id="@+id/scrollvw_for_login_form"
         android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="488dp"
         android:backgroundTint="#fffefefe">
 
         <LinearLayout
-            android:id="@+id/email_login_form"
+            android:id="@+id/login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <AutoCompleteTextView
-                android:id="@+id/email"
+            <EditText
+                android:id="@+id/et_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/prompt_email"
-                android:inputType="textEmailAddress"
+                android:hint="@string/username_prompt"
+                android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true"
+                android:imeActionId="@integer/loginImeActionId"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
                 android:textColorHint="#ffbdbdbd"
                 android:layout_marginTop="12dp"
                 android:backgroundTint="#ffbdbdbd"/>
@@ -85,6 +88,7 @@
                 android:src="@drawable/arrow_forward_2x"
                 android:layout_gravity="right"
                 android:contentDescription="@string/sign_in_button"
+                android:onClick="loginButtonClick"
                 android:background="#ffececec"/>
 
             <ImageView
@@ -101,35 +105,40 @@
         </LinearLayout>
     </ScrollView>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/create_account"
-        android:id="@+id/tv_create_account"
-        android:linksClickable="true"
-        android:onClick="createAccountClicked"
-        android:textColor="#ff0e3e7e"
-        android:focusableInTouchMode="false"
-        android:clickable="true"
-        android:layout_above="@+id/tv_forgot_passwd"
+        android:layout_alignParentBottom="true"
+        android:layout_alignBottom="@+id/scrollvw_for_login_form"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"/>
+        android:id="@+id/ll_bottom_margin_links">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/forgot_password"
-        android:id="@+id/tv_forgot_passwd"
-        android:linksClickable="true"
-        android:onClick="forgotPassClicked"
-        android:textColor="#ff0e3e7e"
-        android:clickable="true"
-        android:layout_alignBottom="@+id/login_form"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:layout_alignParentBottom="false"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:onClick="createAccountClicked"
+            android:text="@string/create_account"
+            android:clickable="true"
+            android:layout_marginBottom="8dp"
+            android:id="@+id/tv_create_account"
+            android:textColor="#ff0e3e7e"
+            android:layout_gravity="center_horizontal"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/forgot_password"
+            android:clickable="true"
+            android:onClick="forgotPassClicked"
+            android:textColor="#ff0e3e7e"
+            android:id="@+id/tv_forgot_passwd"
+            android:layout_marginBottom="8dp"
+
+            android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
 
 </RelativeLayout>
 
