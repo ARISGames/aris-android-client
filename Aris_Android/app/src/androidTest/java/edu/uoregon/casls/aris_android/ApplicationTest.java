@@ -1,4 +1,4 @@
-package com.example.smorison.aris_android;
+package edu.uoregon.casls.aris_android;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
