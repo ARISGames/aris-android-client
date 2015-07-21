@@ -19,6 +19,7 @@ import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -32,13 +33,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.StringEntity;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -51,6 +57,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
 	private static final String HTTP_CLIENT_LOGIN_REQ_API = "v2.users.logIn";
 	private final static String TAG_SERVER_ERROR = "server_error";
+	private final static String TAG_SERVER_SUCCESS = "success";
 	private final static String TAG_ERROR = "error";
 
 	public android.support.v7.app.ActionBar tabBar;
@@ -76,7 +83,11 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 	private View mLlBottomPageLinksView;
 	private View mProgressView;
 	private View mLoginFormView;
-	private int mLoginId = 0;
+	private String mUserId;
+	private String mDisplayName;
+	private String mMediaId;
+	private String mReadWriteKey;
+
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	@Override
@@ -134,6 +145,15 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 	@Override
 	public void onResume() {
 		super.onResume();
+		if (AppUtils.DEBUG_ON) { // preset the input fields to save time during testing.
+			mEtUsername.setText("scott");
+			mEtPassword.setText("123123");
+		}
+		else {
+			mEtUsername.setText("");
+			mEtPassword.setText("");
+		}
+
 	}
 
 //	@Override // attempt to hide the qr code background when the keyboard is up.
@@ -224,54 +244,100 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 //			mAuthTask.execute((Void) null);
 			pollServer();
 		}
+
 	}
+
+	/* How to pos json data list
+	        JSONObject jsonParams = new JSONObject();
+        jsonParams.put("notes", "Test api support");
+        StringEntity entity = new StringEntity(jsonParams.toString());
+        client.post(context, restApiUrl, entity, "application/json",
+                responseHandler);
+	 */
 
 	private void pollServer() {
 		RequestParams rqParams = new RequestParams();
+//		JSONObject jsonParams = new JSONObject();
 
 		final Context context = this;
+		String request_url = AppUtils.SERVER_URL_MOBILE + "/v2.users.logIn";
 
-//		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		rqParams.put("request", HTTP_CLIENT_LOGIN_REQ_API);
-//		rqParams.put("reqCode", Integer.toString(HTTP_CLIENT_LOGIN_REQ_CODE));
-		rqParams.put("username", mEtUsername.getText().toString());
-		rqParams.put("password", mEtPassword.getText().toString());
-		rqParams.put("permission", "read_write");
-		rqParams.put("device_id", Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID)); // android call to get a device id. gets reset on device wipe.
 
+		JSONObject jsonParams;
+		jsonParams = new JSONObject();
+		StringEntity entity;
+		entity = null;
+
+		try {
+			jsonParams.put("user_name", mEtUsername.getText().toString());
+			jsonParams.put("password", mEtPassword.getText().toString());
+			jsonParams.put("permission", "read_write");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		Log.i(AppUtils.LOGTAG, "Json string Req to server: " + jsonParams);
+
+		try {
+			entity = new StringEntity(jsonParams.toString());
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		/*
+		client.post(context, restApiUrl, entity, "application/json",
+                responseHandler);
+		 */
+		// post data should look like this: {"password":"123123","permission":"read_write","user_name":"scott"}
 		if (AppUtils.isNetworkAvailable(getApplicationContext())) {
 			AsyncHttpClient client = new AsyncHttpClient();
-			RequestHandle rqHandle = client.post(AppUtils.SERVER_URL_MOBILE, rqParams, new TextHttpResponseHandler() {
+//			RequestHandle rqHandle = client.post(AppUtils.SERVER_URL_MOBILE, rqParams, new TextHttpResponseHandler() {
+//			RequestHandle rqHandle = client.post(request_url, rqParams, new TextHttpResponseHandler() {
+			client.post(context, request_url, entity, "application/json", new JsonHttpResponseHandler() {
 				@Override
+				public void onSuccess(int statusCode, Header[] headers, JSONObject jsonReturn) {
+					showProgress(false);
+					processJsonHttpResponse(HTTP_CLIENT_LOGIN_REQ_API, TAG_SERVER_SUCCESS, jsonReturn);
+
+				}
 				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//					if (progressDialog != null) {
-//						progressDialog.dismiss();
-//					}
 					showProgress(false);
-					processHttpResponse(HTTP_CLIENT_LOGIN_REQ_API, TAG_SERVER_ERROR, "{\"error\":\"error\"}");
+//					processHttpResponse(HTTP_CLIENT_LOGIN_REQ_API, TAG_SERVER_ERROR, "{\"error\":\"error\"}");
+					processJsonHttpResponse(HTTP_CLIENT_LOGIN_REQ_API, TAG_SERVER_ERROR, null);
 				}
 
-				@Override
-				public void onSuccess(int statusCode, Header[] headers, String responseString) {
-					processHttpResponse(HTTP_CLIENT_LOGIN_REQ_API, "success", responseString);
-				}
-
-				@Override
-				public void onStart() {
-//					progressDialog = new ProgressDialogShower(context, "Checking with Server...", "Please wait.", false, true);
-					showProgress(true);
-					super.onStart();
-				}
-
-				@Override
-				public void onFinish() {
-//					if (progressDialog != null) {
-//						progressDialog.dismiss();
-//					}
-					showProgress(false);
-					super.onFinish();
-				}
-			});
+					});
+//			client.post(context, request_url, entity, "application/json", new TextHttpResponseHandler() {
+//				@Override
+//				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+////					if (progressDialog != null) {
+////						progressDialog.dismiss();
+////					}
+//					showProgress(false);
+//					processHttpResponse(HTTP_CLIENT_LOGIN_REQ_API, TAG_SERVER_ERROR, "{\"error\":\"error\"}");
+//				}
+//
+//				@Override
+//				public void onSuccess(int statusCode, Header[] headers, String responseString) {
+//					processHttpResponse(HTTP_CLIENT_LOGIN_REQ_API, "success", responseString);
+//				}
+//
+//				@Override
+//				public void onStart() {
+////					progressDialog = new ProgressDialogShower(context, "Checking with Server...", "Please wait.", false, true);
+//					showProgress(true);
+//					super.onStart();
+//				}
+//
+//				@Override
+//				public void onFinish() {
+////					if (progressDialog != null) {
+////						progressDialog.dismiss();
+////					}
+//					showProgress(false);
+//					super.onFinish();
+//				}
+//			});
 		}
 		else {
 			Toast t = Toast.makeText(getApplicationContext(), "You are not connected to the internet currently. Please try again later.",
@@ -281,7 +347,52 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 		}
 	}
 
+	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) {
+		Log.i(AppUtils.LOGTAG, "Return status to server Req: " + jsonReturn.toString());
+		if (returnStatus.contentEquals(TAG_SERVER_ERROR)) {
+			Log.e(AppUtils.LOGTAG, "Failed while contacting server from request:" + HTTP_CLIENT_LOGIN_REQ_API);
+			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
+					Toast.LENGTH_SHORT);
+			t.setGravity(Gravity.CENTER, 0, 0);
+			t.show();
+		}
+		else if (callingReq == HTTP_CLIENT_LOGIN_REQ_API) {
+			Log.i(AppUtils.LOGTAG, "Landed successfully in colling Req: " + HTTP_CLIENT_LOGIN_REQ_API);
+			try {
+				// process incoming json data
+				if (jsonReturn.has("data")) {
+					int returnCode = jsonReturn.getInt("returnCode");
+//					String returnCodeDescription = jsonObj.getString("returnCodeDescription");
+					JSONObject jsonObj = jsonReturn.getJSONObject("data");
+					if (returnCode == 0) {
+						mUserId = jsonObj.getString("user_id");
+						mDisplayName = jsonObj.getString("display_name");
+						mMediaId = jsonObj.getString("media_id");
+						mReadWriteKey = jsonObj.getString("read_write_key");
+					}
+					else if (returnCode != 0) { // login creds denied
+						Toast t = Toast.makeText(getApplicationContext(), "This username and/or password were not recognized by the server. Please try again.",
+								Toast.LENGTH_SHORT);
+						t.setGravity(Gravity.CENTER, 0, 0);
+						t.show();
+
+					}
+				}
+			} catch (JSONException e) {
+				Log.e(AppUtils.LOGTAG, "Failed while parsing returning JSON from request:" + HTTP_CLIENT_LOGIN_REQ_API + " Error reported was: " + e.getCause());
+				e.printStackTrace();
+			}
+		}
+	}
+
+
+
 	protected void processHttpResponse(String callingReq, String returnStatus, String jsonResult) {
+		Log.i(AppUtils.LOGTAG, "Return status to server Req: " + returnStatus);
+		Log.i(AppUtils.LOGTAG, "Result json string from server Req: " + jsonResult);
+		//login credentials denied looks like this:
+		//"\n{"data":{"user_id":null,"user_name":null,"display_name":null,"media_id":null},"returnCode":0,"returnCodeDescription":null}"
+		// login accepted should look like this: {"data":{"user_id":"1","user_name":"scott","display_name":"scott","media_id":"0","read_write_key":"F7rwZn5LwfH0gf4gQdBSZ6My1gZlWIhrGzOvMJ79PEZVJU2qXt9MpLagS0rFyzX4"},"returnCode":0,"returnCodeDescription":null}
 
 		if (returnStatus.contentEquals(TAG_SERVER_ERROR)) {
 			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
@@ -290,58 +401,60 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 			t.show();
 		}
 		else if (callingReq == HTTP_CLIENT_LOGIN_REQ_API) {
+			Log.i(AppUtils.LOGTAG, "Landed successfully in colling Req: " + HTTP_CLIENT_LOGIN_REQ_API);
+
 			// get result
 			//decode json and pull out result success, which in this case is a user ID greater than 0.
-			JSONObject jsonObject = null;
-			try {
-				jsonObject = new JSONObject(jsonResult);
-				if (jsonObject.has(TAG_SERVER_ERROR)) {
-					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
-							Toast.LENGTH_SHORT);
-					t.setGravity(Gravity.CENTER, 0, 0);
-					t.show();
-				}
-				else if (jsonObject.has(TAG_ERROR)) {
-					mEtPassword.setText("");
-					Toast t = Toast.makeText(getApplicationContext(), "We were unable to log you in to LFO To Go. Reason: " + jsonObject.getString("error"),
-							Toast.LENGTH_SHORT);
-					t.setGravity(Gravity.CENTER, 0, 0);
-					t.show();
+//			JSONObject jsonObject = null;
+//			try {
+//				jsonObject = new JSONObject(jsonResult);
+//				if (jsonObject.has(TAG_SERVER_ERROR)) {
+//					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
+//							Toast.LENGTH_SHORT);
+//					t.setGravity(Gravity.CENTER, 0, 0);
+//					t.show();
+//				}
+//				else if (jsonObject.has(TAG_ERROR)) {
+//					mEtPassword.setText("");
+//					Toast t = Toast.makeText(getApplicationContext(), "We were unable to log you in to LFO To Go. Reason: " + jsonObject.getString("error"),
+//							Toast.LENGTH_SHORT);
+//					t.setGravity(Gravity.CENTER, 0, 0);
+//					t.show();
+//
+//				}
+//				else if (jsonObject.has("loginid")) {
+//					mLoginId = jsonObject.getInt("loginid");
+//					if (mLoginId > 0) { // Store mLoginId and PW and send them to the home screen/activity
+//						SharedPreferences.Editor spEditor = appPrefs.edit();
+//						spEditor.putInt("loginid", mLoginId);
+//						spEditor.putString("username", mEtUsername.getText().toString());
+//						spEditor.putString("password", mEtPassword.getText().toString());
+//						spEditor.commit();
+//
+//						// go to home screen. (aka: passport)
+////						Intent homeIntent = new Intent(LoginActivity.this, HomeActivity.class);
+////						// remove this login activity from the stack when proceeding to home activity (so they don't use back button)
+////						homeIntent.putExtra("username", edTxtUsername.getText().toString());
+////						homeIntent.putExtra("loginid", mLoginId);
+////						homeIntent.putExtra("password", edTxtPassword.getText().toString());
+////						homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+////						startActivity(homeIntent);
+//						Toast t = Toast.makeText(getApplicationContext(), "Successful Login Temp Message.",
+//								Toast.LENGTH_SHORT);
+//
+//
+//					}
+//				}
+//				else { // Something unexpected happened. Bad server URL??
+//					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again later.",
+//							Toast.LENGTH_SHORT);
+//					t.setGravity(Gravity.CENTER, 0, 0);
+//					t.show();
+//				}
 
-				}
-				else if (jsonObject.has("loginid")) {
-					mLoginId = jsonObject.getInt("loginid");
-					if (mLoginId > 0) { // Store mLoginId and PW and send them to the home screen/activity
-						SharedPreferences.Editor spEditor = appPrefs.edit();
-						spEditor.putInt("loginid", mLoginId);
-						spEditor.putString("username", mEtUsername.getText().toString());
-						spEditor.putString("password", mEtPassword.getText().toString());
-						spEditor.commit();
-
-						// go to home screen. (aka: passport)
-//						Intent homeIntent = new Intent(LoginActivity.this, HomeActivity.class);
-//						// remove this login activity from the stack when proceeding to home activity (so they don't use back button)
-//						homeIntent.putExtra("username", edTxtUsername.getText().toString());
-//						homeIntent.putExtra("loginid", mLoginId);
-//						homeIntent.putExtra("password", edTxtPassword.getText().toString());
-//						homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//						startActivity(homeIntent);
-						Toast t = Toast.makeText(getApplicationContext(), "Successful Login Temp Message.",
-								Toast.LENGTH_SHORT);
-
-
-					}
-				}
-				else { // Something unexpected happened. Bad server URL??
-					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again later.",
-							Toast.LENGTH_SHORT);
-					t.setGravity(Gravity.CENTER, 0, 0);
-					t.show();
-				}
-
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+//			} catch (JSONException e) {
+//				e.printStackTrace();
+//			}
 		}
 		else {
 			// resultCode was NOT OK

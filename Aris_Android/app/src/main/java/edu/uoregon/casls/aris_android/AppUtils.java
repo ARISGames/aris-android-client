@@ -11,7 +11,9 @@ public class AppUtils {
 
 	public static final String SERVER_URL_BASE = "http://10.223.178.105"; //localhost
 	public static final String SERVER_URL_MOBILE = SERVER_URL_BASE + "/server/json.php";
+	public static final String LOGTAG = "ARIS_ANDROID";
 
+	public final static Boolean DEBUG_ON = true; //todo: Make sure to turn this off for release version
 
 	public static boolean isNetworkAvailable(Context context) {
 		boolean haveConnectedWifi = false;
