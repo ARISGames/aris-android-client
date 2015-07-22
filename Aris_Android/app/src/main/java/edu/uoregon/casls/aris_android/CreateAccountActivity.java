@@ -12,7 +12,7 @@ public class CreateAccountActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_account);
 
-		// built in toolbar - painfully difficult to customize, so using custom "titlebar.xml for this now.
+		// built in toolbar - painfully difficult to customize, so using custom "titlebar_w_back_arrow_w_back_arrow.xml for this now.
 		// Todo: saving this code for now just in case I need to use it for something later. delete if unused.
 //		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //		setSupportActionBar(toolbar);

@@ -291,8 +291,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 		// post data should look like this: {"password":"123123","permission":"read_write","user_name":"scott"}
 		if (AppUtils.isNetworkAvailable(getApplicationContext())) {
 			AsyncHttpClient client = new AsyncHttpClient();
-//			RequestHandle rqHandle = client.post(AppUtils.SERVER_URL_MOBILE, rqParams, new TextHttpResponseHandler() {
-//			RequestHandle rqHandle = client.post(request_url, rqParams, new TextHttpResponseHandler() {
+
 			client.post(context, request_url, entity, "application/json", new JsonHttpResponseHandler() {
 				@Override
 				public void onSuccess(int statusCode, Header[] headers, JSONObject jsonReturn) {
@@ -300,44 +299,17 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 					processJsonHttpResponse(HTTP_CLIENT_LOGIN_REQ_API, TAG_SERVER_SUCCESS, jsonReturn);
 
 				}
+				@Override
 				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+					Log.e(AppUtils.LOGTAG, "AsyncHttpClient failed server call. ", throwable);
 					showProgress(false);
-//					processHttpResponse(HTTP_CLIENT_LOGIN_REQ_API, TAG_SERVER_ERROR, "{\"error\":\"error\"}");
-					processJsonHttpResponse(HTTP_CLIENT_LOGIN_REQ_API, TAG_SERVER_ERROR, null);
+					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
+							Toast.LENGTH_SHORT);
+					t.setGravity(Gravity.CENTER, 0, 0);
+					t.show();
+					super.onFailure(statusCode, headers, responseString, throwable);
 				}
-
-					});
-//			client.post(context, request_url, entity, "application/json", new TextHttpResponseHandler() {
-//				@Override
-//				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-////					if (progressDialog != null) {
-////						progressDialog.dismiss();
-////					}
-//					showProgress(false);
-//					processHttpResponse(HTTP_CLIENT_LOGIN_REQ_API, TAG_SERVER_ERROR, "{\"error\":\"error\"}");
-//				}
-//
-//				@Override
-//				public void onSuccess(int statusCode, Header[] headers, String responseString) {
-//					processHttpResponse(HTTP_CLIENT_LOGIN_REQ_API, "success", responseString);
-//				}
-//
-//				@Override
-//				public void onStart() {
-////					progressDialog = new ProgressDialogShower(context, "Checking with Server...", "Please wait.", false, true);
-//					showProgress(true);
-//					super.onStart();
-//				}
-//
-//				@Override
-//				public void onFinish() {
-////					if (progressDialog != null) {
-////						progressDialog.dismiss();
-////					}
-//					showProgress(false);
-//					super.onFinish();
-//				}
-//			});
+			});
 		}
 		else {
 			Toast t = Toast.makeText(getApplicationContext(), "You are not connected to the internet currently. Please try again later.",
@@ -349,33 +321,35 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) {
 		Log.i(AppUtils.LOGTAG, "Return status to server Req: " + jsonReturn.toString());
-		if (returnStatus.contentEquals(TAG_SERVER_ERROR)) {
-			Log.e(AppUtils.LOGTAG, "Failed while contacting server from request:" + HTTP_CLIENT_LOGIN_REQ_API);
-			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
-					Toast.LENGTH_SHORT);
-			t.setGravity(Gravity.CENTER, 0, 0);
-			t.show();
-		}
-		else if (callingReq == HTTP_CLIENT_LOGIN_REQ_API) {
+ 		if (callingReq == HTTP_CLIENT_LOGIN_REQ_API) {
 			Log.i(AppUtils.LOGTAG, "Landed successfully in colling Req: " + HTTP_CLIENT_LOGIN_REQ_API);
 			try {
 				// process incoming json data
 				if (jsonReturn.has("data")) {
-					int returnCode = jsonReturn.getInt("returnCode");
-//					String returnCodeDescription = jsonObj.getString("returnCodeDescription");
+//					int returnCode = (jsonReturn.has("returnCode")) ? jsonReturn.getInt("returnCode") : null; // what do I do?
+//					String returnCodeDescription = (jsonReturn.has("returnCode")) ? jsonReturn.getString("returnCodeDescription") : ""; // For what?
 					JSONObject jsonObj = jsonReturn.getJSONObject("data");
-					if (returnCode == 0) {
-						mUserId = jsonObj.getString("user_id");
+					mUserId = jsonReturn.has("returnCode") ? jsonObj.getString("user_id") : "null";
+					if (mUserId != null && !mUserId.contentEquals("null")) { // login creds accepted
 						mDisplayName = jsonObj.getString("display_name");
 						mMediaId = jsonObj.getString("media_id");
 						mReadWriteKey = jsonObj.getString("read_write_key");
+						// log in the user
+						Intent i = new Intent(LoginActivity.this, GamesListNearby.class);
+						i.putExtra("user_name", mEtUsername.getText().toString());
+						i.putExtra("password", mEtPassword.getText().toString());
+						i.putExtra("user_id", mUserId);
+						i.putExtra("display_name", jsonObj.getString("display_name"));
+						i.putExtra("media_id", jsonObj.getString("media_id"));
+						i.putExtra("read_write_key", jsonObj.getString("read_write_key"));
+						i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						startActivity(i);
 					}
-					else if (returnCode != 0) { // login creds denied
+					else { // login creds denied
 						Toast t = Toast.makeText(getApplicationContext(), "This username and/or password were not recognized by the server. Please try again.",
 								Toast.LENGTH_SHORT);
 						t.setGravity(Gravity.CENTER, 0, 0);
 						t.show();
-
 					}
 				}
 			} catch (JSONException e) {
@@ -383,87 +357,16 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 				e.printStackTrace();
 			}
 		}
-	}
-
-
-
-	protected void processHttpResponse(String callingReq, String returnStatus, String jsonResult) {
-		Log.i(AppUtils.LOGTAG, "Return status to server Req: " + returnStatus);
-		Log.i(AppUtils.LOGTAG, "Result json string from server Req: " + jsonResult);
-		//login credentials denied looks like this:
-		//"\n{"data":{"user_id":null,"user_name":null,"display_name":null,"media_id":null},"returnCode":0,"returnCodeDescription":null}"
-		// login accepted should look like this: {"data":{"user_id":"1","user_name":"scott","display_name":"scott","media_id":"0","read_write_key":"F7rwZn5LwfH0gf4gQdBSZ6My1gZlWIhrGzOvMJ79PEZVJU2qXt9MpLagS0rFyzX4"},"returnCode":0,"returnCodeDescription":null}
-
-		if (returnStatus.contentEquals(TAG_SERVER_ERROR)) {
+		else { // unknown callinRequest
+			Log.e(AppUtils.LOGTAG, "AsyncHttpClient returned unknown server callingReq: " + callingReq);
 			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 					Toast.LENGTH_SHORT);
 			t.setGravity(Gravity.CENTER, 0, 0);
 			t.show();
-		}
-		else if (callingReq == HTTP_CLIENT_LOGIN_REQ_API) {
-			Log.i(AppUtils.LOGTAG, "Landed successfully in colling Req: " + HTTP_CLIENT_LOGIN_REQ_API);
 
-			// get result
-			//decode json and pull out result success, which in this case is a user ID greater than 0.
-//			JSONObject jsonObject = null;
-//			try {
-//				jsonObject = new JSONObject(jsonResult);
-//				if (jsonObject.has(TAG_SERVER_ERROR)) {
-//					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
-//							Toast.LENGTH_SHORT);
-//					t.setGravity(Gravity.CENTER, 0, 0);
-//					t.show();
-//				}
-//				else if (jsonObject.has(TAG_ERROR)) {
-//					mEtPassword.setText("");
-//					Toast t = Toast.makeText(getApplicationContext(), "We were unable to log you in to LFO To Go. Reason: " + jsonObject.getString("error"),
-//							Toast.LENGTH_SHORT);
-//					t.setGravity(Gravity.CENTER, 0, 0);
-//					t.show();
-//
-//				}
-//				else if (jsonObject.has("loginid")) {
-//					mLoginId = jsonObject.getInt("loginid");
-//					if (mLoginId > 0) { // Store mLoginId and PW and send them to the home screen/activity
-//						SharedPreferences.Editor spEditor = appPrefs.edit();
-//						spEditor.putInt("loginid", mLoginId);
-//						spEditor.putString("username", mEtUsername.getText().toString());
-//						spEditor.putString("password", mEtPassword.getText().toString());
-//						spEditor.commit();
-//
-//						// go to home screen. (aka: passport)
-////						Intent homeIntent = new Intent(LoginActivity.this, HomeActivity.class);
-////						// remove this login activity from the stack when proceeding to home activity (so they don't use back button)
-////						homeIntent.putExtra("username", edTxtUsername.getText().toString());
-////						homeIntent.putExtra("loginid", mLoginId);
-////						homeIntent.putExtra("password", edTxtPassword.getText().toString());
-////						homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-////						startActivity(homeIntent);
-//						Toast t = Toast.makeText(getApplicationContext(), "Successful Login Temp Message.",
-//								Toast.LENGTH_SHORT);
-//
-//
-//					}
-//				}
-//				else { // Something unexpected happened. Bad server URL??
-//					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again later.",
-//							Toast.LENGTH_SHORT);
-//					t.setGravity(Gravity.CENTER, 0, 0);
-//					t.show();
-//				}
-
-//			} catch (JSONException e) {
-//				e.printStackTrace();
-//			}
-		}
-		else {
-			// resultCode was NOT OK
-			Toast t = Toast.makeText(getApplicationContext(), "There was a problem logging in to the server. Make sure you are connected to the internet.",
-					Toast.LENGTH_SHORT);
-			t.setGravity(Gravity.CENTER, 0, 0);
-			t.show();
 		}
 	}
+
 
 	private boolean isEmailValid(String email) {
 		if (email == null) {
