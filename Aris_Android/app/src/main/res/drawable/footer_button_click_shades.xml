@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_pressed="true">
+        <color android:color="@color/footer_btn_selected"/>
+    </item>
+    <item android:state_focused="true">
+        <color android:color="@color/footer_btn_selected"/>
+    </item>
+    <item android:state_pressed="false">
+        <color android:color="@color/footer_btn_normal"/>
+    </item>
+
+</selector>

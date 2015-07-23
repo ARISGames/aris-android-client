@@ -1,11 +1,15 @@
 package edu.uoregon.casls.aris_android;
 
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 
 public class GamesListNearby extends ActionBarActivity {
@@ -34,12 +38,38 @@ public class GamesListNearby extends ActionBarActivity {
 			else
 				Log.i(AppUtils.LOGTAG, getClass().getSimpleName() + ": extras) was NULL");
 		}
+
+
 	}
 
 	// handle profile button click
 	public void profileButtonClick(View v) {
 
 	}
+
+	public void onClickNearbyBtn(View v) {
+		Log.i(AppUtils.LOGTAG, getClass().getSimpleName() + ": onClickNearbyBtn");
+
+	}
+
+	public void onClickPopularBtn(View v) {
+		Log.i(AppUtils.LOGTAG, getClass().getSimpleName() + ": onClickPopularBtn");
+
+	}
+
+	public void onClickRecentBtn(View v) {
+		Log.i(AppUtils.LOGTAG, getClass().getSimpleName() + ": onClickRecentBtn");
+
+	}
+
+	public void onClickSearchBtn(View v) {
+
+	}
+
+	public void onClickMineBtn(View v) {
+
+	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

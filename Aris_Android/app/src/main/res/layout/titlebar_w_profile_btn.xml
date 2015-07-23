@@ -5,7 +5,7 @@
                 android:orientation="horizontal"
                 android:paddingLeft="5dp"
                 android:background="#fffefefe"
-                android:backgroundTint="#fffefefe">
+                android:backgroundTint="#FFEDEDED">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -35,6 +35,6 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:onClick="profileButtonClick"
-        android:background="#fffefefe"
+        android:background="#FFEDEDED"
 />
 </RelativeLayout>
