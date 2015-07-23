@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
 public class GamesListNearby extends ActionBarActivity {
@@ -33,6 +34,11 @@ public class GamesListNearby extends ActionBarActivity {
 			else
 				Log.i(AppUtils.LOGTAG, getClass().getSimpleName() + ": extras) was NULL");
 		}
+	}
+
+	// handle profile button click
+	public void profileButtonClick(View v) {
+
 	}
 
 	@Override
