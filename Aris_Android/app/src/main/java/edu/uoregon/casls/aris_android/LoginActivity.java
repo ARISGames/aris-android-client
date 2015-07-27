@@ -186,7 +186,10 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 //		if (mAuthTask != null) {
 //			return;
 //		}
-
+		if (AppUtils.FAKE_GOOD_LOGIN) {
+			fakeLogin();
+			finish();
+		}
 		// Reset errors.
 		mEtUsername.setError(null);
 //		mAcTvEmail.setError(null);
@@ -504,7 +507,23 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
 	public void loginButtonClick(View v) {
 		// user has clicked the login button
-		attemptLogin();
+		if (AppUtils.FAKE_GOOD_LOGIN)
+			fakeLogin();
+		else
+			attemptLogin();
+	}
+
+	public void fakeLogin () { // DEBUG MODE FOR NOT HAVING SERVER AVAIALBE
+		Intent i = new Intent(LoginActivity.this, GamesListNearby.class);
+		i.putExtra("user_name", mEtUsername.getText().toString());
+		i.putExtra("password", mEtPassword.getText().toString());
+		i.putExtra("user_id", mUserId);
+		i.putExtra("display_name", "FakeScott");
+		i.putExtra("media_id", "11111");
+		i.putExtra("read_write_key", "FABBED");
+		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(i);
+
 	}
 
 //	/**
