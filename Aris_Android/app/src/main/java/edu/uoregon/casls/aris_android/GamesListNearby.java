@@ -118,8 +118,8 @@ public class GamesListNearby extends ActionBarActivity {
 			case (TIME_TAB_WEEKLY):
 				mFlTimeTabDaily.setBackgroundResource(0);
 				mTvTimeTabDaily.setTextColor(Color.parseColor("#FF242424"));
-				mFlTimeTabWeekly.setBackgroundColor(Color.parseColor("#FF0F3C7C"));
-				mTvTimeTabWeekly.setTextColor(Color.parseColor("#FFFCFCFC"));
+				mFlTimeTabWeekly.setBackgroundColor(Color.parseColor("#FFFCFCFC"));
+				mTvTimeTabWeekly.setTextColor(Color.parseColor("#FF151515"));
 				mFlTimeTabMonthly.setBackgroundResource(0);
 				mTvTimeTabMonthly.setTextColor(Color.parseColor("#FF242424"));
 				break;

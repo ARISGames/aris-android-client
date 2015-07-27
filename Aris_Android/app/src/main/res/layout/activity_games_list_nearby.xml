@@ -72,7 +72,8 @@
                 android:textIsSelectable="true"
                 android:autoText="false"
                 android:onClick="onClickTabDaily"
-                android:textColor="#FFEDEDED"/>
+                android:textColor="#FFEDEDED"
+                android:clickable="true"/>
         </FrameLayout>
 
         <FrameLayout
@@ -99,7 +100,8 @@
                 android:autoText="false"
                 android:background="#FFFCFCFC"
                 android:layout_margin="1dp"
-                android:onClick="onClickTabWeekly"/>
+                android:onClick="onClickTabWeekly"
+                android:clickable="true"/>
         </FrameLayout>
 
         <FrameLayout
@@ -122,7 +124,8 @@
                 android:textIsSelectable="true"
                 android:autoText="false"
                 android:layout_margin="1dp"
-                android:onClick="onClickTabMonthly"/>
+                android:onClick="onClickTabMonthly"
+                android:clickable="true"/>
         </FrameLayout>
     </LinearLayout>
 </RelativeLayout>
