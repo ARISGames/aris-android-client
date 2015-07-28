@@ -2,10 +2,10 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="0dp"
-                android:paddingRight="0dp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
                 android:paddingTop="0dp"
-                tools:context="edu.uoregon.casls.aris_android.GamesListNearby"
+                tools:context="edu.uoregon.casls.aris_android.GamesList"
                 android:paddingBottom="3dp"
                 android:background="#FFFCFCFC">
 
@@ -28,15 +28,6 @@
         android:id="@+id/incl_titlebar"/>
 
 
-    <include
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="bottom"
-        layout="@layout/footer_game_list_nav_btns"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="false"
-        android:layout_alignParentEnd="true"/>
-
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -48,7 +39,8 @@
         android:padding="0dp"
         android:id="@+id/ll_time_tab_bar"
         android:divider="@drawable/divider_lines"
-        android:dividerPadding="11dp">
+        android:dividerPadding="11dp"
+        android:visibility="gone">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -56,6 +48,8 @@
             android:layout_weight="1"
             android:background="@drawable/btn_selected_radius_lft_corners"
             android:id="@+id/fl_time_tab_daily"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:onClick="onClickTabDaily">
 
             <TextView
@@ -73,6 +67,8 @@
                 android:autoText="false"
                 android:onClick="onClickTabDaily"
                 android:textColor="#FFEDEDED"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:clickable="true"/>
         </FrameLayout>
 
@@ -84,6 +80,8 @@
             android:layout_marginLeft="-4dp"
             android:layout_marginRight="-4dp"
             android:id="@+id/fl_time_tab_weekly"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:onClick="onClickTabWeekly">
 
             <TextView
@@ -95,11 +93,14 @@
                 android:textAlignment="center"
                 android:gravity="center"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.ActionMode.Subtitle"
+                android:textColor="#FF242424"
                 android:textSize="20sp"
                 android:textIsSelectable="true"
                 android:autoText="false"
                 android:background="#FFFCFCFC"
                 android:layout_margin="1dp"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:onClick="onClickTabWeekly"
                 android:clickable="true"/>
         </FrameLayout>
@@ -109,6 +110,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:id="@+id/fl_time_tab_monthly"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:onClick="onClickTabMonthly">
 
             <TextView
@@ -120,12 +123,44 @@
                 android:textAlignment="center"
                 android:gravity="center"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.ActionMode.Subtitle"
+                android:textColor="#FF242424"
                 android:textSize="20sp"
                 android:textIsSelectable="true"
                 android:autoText="false"
                 android:layout_margin="1dp"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:onClick="onClickTabMonthly"
                 android:clickable="true"/>
         </FrameLayout>
     </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/incl_titlebar"
+        android:layout_marginTop="12dp" >
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/ll_games_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
+        </ScrollView>
+
+    </FrameLayout>
+
+    <include
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        layout="@layout/footer_game_list_nav_btns"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentEnd="true"/>
+
 </RelativeLayout>

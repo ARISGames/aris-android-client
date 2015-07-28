@@ -15,7 +15,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -33,9 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.apache.http.entity.StringEntity;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,9 +42,7 @@ import java.util.List;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.TextHttpResponseHandler;
 
 
 /**
@@ -338,7 +333,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 						mMediaId = jsonObj.getString("media_id");
 						mReadWriteKey = jsonObj.getString("read_write_key");
 						// log in the user
-						Intent i = new Intent(LoginActivity.this, GamesListNearby.class);
+						Intent i = new Intent(LoginActivity.this, GamesList.class);
 						i.putExtra("user_name", mEtUsername.getText().toString());
 						i.putExtra("password", mEtPassword.getText().toString());
 						i.putExtra("user_id", mUserId);
@@ -514,7 +509,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 	}
 
 	public void fakeLogin () { // DEBUG MODE FOR NOT HAVING SERVER AVAIALBE
-		Intent i = new Intent(LoginActivity.this, GamesListNearby.class);
+		Intent i = new Intent(LoginActivity.this, GamesList.class);
 		i.putExtra("user_name", mEtUsername.getText().toString());
 		i.putExtra("password", mEtPassword.getText().toString());
 		i.putExtra("user_id", mUserId);

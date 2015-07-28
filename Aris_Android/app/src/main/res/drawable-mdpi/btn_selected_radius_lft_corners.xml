@@ -16,12 +16,12 @@
             android:left="5dp"
             android:top="5dp"
             android:right="5dp"
-            android:bottom="5dp"    >
+            android:bottom="2dp"    >
         </padding>
 
         <corners
-            android:bottomRightRadius="0dp" android:bottomLeftRadius="5dp"
-            android:topLeftRadius="5dp" android:topRightRadius="0dp"   >
+            android:bottomRightRadius="0dp" android:bottomLeftRadius="11dp"
+            android:topLeftRadius="11dp" android:topRightRadius="0dp"   >
         </corners>
 
     </shape>
