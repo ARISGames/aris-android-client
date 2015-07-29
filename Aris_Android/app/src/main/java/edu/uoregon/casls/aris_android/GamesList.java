@@ -231,7 +231,11 @@ public class GamesList extends ActionBarActivity {
 				@Override
 				public void onSuccess(int statusCode, Header[] headers, JSONObject jsonReturn) {
 					showProgress(false);
-					processJsonHttpResponse(request_api, TAG_SERVER_SUCCESS, jsonReturn);
+					try {
+						processJsonHttpResponse(request_api, TAG_SERVER_SUCCESS, jsonReturn);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
 
 				}
 				@Override
@@ -266,43 +270,43 @@ public class GamesList extends ActionBarActivity {
 					JSONArray jsonGamesList = jsonReturn.getJSONArray("data");
 					JSONObject game = new JSONObject();
 					if (jsonGamesList.length() > 0) { // get games
-						for (jsonGamesList :  game) {
-							//put into an array for the games list view.
-							game.getString("game_id");
-							game.getString("name");
-							game.getString("description");
-							game.getString("tick_script");
-							game.getString("tick_delay");
-							game.getString("icon_media_id");
-							game.getString("media_id");
-							game.getString("map_type");
-							game.getString("map_latitude");
-							game.getString("map_longitude");
-							game.getString("map_zoom_level");
-							game.getString("map_show_player");
-							game.getString("map_show_players");
-							game.getString("map_offsite_mode");
-							game.getString("notebook_allow_comments");
-							game.getString("notebook_allow_likes");
-							game.getString("notebook_trigger_scene_id");
-							game.getString("notebook_trigger_requirement_root_package_id");
-							game.getString("notebook_trigger_title");
-							game.getString("notebook_trigger_icon_media_id");
-							game.getString("notebook_trigger_distance");
-							game.getString("notebook_trigger_infinite_distance");
-							game.getString("notebook_trigger_wiggle");
-							game.getString("notebook_trigger_show_title");
-							game.getString("notebook_trigger_hidden");
-							game.getString("notebook_trigger_on_enter");
-							game.getString("inventory_weight_cap");
-							game.getString("is_siftr");
-							game.getString("siftr_url");
-							game.getString("published");
-							game.getString("type");
-							game.getString("intro_scene_id");
-							game.getString("moderated");
-
-						}
+//						for (jsonGamesList :  game) {
+//							//put into an array for the games list view.
+//							game.getString("game_id");
+//							game.getString("name");
+//							game.getString("description");
+//							game.getString("tick_script");
+//							game.getString("tick_delay");
+//							game.getString("icon_media_id");
+//							game.getString("media_id");
+//							game.getString("map_type");
+//							game.getString("map_latitude");
+//							game.getString("map_longitude");
+//							game.getString("map_zoom_level");
+//							game.getString("map_show_player");
+//							game.getString("map_show_players");
+//							game.getString("map_offsite_mode");
+//							game.getString("notebook_allow_comments");
+//							game.getString("notebook_allow_likes");
+//							game.getString("notebook_trigger_scene_id");
+//							game.getString("notebook_trigger_requirement_root_package_id");
+//							game.getString("notebook_trigger_title");
+//							game.getString("notebook_trigger_icon_media_id");
+//							game.getString("notebook_trigger_distance");
+//							game.getString("notebook_trigger_infinite_distance");
+//							game.getString("notebook_trigger_wiggle");
+//							game.getString("notebook_trigger_show_title");
+//							game.getString("notebook_trigger_hidden");
+//							game.getString("notebook_trigger_on_enter");
+//							game.getString("inventory_weight_cap");
+//							game.getString("is_siftr");
+//							game.getString("siftr_url");
+//							game.getString("published");
+//							game.getString("type");
+//							game.getString("intro_scene_id");
+//							game.getString("moderated");
+//
+//						}
 
 					}
 					else { // no data in return set
@@ -313,7 +317,7 @@ public class GamesList extends ActionBarActivity {
 					}
 				}
 			} catch (JSONException e) {
-				Log.e(AppUtils.LOGTAG, "Failed while parsing returning JSON from request:" + HTTP_CLIENT_LOGIN_REQ_API + " Error reported was: " + e.getCause());
+				Log.e(AppUtils.LOGTAG, "Failed while parsing returning JSON from request:" + HTTP_GET_NEARBY_GAMES_REQ_API + " Error reported was: " + e.getCause());
 				e.printStackTrace();
 			}
 		}
