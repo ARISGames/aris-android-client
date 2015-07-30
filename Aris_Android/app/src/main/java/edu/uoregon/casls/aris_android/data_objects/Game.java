@@ -27,43 +27,43 @@ import edu.uoregon.casls.aris_android.AppUtils;
 import edu.uoregon.casls.aris_android.GamesList;
 
 /*
-  Created by smorison on 7/28/15. t
+  Created by smorison on 7/28/15.
  */
 public class Game {
 
 	private static final String HTTP_GET_FULL_GAME_REQ_API = "v2.games.getFullGame/";
-	long game_id;
-	String name;
-	String desc;
-	String tick_script;
-	long tick_delay;
-	boolean published;
-	String type;
-	Location location = new Location("0");
-	long player_count;
+	public long game_id;
+	public String name;
+	public String desc;
+	public String tick_script;
+	public long tick_delay;
+	public boolean published;
+	public String type;
+	public Location location = new Location("0"); // from iOS; not used?
+	public Location map_location = new Location("0");
+	public long player_count;
 
-	long icon_media_id;
-	long media_id;
+	public long icon_media_id;
+	public long media_id;
 
-	long intro_scene_id;
+	public long intro_scene_id;
 
-	List<User> authors = new ArrayList<User>();
+	public List<User> authors = new ArrayList<User>();
 //	List<User> Comment = new ArrayList<Comment>();
 
-	String map_type;
-	//		Location map_location; // from iOS; not used
-	double map_zoom_level;
-	boolean map_show_player;
-	boolean map_show_players;
-	boolean map_offsite_mode;
+	public String map_type;
+	public double map_zoom_level;
+	public boolean map_show_player;
+	public boolean map_show_players;
+	public boolean map_offsite_mode;
 
-	boolean notebook_allow_comments;
-	boolean notebook_allow_likes;
-	boolean notebook_allow_player_tags;
+	public boolean notebook_allow_comments;
+	public boolean notebook_allow_likes;
+	public boolean notebook_allow_player_tags;
 
-	long inventory_weight_cap;
+	public long inventory_weight_cap;
 
-	Context mContext;
+	private Context mContext;
 
 	// Supporting classes
 //		ScenesModel     scenesModel;
@@ -84,8 +84,8 @@ public class Game {
 //		QuestsModel     questsModel;
 //		DisplayQueueModel displayQueueModel;
 
-	// Basic Constructor
-	public Game(JSONObject mJsonAuth, JSONObject jsonGame) throws JSONException {
+	// Basic Constructor with json game block
+	public Game(JSONObject jsonGame) throws JSONException {
 		initWithJson(jsonGame);
 	}
 
@@ -123,9 +123,9 @@ public class Game {
 		if (jsonGame.has("map_type"))
 			map_type = jsonGame.getString("map_type");
 		if (jsonGame.has("map_latitude") && !jsonGame.getString("map_latitude").contentEquals("null"))
-			location.setLatitude(Double.parseDouble(jsonGame.getString("map_latitude")));
+			map_location.setLatitude(Double.parseDouble(jsonGame.getString("map_latitude")));
 		if (jsonGame.has("map_longitude") && !jsonGame.getString("map_longitude").contentEquals("null"))
-			location.setLongitude(Double.parseDouble(jsonGame.getString("map_longitude")));
+			map_location.setLongitude(Double.parseDouble(jsonGame.getString("map_longitude")));
 		if (jsonGame.has("map_zoom_level") && !jsonGame.getString("map_zoom_level").contentEquals("null"))
 			map_zoom_level = Double.parseDouble(jsonGame.getString("map_zoom_level"));
 		if (jsonGame.has("map_show_player") && !jsonGame.getString("map_show_player").contentEquals("null"))

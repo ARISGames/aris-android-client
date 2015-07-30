@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/rl_game_list_item"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:background="@drawable/bottom_border">
+    <!-- ListRow Left side Evidence Type Icon image -->
+    <LinearLayout
+        android:id="@+id/ll_game_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dp"
+        android:padding="3dp" >
+        <ImageView
+            android:id="@+id/iv_evidence_type_icon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/logo_icon" />
+    </LinearLayout>
+    <!-- Rightend Arrow -->
+    <ImageView
+        android:id="@+id/iv_game_item_right_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/arrow_forward_2x"
+        android:paddingRight="15dp"
+        android:visibility="invisible"/>
+    <ImageButton
+        android:id="@+id/ib_game_item_delete"
+        android:contentDescription="Delete_This_Item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@android:drawable/ic_delete"
+        android:visibility="invisible"/>
+
+    <!-- Game Name-->
+    <TextView
+        android:id="@+id/tv_game_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/iv_evidence_type_icon"
+        android:layout_marginLeft="75dp"
+        android:text="Game_Name"
+        android:textColor="#040404"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:typeface="sans"
+        tools:ignore="NotSibling"/>
+    <!-- Authors  -->
+    <TextView
+        android:id="@+id/tv_author_names"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_game_name"
+        android:layout_alignLeft="@+id/tv_game_name"
+        android:paddingTop="2dp"
+        android:layout_centerHorizontal="true"
+        android:text="Author Names"
+        android:textColor="#343434"
+        android:textSize="15dp"
+        android:paddingBottom="5dp"/>
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:id="@+id/ratingBar_game_rating"
+        android:layout_below="@+id/tv_author_names"
+        android:layout_toRightOf="@+id/ll_game_icon"
+        android:layout_toEndOf="@+id/ll_game_icon"
+        style="@android:style/Widget.Holo.Light.RatingBar.Small"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="# reviews"
+        android:id="@+id/tv_nmbr_of_reviews"
+        android:layout_toRightOf="@+id/ratingBar_game_rating"
+        android:layout_toEndOf="@+id/ratingBar_game_rating"
+        android:layout_marginLeft="36dp"
+        android:layout_marginStart="36dp"
+        android:layout_alignBottom="@+id/ratingBar_game_rating"
+        android:layout_alignTop="@+id/ratingBar_game_rating"/>
+</RelativeLayout>

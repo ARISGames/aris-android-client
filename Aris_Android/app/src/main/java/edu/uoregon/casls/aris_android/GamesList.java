@@ -10,11 +10,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.data_objects.Game;
+import edu.uoregon.casls.aris_android.data_objects.User;
 
 
 public class GamesList extends ActionBarActivity {
@@ -338,6 +341,58 @@ public class GamesList extends ActionBarActivity {
 
 	private void updateAllViews() {
 		// called after any data has been refreshed, usually after network return.
+		LinearLayout llGamesListLayout = (LinearLayout) findViewById(R.id.ll_games_list);
+		llGamesListLayout.removeAllViews(); // refresh visible views so they don't accumulate
+
+		if (mListedGamesMap == null || mListedGamesMap.size() < 1) {
+			//nothing in games list
+		}
+		else {
+			// populate games list.
+			int i = 0;
+			for (final String game_id_key: mListedGamesMap.keySet()) {
+				final Game gameItem = mListedGamesMap.get(game_id_key);
+
+				LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				final View gameItemView = inflater.inflate(R.layout.games_list_item, null);
+
+				gameItemView.setId(Integer.parseInt(game_id_key));
+				gameItemView.setTag(gameItem.name);
+
+				//Set game item textviews and rating bar:
+				TextView tvGameName = (TextView) gameItemView.findViewById(R.id.tv_game_name);
+				TextView tvGameAuthors = (TextView) gameItemView.findViewById(R.id.tv_author_names);
+				TextView tvNmbrOfReviews = (TextView) gameItemView.findViewById(R.id.tv_nmbr_of_reviews);
+				RatingBar rateBarGameRating = (RatingBar) gameItemView.findViewById(R.id.ratingBar_game_rating);
+				tvGameName.setText(gameItem.name);
+				List<User> authorsList = new ArrayList<>();
+				authorsList = gameItem.authors;
+				String authorNames = "";
+				// iterate through Authors list and create one string of names
+				for (int j = 0; j < authorsList.size(); j++) {
+					User author = authorsList.get(j);
+					if (j == 0)
+						authorNames = author.display_name;
+					else
+						authorNames += ", " + author.display_name;
+				}
+				tvGameAuthors.setText(authorNames);
+				tvGameName.setText(gameItem.name);
+				rateBarGameRating.setRating(Float.parseFloat("0")); // todo: set rating to proper value (from where? games-model, I presume.)
+
+				// set onClick listener for this game item listing:
+				gameItemView.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						// for now just display a toast:
+						Toast.makeText(getApplicationContext(), "Game clicked. Name: " + gameItem.name + ", ID: " + game_id_key,
+								Toast.LENGTH_LONG).show();
+					}
+				});
+
+				llGamesListLayout.addView(gameItemView, i++);
+			}
+		}
 
 	}
 
@@ -427,7 +482,7 @@ public class GamesList extends ActionBarActivity {
 		for (int i = 0; i < gamesList.length(); i++) {
 			JSONObject jsonGame = gamesList.getJSONObject(i);
 			//populate hashmap as <game_id, Game Obj>
-			games.put(jsonGame.getString("game_id"),  new Game(mJsonAuth, jsonGame)); // add to hashmap
+			games.put(jsonGame.getString("game_id"), new Game(jsonGame)); // add to hashmap
 
 		}
 		return games;
