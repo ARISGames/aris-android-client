@@ -29,7 +29,7 @@ import edu.uoregon.casls.aris_android.GamesList;
 /*
   Created by smorison on 7/28/15.
  */
-public class Pickle {
+public class Game {
 
 	private static final String HTTP_GET_FULL_GAME_REQ_API = "v2.games.getFullGame/";
 	long game_id;
@@ -85,12 +85,12 @@ public class Pickle {
 //		DisplayQueueModel displayQueueModel;
 
 	// Basic Constructor
-	public Pickle(JSONObject mJsonAuth, JSONObject jsonGame) throws JSONException {
+	public Game(JSONObject mJsonAuth, JSONObject jsonGame) throws JSONException {
 		initWithJson(jsonGame);
 	}
 
 	// Constructor for use with internal HTTP calls which need the context
-	public Pickle(final Context context, final JSONObject jsonAuth, JSONObject jsonGame) throws JSONException {
+	public Game(final Context context, final JSONObject jsonAuth, JSONObject jsonGame) throws JSONException {
 
 		mContext = context;
 		initWithJson(jsonGame);
@@ -99,7 +99,7 @@ public class Pickle {
 	}
 
 	// stub for future possible use.
-	public Pickle(final Context context, final HashMap<String, String> hmapAuth, HashMap<String, String> hmapGame) {
+	public Game(final Context context, final HashMap<String, String> hmapAuth, HashMap<String, String> hmapGame) {
 //		initWithMap(hmapGame);
 		// get full game
 //		pollServer(context, hmapAuth, HTTP_GET_FULL_GAME_REQ_API);
