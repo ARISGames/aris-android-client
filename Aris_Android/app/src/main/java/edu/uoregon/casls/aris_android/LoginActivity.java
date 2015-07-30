@@ -50,7 +50,7 @@ import com.loopj.android.http.RequestParams;
  */
 public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<Cursor> {
 
-	private static final String HTTP_CLIENT_LOGIN_REQ_API = "v2.users.logIn";
+	private static final String HTTP_CLIENT_LOGIN_REQ_API = "v2.users.logIn/";
 	private final static String TAG_SERVER_ERROR = "server_error";
 	private final static String TAG_SERVER_SUCCESS = "success";
 	private final static String TAG_ERROR = "error";
@@ -258,7 +258,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 //		JSONObject jsonParams = new JSONObject();
 
 		final Context context = this;
-		String request_url = AppUtils.SERVER_URL_MOBILE + "/v2.users.logIn";
+		String request_url = AppUtils.SERVER_URL_MOBILE + HTTP_CLIENT_LOGIN_REQ_API;
 
 		rqParams.put("request", HTTP_CLIENT_LOGIN_REQ_API);
 

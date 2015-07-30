@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
@@ -30,6 +29,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import edu.uoregon.casls.aris_android.data_objects.Game;
 
 
 public class GamesList extends ActionBarActivity {
@@ -37,13 +42,14 @@ public class GamesList extends ActionBarActivity {
 	private static final String TIME_TAB_DAILY = "Daily";
 	private static final String TIME_TAB_WEEKLY = "Weekly";
 	private static final String TIME_TAB_MONTHLY = "Monthly";
-	private static final String HTTP_GET_NEARBY_GAMES_REQ_API = "v2.client.getNearbyGamesForPlayer";
-	private static final String HTTP_GET_POPULAR_GAMES_REQ_API = "v2.client.getPopularGamesForPlayer";
-	private static final String HTTP_GET_RECENT_GAMES_REQ_API = "v2.client.getRecentGamesForPlayer";
-	private static final String HTTP_GET_SEARCH_GAMES_REQ_API = "v2.client.getSearchGamesForPlayer";
-	private static final String HTTP_GET_PLAYER_GAMES_REQ_API = "v2.client.getPlayerGamesForPlayer";
+	private static final String HTTP_GET_NEARBY_GAMES_REQ_API = "v2.client.getNearbyGamesForPlayer/";
+	private static final String HTTP_GET_POPULAR_GAMES_REQ_API = "v2.client.getPopularGamesForPlayer/";
+	private static final String HTTP_GET_RECENT_GAMES_REQ_API = "v2.client.getRecentGamesForPlayer/";
+	private static final String HTTP_GET_SEARCH_GAMES_REQ_API = "v2.client.getSearchGamesForPlayer/";
+	private static final String HTTP_GET_PLAYER_GAMES_REQ_API = "v2.client.getPlayerGamesForPlayer/";
+	private static final String HTTP_GET_FULL_GAME_REQ_API = "v2.games.getFullGame/";
 	private final static String TAG_SERVER_SUCCESS = "success";
-	private String mUser_name;
+	public String mUser_name;
 	private String mPassword;
 	private String mUser_Id;
 	private String mDisplay_name;
@@ -58,6 +64,12 @@ public class GamesList extends ActionBarActivity {
 	private TextView mTvTimeTabWeekly;
 	private TextView mTvTimeTabMonthly;
 	private String mTimeTabSelected = TIME_TAB_DAILY; // default starting tab
+//	public Game[] mListedGames;
+	public List<Game> mListedGames = new ArrayList<Game>();
+	public Map<String, Game> mListedGamesMap = new LinkedHashMap<String, Game>();
+	public JSONObject mJsonAuth = new JSONObject();
+	public int mTotalGamesCount = 0;
+	public int mFullGamesUpdated = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -99,28 +111,32 @@ public class GamesList extends ActionBarActivity {
 		//hide time tab bar
 		mLlTimeTabBar.setVisibility(View.GONE);
 		// get nearby games from server
+		pollServer(HTTP_GET_NEARBY_GAMES_REQ_API, "");
 	}
 
 	public void onClickPopularBtn(View v) {
 		Log.i(AppUtils.LOGTAG, getClass().getSimpleName() + ": onClickPopularBtn");
 		mLlTimeTabBar.setVisibility(View.VISIBLE);
-
+		// get nearby games from server
+		pollServer(HTTP_GET_NEARBY_GAMES_REQ_API, "");
 	}
 
 	public void onClickRecentBtn(View v) {
 		Log.i(AppUtils.LOGTAG, getClass().getSimpleName() + ": onClickRecentBtn");
 		mLlTimeTabBar.setVisibility(View.GONE);
-
+		// get nearby games from server
+		pollServer(HTTP_GET_RECENT_GAMES_REQ_API, "");
 	}
 
 	public void onClickSearchBtn(View v) {
+		//todo: set up interface for searching (show search field)
 		mLlTimeTabBar.setVisibility(View.GONE);
-
 	}
 
 	public void onClickMineBtn(View v) {
 		mLlTimeTabBar.setVisibility(View.GONE);
-
+		// get nearby games from server
+		pollServer(HTTP_GET_PLAYER_GAMES_REQ_API, "");
 	}
 
 	public void onClickTabDaily(View v) {
@@ -172,7 +188,7 @@ public class GamesList extends ActionBarActivity {
 				throw new IllegalArgumentException("Invalid Time Range Selected: " + tabSelected);		}
 	}
 
-	private void pollServer(final String request_api) {
+	private void pollServer(final String request_api, String auxData) {
 		RequestParams rqParams = new RequestParams();
 
 		final Context context = this;
@@ -200,14 +216,22 @@ public class GamesList extends ActionBarActivity {
 					break;
 				case (HTTP_GET_PLAYER_GAMES_REQ_API):
 					break;
+				case (HTTP_GET_FULL_GAME_REQ_API):
+					jsonMain.put("game_id", Long.parseLong(auxData));
+					break;
+				default:
+					break;
 			}
 
 			// set up "auth":{...} json child object
-			JSONObject jsonAuth = jsonMain.getJSONObject("auth");
-			jsonAuth.put("user_name", mUser_name);
-			jsonAuth.put("password", mPassword);
-			jsonAuth.put("user_id", mUser_Id);
-			jsonAuth.put("key", mRead_write_key);
+//			JSONObject jsonAuth = jsonMain.getJSONObject("auth");
+//			mJsonAuth = jsonMain.getJSONObject("auth");
+			mJsonAuth.put("user_name", mUser_name);
+			mJsonAuth.put("password", mPassword);
+			mJsonAuth.put("user_id", Long.parseLong(mUser_Id));
+			mJsonAuth.put("key", mRead_write_key);
+
+			jsonMain.put("auth", mJsonAuth);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -260,7 +284,11 @@ public class GamesList extends ActionBarActivity {
 
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) throws JSONException {
 		Log.i(AppUtils.LOGTAG, "Return status to server Req: " + jsonReturn.toString());
-		if (callingReq == HTTP_GET_NEARBY_GAMES_REQ_API) {
+		if (callingReq.matches(HTTP_GET_NEARBY_GAMES_REQ_API
+				+ "|" +  HTTP_GET_POPULAR_GAMES_REQ_API
+				+ "|" +  HTTP_GET_RECENT_GAMES_REQ_API
+				+ "|" + HTTP_GET_SEARCH_GAMES_REQ_API
+				+ "|" +  HTTP_GET_PLAYER_GAMES_REQ_API) ) { // true = debug temp hall pass for all
 			Log.i(AppUtils.LOGTAG, "Landed successfully in colling Req: " + HTTP_GET_NEARBY_GAMES_REQ_API);
 			try {
 				// process incoming json data
@@ -268,46 +296,15 @@ public class GamesList extends ActionBarActivity {
 //					int returnCode = (jsonReturn.has("returnCode")) ? jsonReturn.getInt("returnCode") : null; // what do I do?
 //					String returnCodeDescription = (jsonReturn.has("returnCode")) ? jsonReturn.getString("returnCodeDescription") : ""; // For what?
 					JSONArray jsonGamesList = jsonReturn.getJSONArray("data");
-					JSONObject game = new JSONObject();
-					if (jsonGamesList.length() > 0) { // get games
-//						for (jsonGamesList :  game) {
-//							//put into an array for the games list view.
-//							game.getString("game_id");
-//							game.getString("name");
-//							game.getString("description");
-//							game.getString("tick_script");
-//							game.getString("tick_delay");
-//							game.getString("icon_media_id");
-//							game.getString("media_id");
-//							game.getString("map_type");
-//							game.getString("map_latitude");
-//							game.getString("map_longitude");
-//							game.getString("map_zoom_level");
-//							game.getString("map_show_player");
-//							game.getString("map_show_players");
-//							game.getString("map_offsite_mode");
-//							game.getString("notebook_allow_comments");
-//							game.getString("notebook_allow_likes");
-//							game.getString("notebook_trigger_scene_id");
-//							game.getString("notebook_trigger_requirement_root_package_id");
-//							game.getString("notebook_trigger_title");
-//							game.getString("notebook_trigger_icon_media_id");
-//							game.getString("notebook_trigger_distance");
-//							game.getString("notebook_trigger_infinite_distance");
-//							game.getString("notebook_trigger_wiggle");
-//							game.getString("notebook_trigger_show_title");
-//							game.getString("notebook_trigger_hidden");
-//							game.getString("notebook_trigger_on_enter");
-//							game.getString("inventory_weight_cap");
-//							game.getString("is_siftr");
-//							game.getString("siftr_url");
-//							game.getString("published");
-//							game.getString("type");
-//							game.getString("intro_scene_id");
-//							game.getString("moderated");
-//
-//						}
+					mTotalGamesCount = jsonGamesList.length();
+//					JSONObject game = new JSONObject();
+					if (jsonGamesList.length() > 0) { // get games - Parse through here or send entire array to special method?
+						// send JSON gamesList object to parser method
 
+						mListedGamesMap = parseGamesToMap(jsonGamesList);
+						// do we get the full game now and add the extra bits to the Games List? I guess so.
+						// After all game basic blocks have loaded, poll for the additional (full) game data.
+						getFullGames();
 					}
 					else { // no data in return set
 						Toast t = Toast.makeText(getApplicationContext(), "No games found.",
@@ -321,6 +318,14 @@ public class GamesList extends ActionBarActivity {
 				e.printStackTrace();
 			}
 		}
+		else if (callingReq.contentEquals(HTTP_GET_FULL_GAME_REQ_API)) {
+			// Fill in full game data
+			fillInFullGameData(jsonReturn);
+			mFullGamesUpdated++;
+			if (mFullGamesUpdated == mTotalGamesCount) {
+				updateAllViews();
+			}
+		}
 		else { // unknown callinRequest
 			Log.e(AppUtils.LOGTAG, "AsyncHttpClient returned unknown server callingReq: " + callingReq);
 			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
@@ -331,10 +336,29 @@ public class GamesList extends ActionBarActivity {
 		}
 	}
 
-
-	public void populateAllViews() {
+	private void updateAllViews() {
 		// called after any data has been refreshed, usually after network return.
+
 	}
+
+	private void fillInFullGameData(JSONObject jsonFullGameHTTPReturnSet) throws JSONException {
+		//get "data" block
+		JSONObject jsonFullGameData = jsonFullGameHTTPReturnSet.getJSONObject("data");
+		String game_id = jsonFullGameData.getString("game_id"); // get game id from json block
+		Game game = mListedGamesMap.get(game_id); // get game instance
+		game.initFullGameDetailsWithJson(jsonFullGameHTTPReturnSet);
+	}
+
+	private void getFullGames() {
+		// iterate through map list and request full game data for each.
+		for (Map.Entry game : mListedGamesMap.entrySet()) {
+			pollServer(HTTP_GET_FULL_GAME_REQ_API, game.getKey().toString()); // key is game_id
+		}
+	}
+
+//	public void populateAllViews() {
+//		// called after any data has been refreshed, usually after network return.
+//	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -382,6 +406,43 @@ public class GamesList extends ActionBarActivity {
 		}
 	}
 
+	// convert json list of games into Array (List) of Game() objects.
+	public List<Game> parseGamesToList (JSONArray gamesList) throws JSONException {
+
+		List<Game> games = new ArrayList<Game>();
+
+		for (int i = 0; i < gamesList.length(); i++) {
+			JSONObject jsonGame = gamesList.getJSONObject(i);
+			games.add(new Game(this, mJsonAuth, jsonGame)); // add to simple list (array)
+
+		}
+		return games;
+	}
+
+	// convert json list of games into Game() objects.
+	public Map<String, Game> parseGamesToMap (JSONArray gamesList) throws JSONException {
+
+		Map<String, Game> games = new LinkedHashMap<String, Game>();
+
+		for (int i = 0; i < gamesList.length(); i++) {
+			JSONObject jsonGame = gamesList.getJSONObject(i);
+			//populate hashmap as <game_id, Game Obj>
+			games.put(jsonGame.getString("game_id"),  new Game(mJsonAuth, jsonGame)); // add to hashmap
+
+		}
+		return games;
+	}
+/* iOS:
+	- (NSArray *) parseGames:(NSArray *)gamesDicts
+	{
+		NSMutableArray *games= [[NSMutableArray alloc] init];
+
+		for(long i = 0; i < gamesDicts.count; i++)
+		[games addObject:[[Game alloc] initWithDictionary:gamesDicts[i]]];
+
+		return games;
+	}
+*/
 
 }
 
@@ -471,7 +532,7 @@ Search (with search term "Scott"):
 2015-07-28 15:27:20.448 ARIS[241:18902] NSNotification: SERVICES_GAME_RECEIVED
 2015-07-28 15:27:20.449 ARIS[241:18902] NSNotification: MODEL_GAME_AVAILABLE
 
-More Button:
+Mine Button:
 2015-07-28 15:28:11.296 ARIS[241:18902] Req asynch URL: http://10.223.178.105/server/json.php/v2.client.getPlayerGamesForPlayer/
 2015-07-28 15:28:11.297 ARIS[241:18902] Req async data: {"longitude":"-89.409260","user_id":"1","latitude":"43.073128","page":0,"auth":{"user_id":1,"key":"F7rwZn5LwfH0gf4gQdBSZ6My1gZlWIhrGzOvMJ79PEZVJU2qXt9MpLagS0rFyzX4"}}
 2015-07-28 15:28:11.322 ARIS[241:18902] NSNotification: CONNECTION_LAG
@@ -501,7 +562,7 @@ More Button:
 2015-07-28 15:28:12.796 ARIS[241:18902] NSNotification: MODEL_GAME_AVAILABLE
 2015-07-28 15:28:12.916 ARIS[241:18902] Fin asynch URL: http://10.223.178.105/server/json.php/v2.games.getFullGame/	(0.196895)
 2015-07-28 15:28:12.918 ARIS[241:18902] Fin async data:
-{"data":{"game_id":"5","name":"test game 2","description":"testing some concepts in aris","tick_script":null,"tick_delay":null,"icon_media_id":"0","media_id":"0","map_type":"STREET","map_latitude":"0","map_longitude":"0","map_zoom_level":"0","map_show_player":"1","map_show_players":"1","map_offsite_mode":"0","notebook_allow_comments":"1","notebook_allow_likes":"1","notebook_trigger_scene_id":"0","notebook_trigger_requirement_root_package_id":"0","notebook_trigger_title":"","notebook_trigger_icon_media_id":"0","notebook_trigger_distance":"0","notebook_trigger_infinite_distance":"0","notebook_trigger_wiggle":"0","notebook_trigger_show_title":"1","notebook_trigger_hidden":"0","notebook_trigger_on_enter":"0","inventory_weight_cap":"0","is_siftr":null,"siftr_url":null,"published":"0","type":"LOCATION","intro_scene_id":"3","moderated":null,"authors":[{"user_id":"1","user_name":"scott","display_name":"scott","media_id":"0"}],"media":{"media_id":"0","game_id":0,"name":"Default NPC","file_name":"npc.png","url":"http:\/\/aris.localhost\/server\/gamedata\/v2\/0\/npc.png","thumb_url":"http:\/\/aris.localhost\/server\/gamedata\/v2\/0\/npc_128.png"},"icon_media":{"media_id":"0","game_id":0,"name":"Default NPC","file_name":"npc.png","url":"http:\/\/aris.localhost\/server\/gamedata\/v2\/0\/npc.png","thumb_url":"http:\/\/aris.localhost\/server\/gamedata\/v2\/0\/npc_128.png"}},"returnCode":0,"returnCodeDescription":null}
+{"data":{"game_id":"5","name":"test game 2","description":"testing some concepts in aris","tick_script":null,"tick_delay":null,"icon_media_id":"0","media_id":"0","map_type":"STREET","map_latitude":"0","map_longitude":"0","map_zoom_level":"0","map_show_player":"1","map_show_players":"1","map_offsite_mode":"0","notebook_allow_comments":"1","notebook_allow_likes":"1","notebook_trigger_scene_id":"0","notebook_trigger_requirement_root_package_id":"0","notebook_trigger_title":"","notebook_trigger_icon_media_id":"0","notebook_trigger_distance":"0","notebook_trigger_infinite_distance":"0","notebook_trigger_wigglne":"0","notebook_trigger_show_title":"1","notebook_trigger_hidden":"0","notebook_trigger_on_enter":"0","inventory_weight_cap":"0","is_siftr":null,"siftr_url":null,"published":"0","type":"LOCATION","intro_scene_id":"3","moderated":null,"authors":[{"user_id":"1","user_name":"scott","display_name":"scott","media_id":"0"}],"media":{"media_id":"0","game_id":0,"name":"Default NPC","file_name":"npc.png","url":"http:\/\/aris.localhost\/server\/gamedata\/v2\/0\/npc.png","thumb_url":"http:\/\/aris.localhost\/server\/gamedata\/v2\/0\/npc_128.png"},"icon_media":{"media_id":"0","game_id":0,"name":"Default NPC","file_name":"npc.png","url":"http:\/\/aris.localhost\/server\/gamedata\/v2\/0\/npc.png","thumb_url":"http:\/\/aris.localhost\/server\/gamedata\/v2\/0\/npc_128.png"}},"returnCode":0,"returnCodeDescription":null}
 2015-07-28 15:28:12.927 ARIS[241:18902] NSNotification: SERVICES_GAME_RECEIVED
 2015-07-28 15:28:12.932 ARIS[241:18902] NSNotification: MODEL_GAME_AVAILABLE
 2015-07-28 15:28:13.027 ARIS[241:18902] Fin asynch URL: http://10.223.178.105/server/json.php/v2.games.getFullGame/	(0.280197)
