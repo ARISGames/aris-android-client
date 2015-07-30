@@ -34,7 +34,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.uoregon.casls.aris_android.data_objects.Game;
+import edu.uoregon.casls.aris_android.data_objects.game;
 
 
 public class GamesList extends ActionBarActivity {
@@ -65,8 +65,8 @@ public class GamesList extends ActionBarActivity {
 	private TextView mTvTimeTabMonthly;
 	private String mTimeTabSelected = TIME_TAB_DAILY; // default starting tab
 //	public Game[] mListedGames;
-	public List<Game> mListedGames = new ArrayList<Game>();
-	public Map<String, Game> mListedGamesMap = new LinkedHashMap<String, Game>();
+	public List<game> mListedGames = new ArrayList<game>();
+	public Map<String, game> mListedGamesMap = new LinkedHashMap<String, game>();
 	public JSONObject mJsonAuth = new JSONObject();
 	public int mTotalGamesCount = 0;
 	public int mFullGamesUpdated = 0;
@@ -345,7 +345,7 @@ public class GamesList extends ActionBarActivity {
 		//get "data" block
 		JSONObject jsonFullGameData = jsonFullGameHTTPReturnSet.getJSONObject("data");
 		String game_id = jsonFullGameData.getString("game_id"); // get game id from json block
-		Game game = mListedGamesMap.get(game_id); // get game instance
+		game game = mListedGamesMap.get(game_id); // get game instance
 		game.initFullGameDetailsWithJson(jsonFullGameHTTPReturnSet);
 	}
 
@@ -407,27 +407,27 @@ public class GamesList extends ActionBarActivity {
 	}
 
 	// convert json list of games into Array (List) of Game() objects.
-	public List<Game> parseGamesToList (JSONArray gamesList) throws JSONException {
+	public List<game> parseGamesToList (JSONArray gamesList) throws JSONException {
 
-		List<Game> games = new ArrayList<Game>();
+		List<game> games = new ArrayList<game>();
 
 		for (int i = 0; i < gamesList.length(); i++) {
 			JSONObject jsonGame = gamesList.getJSONObject(i);
-			games.add(new Game(this, mJsonAuth, jsonGame)); // add to simple list (array)
+			games.add(new game(this, mJsonAuth, jsonGame)); // add to simple list (array)
 
 		}
 		return games;
 	}
 
 	// convert json list of games into Game() objects.
-	public Map<String, Game> parseGamesToMap (JSONArray gamesList) throws JSONException {
+	public Map<String, game> parseGamesToMap (JSONArray gamesList) throws JSONException {
 
-		Map<String, Game> games = new LinkedHashMap<String, Game>();
+		Map<String, game> games = new LinkedHashMap<String, game>();
 
 		for (int i = 0; i < gamesList.length(); i++) {
 			JSONObject jsonGame = gamesList.getJSONObject(i);
 			//populate hashmap as <game_id, Game Obj>
-			games.put(jsonGame.getString("game_id"),  new Game(mJsonAuth, jsonGame)); // add to hashmap
+			games.put(jsonGame.getString("game_id"),  new game(mJsonAuth, jsonGame)); // add to hashmap
 
 		}
 		return games;
