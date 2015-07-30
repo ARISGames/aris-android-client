@@ -27,7 +27,7 @@ import edu.uoregon.casls.aris_android.AppUtils;
 import edu.uoregon.casls.aris_android.GamesList;
 
 /*
-  Created by smorison on 7/28/15.
+  Created by smorison on 7/28/15. t
  */
 public class Game {
 
