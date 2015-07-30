@@ -102,6 +102,7 @@ public class GamesList extends ActionBarActivity {
 		mTvTimeTabWeekly = (TextView) findViewById(R.id.tv_time_tab_txt_weekly);
 		mTvTimeTabMonthly = (TextView) findViewById(R.id.tv_time_tab_txt_monthly);
 
+		pollServer(HTTP_GET_NEARBY_GAMES_REQ_API, "");
 	}
 
 	// handle profile button click
@@ -114,19 +115,22 @@ public class GamesList extends ActionBarActivity {
 		//hide time tab bar
 		mLlTimeTabBar.setVisibility(View.GONE);
 		// get nearby games from server
+		clearGamesList();
 		pollServer(HTTP_GET_NEARBY_GAMES_REQ_API, "");
 	}
 
 	public void onClickPopularBtn(View v) {
 		Log.i(AppUtils.LOGTAG, getClass().getSimpleName() + ": onClickPopularBtn");
-		mLlTimeTabBar.setVisibility(View.VISIBLE);
+		mLlTimeTabBar.setVisibility(View.GONE);
 		// get nearby games from server
+		clearGamesList();
 		pollServer(HTTP_GET_NEARBY_GAMES_REQ_API, "");
 	}
 
 	public void onClickRecentBtn(View v) {
 		Log.i(AppUtils.LOGTAG, getClass().getSimpleName() + ": onClickRecentBtn");
-		mLlTimeTabBar.setVisibility(View.GONE);
+		clearGamesList();
+		mLlTimeTabBar.setVisibility(View.VISIBLE);
 		// get nearby games from server
 		pollServer(HTTP_GET_RECENT_GAMES_REQ_API, "");
 	}
@@ -134,10 +138,12 @@ public class GamesList extends ActionBarActivity {
 	public void onClickSearchBtn(View v) {
 		//todo: set up interface for searching (show search field)
 		mLlTimeTabBar.setVisibility(View.GONE);
+		clearGamesList();
 	}
 
 	public void onClickMineBtn(View v) {
 		mLlTimeTabBar.setVisibility(View.GONE);
+		clearGamesList();
 		// get nearby games from server
 		pollServer(HTTP_GET_PLAYER_GAMES_REQ_API, "");
 	}
@@ -192,6 +198,7 @@ public class GamesList extends ActionBarActivity {
 	}
 
 	private void pollServer(final String request_api, String auxData) {
+		showProgress(true);
 		RequestParams rqParams = new RequestParams();
 
 		final Context context = this;
@@ -208,12 +215,14 @@ public class GamesList extends ActionBarActivity {
 
 			switch (request_api) {
 				case (HTTP_GET_NEARBY_GAMES_REQ_API):
-					jsonMain.put("longitude", mUser_Id); // todo: get current lon and lat.
-					jsonMain.put("latitude", mUser_Id);
+					jsonMain.put("longitude", "0"); // todo: get current lon and lat.
+					jsonMain.put("latitude", "0");
 					break;
 				case (HTTP_GET_POPULAR_GAMES_REQ_API):
 					break;
 				case (HTTP_GET_RECENT_GAMES_REQ_API):
+					jsonMain.put("longitude", "0"); // todo: get current lon and lat.
+					jsonMain.put("latitude", "0");
 					break;
 				case (HTTP_GET_SEARCH_GAMES_REQ_API):
 					break;
@@ -290,9 +299,9 @@ public class GamesList extends ActionBarActivity {
 		if (callingReq.matches(HTTP_GET_NEARBY_GAMES_REQ_API
 				+ "|" +  HTTP_GET_POPULAR_GAMES_REQ_API
 				+ "|" +  HTTP_GET_RECENT_GAMES_REQ_API
-				+ "|" + HTTP_GET_SEARCH_GAMES_REQ_API
 				+ "|" +  HTTP_GET_PLAYER_GAMES_REQ_API) ) { // true = debug temp hall pass for all
-			Log.i(AppUtils.LOGTAG, "Landed successfully in colling Req: " + HTTP_GET_NEARBY_GAMES_REQ_API);
+			Log.i(AppUtils.LOGTAG, "Landed successfully in colling Req: " + callingReq);
+			mFullGamesUpdated = 0; // reset found game count
 			try {
 				// process incoming json data
 				if (jsonReturn.has("data")) {
@@ -310,6 +319,7 @@ public class GamesList extends ActionBarActivity {
 						getFullGames();
 					}
 					else { // no data in return set
+						updateAllViews();
 						Toast t = Toast.makeText(getApplicationContext(), "No games found.",
 								Toast.LENGTH_SHORT);
 						t.setGravity(Gravity.CENTER, 0, 0);
@@ -339,6 +349,11 @@ public class GamesList extends ActionBarActivity {
 		}
 	}
 
+	private void clearGamesList() {
+		LinearLayout llGamesListLayout = (LinearLayout) findViewById(R.id.ll_games_list);
+		llGamesListLayout.removeAllViews(); // refresh visible views so they don't accumulate
+	}
+
 	private void updateAllViews() {
 		// called after any data has been refreshed, usually after network return.
 		LinearLayout llGamesListLayout = (LinearLayout) findViewById(R.id.ll_games_list);
@@ -346,6 +361,18 @@ public class GamesList extends ActionBarActivity {
 
 		if (mListedGamesMap == null || mListedGamesMap.size() < 1) {
 			//nothing in games list
+			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+					LinearLayout.LayoutParams.MATCH_PARENT,
+					LinearLayout.LayoutParams.WRAP_CONTENT);
+			layoutParams.setMargins(0, 9, 0, 0);
+
+			TextView tvNoEvidenceMessage = new TextView(this);
+			tvNoEvidenceMessage.setText("No Games Found.\nYou should make one at arisgames.org.");
+			tvNoEvidenceMessage.setTextSize(getResources().getDimension(R.dimen.textsize_small));
+			tvNoEvidenceMessage.setGravity(Gravity.CENTER_HORIZONTAL);
+			tvNoEvidenceMessage.setPadding(0, 15, 0, 0);
+			tvNoEvidenceMessage.setLayoutParams(layoutParams);
+			llGamesListLayout.addView(tvNoEvidenceMessage);
 		}
 		else {
 			// populate games list.
