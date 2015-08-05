@@ -3,6 +3,7 @@ package edu.uoregon.casls.aris_android;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Service;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
@@ -10,10 +11,16 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -59,6 +66,7 @@ public class GamesList extends ActionBarActivity {
 	private String mMedia_id;
 	private String mRead_write_key;
 	private View mProgressView;
+	private LinearLayout mLlSearchBar;
 	private LinearLayout mLlTimeTabBar;
 	private FrameLayout mFlTimeTabDaily;
 	private FrameLayout mFlTimeTabWeekly;
@@ -66,6 +74,7 @@ public class GamesList extends ActionBarActivity {
 	private TextView mTvTimeTabDaily;
 	private TextView mTvTimeTabWeekly;
 	private TextView mTvTimeTabMonthly;
+	private EditText mEtSearchTxt;
 	private String mTimeTabSelected = TIME_TAB_DAILY; // default starting tab
 //	public Game[] mListedGames;
 	public List<Game> mListedGames = new ArrayList<Game>();
@@ -95,6 +104,7 @@ public class GamesList extends ActionBarActivity {
 
 		// get time tab view elements.
 		mLlTimeTabBar = (LinearLayout) findViewById(R.id.ll_time_tab_bar);
+		mLlSearchBar = (LinearLayout) findViewById(R.id.incl_search_bar);
 		mFlTimeTabDaily = (FrameLayout) findViewById(R.id.fl_time_tab_daily);
 		mFlTimeTabWeekly = (FrameLayout) findViewById(R.id.fl_time_tab_weekly);
 		mFlTimeTabMonthly = (FrameLayout) findViewById(R.id.fl_time_tab_monthly);
@@ -102,7 +112,42 @@ public class GamesList extends ActionBarActivity {
 		mTvTimeTabWeekly = (TextView) findViewById(R.id.tv_time_tab_txt_weekly);
 		mTvTimeTabMonthly = (TextView) findViewById(R.id.tv_time_tab_txt_monthly);
 
+		Button btnCancelGameSearch = (Button) findViewById(R.id.btn_cancel_game_search);
+		btnCancelGameSearch.setVisibility(View.GONE); // hide cancel button for now unti we know what it's for.
+
+		mEtSearchTxt = (EditText) findViewById(R.id.et_search_txt);
+//		mEtSearchTxt.setImeActionLabel("Go", EditorInfo.IME_ACTION_DONE); // doesn't seem to work
+		final InputMethodManager imm = (InputMethodManager)this.getSystemService(Service.INPUT_METHOD_SERVICE);
+		mEtSearchTxt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (!hasFocus) {
+					imm.hideSoftInputFromWindow(mEtSearchTxt.getWindowToken(), 0);
+				}
+				else
+					imm.showSoftInput(mEtSearchTxt, 0);
+//				getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+			}
+		});
+		mEtSearchTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				int result = actionId & EditorInfo.IME_MASK_ACTION;
+				if (result == EditorInfo.IME_ACTION_SEARCH) {
+//					doSearch();
+					pollServer(HTTP_GET_SEARCH_GAMES_REQ_API, mEtSearchTxt.getText().toString());
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+		});
+
 		pollServer(HTTP_GET_NEARBY_GAMES_REQ_API, "");
+	}
+
+	private void doSearch() {
 	}
 
 	// handle profile button click
@@ -114,6 +159,7 @@ public class GamesList extends ActionBarActivity {
 		Log.i(AppUtils.LOGTAG, getClass().getSimpleName() + ": onClickNearbyBtn");
 		//hide time tab bar
 		mLlTimeTabBar.setVisibility(View.GONE);
+		mLlSearchBar.setVisibility(View.GONE);
 		// get nearby games from server
 		clearGamesList();
 		pollServer(HTTP_GET_NEARBY_GAMES_REQ_API, "");
@@ -122,6 +168,7 @@ public class GamesList extends ActionBarActivity {
 	public void onClickPopularBtn(View v) {
 		Log.i(AppUtils.LOGTAG, getClass().getSimpleName() + ": onClickPopularBtn");
 		mLlTimeTabBar.setVisibility(View.GONE);
+		mLlSearchBar.setVisibility(View.GONE);
 		// get nearby games from server
 		clearGamesList();
 		pollServer(HTTP_GET_NEARBY_GAMES_REQ_API, "");
@@ -131,6 +178,7 @@ public class GamesList extends ActionBarActivity {
 		Log.i(AppUtils.LOGTAG, getClass().getSimpleName() + ": onClickRecentBtn");
 		clearGamesList();
 		mLlTimeTabBar.setVisibility(View.VISIBLE);
+		mLlSearchBar.setVisibility(View.GONE);
 		// get nearby games from server
 		pollServer(HTTP_GET_RECENT_GAMES_REQ_API, "");
 	}
@@ -138,11 +186,16 @@ public class GamesList extends ActionBarActivity {
 	public void onClickSearchBtn(View v) {
 		//todo: set up interface for searching (show search field)
 		mLlTimeTabBar.setVisibility(View.GONE);
+		mLlSearchBar.setVisibility(View.VISIBLE);
 		clearGamesList();
+		mEtSearchTxt.setText("");
+		mEtSearchTxt.clearFocus();
+		mEtSearchTxt.requestFocus();
 	}
 
 	public void onClickMineBtn(View v) {
 		mLlTimeTabBar.setVisibility(View.GONE);
+		mLlSearchBar.setVisibility(View.GONE);
 		clearGamesList();
 		// get nearby games from server
 		pollServer(HTTP_GET_PLAYER_GAMES_REQ_API, "");
@@ -158,6 +211,15 @@ public class GamesList extends ActionBarActivity {
 
 	public void onClickTabMonthly(View v) {
 		selectTimeRangeTab(TIME_TAB_MONTHLY);
+	}
+
+	public void onClickClearSearchTxt(View v) {
+		mEtSearchTxt.setText("");
+	}
+
+	public void onClickCancelSearch(View v) {
+		// todo: just what is the cancel button for, anyway? for now do this:
+
 	}
 
 	private void selectTimeRangeTab(String tabSelected) {
@@ -208,6 +270,7 @@ public class GamesList extends ActionBarActivity {
 		StringEntity entity;
 		entity = null;
 		JSONObject jsonMain = new JSONObject();
+		JSONObject jsonAuth = new JSONObject();
 		try {
 
 			jsonMain.put("user_id", mUser_Id);
@@ -217,19 +280,29 @@ public class GamesList extends ActionBarActivity {
 				case (HTTP_GET_NEARBY_GAMES_REQ_API):
 					jsonMain.put("longitude", "0"); // todo: get current lon and lat.
 					jsonMain.put("latitude", "0");
+					jsonAuth.put("user_name", mUser_name);
+					jsonAuth.put("password", mPassword);
 					break;
 				case (HTTP_GET_POPULAR_GAMES_REQ_API):
 					break;
 				case (HTTP_GET_RECENT_GAMES_REQ_API):
 					jsonMain.put("longitude", "0"); // todo: get current lon and lat.
 					jsonMain.put("latitude", "0");
+					jsonAuth.put("user_name", mUser_name);
+					jsonAuth.put("password", mPassword);
 					break;
 				case (HTTP_GET_SEARCH_GAMES_REQ_API):
+					//sample: {"auth":{"user_id":1,"key":"F7...zX4"},"longitude":"-89.409260","user_id":"1","latitude":"43.073128","text":"","page":0}
+					jsonMain.put("longitude", "0"); // todo: get current lon and lat.
+					jsonMain.put("latitude", "0");
+					jsonMain.put("text", auxData);
 					break;
 				case (HTTP_GET_PLAYER_GAMES_REQ_API):
 					break;
 				case (HTTP_GET_FULL_GAME_REQ_API):
 					jsonMain.put("game_id", Long.parseLong(auxData));
+					jsonAuth.put("user_name", mUser_name);
+					jsonAuth.put("password", mPassword);
 					break;
 				default:
 					break;
@@ -237,13 +310,11 @@ public class GamesList extends ActionBarActivity {
 
 			// set up "auth":{...} json child object
 //			JSONObject jsonAuth = jsonMain.getJSONObject("auth");
-//			mJsonAuth = jsonMain.getJSONObject("auth");
-			mJsonAuth.put("user_name", mUser_name);
-			mJsonAuth.put("password", mPassword);
-			mJsonAuth.put("user_id", Long.parseLong(mUser_Id));
-			mJsonAuth.put("key", mRead_write_key);
-
-			jsonMain.put("auth", mJsonAuth);
+//			jsonAuth = jsonMain.getJSONObject("auth");
+			jsonAuth.put("user_id", Long.parseLong(mUser_Id));
+			jsonAuth.put("key", mRead_write_key);
+			mJsonAuth = jsonAuth; // copy to global
+			jsonMain.put("auth", jsonAuth);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -299,6 +370,7 @@ public class GamesList extends ActionBarActivity {
 		if (callingReq.matches(HTTP_GET_NEARBY_GAMES_REQ_API
 				+ "|" +  HTTP_GET_POPULAR_GAMES_REQ_API
 				+ "|" +  HTTP_GET_RECENT_GAMES_REQ_API
+				+ "|" +  HTTP_GET_SEARCH_GAMES_REQ_API
 				+ "|" +  HTTP_GET_PLAYER_GAMES_REQ_API) ) { // true = debug temp hall pass for all
 			Log.i(AppUtils.LOGTAG, "Landed successfully in colling Req: " + callingReq);
 			mFullGamesUpdated = 0; // reset found game count
@@ -340,7 +412,7 @@ public class GamesList extends ActionBarActivity {
 			}
 		}
 		else { // unknown callinRequest
-			Log.e(AppUtils.LOGTAG, "AsyncHttpClient returned unknown server callingReq: " + callingReq);
+			Log.e(AppUtils.LOGTAG, "AsyncHttpClient returned uhandled server callingReq: " + callingReq);
 			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 					Toast.LENGTH_SHORT);
 			t.setGravity(Gravity.CENTER, 0, 0);
