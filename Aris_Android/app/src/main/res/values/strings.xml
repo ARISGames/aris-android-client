@@ -28,4 +28,8 @@
     <string name="prompt_email_to_reset">Email to Reset</string>
     <string name="password_reset_message">An email will be sent to the above address with instructions on how to reset your password.</string>
     <string name="title_activity_games_list_nearby">GamesListNearby</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 </resources>

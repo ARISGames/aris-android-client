@@ -317,6 +317,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 		}
 	}
 
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) {
 		Log.i(AppUtils.LOGTAG, "Return status to server Req: " + jsonReturn.toString());
  		if (callingReq == HTTP_CLIENT_LOGIN_REQ_API) {
@@ -333,7 +334,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 						mMediaId = jsonObj.getString("media_id");
 						mReadWriteKey = jsonObj.getString("read_write_key");
 						// log in the user
-						Intent i = new Intent(LoginActivity.this, GamesList.class);
+						Intent i = new Intent(LoginActivity.this, GamesListActivity.class);
 						i.putExtra("user_name", mEtUsername.getText().toString());
 						i.putExtra("password", mEtPassword.getText().toString());
 						i.putExtra("user_id", mUserId);
@@ -341,7 +342,8 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 						i.putExtra("media_id", jsonObj.getString("media_id"));
 						i.putExtra("read_write_key", jsonObj.getString("read_write_key"));
 						i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-						startActivity(i);
+						startActivity(i, mTransitionAnimationBndl);
+						finish();
 					}
 					else { // login creds denied
 						Toast t = Toast.makeText(getApplicationContext(), "This username and/or password were not recognized by the server. Please try again.",
@@ -509,7 +511,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 	}
 
 	public void fakeLogin () { // DEBUG MODE FOR NOT HAVING SERVER AVAIALBE
-		Intent i = new Intent(LoginActivity.this, GamesList.class);
+		Intent i = new Intent(LoginActivity.this, GamesListActivity.class);
 		i.putExtra("user_name", mEtUsername.getText().toString());
 		i.putExtra("password", mEtPassword.getText().toString());
 		i.putExtra("user_id", mUserId);

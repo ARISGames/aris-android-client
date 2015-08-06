@@ -1,8 +1,13 @@
 package edu.uoregon.casls.aris_android;
 
 import android.content.Context;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by smorison on 7/16/15.
@@ -16,6 +21,7 @@ public class AppUtils {
 	public final static Boolean DEBUG_ON = true; //todo: Make sure to turn this off for release version
 	public final static Boolean FAKE_GOOD_LOGIN = false; //todo: Make sure to turn this off for release version
 	public static final String TAG_SERVER_SUCCESS = "success";
+
 
 	public static boolean isNetworkAvailable(Context context) {
 		boolean haveConnectedWifi = false;
@@ -34,4 +40,21 @@ public class AppUtils {
 		return haveConnectedWifi || haveConnectedMobile;
 	}
 
+
+	public static Location getGeoLocation(Context context) {
+		// Get LocationManager object from System Service LOCATION_SERVICE
+		LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		// Create a criteria object to retrieve provider
+		Criteria criteria = new Criteria();
+		// Get the name of the best provider
+		String provider = locationManager.getBestProvider(criteria, true);
+		// Get Current Location
+		Location myLocation = locationManager.getLastKnownLocation(provider);
+
+//		// Get latitude and longitude of the current location
+//		double latitude = myLocation.getLatitude();
+//		double longitude = myLocation.getLongitude();
+//		LatLng latLng = new LatLng(latitude, longitude);
+		return myLocation;
+	}
 }

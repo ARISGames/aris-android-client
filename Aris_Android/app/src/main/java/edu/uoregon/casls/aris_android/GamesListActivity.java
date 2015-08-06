@@ -3,9 +3,12 @@ package edu.uoregon.casls.aris_android;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.ActivityOptions;
 import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -16,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -47,7 +49,7 @@ import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.User;
 
 
-public class GamesList extends ActionBarActivity {
+public class GamesListActivity extends ActionBarActivity {
 
 	private static final String TIME_TAB_DAILY = "Daily";
 	private static final String TIME_TAB_WEEKLY = "Weekly";
@@ -82,20 +84,24 @@ public class GamesList extends ActionBarActivity {
 	public JSONObject mJsonAuth = new JSONObject();
 	public int mTotalGamesCount = 0;
 	public int mFullGamesUpdated = 0;
+	public Bundle mTransitionAnimationBndl;
+	private JSONArray mJsonGamesList;
 
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_games_list);
+
 		if (mUser_name == null || mPassword == null || mUser_Id == null) {
 			Bundle extras = getIntent().getExtras();
 			if (extras != null) {
-				mUser_name = extras.getString("user_name");
-				mPassword = extras.getString("password");
-				mUser_Id = extras.getString("user_id");
-				mDisplay_name = extras.getString("display_name");
-				mMedia_id = extras.getString("media_id");
-				mRead_write_key = extras.getString("read_write_key");
+				mUser_name = 		extras.getString("user_name");
+				mPassword = 		extras.getString("password");
+				mUser_Id = 			extras.getString("user_id");
+				mDisplay_name = 	extras.getString("display_name");
+				mMedia_id = 		extras.getString("media_id");
+				mRead_write_key = 	extras.getString("read_write_key");
 			}
 			else
 				Log.i(AppUtils.LOGTAG, getClass().getSimpleName() + ": extras) was NULL");
@@ -147,12 +153,69 @@ public class GamesList extends ActionBarActivity {
 		pollServer(HTTP_GET_NEARBY_GAMES_REQ_API, "");
 	}
 
-	private void doSearch() {
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+		// Save UI state changes to the savedInstanceState.
+		// This bundle will be passed to onCreate if the process is
+		// killed and restarted.
+		savedInstanceState.putString("user_name", 		mUser_name);
+		savedInstanceState.putString("password", 		mPassword);
+		savedInstanceState.putString("user_id", 		mUser_Id);
+		savedInstanceState.putString("display_name",	mDisplay_name);
+		savedInstanceState.putString("media_id", 		mMedia_id);
+		savedInstanceState.putString("read_write_key", 	mRead_write_key);
+		savedInstanceState.putString("games_map", 		mJsonGamesList.toString());
+		savedInstanceState.putInt("total_games_count", 	mTotalGamesCount);
+		savedInstanceState.putInt("total_games_updated",mFullGamesUpdated);
+
+	}
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		// Restore UI state from the savedInstanceState.
+		// This bundle has also been passed to onCreate.
+		mUser_name = 	savedInstanceState.getString("user_name");
+		mPassword = 	savedInstanceState.getString("password");
+		mUser_Id = 		savedInstanceState.getString("user_id");
+		mDisplay_name = savedInstanceState.getString("display_name");
+		mMedia_id = 	savedInstanceState.getString("media_id");
+		mRead_write_key = savedInstanceState.getString("read_write_key");
+		try {
+			JSONObject jsonObject = new JSONObject(savedInstanceState.getString("games_map"));
+			mJsonGamesList = jsonObject.getJSONArray("data");
+			mListedGamesMap = parseGamesToMap(mJsonGamesList);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		mTotalGamesCount = 		savedInstanceState.getInt("total_games_count");
+		mFullGamesUpdated = 	savedInstanceState.getInt("total_games_updated");
+
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+//		updateAllViews();
 	}
 
 	// handle profile button click
-	public void profileButtonClick(View v) {
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+	public void onClickProfileButton(View v) {
+		// tell transitioning activities how to slide. eg: makeCustomAnimation(ctx, howNewMovesIn, howThisMovesOut) -sem
+		Bundle transitionAnimationBndl = ActivityOptions.makeCustomAnimation(getApplicationContext(),
+				R.animator.slide_in_from_left, R.animator.slide_out_to_right).toBundle();
 
+		//activity version:
+		Intent i = new Intent(GamesListActivity.this, ProfileActivity.class);
+		i.putExtra("user_name", 		mUser_name);
+		i.putExtra("password", 			mPassword );
+		i.putExtra("user_id", 			mUser_Id);
+		i.putExtra("display_name", 		mDisplay_name);
+		i.putExtra("media_id", 			mMedia_id);
+		i.putExtra("read_write_key", 	mRead_write_key);
+		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(i, transitionAnimationBndl);
 	}
 
 	public void onClickNearbyBtn(View v) {
@@ -167,24 +230,23 @@ public class GamesList extends ActionBarActivity {
 
 	public void onClickPopularBtn(View v) {
 		Log.i(AppUtils.LOGTAG, getClass().getSimpleName() + ": onClickPopularBtn");
-		mLlTimeTabBar.setVisibility(View.GONE);
+		mLlTimeTabBar.setVisibility(View.VISIBLE);
 		mLlSearchBar.setVisibility(View.GONE);
-		// get nearby games from server
+		// get popular games from server
 		clearGamesList();
-		pollServer(HTTP_GET_NEARBY_GAMES_REQ_API, "");
+		pollServer(HTTP_GET_POPULAR_GAMES_REQ_API, "WEEK");
 	}
 
 	public void onClickRecentBtn(View v) {
 		Log.i(AppUtils.LOGTAG, getClass().getSimpleName() + ": onClickRecentBtn");
 		clearGamesList();
-		mLlTimeTabBar.setVisibility(View.VISIBLE);
+		mLlTimeTabBar.setVisibility(View.GONE);
 		mLlSearchBar.setVisibility(View.GONE);
-		// get nearby games from server
+		// get recent games from server
 		pollServer(HTTP_GET_RECENT_GAMES_REQ_API, "");
 	}
 
 	public void onClickSearchBtn(View v) {
-		//todo: set up interface for searching (show search field)
 		mLlTimeTabBar.setVisibility(View.GONE);
 		mLlSearchBar.setVisibility(View.VISIBLE);
 		clearGamesList();
@@ -197,20 +259,26 @@ public class GamesList extends ActionBarActivity {
 		mLlTimeTabBar.setVisibility(View.GONE);
 		mLlSearchBar.setVisibility(View.GONE);
 		clearGamesList();
-		// get nearby games from server
+		// get player's games from server
 		pollServer(HTTP_GET_PLAYER_GAMES_REQ_API, "");
 	}
 
 	public void onClickTabDaily(View v) {
 		selectTimeRangeTab(TIME_TAB_DAILY);
+		clearGamesList();
+		pollServer(HTTP_GET_POPULAR_GAMES_REQ_API, "DAY");
 	}
 
 	public void onClickTabWeekly(View v) {
 		selectTimeRangeTab(TIME_TAB_WEEKLY);
+		clearGamesList();
+		pollServer(HTTP_GET_POPULAR_GAMES_REQ_API, "WEEK");
 	}
 
 	public void onClickTabMonthly(View v) {
 		selectTimeRangeTab(TIME_TAB_MONTHLY);
+		clearGamesList();
+		pollServer(HTTP_GET_POPULAR_GAMES_REQ_API, "MONTH");
 	}
 
 	public void onClickClearSearchTxt(View v) {
@@ -218,13 +286,13 @@ public class GamesList extends ActionBarActivity {
 	}
 
 	public void onClickCancelSearch(View v) {
-		// todo: just what is the cancel button for, anyway? for now do this:
+		// todo: just what is the cancel button for, anyway? for now do this: (nothing!)
 
 	}
 
 	private void selectTimeRangeTab(String tabSelected) {
 		mTimeTabSelected = tabSelected;
-		// White = #FFFCFCFC Blue = FF0F3C7C blackish = FF242424
+		// White = #FFFCFCFC Blue = FF0F3C7C Blackish = FF242424
 		switch (tabSelected) {
 			case (TIME_TAB_DAILY):
 				mFlTimeTabDaily.setBackgroundResource(R.drawable.btn_selected_radius_lft_corners);
@@ -266,6 +334,10 @@ public class GamesList extends ActionBarActivity {
 		final Context context = this;
 		String request_url = AppUtils.SERVER_URL_MOBILE + request_api;
 
+		Location playerLocation = AppUtils.getGeoLocation(context);
+		String latitudeStr = String.valueOf(playerLocation.getLatitude());
+		String longitudeStr = String.valueOf(playerLocation.getLongitude());
+
 		rqParams.put("request", request_api);
 		StringEntity entity;
 		entity = null;
@@ -278,26 +350,32 @@ public class GamesList extends ActionBarActivity {
 
 			switch (request_api) {
 				case (HTTP_GET_NEARBY_GAMES_REQ_API):
-					jsonMain.put("longitude", "0"); // todo: get current lon and lat.
-					jsonMain.put("latitude", "0");
+					jsonMain.put("latitude", latitudeStr);
+					jsonMain.put("longitude", longitudeStr);
 					jsonAuth.put("user_name", mUser_name);
 					jsonAuth.put("password", mPassword);
 					break;
 				case (HTTP_GET_POPULAR_GAMES_REQ_API):
+					//sample: {"interval":"WEEK","longitude":"-89.409260","user_id":"1","latitude":"43.073128","page":0,"auth":{"user_id":1,"key":"F7...X4"}}
+					jsonMain.put("longitude", longitudeStr);
+					jsonMain.put("interval", auxData);
+					jsonMain.put("latitude", latitudeStr);
+					jsonAuth.put("user_name", mUser_name);
+					jsonAuth.put("password", mPassword);
 					break;
-				case (HTTP_GET_RECENT_GAMES_REQ_API):
-					jsonMain.put("longitude", "0"); // todo: get current lon and lat.
-					jsonMain.put("latitude", "0");
+				case (HTTP_GET_PLAYER_GAMES_REQ_API):
+				case (HTTP_GET_RECENT_GAMES_REQ_API): // get player and get recent use the same Req param set.
+					//sample: {"longitude":"-89.409260","user_id":"1","latitude":"43.073128","page":0,"auth":{"user_id":1,"key":"F7...yzX4"}}
+					jsonMain.put("latitude", latitudeStr);
+					jsonMain.put("longitude", longitudeStr);
 					jsonAuth.put("user_name", mUser_name);
 					jsonAuth.put("password", mPassword);
 					break;
 				case (HTTP_GET_SEARCH_GAMES_REQ_API):
 					//sample: {"auth":{"user_id":1,"key":"F7...zX4"},"longitude":"-89.409260","user_id":"1","latitude":"43.073128","text":"","page":0}
-					jsonMain.put("longitude", "0"); // todo: get current lon and lat.
-					jsonMain.put("latitude", "0");
+					jsonMain.put("latitude", latitudeStr);
+					jsonMain.put("longitude", longitudeStr);
 					jsonMain.put("text", auxData);
-					break;
-				case (HTTP_GET_PLAYER_GAMES_REQ_API):
 					break;
 				case (HTTP_GET_FULL_GAME_REQ_API):
 					jsonMain.put("game_id", Long.parseLong(auxData));
@@ -365,6 +443,8 @@ public class GamesList extends ActionBarActivity {
 		}
 	}
 
+
+
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) throws JSONException {
 		Log.i(AppUtils.LOGTAG, "Return status to server Req: " + jsonReturn.toString());
 		if (callingReq.matches(HTTP_GET_NEARBY_GAMES_REQ_API
@@ -380,6 +460,7 @@ public class GamesList extends ActionBarActivity {
 //					int returnCode = (jsonReturn.has("returnCode")) ? jsonReturn.getInt("returnCode") : null; // what do I do?
 //					String returnCodeDescription = (jsonReturn.has("returnCode")) ? jsonReturn.getString("returnCodeDescription") : ""; // For what?
 					JSONArray jsonGamesList = jsonReturn.getJSONArray("data");
+					mJsonGamesList = jsonGamesList;
 					mTotalGamesCount = jsonGamesList.length();
 //					JSONObject game = new JSONObject();
 					if (jsonGamesList.length() > 0) { // get games - Parse through here or send entire array to special method?
@@ -391,6 +472,7 @@ public class GamesList extends ActionBarActivity {
 						getFullGames();
 					}
 					else { // no data in return set
+						mListedGamesMap.clear(); // empty the games list map
 						updateAllViews();
 						Toast t = Toast.makeText(getApplicationContext(), "No games found.",
 								Toast.LENGTH_SHORT);
@@ -412,7 +494,7 @@ public class GamesList extends ActionBarActivity {
 			}
 		}
 		else { // unknown callinRequest
-			Log.e(AppUtils.LOGTAG, "AsyncHttpClient returned uhandled server callingReq: " + callingReq);
+			Log.e(AppUtils.LOGTAG, "AsyncHttpClient returned successfully but with unhandled server callingReq: " + callingReq);
 			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 					Toast.LENGTH_SHORT);
 			t.setGravity(Gravity.CENTER, 0, 0);

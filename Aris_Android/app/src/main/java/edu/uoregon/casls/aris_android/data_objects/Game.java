@@ -1,18 +1,14 @@
 package edu.uoregon.casls.aris_android.data_objects;
 
-import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.util.Log;
-import android.view.Gravity;
-import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
-import org.apache.http.NameValuePair;
 import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import edu.uoregon.casls.aris_android.AppUtils;
-import edu.uoregon.casls.aris_android.GamesList;
 
 /*
   Created by smorison on 7/28/15.
