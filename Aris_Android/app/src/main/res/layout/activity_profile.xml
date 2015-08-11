@@ -14,7 +14,25 @@
         android:id="@+id/incl_titlebar"
         android:layout_alignParentTop="true"/>
 
+    <!--Profile Items-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/incl_titlebar"
+        android:layout_marginTop="12dp" >
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/ll_profile_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+            </LinearLayout>
+        </ScrollView>
+
+    </FrameLayout>
     <!--footer-->
     <include
         android:layout_width="fill_parent"

@@ -2,24 +2,49 @@ package edu.uoregon.casls.aris_android;
 
 import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.IntegerRes;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import edu.uoregon.casls.aris_android.data_objects.User;
 
 public class ProfileActivity extends ActionBarActivity {
+
+	private User user;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			user = new User(extras.getString("user"));
+		}
+
 		setContentView(R.layout.activity_profile);
 		ImageButton profileBtn = (ImageButton) findViewById(R.id.imgBtn_profile);
 		profileBtn.setVisibility(View.INVISIBLE);
+
+		// populate list:
+		updateAllViews();
+
 	}
 
 	public void onClickLogOut(View v) {
@@ -30,22 +55,49 @@ public class ProfileActivity extends ActionBarActivity {
 		finish();
 	}
 
-	@Override
-	public void onBackPressed() {
-			new AlertDialog.Builder(this)
-					.setIcon(android.R.drawable.ic_dialog_alert)
-					.setTitle("Quit Aris?")
-					.setMessage("Are you sure you want to quit Aris?")
-					.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							finish();
-						}
-					})
-					.setNegativeButton("No", null)
-					.show();
+	private void updateAllViews() {
+		// populate the list manually for starters, with just Name/Image and PW change.
+		LinearLayout llProfileItems = (LinearLayout) findViewById(R.id.ll_profile_list);
+
+		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View profileItemView = inflater.inflate(R.layout.profile_list_item, null);
+		profileItemView.setId(new Integer(0));
+		profileItemView.setTag("PublicNameAndImage");
+		ImageView ivItemIcon = (ImageView) profileItemView.findViewById(R.id.iv_profile_item_icon);
+		TextView tvItemName = (TextView) profileItemView.findViewById(R.id.tv_item_name);
+		ivItemIcon.setImageResource(R.drawable.game_play_id_card_small);
+		tvItemName.setText("Public Name and Image");
+		profileItemView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// for now just display a toast:
+				Toast.makeText(getApplicationContext(), "Profile Item clicked. Name:, ID: " + 0,
+						Toast.LENGTH_LONG).show();
+			}
+		});
+		llProfileItems.addView(profileItemView, 0);
+
+//		llProfileItems = (LinearLayout) findViewById(R.id.ll_profile_list);
+		inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		profileItemView = inflater.inflate(R.layout.profile_list_item, null);
+		profileItemView.setId(new Integer(1));
+		profileItemView.setTag("ChangePassword");
+		ivItemIcon = (ImageView) profileItemView.findViewById(R.id.iv_profile_item_icon);
+		tvItemName = (TextView) profileItemView.findViewById(R.id.tv_item_name);
+		ivItemIcon.setImageResource(R.drawable.lock_small);
+		tvItemName.setText("Change Password");
+		profileItemView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// for now just display a toast:
+				Toast.makeText(getApplicationContext(), "Profile Item clicked. Name:, ID: " + 1,
+						Toast.LENGTH_LONG).show();
+			}
+		});
+		llProfileItems.addView(profileItemView, 1);
 
 	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

@@ -16,7 +16,7 @@
         android:layout_marginRight="5dp"
         android:padding="3dp" >
         <ImageView
-            android:id="@+id/iv_evidence_type_icon"
+            android:id="@+id/iv_game_icon"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@drawable/logo_icon" />
@@ -46,7 +46,7 @@
         android:id="@+id/tv_game_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/iv_evidence_type_icon"
+        android:layout_toRightOf="@+id/iv_game_icon"
         android:layout_marginLeft="75dp"
         android:text="Game_Name"
         android:textColor="#040404"

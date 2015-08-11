@@ -4,8 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
+import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
@@ -61,12 +63,7 @@ public class GamesListActivity extends ActionBarActivity {
 	private static final String HTTP_GET_PLAYER_GAMES_REQ_API = "v2.client.getPlayerGamesForPlayer/";
 	private static final String HTTP_GET_FULL_GAME_REQ_API = "v2.games.getFullGame/";
 	private final static String TAG_SERVER_SUCCESS = "success";
-	public String mUser_name;
-	private String mPassword;
-	private String mUser_Id;
-	private String mDisplay_name;
-	private String mMedia_id;
-	private String mRead_write_key;
+	private User user;
 	private View mProgressView;
 	private LinearLayout mLlSearchBar;
 	private LinearLayout mLlTimeTabBar;
@@ -77,8 +74,8 @@ public class GamesListActivity extends ActionBarActivity {
 	private TextView mTvTimeTabWeekly;
 	private TextView mTvTimeTabMonthly;
 	private EditText mEtSearchTxt;
-	private String mTimeTabSelected = TIME_TAB_DAILY; // default starting tab
-//	public Game[] mListedGames;
+	private String mTimeTabSelected = TIME_TAB_WEEKLY; // default starting tab
+
 	public List<Game> mListedGames = new ArrayList<Game>();
 	public Map<String, Game> mListedGamesMap = new LinkedHashMap<String, Game>();
 	public JSONObject mJsonAuth = new JSONObject();
@@ -93,19 +90,22 @@ public class GamesListActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_games_list);
 
-		if (mUser_name == null || mPassword == null || mUser_Id == null) {
-			Bundle extras = getIntent().getExtras();
-			if (extras != null) {
-				mUser_name = 		extras.getString("user_name");
-				mPassword = 		extras.getString("password");
-				mUser_Id = 			extras.getString("user_id");
-				mDisplay_name = 	extras.getString("display_name");
-				mMedia_id = 		extras.getString("media_id");
-				mRead_write_key = 	extras.getString("read_write_key");
-			}
-			else
-				Log.i(AppUtils.LOGTAG, getClass().getSimpleName() + ": extras) was NULL");
+		user = new User();
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			user.user_name = 		extras.getString("user_name");
+			user.password = 		extras.getString("password");
+			user.user_id = 			extras.getString("user_id");
+			user.display_name = 	extras.getString("display_name");
+			user.media_id = 		extras.getString("media_id");
+			user.read_write_key = 	extras.getString("read_write_key");
+			// Location info not used at this point.(?)
+//			user.location.setLatitude(0);
+//			user.location.setLongitude(0);
 		}
+		else
+			Log.i(AppUtils.LOGTAG, getClass().getSimpleName() + ": extras) was NULL");
+
 		mProgressView = findViewById(R.id.network_req_progress);
 
 		// get time tab view elements.
@@ -159,15 +159,16 @@ public class GamesListActivity extends ActionBarActivity {
 		// Save UI state changes to the savedInstanceState.
 		// This bundle will be passed to onCreate if the process is
 		// killed and restarted.
-		savedInstanceState.putString("user_name", 		mUser_name);
-		savedInstanceState.putString("password", 		mPassword);
-		savedInstanceState.putString("user_id", 		mUser_Id);
-		savedInstanceState.putString("display_name",	mDisplay_name);
-		savedInstanceState.putString("media_id", 		mMedia_id);
-		savedInstanceState.putString("read_write_key", 	mRead_write_key);
-		savedInstanceState.putString("games_map", 		mJsonGamesList.toString());
-		savedInstanceState.putInt("total_games_count", 	mTotalGamesCount);
-		savedInstanceState.putInt("total_games_updated",mFullGamesUpdated);
+		savedInstanceState.putString("user", 		user.toJsonStr());
+//		savedInstanceState.putString("user_name", 		user.user_name);
+//		savedInstanceState.putString("password", 		user.password);
+//		savedInstanceState.putString("user_id", 		user.user_id);
+//		savedInstanceState.putString("display_name", user.display_name);
+//		savedInstanceState.putString("media_id", 		user.media_id);
+//		savedInstanceState.putString("read_write_key", 	user.read_write_key);
+		savedInstanceState.putString("games_map", mJsonGamesList.toString());
+		savedInstanceState.putInt("total_games_count", mTotalGamesCount);
+		savedInstanceState.putInt("total_games_updated", mFullGamesUpdated);
 
 	}
 	@Override
@@ -175,12 +176,14 @@ public class GamesListActivity extends ActionBarActivity {
 		super.onRestoreInstanceState(savedInstanceState);
 		// Restore UI state from the savedInstanceState.
 		// This bundle has also been passed to onCreate.
-		mUser_name = 	savedInstanceState.getString("user_name");
-		mPassword = 	savedInstanceState.getString("password");
-		mUser_Id = 		savedInstanceState.getString("user_id");
-		mDisplay_name = savedInstanceState.getString("display_name");
-		mMedia_id = 	savedInstanceState.getString("media_id");
-		mRead_write_key = savedInstanceState.getString("read_write_key");
+		user = new User(savedInstanceState.getString("user"));
+
+//		user.user_name = 	savedInstanceState.getString("user_name");
+//		user.password = 	savedInstanceState.getString("password");
+//		user.user_id = 		savedInstanceState.getString("user_id");
+//		user.display_name = savedInstanceState.getString("display_name");
+//		user.media_id = 	savedInstanceState.getString("media_id");
+//		user.read_write_key = savedInstanceState.getString("read_write_key");
 		try {
 			JSONObject jsonObject = new JSONObject(savedInstanceState.getString("games_map"));
 			mJsonGamesList = jsonObject.getJSONArray("data");
@@ -208,12 +211,13 @@ public class GamesListActivity extends ActionBarActivity {
 
 		//activity version:
 		Intent i = new Intent(GamesListActivity.this, ProfileActivity.class);
-		i.putExtra("user_name", 		mUser_name);
-		i.putExtra("password", 			mPassword );
-		i.putExtra("user_id", 			mUser_Id);
-		i.putExtra("display_name", 		mDisplay_name);
-		i.putExtra("media_id", 			mMedia_id);
-		i.putExtra("read_write_key", 	mRead_write_key);
+		i.putExtra("user", user.toJsonStr()); // can this take the place of all those below?
+//		i.putExtra("user_name", 		user.user_name);
+//		i.putExtra("password", 			user.password );
+//		i.putExtra("user_id", 			user.user_id);
+//		i.putExtra("display_name", 		user.display_name);
+//		i.putExtra("media_id", 			user.media_id);
+//		i.putExtra("read_write_key", 	user.read_write_key);
 		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(i, transitionAnimationBndl);
 	}
@@ -290,6 +294,23 @@ public class GamesListActivity extends ActionBarActivity {
 
 	}
 
+	@Override
+	public void onBackPressed() {
+		new AlertDialog.Builder(this)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setTitle("Quit Aris?")
+				.setMessage("Are you sure you want to quit Aris?")
+				.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						finish();
+					}
+				})
+				.setNegativeButton("No", null)
+				.show();
+
+	}
+
 	private void selectTimeRangeTab(String tabSelected) {
 		mTimeTabSelected = tabSelected;
 		// White = #FFFCFCFC Blue = FF0F3C7C Blackish = FF242424
@@ -328,15 +349,14 @@ public class GamesListActivity extends ActionBarActivity {
 	}
 
 	private void pollServer(final String request_api, String auxData) {
+		// test marshal User obj to json:
 		showProgress(true);
 		RequestParams rqParams = new RequestParams();
 
 		final Context context = this;
 		String request_url = AppUtils.SERVER_URL_MOBILE + request_api;
 
-		Location playerLocation = AppUtils.getGeoLocation(context);
-		String latitudeStr = String.valueOf(playerLocation.getLatitude());
-		String longitudeStr = String.valueOf(playerLocation.getLongitude());
+		user.location = AppUtils.getGeoLocation(context);
 
 		rqParams.put("request", request_api);
 		StringEntity entity;
@@ -345,42 +365,42 @@ public class GamesListActivity extends ActionBarActivity {
 		JSONObject jsonAuth = new JSONObject();
 		try {
 
-			jsonMain.put("user_id", mUser_Id);
+			jsonMain.put("user_id", user.user_id);
 			jsonMain.put("page", 0); // todo: determine proper value for page. 0 is just a stand-in value.
 
 			switch (request_api) {
 				case (HTTP_GET_NEARBY_GAMES_REQ_API):
-					jsonMain.put("latitude", latitudeStr);
-					jsonMain.put("longitude", longitudeStr);
-					jsonAuth.put("user_name", mUser_name);
-					jsonAuth.put("password", mPassword);
+					jsonMain.put("latitude", user.location.getLatitude());
+					jsonMain.put("longitude", user.location.getLongitude());
+					jsonAuth.put("user_name", user.user_name);
+					jsonAuth.put("password", user.password);
 					break;
 				case (HTTP_GET_POPULAR_GAMES_REQ_API):
 					//sample: {"interval":"WEEK","longitude":"-89.409260","user_id":"1","latitude":"43.073128","page":0,"auth":{"user_id":1,"key":"F7...X4"}}
-					jsonMain.put("longitude", longitudeStr);
+					jsonMain.put("longitude", user.location.getLongitude());
 					jsonMain.put("interval", auxData);
-					jsonMain.put("latitude", latitudeStr);
-					jsonAuth.put("user_name", mUser_name);
-					jsonAuth.put("password", mPassword);
+					jsonMain.put("latitude", user.location.getLatitude());
+					jsonAuth.put("user_name", user.user_name);
+					jsonAuth.put("password", user.password);
 					break;
 				case (HTTP_GET_PLAYER_GAMES_REQ_API):
 				case (HTTP_GET_RECENT_GAMES_REQ_API): // get player and get recent use the same Req param set.
 					//sample: {"longitude":"-89.409260","user_id":"1","latitude":"43.073128","page":0,"auth":{"user_id":1,"key":"F7...yzX4"}}
-					jsonMain.put("latitude", latitudeStr);
-					jsonMain.put("longitude", longitudeStr);
-					jsonAuth.put("user_name", mUser_name);
-					jsonAuth.put("password", mPassword);
+					jsonMain.put("latitude", user.location.getLatitude());
+					jsonMain.put("longitude", user.location.getLongitude());
+					jsonAuth.put("user_name", user.user_name);
+					jsonAuth.put("password", user.password);
 					break;
 				case (HTTP_GET_SEARCH_GAMES_REQ_API):
 					//sample: {"auth":{"user_id":1,"key":"F7...zX4"},"longitude":"-89.409260","user_id":"1","latitude":"43.073128","text":"","page":0}
-					jsonMain.put("latitude", latitudeStr);
-					jsonMain.put("longitude", longitudeStr);
+					jsonMain.put("latitude", user.location.getLatitude());
+					jsonMain.put("longitude", user.location.getLongitude());
 					jsonMain.put("text", auxData);
 					break;
 				case (HTTP_GET_FULL_GAME_REQ_API):
 					jsonMain.put("game_id", Long.parseLong(auxData));
-					jsonAuth.put("user_name", mUser_name);
-					jsonAuth.put("password", mPassword);
+					jsonAuth.put("user_name", user.user_name);
+					jsonAuth.put("password", user.password);
 					break;
 				default:
 					break;
@@ -389,8 +409,8 @@ public class GamesListActivity extends ActionBarActivity {
 			// set up "auth":{...} json child object
 //			JSONObject jsonAuth = jsonMain.getJSONObject("auth");
 //			jsonAuth = jsonMain.getJSONObject("auth");
-			jsonAuth.put("user_id", Long.parseLong(mUser_Id));
-			jsonAuth.put("key", mRead_write_key);
+			jsonAuth.put("user_id", Long.parseLong(user.user_id));
+			jsonAuth.put("key", user.read_write_key);
 			mJsonAuth = jsonAuth; // copy to global
 			jsonMain.put("auth", jsonAuth);
 		} catch (JSONException e) {

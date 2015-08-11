@@ -48,13 +48,7 @@ public class AppUtils {
 		Criteria criteria = new Criteria();
 		// Get the name of the best provider
 		String provider = locationManager.getBestProvider(criteria, true);
-		// Get Current Location
-		Location myLocation = locationManager.getLastKnownLocation(provider);
-
-//		// Get latitude and longitude of the current location
-//		double latitude = myLocation.getLatitude();
-//		double longitude = myLocation.getLongitude();
-//		LatLng latLng = new LatLng(latitude, longitude);
-		return myLocation;
+		// Return Current Location
+		return locationManager.getLastKnownLocation(provider);
 	}
 }

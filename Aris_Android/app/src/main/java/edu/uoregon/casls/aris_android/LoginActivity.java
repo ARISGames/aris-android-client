@@ -335,6 +335,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 						mReadWriteKey = jsonObj.getString("read_write_key");
 						// log in the user
 						Intent i = new Intent(LoginActivity.this, GamesListActivity.class);
+//						i.putExtra("user", 		user.toJsonStr());
 						i.putExtra("user_name", mEtUsername.getText().toString());
 						i.putExtra("password", mEtPassword.getText().toString());
 						i.putExtra("user_id", mUserId);
