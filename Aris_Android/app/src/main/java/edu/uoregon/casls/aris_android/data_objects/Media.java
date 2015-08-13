@@ -21,41 +21,41 @@ public class Media {
 //	@property (nonatomic, strong) NSData *data;
 //	@property (nonatomic, strong) NSData *thumb;
 
-	public fileExtension
-	{
-		if(mediaCD.remoteURL) return [mediaCD.remoteURL pathExtension];
-		return [mediaCD.localURL pathExtension];
-	}
-
-	// return general media file type
-	public String type() {
-
-			NSString *ext = [[self fileExtension] lowercaseString];
-			if([ext isEqualToString:@"jpg"]  ||
-			[ext isEqualToString:@"jpeg"] ||
-			[ext isEqualToString:@"png"]  ||
-			[ext isEqualToString:@"gif"])
-			{
-				return @"IMAGE";
-			}
-			else if([ext isEqualToString:@"mov"] ||
-			[ext isEqualToString:@"avi"] ||
-			[ext isEqualToString:@"3gp"] ||
-			[ext isEqualToString:@"m4v"] ||
-			[ext isEqualToString:@"mp4"])
-			{
-				return @"VIDEO";
-			}
-			else if([ext isEqualToString:@"mp3"] ||
-			[ext isEqualToString:@"wav"] ||
-			[ext isEqualToString:@"m4a"] ||
-			[ext isEqualToString:@"ogg"] ||
-			[ext isEqualToString:@"caf"])
-			{
-				return @"AUDIO";
-			}
-			else return @"";
-
-
-	}
+//	public fileExtension(URL url)
+//	{
+//		if(mediaCD.remoteURL) return [mediaCD.remoteURL pathExtension];
+//		return [mediaCD.localURL pathExtension];
+//	}
+//
+//	// return general media file type
+//	public String type() {
+//
+//			NSString *ext = [[self fileExtension] lowercaseString];
+//			if([ext isEqualToString:@"jpg"]  ||
+//			[ext isEqualToString:@"jpeg"] ||
+//			[ext isEqualToString:@"png"]  ||
+//			[ext isEqualToString:@"gif"])
+//			{
+//				return @"IMAGE";
+//			}
+//			else if([ext isEqualToString:@"mov"] ||
+//			[ext isEqualToString:@"avi"] ||
+//			[ext isEqualToString:@"3gp"] ||
+//			[ext isEqualToString:@"m4v"] ||
+//			[ext isEqualToString:@"mp4"])
+//			{
+//				return @"VIDEO";
+//			}
+//			else if([ext isEqualToString:@"mp3"] ||
+//			[ext isEqualToString:@"wav"] ||
+//			[ext isEqualToString:@"m4a"] ||
+//			[ext isEqualToString:@"ogg"] ||
+//			[ext isEqualToString:@"caf"])
+//			{
+//				return @"AUDIO";
+//			}
+//			else return @"";
+//
+//
+//	}
 }
