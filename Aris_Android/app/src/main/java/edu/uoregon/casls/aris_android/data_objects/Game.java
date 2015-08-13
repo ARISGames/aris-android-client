@@ -39,6 +39,7 @@ public class Game {
 	public long player_count;
 
 	public long icon_media_id;
+//	public media
 	public long media_id;
 
 	public long intro_scene_id;
@@ -58,7 +59,7 @@ public class Game {
 
 	public long inventory_weight_cap;
 
-	private Context mContext;
+//	private Context mContext;
 
 	// Supporting classes
 //		ScenesModel     scenesModel;
@@ -82,22 +83,6 @@ public class Game {
 	// Basic Constructor with json game block
 	public Game(JSONObject jsonGame) throws JSONException {
 		initWithJson(jsonGame);
-	}
-
-	// Constructor for use with internal HTTP calls which need the context
-	public Game(final Context context, final JSONObject jsonAuth, JSONObject jsonGame) throws JSONException {
-
-		mContext = context;
-		initWithJson(jsonGame);
-		// get full game // Turned out to be problematic - ASYNC calls would return after object was returned
-//		pollServer(context, jsonAuth, HTTP_GET_FULL_GAME_REQ_API); // moving FullGame call to GamesList
-	}
-
-	// stub for future possible use.
-	public Game(final Context context, final HashMap<String, String> hmapAuth, HashMap<String, String> hmapGame) {
-//		initWithMap(hmapGame);
-		// get full game
-//		pollServer(context, hmapAuth, HTTP_GET_FULL_GAME_REQ_API);
 	}
 
 	private void initWithJson(JSONObject jsonGame) throws JSONException {
@@ -189,22 +174,26 @@ public class Game {
 				authors.add(new User(jsonAuthor));
 			}
 		}
+		if (jsonGameData.has("media")) {
+			JSONObject jsonMedia = jsonGameData.getJSONObject("authors");
+			// get media block
+		}
 
 		// where do all these come into play???
 		// upon search, none of these are utilized, or even mentioned in, in the iOS code
-//		jsonFullGame.getString("is_siftr");
-//		jsonFullGame.getString("siftr_url");
-//		jsonFullGame.getString("moderated");
-//		jsonFullGame.getString("notebook_trigger_scene_id");
-//		jsonFullGame.getString("notebook_trigger_requirement_root_package_id");
-//		jsonFullGame.getString("notebook_trigger_title");
-//		jsonFullGame.getString("notebook_trigger_icon_media_id");
-//		jsonFullGame.getString("notebook_trigger_distance");
-//		jsonFullGame.getString("notebook_trigger_infinite_distance");
-//		jsonFullGame.getString("notebook_trigger_wiggle");
-//		jsonFullGame.getString("notebook_trigger_show_title");
-//		jsonFullGame.getString("notebook_trigger_hidden");
-//		jsonFullGame.getString("notebook_trigger_on_enter");
+		jsonFullGame.getString("is_siftr");
+		jsonFullGame.getString("siftr_url");
+		jsonFullGame.getString("moderated");
+		jsonFullGame.getString("notebook_trigger_scene_id");
+		jsonFullGame.getString("notebook_trigger_requirement_root_package_id");
+		jsonFullGame.getString("notebook_trigger_title");
+		jsonFullGame.getString("notebook_trigger_icon_media_id");
+		jsonFullGame.getString("notebook_trigger_distance");
+		jsonFullGame.getString("notebook_trigger_infinite_distance");
+		jsonFullGame.getString("notebook_trigger_wiggle");
+		jsonFullGame.getString("notebook_trigger_show_title");
+		jsonFullGame.getString("notebook_trigger_hidden");
+		jsonFullGame.getString("notebook_trigger_on_enter");
 
 
 		// stub-in for when/if comments seem to become a part of the Game data.
@@ -217,76 +206,64 @@ public class Game {
 //			}
 //		}
 
+
+
 	}
 
-	private void pollServer(final Context context, JSONObject jsonAuth, final String request_api) {
-		RequestParams rqParams = new RequestParams();
-
-//		final Context context = this;
-		String request_url = AppUtils.SERVER_URL_MOBILE + request_api;
-
-		rqParams.put("request", request_api);
-		StringEntity entity;
-		entity = null;
-		JSONObject jsonMain = new JSONObject();
-		try {
-
-			jsonMain.put("game_id", game_id);
-			jsonMain.put("auth", jsonAuth);
-
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		Log.i(AppUtils.LOGTAG, "Json string Req to server: " + jsonMain);
-
-		try {
-			entity = new StringEntity(jsonMain.toString());
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-
-		/*
-		client.post(context, restApiUrl, entity, "application/json",
-                responseHandler);
-		 */
-		// post data should look like this: {"password":"123123","permission":"read_write","user_name":"scott"}
-		if (AppUtils.isNetworkAvailable(context)) { // force logic. assuming that netwk is currently availbl.
-			AsyncHttpClient client = new AsyncHttpClient();
-
-			client.post(context, request_url, entity, "application/json", new JsonHttpResponseHandler() {
-				@Override
-				public void onSuccess(int statusCode, Header[] headers, JSONObject jsonReturn) {
-//					showProgress(false);
-					try {
-						processJsonHttpResponse(request_api, AppUtils.TAG_SERVER_SUCCESS, jsonReturn);
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-
-				}
-
-				@Override
-				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-					Log.e(AppUtils.LOGTAG, "AsyncHttpClient failed server call. ", throwable);
-					super.onFailure(statusCode, headers, responseString, throwable);
-				}
-			});
-		}
-		else {
-			// log it.
-		}
-	}
-
-	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) throws JSONException {
-		Log.i(AppUtils.LOGTAG, "Landed successfully in colling Req: " + callingReq);
-		try {
-			// process incoming json data
-			if (jsonReturn.has("data")) {
-				initFullGameDetailsWithJson(jsonReturn);
-			}
-		} catch (JSONException e) {
-			Log.e(AppUtils.LOGTAG, "Failed while parsing returning JSON from request:" + callingReq + " Error reported was: " + e.getCause());
-			e.printStackTrace();
-		}
-	}
 }
+
+/*
+Example of getFullGame reult JSON:
+http://arisgames.org/server/json.php/v2.games.getFullGame/	(1.126998)
+2015-08-13 15:57:52.920 ARIS[717:244847] Fin async data:
+{"data":{
+"game_id":"91",
+"name":"Dinner Search",
+"description":"Help Mr. and Mrs. Hill get ready for... Mr. Hill.",
+"icon_media_id":"2891",
+"media_id":"2891",
+"map_type":"STREET",
+"map_latitude":"0",
+"map_longitude":"0",
+"map_zoom_level":"0",
+"map_show_player":"1",
+"map_show_players":"1",
+"map_offsite_mode":"0",
+"notebook_allow_comments":"1",
+"notebook_allow_likes":"1",
+"notebook_trigger_scene_id":"0",
+"notebook_trigger_requirement_root_package_id":"0",
+"notebook_trigger_title":"",
+"notebook_trigger_icon_media_id":"0",
+"notebook_trigger_distance":"0",
+"notebook_trigger_infinite_distance":"0",
+"notebook_trigger_wiggle":"0",
+"notebook_trigger_show_title":"0",
+"notebook_trigger_hidden":"0",
+"notebook_trigger_on_enter":"0",
+"inventory_weight_cap":"0",
+"is_siftr":"0",
+"siftr_url":null,
+"published":"1",
+"type":"QR",
+"intro_scene_id":"1",
+"moderated":"0",
+"authors":[{"user_id":"34","user_name":"erica.white","display_name":"","media_id":"0"}],
+"media":{
+	"media_id":"2891",
+	"game_id":"91",
+	"name":"Dinner",
+	"file_name":"aris18ae30099ba6d75e05d2c445f4eecafd.jpg",
+	"url":"http:\/\/arisgames.org\/server\/gamedatav2\/91\/aris18ae30099ba6d75e05d2c445f4eecafd.jpg",
+	"thumb_url":"http:\/\/arisgames.org\/server\/gamedatav2\/91\/aris18ae30099ba6d75e05d2c445f4eecafd_128.jpg"},
+"icon_media":{
+	"media_id":"2891",
+	"game_id":"91",
+	"name":"Dinner",
+	"file_name":"aris18ae30099ba6d75e05d2c445f4eecafd.jpg",
+	"url":"http:\/\/arisgames.org\/server\/gamedatav2\/91\/aris18ae30099ba6d75e05d2c445f4eecafd.jpg",
+	"thumb_url":"http:\/\/arisgames.org\/server\/gamedatav2\/91\/aris18ae30099ba6d75e05d2c445f4eecafd_128.jpg"
+	}
+},"returnCode":0,"returnCodeDescription":null}
+
+ */

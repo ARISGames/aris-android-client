@@ -14,7 +14,8 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class AppUtils {
 	// scott was here and here
-	public static final String SERVER_URL_BASE = "http://10.223.178.105"; //localhost
+//	public static final String SERVER_URL_BASE = "http://10.223.178.105"; //localhost
+	public static final String SERVER_URL_BASE = "http://arisgames.org"; //aris server
 	public static final String SERVER_URL_MOBILE = SERVER_URL_BASE + "/server/json.php/";
 	public static final String LOGTAG = "ARIS_ANDROID";
 

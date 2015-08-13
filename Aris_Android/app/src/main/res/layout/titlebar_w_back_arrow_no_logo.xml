@@ -7,15 +7,16 @@
                 android:background="#fffefefe"
                 android:backgroundTint="#fffefefe">
 
-    <ImageView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imgVw_logo"
+        android:id="@+id/tv_game_cover_name"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/logo_text_nav"
+        android:text="Game Title"
         android:scaleType="fitCenter"
-        android:layout_margin="5dp"/>
+        android:layout_margin="5dp"
+        android:textSize="@dimen/abc_text_size_title_material"/>
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -30,5 +31,6 @@
         android:onClick="onBackButtonClick"
         android:background="#fffefefe"
         android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp"/>
+        android:layout_marginBottom="6dp"
+        android:layout_toRightOf="@+id/tv_game_cover_name"/>
 </RelativeLayout>

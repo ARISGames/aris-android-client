@@ -54,6 +54,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 	private final static String TAG_SERVER_ERROR = "server_error";
 	private final static String TAG_SERVER_SUCCESS = "success";
 	private final static String TAG_ERROR = "error";
+	private static final int CREATE_ACCOUNT_REQ_CODE = 222;
 
 	public android.support.v7.app.ActionBar tabBar;
 	public Bundle mTransitionAnimationBndl;
@@ -83,6 +84,9 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 	private String mMediaId;
 	private String mReadWriteKey;
 
+	// todo:
+	// todo:  Need to check for avatar pic, and redirect to camera if no pic exists and set Public Name field
+	// todo:
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	@Override
@@ -388,6 +392,29 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 		return password.length() > 4;
 	}
 
+//	@Override
+//	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//		switch(requestCode) {
+//			case CREATE_ACCOUNT_REQ_CODE:
+//				if (resultCode == RESULT_OK) {
+//					Bundle res = data.getExtras();
+//					Boolean doLogin = res.getBoolean("do_login");
+//					if (doLogin) {
+//						try {
+//							JSONObject jsonUser = new JSONObject(res.getString("json_user"));
+//							mUserId = jsonUser.getString("user_id");
+//							mEtUsername.setText(jsonUser.getString("user_name"));
+//							mEtPassword.setText(res.getString("password"));
+//							pollServer();
+//						} catch (JSONException e) {
+//							e.printStackTrace();
+//						}
+//					}
+//				}
+//				break;
+//		}
+//	}
+
 	/**
 	 * Shows the progress UI and hides the login form.
 	 */
@@ -493,6 +520,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 		// start CreateAccountActivity
 
 		Intent i = new Intent(LoginActivity.this, CreateAccountActivity.class);
+//		startActivityForResult(i, CREATE_ACCOUNT_REQ_CODE, mTransitionAnimationBndl);
 		startActivity(i, mTransitionAnimationBndl);
 	}
 

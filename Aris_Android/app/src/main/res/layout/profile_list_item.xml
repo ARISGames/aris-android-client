@@ -7,7 +7,8 @@
                 android:orientation="horizontal"
                 android:padding="5dp"
                 android:background="@drawable/bottom_border">
-    <!-- ListRow Left side Evidence Type Icon image -->
+
+    <!-- Left side Profile Type Icon -->
     <LinearLayout
         android:id="@+id/ll_profile_icon"
         android:layout_width="wrap_content"
@@ -23,6 +24,7 @@
             android:scaleType="centerInside"/>
     </LinearLayout>
 
+    <!-- Item name -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,9 +35,5 @@
         android:layout_toRightOf="@+id/ll_profile_icon"
         android:layout_toEndOf="@+id/ll_profile_icon"
         android:layout_marginLeft="24dp"/>
-    <!-- Rightend Arrow -->
-
-    <!-- Game Name-->
-    <!-- Authors  -->
 
 </RelativeLayout>

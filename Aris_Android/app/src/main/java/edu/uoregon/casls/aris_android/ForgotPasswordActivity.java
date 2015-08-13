@@ -216,7 +216,7 @@ public class ForgotPasswordActivity extends ActionBarActivity implements LoaderC
 		}
 	}
 
-	public void backButtonClick(View v) {
+	public void onBackButtonClick(View v) {
 		// kill activity - return to login
 		super.onBackPressed();
 	}

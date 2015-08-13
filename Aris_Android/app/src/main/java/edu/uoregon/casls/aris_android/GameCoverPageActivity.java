@@ -1,0 +1,262 @@
+package edu.uoregon.casls.aris_android;
+
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.media.Image;
+import android.os.Build;
+import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.Header;
+import org.apache.http.entity.StringEntity;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+
+import edu.uoregon.casls.aris_android.data_objects.Game;
+import edu.uoregon.casls.aris_android.data_objects.User;
+
+public class GameCoverPageActivity extends ActionBarActivity {
+	private static final String HTTP_GET_PLAYER_PLAYED_GAME_REQ_API = "v2.client.getPlayerPlayedGame/";
+	private final static String TAG_SERVER_SUCCESS = "success";
+	public User mUser;
+	protected Game mGame;
+	private View mProgressView;
+	private LinearLayout mLlFooter;
+	private FrameLayout mFlReset, mFlResume, mFlNewGame;
+	public JSONObject mJsonAuth;
+	private boolean mHasPlayed;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_game_cover_page);
+		Gson gson = new Gson();
+
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			mUser = new User(extras.getString("user"));
+			mGame = gson.fromJson(extras.getString("game"), Game.class);
+			try {
+				mJsonAuth = new JSONObject(extras.getString("json_auth"));
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+
+		ImageView ivGameIcon = (ImageView) findViewById(R.id.iv_game_icon);
+//		ImageView ivGameLogo = (ImageView) findViewById(R.id.iv_game_designer_logo);
+		TextView tvGameName = (TextView) findViewById(R.id.tv_game_cover_name);
+		TextView tvGameDesc = (TextView) findViewById(R.id.tv_game_desc);
+		mProgressView = findViewById(R.id.network_req_progress);
+		mLlFooter = (LinearLayout) findViewById(R.id.ll_game_cover_pg_footer);
+		mFlNewGame = (FrameLayout) findViewById(R.id.fl_newgame_btnbox);
+		mFlResume = (FrameLayout) findViewById(R.id.fl_resume_btnbox);
+		mFlReset = (FrameLayout) findViewById(R.id.fl_reset_btnbox);
+
+		tvGameName.setText(mGame.name);
+		tvGameDesc.setText(mGame.desc);
+
+		// stub in graphics todo: replace with custom icon/logo from game settings
+		ivGameIcon.setImageResource(R.drawable.logo_full_tiny);
+//		ivGameLogo.setImageResource(R.drawable.logo_text);
+
+		pollServer(HTTP_GET_PLAYER_PLAYED_GAME_REQ_API);
+	}
+
+	/*
+	 Server Request for this game screen:
+	URL: http://10.223.178.105/server/json.php/v2.client.getPlayerPlayedGame/
+	Req data: {"auth":{"user_id":1,"key":"F7rwZn5LwfH0gf4gQdBSZ6My1gZlWIhrGzOvMJ79PEZVJU2qXt9MpLagS0rFyzX4"},"game_id":"6"}
+	 */
+	private void pollServer(final String request_api) {
+		showProgress(true);
+		RequestParams rqParams = new RequestParams();
+
+		final Context context = this;
+		String request_url = AppUtils.SERVER_URL_MOBILE + request_api;
+
+		rqParams.put("request", request_api);
+		StringEntity entity;
+		entity = null;
+		JSONObject jsonMain = new JSONObject();
+		try {
+			jsonMain.put("game_id", String.valueOf(mGame.game_id));
+			// embed Auth json into main json block
+			jsonMain.put("auth", mJsonAuth);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		Log.d(AppUtils.LOGTAG, "Json string Req to server: " + jsonMain);
+
+		try {
+			entity = new StringEntity(jsonMain.toString());
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		// post data should look like this: {"auth":{"user_id":1,"key":"F7...yzX4"},"game_id":"6"}
+		if (AppUtils.isNetworkAvailable(getApplicationContext())) {
+			AsyncHttpClient client = new AsyncHttpClient();
+
+			client.post(context, request_url, entity, "application/json", new JsonHttpResponseHandler() {
+				@Override
+				public void onSuccess(int statusCode, Header[] headers, JSONObject jsonReturn) {
+					showProgress(false);
+					try {
+						processJsonHttpResponse(request_api, TAG_SERVER_SUCCESS, jsonReturn);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+
+				}
+				@Override
+				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+					Log.e(AppUtils.LOGTAG, "AsyncHttpClient failed server call. ", throwable);
+					showProgress(false);
+					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
+							Toast.LENGTH_SHORT);
+					t.setGravity(Gravity.CENTER, 0, 0);
+					t.show();
+					super.onFailure(statusCode, headers, responseString, throwable);
+				}
+			});
+		}
+		else {
+			Toast t = Toast.makeText(getApplicationContext(), "You are not connected to the internet currently. Please try again later.",
+					Toast.LENGTH_SHORT);
+			t.setGravity(Gravity.CENTER, 0, 0);
+			t.show();
+		}
+	}
+
+	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) throws JSONException {
+		Log.d(AppUtils.LOGTAG, "Return status to server Req: " + jsonReturn.toString());
+		if (callingReq.contentEquals(HTTP_GET_PLAYER_PLAYED_GAME_REQ_API) ) { //
+			// Response looks like this: {"data":{"game_id":"1","has_played":false},"returnCode":0,"returnCodeDescription":null}
+			Log.i(AppUtils.LOGTAG, "Landed successfully in colling Req: " + callingReq);
+			try {
+				// process incoming json data
+				if (jsonReturn.has("data")) {
+					if (jsonReturn.has("returnCode") && jsonReturn.getLong("returnCode") == 0) {
+						JSONObject jsonDataBlock = new JSONObject(jsonReturn.getString("data"));
+						mHasPlayed = jsonDataBlock.getBoolean("has_played");
+						updateAllViews();
+					}
+
+				}
+			} catch (JSONException e) {
+				Log.e(AppUtils.LOGTAG, "Failed while parsing returning JSON from request:" + HTTP_GET_PLAYER_PLAYED_GAME_REQ_API + " Error reported was: " + e.getCause());
+				e.printStackTrace();
+			}
+		}
+		else { // unknown callinRequest
+			Log.e(AppUtils.LOGTAG, "AsyncHttpClient returned successfully but with unhandled server callingReq: " + callingReq);
+			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
+					Toast.LENGTH_SHORT);
+			t.setGravity(Gravity.CENTER, 0, 0);
+			t.show();
+
+		}
+	}
+
+	private void updateAllViews() {
+		if (mHasPlayed) {
+			mFlReset.setVisibility(View.VISIBLE);
+			mFlResume.setVisibility(View.VISIBLE);
+			mFlNewGame.setVisibility(View.GONE);
+		}
+		else {
+			mFlReset.setVisibility(View.GONE);
+			mFlResume.setVisibility(View.GONE);
+			mFlNewGame.setVisibility(View.VISIBLE);
+		}
+		mLlFooter.setVisibility(View.VISIBLE);
+	}
+
+	public void onClickResetGame (View v) {
+
+	}
+
+	public void onClickResumeGame (View v) {
+
+	}
+
+	public void onBackButtonClick(View v) {
+		// kill activity - return to login
+		super.onBackPressed();
+	}
+
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.menu_game_cover_page, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+
+		//noinspection SimplifiableIfStatement
+		if (id == R.id.action_settings) {
+			return true;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+	public void showProgress(final boolean show) {
+		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+		// for very easy animations. If available, use these APIs to fade-in
+		// the progress spinner.
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+			int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+			mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+			mProgressView.animate().setDuration(shortAnimTime).alpha(
+					show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+				}
+			});
+		}
+		else {
+			// The ViewPropertyAnimator APIs are not available, so simply show
+			// and hide the relevant UI components.
+			mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+		}
+	}
+
+	public void finish() {
+		super.finish();
+		// tell transitioning activities how to slide. eg: overridePendingTransition(howThisMovesOut, howNewMovesIn) -sem
+		overridePendingTransition(R.animator.slide_out_to_right, R.animator.slide_in_from_left);
+	}
+}
+

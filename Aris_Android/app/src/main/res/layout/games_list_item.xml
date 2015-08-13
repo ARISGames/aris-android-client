@@ -7,7 +7,8 @@
                 android:orientation="horizontal"
                 android:padding="5dp"
                 android:background="@drawable/bottom_border">
-    <!-- ListRow Left side Evidence Type Icon image -->
+
+    <!-- Left side game icon -->
     <LinearLayout
         android:id="@+id/ll_game_icon"
         android:layout_width="wrap_content"
@@ -21,7 +22,8 @@
             android:layout_height="60dp"
             android:src="@drawable/logo_icon" />
     </LinearLayout>
-    <!-- Rightend Arrow -->
+
+    <!-- Right end arrow (not used in this view) -->
     <ImageView
         android:id="@+id/iv_game_item_right_arrow"
         android:layout_width="wrap_content"
@@ -31,6 +33,8 @@
         android:src="@drawable/arrow_forward_2x"
         android:paddingRight="15dp"
         android:visibility="invisible"/>
+
+    <!-- Delete button not used in this list -->
     <ImageButton
         android:id="@+id/ib_game_item_delete"
         android:contentDescription="Delete_This_Item"
@@ -54,6 +58,7 @@
         android:textStyle="bold"
         android:typeface="sans"
         tools:ignore="NotSibling"/>
+
     <!-- Authors  -->
     <TextView
         android:id="@+id/tv_author_names"
@@ -68,6 +73,7 @@
         android:textSize="15dp"
         android:paddingBottom="5dp"/>
 
+    <!-- Game popularity rating bar -->
     <RatingBar
         android:layout_width="wrap_content"
         android:layout_height="20dp"
@@ -77,6 +83,7 @@
         android:layout_toEndOf="@+id/ll_game_icon"
         style="@android:style/Widget.Holo.Light.RatingBar.Small"/>
 
+    <!-- Number of reviews -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

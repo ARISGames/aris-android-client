@@ -44,7 +44,11 @@ public class ProfileActivity extends ActionBarActivity {
 
 		// populate list:
 		updateAllViews();
+	}
 
+	@Override
+	protected void onStart() {
+		super.onStart();
 	}
 
 	public void onClickLogOut(View v) {
@@ -58,8 +62,9 @@ public class ProfileActivity extends ActionBarActivity {
 	private void updateAllViews() {
 		// populate the list manually for starters, with just Name/Image and PW change.
 		LinearLayout llProfileItems = (LinearLayout) findViewById(R.id.ll_profile_list);
-
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+		// == ROW 1 ==
 		View profileItemView = inflater.inflate(R.layout.profile_list_item, null);
 		profileItemView.setId(new Integer(0));
 		profileItemView.setTag("PublicNameAndImage");
@@ -77,8 +82,7 @@ public class ProfileActivity extends ActionBarActivity {
 		});
 		llProfileItems.addView(profileItemView, 0);
 
-//		llProfileItems = (LinearLayout) findViewById(R.id.ll_profile_list);
-		inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		// == ROW 2 ==
 		profileItemView = inflater.inflate(R.layout.profile_list_item, null);
 		profileItemView.setId(new Integer(1));
 		profileItemView.setTag("ChangePassword");
@@ -120,4 +124,12 @@ public class ProfileActivity extends ActionBarActivity {
 
 		return super.onOptionsItemSelected(item);
 	}
+
+	@Override
+	public void finish() {
+		super.finish();
+		// tell transitioning activities how to slide. eg: overridePendingTransition(howThisMovesOut, howNewMovesIn) -sem
+		overridePendingTransition(R.animator.slide_out_to_left, R.animator.slide_in_from_right); // todo: transition flashes a little. Fix?
+	}
+
 }

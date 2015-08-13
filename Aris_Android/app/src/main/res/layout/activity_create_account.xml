@@ -25,7 +25,7 @@
 
     <!-- Login progress -->
     <ProgressBar
-        android:id="@+id/login_progress"
+        android:id="@+id/create_acct_progress"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                 android:inputType="textPersonName"/>
 
             <AutoCompleteTextView
-                android:id="@+id/email"
+                android:id="@+id/actv_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_email"
@@ -74,10 +74,24 @@
                 android:backgroundTint="#ffbdbdbd"/>
 
             <EditText
-                android:id="@+id/password"
+                android:id="@+id/et_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/prompt_password"
+                android:hint="@string/password"
+                android:textColorHint="#ffbdbdbd"
+                android:imeActionId="@integer/loginImeActionId"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:backgroundTint="#ffbdbdbd"/>
+
+            <EditText
+                android:id="@+id/et_password_again"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password_again"
                 android:textColorHint="#ffbdbdbd"
                 android:imeActionId="@integer/loginImeActionId"
                 android:imeActionLabel="@string/action_sign_in_short"
@@ -97,9 +111,10 @@
                 android:src="@drawable/arrow_forward_2x"
                 android:layout_gravity="right"
                 android:contentDescription="@string/sign_in_button"
-                android:background="#ffececec"
+                android:background="#fffefefe"
                 android:adjustViewBounds="true"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginRight="10dp"
+                android:onClick="onClickSignInBtn"/>
 
         </LinearLayout>
     </ScrollView>

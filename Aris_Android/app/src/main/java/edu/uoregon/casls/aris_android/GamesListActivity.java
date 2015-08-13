@@ -14,6 +14,7 @@ import android.location.Location;
 import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.transition.Transition;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -26,11 +27,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -118,6 +121,10 @@ public class GamesListActivity extends ActionBarActivity {
 		mTvTimeTabWeekly = (TextView) findViewById(R.id.tv_time_tab_txt_weekly);
 		mTvTimeTabMonthly = (TextView) findViewById(R.id.tv_time_tab_txt_monthly);
 
+		// make profile button visible
+		ImageButton ibProfile = (ImageButton) findViewById(R.id.imgBtn_profile);
+		ibProfile.setVisibility(View.VISIBLE);
+
 		Button btnCancelGameSearch = (Button) findViewById(R.id.btn_cancel_game_search);
 		btnCancelGameSearch.setVisibility(View.GONE); // hide cancel button for now unti we know what it's for.
 
@@ -149,6 +156,10 @@ public class GamesListActivity extends ActionBarActivity {
 				}
 			}
 		});
+
+		// tell transitioning activities how to slide. eg: makeCustomAnimation(ctx, howNewMovesIn, howThisMovesOut) -sem
+		mTransitionAnimationBndl = ActivityOptions.makeCustomAnimation(getApplicationContext(),
+				R.animator.slide_in_from_right, R.animator.slide_out_to_left).toBundle();
 
 		pollServer(HTTP_GET_NEARBY_GAMES_REQ_API, "");
 	}
@@ -211,13 +222,7 @@ public class GamesListActivity extends ActionBarActivity {
 
 		//activity version:
 		Intent i = new Intent(GamesListActivity.this, ProfileActivity.class);
-		i.putExtra("user", user.toJsonStr()); // can this take the place of all those below?
-//		i.putExtra("user_name", 		user.user_name);
-//		i.putExtra("password", 			user.password );
-//		i.putExtra("user_id", 			user.user_id);
-//		i.putExtra("display_name", 		user.display_name);
-//		i.putExtra("media_id", 			user.media_id);
-//		i.putExtra("read_write_key", 	user.read_write_key);
+		i.putExtra("user", user.toJsonStr());
 		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(i, transitionAnimationBndl);
 	}
@@ -349,7 +354,6 @@ public class GamesListActivity extends ActionBarActivity {
 	}
 
 	private void pollServer(final String request_api, String auxData) {
-		// test marshal User obj to json:
 		showProgress(true);
 		RequestParams rqParams = new RequestParams();
 
@@ -407,16 +411,15 @@ public class GamesListActivity extends ActionBarActivity {
 			}
 
 			// set up "auth":{...} json child object
-//			JSONObject jsonAuth = jsonMain.getJSONObject("auth");
-//			jsonAuth = jsonMain.getJSONObject("auth");
 			jsonAuth.put("user_id", Long.parseLong(user.user_id));
 			jsonAuth.put("key", user.read_write_key);
 			mJsonAuth = jsonAuth; // copy to global
+			// embed Auth json into main json block
 			jsonMain.put("auth", jsonAuth);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		Log.i(AppUtils.LOGTAG, "Json string Req to server: " + jsonMain);
+		Log.d(AppUtils.LOGTAG, "Json string Req to server: " + jsonMain);
 
 		try {
 			entity = new StringEntity(jsonMain.toString());
@@ -466,7 +469,7 @@ public class GamesListActivity extends ActionBarActivity {
 
 
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) throws JSONException {
-		Log.i(AppUtils.LOGTAG, "Return status to server Req: " + jsonReturn.toString());
+		Log.d(AppUtils.LOGTAG, "Return status to server Req: " + jsonReturn.toString());
 		if (callingReq.matches(HTTP_GET_NEARBY_GAMES_REQ_API
 				+ "|" +  HTTP_GET_POPULAR_GAMES_REQ_API
 				+ "|" +  HTTP_GET_RECENT_GAMES_REQ_API
@@ -528,6 +531,7 @@ public class GamesListActivity extends ActionBarActivity {
 		llGamesListLayout.removeAllViews(); // refresh visible views so they don't accumulate
 	}
 
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	private void updateAllViews() {
 		// called after any data has been refreshed, usually after network return.
 		LinearLayout llGamesListLayout = (LinearLayout) findViewById(R.id.ll_games_list);
@@ -581,13 +585,23 @@ public class GamesListActivity extends ActionBarActivity {
 				tvGameName.setText(gameItem.name);
 				rateBarGameRating.setRating(Float.parseFloat("0")); // todo: set rating to proper value (from where? games-model, I presume.)
 
+				final Bundle transitionAnimationBndl = ActivityOptions.makeCustomAnimation(getApplicationContext(),
+						R.animator.slide_in_from_right, R.animator.slide_out_to_left).toBundle();
+
 				// set onClick listener for this game item listing:
 				gameItemView.setOnClickListener(new View.OnClickListener() {
+					@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 					@Override
 					public void onClick(View v) {
-						// for now just display a toast:
-						Toast.makeText(getApplicationContext(), "Game clicked. Name: " + gameItem.name + ", ID: " + game_id_key,
-								Toast.LENGTH_LONG).show();
+						// start game cover page  activity
+						Intent i = new Intent(GamesListActivity.this, GameCoverPageActivity.class);
+						Gson gson = new Gson();
+						String jsonGame = gson.toJson(gameItem);
+						i.putExtra("user", user.toJsonStr());
+						i.putExtra("game", jsonGame);
+						i.putExtra("json_auth", mJsonAuth.toString());
+						startActivity(i, transitionAnimationBndl);
+
 					}
 				});
 
@@ -663,17 +677,17 @@ public class GamesListActivity extends ActionBarActivity {
 	}
 
 	// convert json list of games into Array (List) of Game() objects.
-	public List<Game> parseGamesToList (JSONArray gamesList) throws JSONException {
-
-		List<Game> games = new ArrayList<Game>();
-
-		for (int i = 0; i < gamesList.length(); i++) {
-			JSONObject jsonGame = gamesList.getJSONObject(i);
-			games.add(new Game(this, mJsonAuth, jsonGame)); // add to simple list (array)
-
-		}
-		return games;
-	}
+//	public List<Game> parseGamesToList (JSONArray gamesList) throws JSONException {
+//
+//		List<Game> games = new ArrayList<Game>();
+//
+//		for (int i = 0; i < gamesList.length(); i++) {
+//			JSONObject jsonGame = gamesList.getJSONObject(i);
+//			games.add(new Game(this, mJsonAuth, jsonGame)); // add to simple list (array)
+//
+//		}
+//		return games;
+//	}
 
 	// convert json list of games into Game() objects.
 	public Map<String, Game> parseGamesToMap (JSONArray gamesList) throws JSONException {
@@ -810,7 +824,7 @@ Mine Button:
 2015-07-28 15:28:12.717 ARIS[241:18902] Req asynch URL: http://10.223.178.105/server/json.php/v2.games.getFullGame/
 2015-07-28 15:28:12.717 ARIS[241:18902] Req async data: {"auth":{"user_id":1,"key":"F7rwZn5LwfH0gf4gQdBSZ6My1gZlWIhrGzOvMJ79PEZVJU2qXt9MpLagS0rFyzX4"},"game_id":5}
 2015-07-28 15:28:12.744 ARIS[241:18902] Req asynch URL: http://10.223.178.105/server/json.php/v2.games.getFullGame/
-2015-07-28 15:28:12.745 ARIS[241:18902] Req async data: {"auth":{"user_id":1,"key":"F7rwZn5LwfH0gf4gQdBSZ6My1gZlWIhrGzOvMJ79PEZVJU2qXt9MpLagS0rFyzX4"},"game_id":6}
+2015-07-28 15:28:12.745 ARIS[241:18902] Req async data: {"auth":{"user_id":1,"key":"F7rw...zX4"},"game_id":6}
 2015-07-28 15:28:12.786 ARIS[241:18902] Fin asynch URL: http://10.223.178.105/server/json.php/v2.games.getFullGame/	(0.145088)
 2015-07-28 15:28:12.787 ARIS[241:18902] Fin async data:
 {"data":{"game_id":"1","name":"scott game 1","description":"game1","tick_script":null,"tick_delay":null,"icon_media_id":"0","media_id":"0","map_type":"STREET","map_latitude":"0","map_longitude":"0","map_zoom_level":"0","map_show_player":"1","map_show_players":"1","map_offsite_mode":"0","notebook_allow_comments":"1","notebook_allow_likes":"1","notebook_trigger_scene_id":"0","notebook_trigger_requirement_root_package_id":"0","notebook_trigger_title":"","notebook_trigger_icon_media_id":"0","notebook_trigger_distance":"0","notebook_trigger_infinite_distance":"0","notebook_trigger_wiggle":"0","notebook_trigger_show_title":"1","notebook_trigger_hidden":"0","notebook_trigger_on_enter":"0","inventory_weight_cap":"0","is_siftr":null,"siftr_url":null,"published":"1","type":"LOCATION","intro_scene_id":"1","moderated":null,"authors":[{"user_id":"1","user_name":"scott","display_name":"scott","media_id":"0"}],"media":{"media_id":"0","game_id":0,"name":"Default NPC","file_name":"npc.png","url":"http:\/\/aris.localhost\/server\/gamedata\/v2\/0\/npc.png","thumb_url":"http:\/\/aris.localhost\/server\/gamedata\/v2\/0\/npc_128.png"},"icon_media":{"media_id":"0","game_id":0,"name":"Default NPC","file_name":"npc.png","url":"http:\/\/aris.localhost\/server\/gamedata\/v2\/0\/npc.png","thumb_url":"http:\/\/aris.localhost\/server\/gamedata\/v2\/0\/npc_128.png"}},"returnCode":0,"returnCodeDescription":null}

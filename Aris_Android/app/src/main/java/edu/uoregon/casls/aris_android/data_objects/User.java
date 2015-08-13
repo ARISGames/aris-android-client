@@ -51,7 +51,7 @@ public class User {
 			display_name = jsonUser.getString("email");
 		if (jsonUser.has("media_id") /*&& !jsonUser.getString("media_id").contentEquals("null")*/)
 			media_id = jsonUser.getString("media_id");
-		// Not sure if this is the exact json key for user. May need to update this.
+		// Not sure if this is the exact json key for user. May need to update this. is map_long/lat for the Game and long/lat/ for User?
 		if (jsonUser.has("map_latitude") && !jsonUser.getString("map_latitude").contentEquals("null"))
 			location.setLatitude(Double.parseDouble(jsonUser.getString("map_latitude")));
 		else if (jsonUser.has("latitude") && !jsonUser.getString("latitude").contentEquals("null"))
