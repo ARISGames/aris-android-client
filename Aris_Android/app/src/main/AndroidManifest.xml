@@ -20,10 +20,9 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- External storage for caching. -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <!-- from: http://examples.javacodegeeks.com/android/core/android-video-capture-example/ -->
     <uses-feature android:name="android.hardware.camera" />
@@ -35,6 +34,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/logo_icon"
+        android:name=".ArisApp"
         android:label="@string/app_name"
         android:theme="@style/ArisClassic" >
         <activity
@@ -45,7 +45,6 @@
             android:windowSoftInputMode="adjustResize|stateVisible" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
