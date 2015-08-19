@@ -1,25 +1,14 @@
 package edu.uoregon.casls.aris_android.data_objects;
 
-import android.content.Context;
 import android.location.Location;
-import android.util.Log;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
-import org.apache.http.Header;
-import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import edu.uoregon.casls.aris_android.AppUtils;
 
 /*
   Created by smorison on 7/28/15.

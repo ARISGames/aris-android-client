@@ -1,4 +1,4 @@
-package edu.uoregon.casls.aris_android;
+package edu.uoregon.casls.aris_android.Utilities;
 
 import android.content.Context;
 

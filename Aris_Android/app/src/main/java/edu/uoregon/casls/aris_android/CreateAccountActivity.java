@@ -31,6 +31,8 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
+import edu.uoregon.casls.aris_android.Utilities.AppUtils;
+
 
 public class CreateAccountActivity extends ActionBarActivity {
 	private static final String HTTP_CLIENT_CREATE_USER_REQ_API = "v2.users.createUser/";

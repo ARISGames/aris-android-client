@@ -44,6 +44,8 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import edu.uoregon.casls.aris_android.Utilities.AppUtils;
+
 
 /**
  * A login screen that offers login via email/password.

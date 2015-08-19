@@ -34,7 +34,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/logo_icon"
-        android:name=".ArisApp"
+        android:name=".Utilities.ArisApp"
         android:label="@string/app_name"
         android:theme="@style/ArisClassic" >
         <activity

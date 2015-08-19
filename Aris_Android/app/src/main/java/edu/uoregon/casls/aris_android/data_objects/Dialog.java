@@ -1,4 +1,4 @@
-package edu.uoregon.casls.aris_android;
+package edu.uoregon.casls.aris_android.data_objects;
 
 /**
  * Created by smorison on 8/19/15.

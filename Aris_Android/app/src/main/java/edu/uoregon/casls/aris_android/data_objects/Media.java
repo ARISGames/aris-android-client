@@ -4,7 +4,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import edu.uoregon.casls.aris_android.ArisApp;
+import edu.uoregon.casls.aris_android.Utilities.ArisApp;
 import edu.uoregon.casls.aris_android.data_objects.cd_data_objects.MediaCD;
 
 /**
