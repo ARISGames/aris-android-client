@@ -1,6 +1,7 @@
 package edu.uoregon.casls.aris_android.data_objects;
 
 import android.location.Location;
+import android.os.Handler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,10 +11,43 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import edu.uoregon.casls.aris_android.Utilities.AppUtils;
+import edu.uoregon.casls.aris_android.Utilities.ArisApp;
+import edu.uoregon.casls.aris_android.models.DialogsModel;
+import edu.uoregon.casls.aris_android.models.DisplayQueueModel;
+import edu.uoregon.casls.aris_android.models.EventsModel;
+import edu.uoregon.casls.aris_android.models.FactoriesModel;
+import edu.uoregon.casls.aris_android.models.InstancesModel;
+import edu.uoregon.casls.aris_android.models.ItemsModel;
+import edu.uoregon.casls.aris_android.models.LogsModel;
+import edu.uoregon.casls.aris_android.models.NotesModel;
+import edu.uoregon.casls.aris_android.models.OverlaysModel;
+import edu.uoregon.casls.aris_android.models.PlaquesModel;
+import edu.uoregon.casls.aris_android.models.PlayerInstancesModel;
+import edu.uoregon.casls.aris_android.models.QuestsModel;
+import edu.uoregon.casls.aris_android.models.ScenesModel;
+import edu.uoregon.casls.aris_android.models.TabsModel;
+import edu.uoregon.casls.aris_android.models.TagsModel;
+import edu.uoregon.casls.aris_android.models.TriggersModel;
+import edu.uoregon.casls.aris_android.models.WebPagesModel;
+
 /*
   Created by smorison on 7/28/15.
  */
 public class Game {
+
+	static final long gameDatasToReceive = 23;
+	static final long playerDatasToReceive = 7;
+
+	public long receivedGameData;
+	public Boolean gameDataReceived;
+
+	public long receivedPlayerData;
+	public Boolean playerDataReceived;
+
+//	public NSTimer *poller; todo: android equivalent
+	private int pollerInterval = 1000; // Move the timer to the activity that will be in charge of the game play.?
+	private final Handler poller = new Handler();
 
 	private static final String HTTP_GET_FULL_GAME_REQ_API = "v2.games.getFullGame/";
 	public long game_id;
@@ -34,7 +68,7 @@ public class Game {
 	public long intro_scene_id;
 
 	public List<User> authors = new ArrayList<User>();
-//	List<User> Comment = new ArrayList<Comment>();
+//	public List<GameComment> comments = new ArrayList<GameComment>();
 
 	public String map_type;
 	public double map_zoom_level;
@@ -48,26 +82,24 @@ public class Game {
 
 	public long inventory_weight_cap;
 
-//	private Context mContext;
-
-	// Supporting classes
-//		ScenesModel     scenesModel;
-//		PlaquesModel    plaquesModel;
-//		ItemsModel      itemsModel;
-//		DialogsModel    dialogsModel;
-//		WebPagesModel   webPagesModel;
-//		NotesModel      notesModel;
-//		TagsModel       tagsModel;
-//		EventsModel     eventsModel;
-//		TriggersModel   triggersModel;
-//		FactoriesModel  factoriesModel;
-//		OverlaysModel   overlaysModel;
-//		InstancesModel  instancesModel;
-//		PlayerInstancesModel  playerInstancesModel;
-//		TabsModel       tabsModel;
-//		LogsModel       logsModel;
-//		QuestsModel     questsModel;
-//		DisplayQueueModel displayQueueModel;
+	// Game subcomponent classes
+	ScenesModel scenesModel;
+	PlaquesModel plaquesModel;
+	ItemsModel itemsModel;
+	DialogsModel dialogsModel;
+	WebPagesModel webPagesModel;
+	NotesModel notesModel;
+	TagsModel tagsModel;
+	EventsModel eventsModel;
+	TriggersModel triggersModel;
+	FactoriesModel factoriesModel;
+	OverlaysModel overlaysModel;
+	InstancesModel instancesModel;
+	PlayerInstancesModel playerInstancesModel;
+	TabsModel tabsModel;
+	LogsModel logsModel;
+	QuestsModel questsModel;
+	DisplayQueueModel displayQueueModel;
 
 	// Basic Constructor with json game block
 	public Game(JSONObject jsonGame) throws JSONException {
@@ -195,8 +227,194 @@ public class Game {
 //			}
 //		}
 
+	}
+
+	public void getReadyToPlay() {
+//		_ARIS_NOTIF_LISTEN_(@"MODEL_GAME_PIECE_AVAILABLE",self,@selector(gamePieceReceived),null);
+//		_ARIS_NOTIF_LISTEN_(@"MODEL_GAME_PLAYER_PIECE_AVAILABLE",self,@selector(gamePlayerPieceReceived),null);
+
+		receivedGameData = 0;
+		gameDataReceived = false;
+
+		receivedPlayerData = 0;
+		playerDataReceived = false;
+
+		scenesModel          = new ScenesModel();
+		plaquesModel         = new PlaquesModel();
+		itemsModel           = new ItemsModel();
+		dialogsModel         = new DialogsModel();
+		webPagesModel        = new WebPagesModel();
+		notesModel           = new NotesModel();
+		tagsModel            = new TagsModel();
+		eventsModel          = new EventsModel();
+		triggersModel        = new TriggersModel();
+		factoriesModel       = new FactoriesModel();
+		overlaysModel        = new OverlaysModel();
+		instancesModel       = new InstancesModel();
+		playerInstancesModel = new PlayerInstancesModel();
+		tabsModel            = new TabsModel();
+		logsModel            = new LogsModel();
+		questsModel          = new QuestsModel();
+		displayQueueModel    = new DisplayQueueModel();
+	}
+
+	//to remove models while retaining the game stub for lists and such
+	public void endPlay() {
+		receivedGameData = 0;
+		gameDataReceived = false;
+
+		receivedPlayerData = 0;
+		playerDataReceived = false;
+
+		scenesModel          = null;
+		plaquesModel         = null;
+		itemsModel           = null;
+		dialogsModel         = null;
+		webPagesModel        = null;
+		notesModel           = null;
+		tagsModel            = null;
+		eventsModel          = null;
+		triggersModel        = null;
+		factoriesModel       = null;
+		overlaysModel        = null;
+		instancesModel       = null;
+		playerInstancesModel = null;
+		tabsModel            = null;
+		questsModel          = null;
+		logsModel            = null;
+		displayQueueModel    = null;
+	}
+
+	public void requestGameData() {
+		receivedGameData = 0;
+		scenesModel.requestScenes();
+		scenesModel.touchPlayerScene();
+		plaquesModel.requestPlaques();
+		itemsModel.requestItems();
+		playerInstancesModel.touchPlayerInstances();
+		dialogsModel.requestDialogs(); //makes 4 "game data received" notifs (dialogs, characters, scripts, options)
+		webPagesModel.requestWebPages();
+		notesModel.requestNotes();
+		notesModel.requestNoteComments();
+		tagsModel.requestTags();
+		eventsModel.requestEvents();
+		questsModel.requestQuests();
+		triggersModel.requestTriggers();
+		factoriesModel.requestFactories();
+		overlaysModel.requestOverlays();
+		instancesModel.requestInstances();
+		tabsModel.requestTabs();
+
+//		//the requests not 'owned' by Game. Also, not 100% necessary
+//		//(has ability to load on an individual basis)
+//		_MODEL_MEDIA_ requestMedia();
+//		_MODEL_USERS_ requestUsers();
+	}
+
+	public void requestPlayerData() {
+		receivedPlayerData = 0;
+		scenesModel.requestPlayerScene();
+		instancesModel.requestPlayerInstances();
+		triggersModel.requestPlayerTriggers();
+		overlaysModel.requestPlayerOverlays();
+		questsModel.requestPlayerQuests();
+		tabsModel.requestPlayerTabs();
+		logsModel.requestPlayerLogs();
+	}
+
+	public void gamePieceReceived() {
+		receivedGameData++;
+		if(!gameDataReceived && receivedGameData >= gameDatasToReceive)
+		{
+//			_ARIS_NOTIF_SEND_(@"MODEL_GAME_DATA_LOADED", null, null);
+			gameDataReceived = true;
+		}
+		percentLoadedChanged();
+	}
+
+	public void gamePlayerPieceReceived() {
+		receivedPlayerData++;
+		if(receivedPlayerData >= playerDatasToReceive)
+		{
+//			_ARIS_NOTIF_SEND_(@"MODEL_GAME_PLAYER_DATA_LOADED", null, null);
+			playerDataReceived = true;
+		}
+		percentLoadedChanged();
+	}
+
+	public void percentLoadedChanged() {
+		float percentReceived = (receivedGameData + receivedPlayerData) / (gameDatasToReceive + playerDatasToReceive);
+//		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PERCENT_LOADED", null, @{@"percent":percentReceived});
+	}
+
+	public void gameBegan() {
+//		_ARIS_NOTIF_IGNORE_(@"MODEL_GAME_PIECE_AVAILABLE", self, null);
+//		_ARIS_NOTIF_IGNORE_(@"MODEL_GAME_PLAYER_PIECE_AVAILABLE", self, null);
+//		poller = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(requestPlayerData) userInfo:null repeats:YES];
+	}
+
+	public void gameLeft() {
+//		poller invalidate();
+	}
+
+//	private Runnable runnable = new Runnable() {
+//		@Override
+//		public void run() {
+//      /* do what you need to do */
+//			foobar();
+//			]\
+//      /* and here comes the "trick" */
+//			poller.postDelayed(this, 100);
+//		}
+//	};
 
 
+	public void clearModels() {
+		receivedGameData = 0;
+		gameDataReceived = false;
+
+		receivedPlayerData = 0;
+		playerDataReceived = false;
+
+		scenesModel.clearGameData();
+		plaquesModel.clearGameData();
+		itemsModel.clearGameData();
+		dialogsModel.clearGameData();
+		webPagesModel.clearGameData();
+		notesModel.clearGameData();
+		tagsModel.clearGameData();
+		eventsModel.clearGameData();
+		questsModel.clearGameData();
+		triggersModel.clearGameData();
+		factoriesModel.clearGameData();
+		overlaysModel.clearGameData();
+		instancesModel.clearGameData();
+		playerInstancesModel.clearGameData();
+		tabsModel.clearGameData();
+
+		scenesModel.clearPlayerData();
+		questsModel.clearPlayerData();
+		triggersModel.clearPlayerData();
+		overlaysModel.clearPlayerData();
+		instancesModel.clearPlayerData();
+		playerInstancesModel.clearPlayerData();
+		tabsModel.clearPlayerData();
+		logsModel.clearPlayerData();
+
+		displayQueueModel.clear();
+	}
+
+//	public long rating() {
+//		if(!comments.count) return 0;
+//		long rating = 0;
+//		for(long i = 0; i < comments.count; i++)
+//			rating += ((GameComment *)[comments objectAtIndex:i]).rating;
+//		return rating/comments.count;
+//	}
+
+	public String description()
+	{
+		return (String) "Game- Id:" + game_id + "\tName:" + name;
 	}
 
 }
