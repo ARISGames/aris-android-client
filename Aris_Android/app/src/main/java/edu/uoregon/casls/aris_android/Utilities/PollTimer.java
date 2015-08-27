@@ -11,6 +11,7 @@ import android.util.Log;
  */
 public class PollTimer extends IntentService {
 	private boolean runTimer = true;
+	// might want to set this up with its own llisteners for things like Pause and other behavioural changes. -sem
 
 	public PollTimer() {
 		super("PollTimer");
