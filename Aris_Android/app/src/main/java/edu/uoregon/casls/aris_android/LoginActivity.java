@@ -45,6 +45,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
+import edu.uoregon.casls.aris_android.Utilities.Constant;
 
 
 /**
@@ -146,7 +147,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (AppUtils.DEBUG_ON) { // preset the input fields to save time during testing.
+		if (Constant.DEBUG_ON) { // preset the input fields to save time during testing.
 			mEtUsername.setText("scott");
 			mEtPassword.setText("123123");
 		}
@@ -187,7 +188,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 //		if (mAuthTask != null) {
 //			return;
 //		}
-		if (AppUtils.FAKE_GOOD_LOGIN) {
+		if (Constant.FAKE_GOOD_LOGIN) {
 			fakeLogin();
 			finish();
 		}
@@ -264,7 +265,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 //		JSONObject jsonParams = new JSONObject();
 
 		final Context context = this;
-		String request_url = AppUtils.SERVER_URL_MOBILE + HTTP_CLIENT_LOGIN_REQ_API;
+		String request_url = Constant.SERVER_URL_MOBILE + HTTP_CLIENT_LOGIN_REQ_API;
 
 		rqParams.put("request", HTTP_CLIENT_LOGIN_REQ_API);
 
@@ -280,7 +281,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		Log.i(AppUtils.LOGTAG, "Json string Req to server: " + jsonParams);
+		Log.i(Constant.LOGTAG, "Json string Req to server: " + jsonParams);
 
 		try {
 			entity = new StringEntity(jsonParams.toString());
@@ -305,7 +306,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 				}
 				@Override
 				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-					Log.e(AppUtils.LOGTAG, "AsyncHttpClient failed server call. ", throwable);
+					Log.e(Constant.LOGTAG, "AsyncHttpClient failed server call. ", throwable);
 					showProgress(false);
 					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 							Toast.LENGTH_SHORT);
@@ -325,9 +326,9 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) {
-		Log.i(AppUtils.LOGTAG, "Return status to server Req: " + jsonReturn.toString());
+		Log.i(Constant.LOGTAG, "Return status to server Req: " + jsonReturn.toString());
  		if (callingReq == HTTP_CLIENT_LOGIN_REQ_API) {
-			Log.i(AppUtils.LOGTAG, "Landed successfully in colling Req: " + HTTP_CLIENT_LOGIN_REQ_API);
+			Log.i(Constant.LOGTAG, "Landed successfully in colling Req: " + HTTP_CLIENT_LOGIN_REQ_API);
 			try {
 				// process incoming json data
 				if (jsonReturn.has("data")) {
@@ -360,12 +361,12 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 					}
 				}
 			} catch (JSONException e) {
-				Log.e(AppUtils.LOGTAG, "Failed while parsing returning JSON from request:" + HTTP_CLIENT_LOGIN_REQ_API + " Error reported was: " + e.getCause());
+				Log.e(Constant.LOGTAG, "Failed while parsing returning JSON from request:" + HTTP_CLIENT_LOGIN_REQ_API + " Error reported was: " + e.getCause());
 				e.printStackTrace();
 			}
 		}
 		else { // unknown callinRequest
-			Log.e(AppUtils.LOGTAG, "AsyncHttpClient returned unknown server callingReq: " + callingReq);
+			Log.e(Constant.LOGTAG, "AsyncHttpClient returned unknown server callingReq: " + callingReq);
 			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 					Toast.LENGTH_SHORT);
 			t.setGravity(Gravity.CENTER, 0, 0);
@@ -535,7 +536,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
 	public void loginButtonClick(View v) {
 		// user has clicked the login button
-		if (AppUtils.FAKE_GOOD_LOGIN)
+		if (Constant.FAKE_GOOD_LOGIN)
 			fakeLogin();
 		else
 			attemptLogin();

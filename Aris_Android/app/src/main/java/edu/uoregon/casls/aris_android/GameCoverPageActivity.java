@@ -31,6 +31,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
+import edu.uoregon.casls.aris_android.Utilities.Constant;
 import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.User;
 
@@ -92,7 +93,7 @@ public class GameCoverPageActivity extends ActionBarActivity {
 		RequestParams rqParams = new RequestParams();
 
 		final Context context = this;
-		String request_url = AppUtils.SERVER_URL_MOBILE + request_api;
+		String request_url = Constant.SERVER_URL_MOBILE + request_api;
 
 		rqParams.put("request", request_api);
 		StringEntity entity;
@@ -105,7 +106,7 @@ public class GameCoverPageActivity extends ActionBarActivity {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		Log.d(AppUtils.LOGTAG, "Json string Req to server: " + jsonMain);
+		Log.d(Constant.LOGTAG, "Json string Req to server: " + jsonMain);
 
 		try {
 			entity = new StringEntity(jsonMain.toString());
@@ -130,7 +131,7 @@ public class GameCoverPageActivity extends ActionBarActivity {
 				}
 				@Override
 				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-					Log.e(AppUtils.LOGTAG, "AsyncHttpClient failed server call. ", throwable);
+					Log.e(Constant.LOGTAG, "AsyncHttpClient failed server call. ", throwable);
 					showProgress(false);
 					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 							Toast.LENGTH_SHORT);
@@ -149,10 +150,10 @@ public class GameCoverPageActivity extends ActionBarActivity {
 	}
 
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) throws JSONException {
-		Log.d(AppUtils.LOGTAG, "Return status to server Req: " + jsonReturn.toString());
+		Log.d(Constant.LOGTAG, "Return status to server Req: " + jsonReturn.toString());
 		if (callingReq.contentEquals(HTTP_GET_PLAYER_PLAYED_GAME_REQ_API) ) { //
 			// Response looks like this: {"data":{"game_id":"1","has_played":false},"returnCode":0,"returnCodeDescription":null}
-			Log.i(AppUtils.LOGTAG, "Landed successfully in colling Req: " + callingReq);
+			Log.i(Constant.LOGTAG, "Landed successfully in colling Req: " + callingReq);
 			try {
 				// process incoming json data
 				if (jsonReturn.has("data")) {
@@ -164,12 +165,12 @@ public class GameCoverPageActivity extends ActionBarActivity {
 
 				}
 			} catch (JSONException e) {
-				Log.e(AppUtils.LOGTAG, "Failed while parsing returning JSON from request:" + HTTP_GET_PLAYER_PLAYED_GAME_REQ_API + " Error reported was: " + e.getCause());
+				Log.e(Constant.LOGTAG, "Failed while parsing returning JSON from request:" + HTTP_GET_PLAYER_PLAYED_GAME_REQ_API + " Error reported was: " + e.getCause());
 				e.printStackTrace();
 			}
 		}
 		else { // unknown callinRequest
-			Log.e(AppUtils.LOGTAG, "AsyncHttpClient returned successfully but with unhandled server callingReq: " + callingReq);
+			Log.e(Constant.LOGTAG, "AsyncHttpClient returned successfully but with unhandled server callingReq: " + callingReq);
 			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 					Toast.LENGTH_SHORT);
 			t.setGravity(Gravity.CENTER, 0, 0);
