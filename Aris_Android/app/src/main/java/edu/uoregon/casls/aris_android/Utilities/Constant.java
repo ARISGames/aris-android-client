@@ -12,7 +12,6 @@ public class Constant {
 
 	public final static Boolean DEBUG_ON = true; //todo: Make sure to turn this off for release version
 	public final static Boolean FAKE_GOOD_LOGIN = false; //todo: Make sure to turn this off for release version
-	public static final String TAG_SERVER_SUCCESS = "success";
 
 	public static final int UPDATE_PROGRESS = 1;
 	public static final int POLLTIMER_RESULT = 2;
@@ -20,4 +19,7 @@ public class Constant {
 			"edu.uoregon.casls.aris_android.REQUEST_PROCESSED";
 	public static final String COMMAND = "command";
 	public static final String DATA = "data";
+
+	public static final String TAG_SERVER_SUCCESS = "success";
+	public static final String SVR_RETURN_CODE = "returnCode";
 }

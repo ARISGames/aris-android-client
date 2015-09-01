@@ -32,27 +32,29 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/incl_titlebar">
+        android:layout_below="@+id/incl_titlebar"
+        android:layout_marginBottom="60dp">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <!--<WebView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/webView"/>-->
+
             <WebView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/webView"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/iv_game_icon"
-                android:layout_centerHorizontal="true"/>
+                android:id="@+id/wv_game_pic"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/logo_icon"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/iv_game_designer_logo"
-                android:layout_below="@+id/iv_game_icon"
+                android:layout_below="@+id/wv_game_pic"
                 android:layout_centerHorizontal="true"/>
 
             <TextView

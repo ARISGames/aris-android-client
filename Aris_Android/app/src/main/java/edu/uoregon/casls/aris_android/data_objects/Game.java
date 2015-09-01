@@ -2,6 +2,10 @@ package edu.uoregon.casls.aris_android.data_objects;
 
 import android.location.Location;
 import android.os.Handler;
+import android.util.*;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,6 +17,7 @@ import java.util.List;
 
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.Utilities.ArisApp;
+import edu.uoregon.casls.aris_android.Utilities.Constant;
 import edu.uoregon.casls.aris_android.models.DialogsModel;
 import edu.uoregon.casls.aris_android.models.DisplayQueueModel;
 import edu.uoregon.casls.aris_android.models.EventsModel;
@@ -46,8 +51,9 @@ public class Game {
 	public Boolean playerDataReceived;
 
 //	public NSTimer *poller; todo: android equivalent
-	private int pollerInterval = 1000; // Move the timer to the activity that will be in charge of the game play.?
-	private final Handler poller = new Handler();
+	// todo: this will not serialize (crashes gson.toJson()) so I need to locate it in the gameplay activity itself.
+//	private int pollerInterval = 1000; // Move the timer to the activity that will be in charge of the game play.?
+//	private final Handler poller = new Handler();
 
 	private static final String HTTP_GET_FULL_GAME_REQ_API = "v2.games.getFullGame/";
 	public long game_id;
@@ -61,8 +67,9 @@ public class Game {
 	public Location map_location = new Location("0");
 	public long player_count;
 
+	public Media icon_media;
 	public long icon_media_id;
-//	public media
+	public Media media;
 	public long media_id;
 
 	public long intro_scene_id;
@@ -107,7 +114,7 @@ public class Game {
 	}
 
 	private void initWithJson(JSONObject jsonGame) throws JSONException {
-		if (jsonGame.has("game_id") && !jsonGame.getString("game_id").contentEquals("null"))
+		if (jsonGame.has("game_id") && !jsonGame.getString("game_id").equals("null"))
 			game_id = Long.parseLong(jsonGame.getString("game_id"));
 		if (jsonGame.has("name"))
 			name = jsonGame.getString("name");
@@ -115,39 +122,43 @@ public class Game {
 			desc = jsonGame.getString("description");
 		if (jsonGame.has("tick_script"))
 			tick_script = jsonGame.getString("tick_script");
-		if (jsonGame.has("tick_delay") && !jsonGame.getString("tick_delay").contentEquals("null"))
+		if (jsonGame.has("tick_delay") && !jsonGame.getString("tick_delay").equals("null"))
 			tick_delay = Long.parseLong(jsonGame.getString("tick_delay"));
-		if (jsonGame.has("icon_media_id") && !jsonGame.getString("icon_media_id").contentEquals("null"))
+		if (jsonGame.has("icon_media_id") && !jsonGame.getString("icon_media_id").equals("null"))
 			icon_media_id = Long.parseLong(jsonGame.getString("icon_media_id"));
-		if (jsonGame.has("media_id") && !jsonGame.getString("media_id").contentEquals("null"))
+		if (jsonGame.has("media_id") && !jsonGame.getString("media_id").equals("null"))
 			media_id = Long.parseLong(jsonGame.getString("media_id"));
+		if (jsonGame.has("latitude") && !jsonGame.getString("latitude").equals("null"))
+			location.setLatitude(Double.parseDouble(jsonGame.getString("latitude")));
+		if (jsonGame.has("longitude") && !jsonGame.getString("longitude").equals("null"))
+			location.setLongitude(Double.parseDouble(jsonGame.getString("longitude")));
 		if (jsonGame.has("map_type"))
 			map_type = jsonGame.getString("map_type");
-		if (jsonGame.has("map_latitude") && !jsonGame.getString("map_latitude").contentEquals("null"))
+		if (jsonGame.has("map_latitude") && !jsonGame.getString("map_latitude").equals("null"))
 			map_location.setLatitude(Double.parseDouble(jsonGame.getString("map_latitude")));
-		if (jsonGame.has("map_longitude") && !jsonGame.getString("map_longitude").contentEquals("null"))
+		if (jsonGame.has("map_longitude") && !jsonGame.getString("map_longitude").equals("null"))
 			map_location.setLongitude(Double.parseDouble(jsonGame.getString("map_longitude")));
-		if (jsonGame.has("map_zoom_level") && !jsonGame.getString("map_zoom_level").contentEquals("null"))
+		if (jsonGame.has("map_zoom_level") && !jsonGame.getString("map_zoom_level").equals("null"))
 			map_zoom_level = Double.parseDouble(jsonGame.getString("map_zoom_level"));
-		if (jsonGame.has("map_show_player") && !jsonGame.getString("map_show_player").contentEquals("null"))
+		if (jsonGame.has("map_show_player") && !jsonGame.getString("map_show_player").equals("null"))
 			map_show_player = Boolean.parseBoolean(jsonGame.getString("map_show_player"));
-		if (jsonGame.has("map_show_players") && !jsonGame.getString("map_show_players").contentEquals("null"))
+		if (jsonGame.has("map_show_players") && !jsonGame.getString("map_show_players").equals("null"))
 			map_show_players = Boolean.parseBoolean(jsonGame.getString("map_show_players"));
-		if (jsonGame.has("map_offsite_mode") && !jsonGame.getString("map_offsite_mode").contentEquals("null"))
+		if (jsonGame.has("map_offsite_mode") && !jsonGame.getString("map_offsite_mode").equals("null"))
 			map_offsite_mode = Boolean.parseBoolean(jsonGame.getString("map_offsite_mode"));
-		if (jsonGame.has("notebook_allow_comments") && !jsonGame.getString("notebook_allow_comments").contentEquals("null"))
+		if (jsonGame.has("notebook_allow_comments") && !jsonGame.getString("notebook_allow_comments").equals("null"))
 			notebook_allow_comments = Boolean.parseBoolean(jsonGame.getString("notebook_allow_comments"));
-		if (jsonGame.has("notebook_allow_likes") && !jsonGame.getString("notebook_allow_likes").contentEquals("null"))
+		if (jsonGame.has("notebook_allow_likes") && !jsonGame.getString("notebook_allow_likes").equals("null"))
 			notebook_allow_likes = Boolean.parseBoolean(jsonGame.getString("notebook_allow_likes"));
-		if (jsonGame.has("notebook_allow_player_tags") && !jsonGame.getString("notebook_allow_player_tags").contentEquals("null"))
+		if (jsonGame.has("notebook_allow_player_tags") && !jsonGame.getString("notebook_allow_player_tags").equals("null"))
 			notebook_allow_player_tags = Boolean.parseBoolean(jsonGame.getString("notebook_allow_player_tags"));
-		if (jsonGame.has("published") && !jsonGame.getString("published").contentEquals("null"))
+		if (jsonGame.has("published") && !jsonGame.getString("published").equals("null"))
 			published = Boolean.parseBoolean(jsonGame.getString("published"));
 		if (jsonGame.has("type"))
 			type = jsonGame.getString("type");
-		if (jsonGame.has("intro_scene_id") && !jsonGame.getString("intro_scene_id").contentEquals("null"))
+		if (jsonGame.has("intro_scene_id") && !jsonGame.getString("intro_scene_id").equals("null"))
 			intro_scene_id = Long.parseLong(jsonGame.getString("intro_scene_id"));
-		if (jsonGame.has("player_count") && !jsonGame.getString("player_count").contentEquals("null"))
+		if (jsonGame.has("player_count") && !jsonGame.getString("player_count").equals("null"))
 			player_count = Long.parseLong(jsonGame.getString("player_count"));
 
 		//not found in basic game data apparently, at least not here in Game() see full game init
@@ -183,8 +194,9 @@ public class Game {
 
 	// fill in the fields not present in the constructor parameters, such authors and inventory_weight_cap
 	public void initFullGameDetailsWithJson(JSONObject jsonFullGame) throws JSONException {
+		Gson gson = new Gson();
 		JSONObject jsonGameData = jsonFullGame.getJSONObject("data");
-		if (jsonGameData.has("inventory_weight_cap") && !jsonGameData.getString("inventory_weight_cap").contentEquals("null"))
+		if (jsonGameData.has("inventory_weight_cap") && !jsonGameData.getString("inventory_weight_cap").equals("null"))
 			inventory_weight_cap = Long.parseLong(jsonGameData.getString("inventory_weight_cap"));
 		// get authors from full game block
 		if (jsonGameData.has("authors")) {
@@ -196,26 +208,32 @@ public class Game {
 			}
 		}
 		if (jsonGameData.has("media")) {
-			JSONObject jsonMedia = jsonGameData.getJSONObject("authors");
 			// get media block
+			JSONObject jsonMedia = jsonGameData.getJSONObject("media");
+			media = gson.fromJson(jsonMedia.toString(), Media.class);
+//			android.util.Log.d(Constant.LOGTAG, "Debug break to examine object media");
+
+		}
+		if (jsonGameData.has("icon_media")) {
+			// get icon_media block
+			JSONObject jsonMedia = jsonGameData.getJSONObject("icon_media");
+			icon_media = gson.fromJson(jsonMedia.toString(), Media.class);
 		}
 
-		// where do all these come into play???
-		// upon search, none of these are utilized, or even mentioned in, in the iOS code
-		jsonFullGame.getString("is_siftr");
-		jsonFullGame.getString("siftr_url");
-		jsonFullGame.getString("moderated");
-		jsonFullGame.getString("notebook_trigger_scene_id");
-		jsonFullGame.getString("notebook_trigger_requirement_root_package_id");
-		jsonFullGame.getString("notebook_trigger_title");
-		jsonFullGame.getString("notebook_trigger_icon_media_id");
-		jsonFullGame.getString("notebook_trigger_distance");
-		jsonFullGame.getString("notebook_trigger_infinite_distance");
-		jsonFullGame.getString("notebook_trigger_wiggle");
-		jsonFullGame.getString("notebook_trigger_show_title");
-		jsonFullGame.getString("notebook_trigger_hidden");
-		jsonFullGame.getString("notebook_trigger_on_enter");
-
+		// none of these are utilized, or even mentioned in, in the iOS code leaving in for future potential
+//		jsonFullGame.getString("is_siftr");
+//		jsonFullGame.getString("siftr_url");
+//		jsonFullGame.getString("moderated");
+//		jsonFullGame.getString("notebook_trigger_scene_id");
+//		jsonFullGame.getString("notebook_trigger_requirement_root_package_id");
+//		jsonFullGame.getString("notebook_trigger_title");
+//		jsonFullGame.getString("notebook_trigger_icon_media_id");
+//		jsonFullGame.getString("notebook_trigger_distance");
+//		jsonFullGame.getString("notebook_trigger_infinite_distance");
+//		jsonFullGame.getString("notebook_trigger_wiggle");
+//		jsonFullGame.getString("notebook_trigger_show_title");
+//		jsonFullGame.getString("notebook_trigger_hidden");
+//		jsonFullGame.getString("notebook_trigger_on_enter");
 
 		// stub-in for when/if comments seem to become a part of the Game data.
 //		if (jsonFullGame.has("comments")) {

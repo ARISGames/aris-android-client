@@ -148,7 +148,8 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 	public void onResume() {
 		super.onResume();
 		if (Constant.DEBUG_ON) { // preset the input fields to save time during testing.
-			mEtUsername.setText("scott");
+			mEtUsername.setText("scotta"); // arisgames.org
+//			mEtUsername.setText("scott"); // localhost
 			mEtPassword.setText("123123");
 		}
 		else {
@@ -327,40 +328,50 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) {
 		Log.i(Constant.LOGTAG, "Return status to server Req: " + jsonReturn.toString());
- 		if (callingReq == HTTP_CLIENT_LOGIN_REQ_API) {
+ 		if (callingReq.equals(HTTP_CLIENT_LOGIN_REQ_API)) {
 			Log.i(Constant.LOGTAG, "Landed successfully in colling Req: " + HTTP_CLIENT_LOGIN_REQ_API);
 			try {
-				// process incoming json data
-				if (jsonReturn.has("data")) {
+				// check for login denial response from server
+				if (jsonReturn.has("returnCode") && jsonReturn.getInt(Constant.SVR_RETURN_CODE) > 0) {
+					Toast t = Toast.makeText(getApplicationContext(), "This username and/or password were not recognized by the server. Please try again.",
+							Toast.LENGTH_LONG);
+					t.setGravity(Gravity.CENTER, 0, 0);
+					t.show();
+				}
+				else { // passed login
+					// process incoming json data
+					if (jsonReturn.has("data")) {
 //					int returnCode = (jsonReturn.has("returnCode")) ? jsonReturn.getInt("returnCode") : null; // what do I do?
 //					String returnCodeDescription = (jsonReturn.has("returnCode")) ? jsonReturn.getString("returnCodeDescription") : ""; // For what?
-					JSONObject jsonObj = jsonReturn.getJSONObject("data");
-					mUserId = jsonReturn.has("returnCode") ? jsonObj.getString("user_id") : "null";
-					if (mUserId != null && !mUserId.contentEquals("null")) { // login creds accepted
-						mDisplayName = jsonObj.getString("display_name");
-						mMediaId = jsonObj.getString("media_id");
-						mReadWriteKey = jsonObj.getString("read_write_key");
-						// log in the user
-						Intent i = new Intent(LoginActivity.this, GamesListActivity.class);
+						JSONObject jsonObj = jsonReturn.getJSONObject("data");
+						mUserId = jsonReturn.has("returnCode") ? jsonObj.getString("user_id") : "null";
+						if (mUserId != null && !mUserId.contentEquals("null")) { // login creds accepted
+							mDisplayName = jsonObj.getString("display_name");
+							mMediaId = jsonObj.getString("media_id");
+							mReadWriteKey = jsonObj.getString("read_write_key");
+							// log in the user
+							Intent i = new Intent(LoginActivity.this, GamesListActivity.class);
 //						i.putExtra("user", 		user.toJsonStr());
-						i.putExtra("user_name", mEtUsername.getText().toString());
-						i.putExtra("password", mEtPassword.getText().toString());
-						i.putExtra("user_id", mUserId);
-						i.putExtra("display_name", jsonObj.getString("display_name"));
-						i.putExtra("media_id", jsonObj.getString("media_id"));
-						i.putExtra("read_write_key", jsonObj.getString("read_write_key"));
-						i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-						startActivity(i, mTransitionAnimationBndl);
-						finish();
-					}
-					else { // login creds denied
-						Toast t = Toast.makeText(getApplicationContext(), "This username and/or password were not recognized by the server. Please try again.",
-								Toast.LENGTH_SHORT);
-						t.setGravity(Gravity.CENTER, 0, 0);
-						t.show();
+							i.putExtra("user_name", mEtUsername.getText().toString());
+							i.putExtra("password", mEtPassword.getText().toString());
+							i.putExtra("user_id", mUserId);
+							i.putExtra("display_name", jsonObj.getString("display_name"));
+							i.putExtra("media_id", jsonObj.getString("media_id"));
+							i.putExtra("read_write_key", jsonObj.getString("read_write_key"));
+							i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+							startActivity(i, mTransitionAnimationBndl);
+							finish();
+						}
+						else { // login creds denied
+							Toast t = Toast.makeText(getApplicationContext(), "This username and/or password were not recognized by the server. Please try again.",
+									Toast.LENGTH_SHORT);
+							t.setGravity(Gravity.CENTER, 0, 0);
+							t.show();
+						}
 					}
 				}
-			} catch (JSONException e) {
+			}
+			catch(JSONException e) {
 				Log.e(Constant.LOGTAG, "Failed while parsing returning JSON from request:" + HTTP_CLIENT_LOGIN_REQ_API + " Error reported was: " + e.getCause());
 				e.printStackTrace();
 			}
@@ -377,12 +388,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
 
 	private boolean isEmailValid(String email) {
-		if (email == null) {
-			return false;
-		}
-		else {
-			return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-		}
+		return email != null && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
 	}
 
 	private boolean isUsernameValid(String username) {

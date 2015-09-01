@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -561,6 +562,20 @@ public class GamesListActivity extends ActionBarActivity {
 				LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				final View gameItemView = inflater.inflate(R.layout.games_list_item, null);
 
+				// set webview to display remote icon
+				WebView wvGameIcon = (WebView) gameItemView.findViewById(R.id.wv_game_icon);
+				if (gameItem.icon_media.media_id == 0) { // 0 = no custom icon
+					wvGameIcon.setBackgroundColor(0x00000000);
+					wvGameIcon.setBackgroundResource(R.drawable.logo_icon); // set to static aris icon
+				}
+				else {
+					wvGameIcon.getSettings().setJavaScriptEnabled(true);
+					wvGameIcon.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
+					wvGameIcon.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
+					wvGameIcon.getSettings().setUseWideViewPort(true);
+					wvGameIcon.loadUrl(gameItem.icon_media.thumb_url.toString());
+				}
+
 				gameItemView.setId(Integer.parseInt(game_id_key));
 				gameItemView.setTag(gameItem.name);
 
@@ -570,7 +585,7 @@ public class GamesListActivity extends ActionBarActivity {
 				TextView tvNmbrOfReviews = (TextView) gameItemView.findViewById(R.id.tv_nmbr_of_reviews);
 				RatingBar rateBarGameRating = (RatingBar) gameItemView.findViewById(R.id.ratingBar_game_rating);
 				tvGameName.setText(gameItem.name);
-				List<User> authorsList = new ArrayList<>();
+				List<User> authorsList;
 				authorsList = gameItem.authors;
 				String authorNames = "";
 				// iterate through Authors list and create one string of names
@@ -594,6 +609,7 @@ public class GamesListActivity extends ActionBarActivity {
 					@Override
 					public void onClick(View v) {
 						// start game cover page  activity
+						showProgress(true);
 						Intent i = new Intent(GamesListActivity.this, GameCoverPageActivity.class);
 						Gson gson = new Gson();
 						String jsonGame = gson.toJson(gameItem);
@@ -713,6 +729,11 @@ public class GamesListActivity extends ActionBarActivity {
 		return games;
 	}
 */
+	@Override
+	public void onStop() {
+		showProgress(false);
+		super.onStop();
+	}
 
 }
 

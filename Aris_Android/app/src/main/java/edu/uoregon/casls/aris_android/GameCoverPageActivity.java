@@ -12,6 +12,8 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -63,8 +65,8 @@ public class GameCoverPageActivity extends ActionBarActivity {
 			}
 		}
 
-		ImageView ivGameIcon = (ImageView) findViewById(R.id.iv_game_icon);
-//		ImageView ivGameLogo = (ImageView) findViewById(R.id.iv_game_designer_logo);
+//		ImageView ivGameIcon = (ImageView) findViewById(R.id.iv_game_icon);
+		ImageView ivGameLogo = (ImageView) findViewById(R.id.iv_game_designer_logo);
 		TextView tvGameName = (TextView) findViewById(R.id.tv_game_cover_name);
 		TextView tvGameDesc = (TextView) findViewById(R.id.tv_game_desc);
 		mProgressView = findViewById(R.id.network_req_progress);
@@ -76,9 +78,26 @@ public class GameCoverPageActivity extends ActionBarActivity {
 		tvGameName.setText(mGame.name);
 		tvGameDesc.setText(mGame.desc);
 
+		WebView wvGamePic = (WebView) findViewById(R.id.wv_game_pic);
+		if (mGame.media.media_id == 0) { // 0 = no custom icon
+			wvGamePic.setBackgroundColor(0x00000000);
+			wvGamePic.setBackgroundResource(R.drawable.logo_icon); // set to static aris icon
+			ViewGroup.LayoutParams layoutParams = wvGamePic.getLayoutParams(); // force the webview to have a size since it cannot adjust w/o actual content.
+			layoutParams.height = 400;
+			layoutParams.width = 400;
+			wvGamePic.setLayoutParams(layoutParams);
+			ivGameLogo.setImageResource(R.drawable.logo_text_nav);
+		}
+		else {
+			wvGamePic.getSettings().setJavaScriptEnabled(true);
+			wvGamePic.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
+			wvGamePic.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
+			wvGamePic.getSettings().setUseWideViewPort(false); // constrain the image horizontally
+			wvGamePic.loadUrl(mGame.media.url.toString());
+		}
+
 		// stub in graphics todo: replace with custom icon/logo from game settings
-		ivGameIcon.setImageResource(R.drawable.logo_full_tiny);
-//		ivGameLogo.setImageResource(R.drawable.logo_text);
+//		ivGameIcon.setImageResource(R.drawable.logo_full_tiny);
 
 		pollServer(HTTP_GET_PLAYER_PLAYED_GAME_REQ_API);
 	}
@@ -153,7 +172,7 @@ public class GameCoverPageActivity extends ActionBarActivity {
 		Log.d(Constant.LOGTAG, "Return status to server Req: " + jsonReturn.toString());
 		if (callingReq.contentEquals(HTTP_GET_PLAYER_PLAYED_GAME_REQ_API) ) { //
 			// Response looks like this: {"data":{"game_id":"1","has_played":false},"returnCode":0,"returnCodeDescription":null}
-			Log.i(Constant.LOGTAG, "Landed successfully in colling Req: " + callingReq);
+			Log.d(Constant.LOGTAG, "Landed successfully in colling Req: " + callingReq);
 			try {
 				// process incoming json data
 				if (jsonReturn.has("data")) {
