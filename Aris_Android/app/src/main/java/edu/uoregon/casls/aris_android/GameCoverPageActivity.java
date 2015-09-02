@@ -3,7 +3,9 @@ package edu.uoregon.casls.aris_android;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -39,7 +41,9 @@ import edu.uoregon.casls.aris_android.data_objects.User;
 
 public class GameCoverPageActivity extends ActionBarActivity {
 	private static final String HTTP_GET_PLAYER_PLAYED_GAME_REQ_API = "v2.client.getPlayerPlayedGame/";
+	private static final String HTTP_LOG_PLAYER_RESET_GAME = "v2.client.logPlayerResetGame/";
 	private final static String TAG_SERVER_SUCCESS = "success";
+	public Bundle mTransitionAnimationBndl;
 	public User mUser;
 	protected Game mGame;
 	private View mProgressView;
@@ -64,6 +68,9 @@ public class GameCoverPageActivity extends ActionBarActivity {
 				e.printStackTrace();
 			}
 		}
+		// tell transitioning activities how to slide. eg: makeCustomAnimation(ctx, howNewMovesIn, howThisMovesOut) -sem
+		mTransitionAnimationBndl = ActivityOptions.makeCustomAnimation(getApplicationContext(),
+				R.animator.slide_in_from_right, R.animator.slide_out_to_left).toBundle();
 
 //		ImageView ivGameIcon = (ImageView) findViewById(R.id.iv_game_icon);
 		ImageView ivGameLogo = (ImageView) findViewById(R.id.iv_game_designer_logo);
@@ -188,6 +195,16 @@ public class GameCoverPageActivity extends ActionBarActivity {
 				e.printStackTrace();
 			}
 		}
+		else if (callingReq.equals(HTTP_LOG_PLAYER_RESET_GAME)) {
+			if (jsonReturn.has("returnCode") && jsonReturn.getLong("returnCode") == 0) {
+				// reset game play buttons.
+				mHasPlayed = false;
+				updateAllViews();
+			}
+			else {
+				Log.e(Constant.LOGTAG, "Attempt to reset game from GameCoverPageActivity failed; server returned code: "  + jsonReturn.getLong("returnCode"));
+			}
+		}
 		else { // unknown callinRequest
 			Log.e(Constant.LOGTAG, "AsyncHttpClient returned successfully but with unhandled server callingReq: " + callingReq);
 			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
@@ -213,10 +230,20 @@ public class GameCoverPageActivity extends ActionBarActivity {
 	}
 
 	public void onClickResetGame (View v) {
-
+		pollServer(HTTP_LOG_PLAYER_RESET_GAME);
 	}
 
 	public void onClickResumeGame (View v) {
+		// start game play activity.
+		startGamePlay();
+	}
+
+	private void startGamePlay() {
+		Intent i = new Intent(GameCoverPageActivity.this, GamePlayActivity.class);
+		i.putExtra("user", 		mUser.toJsonStr());
+		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(i, mTransitionAnimationBndl);
+		finish();
 
 	}
 

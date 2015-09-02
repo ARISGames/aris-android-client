@@ -325,7 +325,6 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 		}
 	}
 
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) {
 		Log.i(Constant.LOGTAG, "Return status to server Req: " + jsonReturn.toString());
  		if (callingReq.equals(HTTP_CLIENT_LOGIN_REQ_API)) {
@@ -427,7 +426,6 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 	/**
 	 * Shows the progress UI and hides the login form.
 	 */
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 	public void showProgress(final boolean show) {
 		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
 		// for very easy animations. If available, use these APIs to fade-in
