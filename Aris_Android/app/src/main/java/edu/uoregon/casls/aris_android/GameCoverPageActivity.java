@@ -35,7 +35,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
-import edu.uoregon.casls.aris_android.Utilities.Constant;
+import edu.uoregon.casls.aris_android.Utilities.Config;
 import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.User;
 
@@ -119,7 +119,7 @@ public class GameCoverPageActivity extends ActionBarActivity {
 		RequestParams rqParams = new RequestParams();
 
 		final Context context = this;
-		String request_url = Constant.SERVER_URL_MOBILE + request_api;
+		String request_url = Config.SERVER_URL_MOBILE + request_api;
 
 		rqParams.put("request", request_api);
 		StringEntity entity;
@@ -132,7 +132,7 @@ public class GameCoverPageActivity extends ActionBarActivity {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		Log.d(Constant.LOGTAG, "Json string Req to server: " + jsonMain);
+		Log.d(Config.LOGTAG, "Json string Req to server: " + jsonMain);
 
 		try {
 			entity = new StringEntity(jsonMain.toString());
@@ -157,7 +157,7 @@ public class GameCoverPageActivity extends ActionBarActivity {
 				}
 				@Override
 				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-					Log.e(Constant.LOGTAG, "AsyncHttpClient failed server call. ", throwable);
+					Log.e(Config.LOGTAG, "AsyncHttpClient failed server call. ", throwable);
 					showProgress(false);
 					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 							Toast.LENGTH_SHORT);
@@ -176,10 +176,10 @@ public class GameCoverPageActivity extends ActionBarActivity {
 	}
 
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) throws JSONException {
-		Log.d(Constant.LOGTAG, "Return status to server Req: " + jsonReturn.toString());
+		Log.d(Config.LOGTAG, "Return status to server Req: " + jsonReturn.toString());
 		if (callingReq.contentEquals(HTTP_GET_PLAYER_PLAYED_GAME_REQ_API) ) { //
 			// Response looks like this: {"data":{"game_id":"1","has_played":false},"returnCode":0,"returnCodeDescription":null}
-			Log.d(Constant.LOGTAG, "Landed successfully in colling Req: " + callingReq);
+			Log.d(Config.LOGTAG, "Landed successfully in colling Req: " + callingReq);
 			try {
 				// process incoming json data
 				if (jsonReturn.has("data")) {
@@ -191,7 +191,7 @@ public class GameCoverPageActivity extends ActionBarActivity {
 
 				}
 			} catch (JSONException e) {
-				Log.e(Constant.LOGTAG, "Failed while parsing returning JSON from request:" + HTTP_GET_PLAYER_PLAYED_GAME_REQ_API + " Error reported was: " + e.getCause());
+				Log.e(Config.LOGTAG, "Failed while parsing returning JSON from request:" + HTTP_GET_PLAYER_PLAYED_GAME_REQ_API + " Error reported was: " + e.getCause());
 				e.printStackTrace();
 			}
 		}
@@ -202,11 +202,11 @@ public class GameCoverPageActivity extends ActionBarActivity {
 				updateAllViews();
 			}
 			else {
-				Log.e(Constant.LOGTAG, "Attempt to reset game from GameCoverPageActivity failed; server returned code: "  + jsonReturn.getLong("returnCode"));
+				Log.e(Config.LOGTAG, "Attempt to reset game from GameCoverPageActivity failed; server returned code: "  + jsonReturn.getLong("returnCode"));
 			}
 		}
 		else { // unknown callinRequest
-			Log.e(Constant.LOGTAG, "AsyncHttpClient returned successfully but with unhandled server callingReq: " + callingReq);
+			Log.e(Config.LOGTAG, "AsyncHttpClient returned successfully but with unhandled server callingReq: " + callingReq);
 			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 					Toast.LENGTH_SHORT);
 			t.setGravity(Gravity.CENTER, 0, 0);
@@ -237,11 +237,18 @@ public class GameCoverPageActivity extends ActionBarActivity {
 		// start game play activity.
 		startGamePlay();
 	}
+	public void onClickNewGame (View v) {
+		// start game play activity.
+		startGamePlay();
+	}
 
 	private void startGamePlay() {
 		Intent i = new Intent(GameCoverPageActivity.this, GamePlayActivity.class);
 		i.putExtra("user", 		mUser.toJsonStr());
-		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//		i.putExtra("game_id", 	mGame.game_id); //todo: do I need the entire game object or just the game id. ei. does it just reload everything in gameplay?
+		Gson gson = new Gson();
+		i.putExtra("game", gson.toJson(mGame));
+ 		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(i, mTransitionAnimationBndl);
 		finish();
 

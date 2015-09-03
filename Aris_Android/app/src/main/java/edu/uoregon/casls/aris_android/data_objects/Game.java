@@ -1,11 +1,8 @@
 package edu.uoregon.casls.aris_android.data_objects;
 
 import android.location.Location;
-import android.os.Handler;
-import android.util.*;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,9 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import edu.uoregon.casls.aris_android.Utilities.AppUtils;
-import edu.uoregon.casls.aris_android.Utilities.ArisApp;
-import edu.uoregon.casls.aris_android.Utilities.Constant;
 import edu.uoregon.casls.aris_android.models.DialogsModel;
 import edu.uoregon.casls.aris_android.models.DisplayQueueModel;
 import edu.uoregon.casls.aris_android.models.EventsModel;

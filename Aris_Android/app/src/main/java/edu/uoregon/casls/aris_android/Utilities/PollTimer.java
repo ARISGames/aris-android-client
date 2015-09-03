@@ -42,17 +42,17 @@ public class PollTimer extends IntentService {
 
 	private void sendUpdateMessage(int pct) {
 		Log.d("SEM", "Broadcasting update message: " + pct);
-		Intent intent = new Intent(Constant.POLLTIMER_FILTER);
-		intent.putExtra(Constant.COMMAND, Constant.UPDATE_PROGRESS);
-		intent.putExtra(Constant.DATA, pct);
+		Intent intent = new Intent(Config.POLLTIMER_FILTER);
+		intent.putExtra(Config.COMMAND, Config.UPDATE_PROGRESS);
+		intent.putExtra(Config.DATA, pct);
 		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 	}
 
 	private void sendResultMessage(String data) {
 		Log.d("SEM", "Broadcasting result message: " + data);
-		Intent intent = new Intent(Constant.POLLTIMER_FILTER);
-		intent.putExtra(Constant.COMMAND, Constant.POLLTIMER_RESULT);
-		intent.putExtra(Constant.DATA, data);
+		Intent intent = new Intent(Config.POLLTIMER_FILTER);
+		intent.putExtra(Config.COMMAND, Config.POLLTIMER_RESULT);
+		intent.putExtra(Config.DATA, data);
 		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 	}
 

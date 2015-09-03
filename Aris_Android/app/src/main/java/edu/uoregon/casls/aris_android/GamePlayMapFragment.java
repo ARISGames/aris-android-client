@@ -61,6 +61,14 @@ public class GamePlayMapFragment extends Fragment {
 		return fragment;
 	}
 
+	public static GamePlayMapFragment newInstance(String sectionName) {
+		GamePlayMapFragment fragment = new GamePlayMapFragment();
+		Bundle args = new Bundle();
+		args.putString(ARG_SECTION_NUMBER, sectionName);
+		fragment.setArguments(args);
+		return fragment;
+	}
+
 	public GamePlayMapFragment() {
 		// Required empty public constructor
 	}

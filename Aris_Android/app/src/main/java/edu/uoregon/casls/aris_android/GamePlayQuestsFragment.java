@@ -30,6 +30,15 @@ public class GamePlayQuestsFragment extends Fragment {
 		return fragment;
 	}
 
+	public static GamePlayQuestsFragment newInstance(String sectionName) {
+		GamePlayQuestsFragment fragment = new GamePlayQuestsFragment();
+		Bundle args = new Bundle();
+		args.putString(ARG_SECTION_NUMBER, sectionName);
+		fragment.setArguments(args);
+		return fragment;
+	}
+
+
 	public GamePlayQuestsFragment() {
 	}
 

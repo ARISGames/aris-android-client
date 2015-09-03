@@ -48,10 +48,27 @@ public class GamePlayActivity extends ActionBarActivity
 						.commit();
 				break;
 			case 1:
-//				fragmentManager.beginTransaction()
-//						.replace(R.id.container, SecondFragment.newInstance(position + 1))
-//						.commit();
+				fragmentManager.beginTransaction()
+						.replace(R.id.container, GamePlayMapFragment.newInstance(position + 1))
+						.commit();
 				break;
+		}
+	}
+
+	@Override
+	public void onNavigationDrawerItemSelected(String itemName) {
+		// update the main content by replacing fragments
+		FragmentManager fragmentManager = getSupportFragmentManager();
+
+		if (itemName.equals("Quests")) {
+			fragmentManager.beginTransaction()
+					.replace(R.id.container, GamePlayQuestsFragment.newInstance(itemName))
+					.commit();
+		}
+		else if (itemName.equals("Map")) {
+				fragmentManager.beginTransaction()
+						.replace(R.id.container, GamePlayMapFragment.newInstance(itemName))
+						.commit();
 		}
 	}
 

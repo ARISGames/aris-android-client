@@ -50,7 +50,7 @@
         android:id="@+id/tv_game_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/iv_game_icon"
+        android:layout_toRightOf="@+id/wv_game_icon"
         android:layout_marginLeft="75dp"
         android:text="Game_Name"
         android:textColor="#040404"

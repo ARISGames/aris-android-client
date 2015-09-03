@@ -75,7 +75,8 @@
         </activity>
         <activity
             android:name=".GamePlayActivity"
-            android:label="@string/title_activity_game_play" >
+            android:label="@string/title_activity_game_play"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
         </activity>
     </application>
 

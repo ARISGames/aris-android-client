@@ -32,9 +32,19 @@
     <string name="password_reset_message">An email will be sent to the above address with instructions on how to reset your password.</string>
     <string name="title_activity_games_list_nearby">GamesListNearby</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_game_cover_page">GameCoverPageActivity</string>
     <string name="title_activity_game_play">GamePlayActivity</string>
+
+    <!-- any changes to this array must also be reflected in Config.gameDrawerItemIconByName[] array. -->
+    <string-array name="game_drawer_list_items">
+        <item>Quests</item>
+        <item>Map</item>
+        <item>Inventory</item>
+        <item>Scanner</item>
+        <item>Decoder</item>
+        <item>Player</item>
+        <item>Notebook</item>
+    </string-array>
+
 </resources>

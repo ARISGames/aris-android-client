@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,15 +18,23 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.net.URL;
+import java.util.ArrayList;
+
+import edu.uoregon.casls.aris_android.Utilities.Config;
 
 
 public class GamePlayNavDrawerFragment extends Fragment {
 
-
+	private static final java.lang.String STATE_SELECTED_ITEM_NAME = "selected_item_name";
+	public String[] mDrawerListItems;
 	/**
 	 * Remember the position of the selected item.
 	 */
@@ -53,8 +61,11 @@ public class GamePlayNavDrawerFragment extends Fragment {
 	private View mFragmentContainerView;
 
 	private int mCurrentSelectedPosition = 0;
+	private String mCurrentSelectedItemName;
 	private boolean mFromSavedInstanceState;
 	private boolean mUserLearnedDrawer;
+
+	private ArrayList<NavItem> mNavItems = new ArrayList<NavItem>();
 
 	public GamePlayNavDrawerFragment() {
 	}
@@ -70,11 +81,12 @@ public class GamePlayNavDrawerFragment extends Fragment {
 
 		if (savedInstanceState != null) {
 			mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
+			mCurrentSelectedItemName = savedInstanceState.getString(STATE_SELECTED_ITEM_NAME);
 			mFromSavedInstanceState = true;
 		}
 
 		// Select either the default item (0) or the last selected item.
-		selectItem(mCurrentSelectedPosition);
+		selectItem(mCurrentSelectedPosition, mCurrentSelectedItemName);
 	}
 
 	@Override
@@ -89,26 +101,33 @@ public class GamePlayNavDrawerFragment extends Fragment {
 							 Bundle savedInstanceState) {
 		mDrawerListView = (ListView) inflater.inflate(
 				R.layout.fragment_game_play_nav_drawer, container, false);
-		mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() { // todo: seem to have broken the item click listner FOR WED
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				selectItem(position);
+				TextView tv = (TextView) view.findViewById(R.id.title);
+				String itemName = tv.getText().toString();
+				selectItem(position, itemName);
 			}
 		});
 
-		ActionBar ab = getActionBar();
-		Context ctx = ab.getThemedContext();
-		// here's where we can set the list contents
-		mDrawerListView.setAdapter(new ArrayAdapter<String>(
-//				getActionBar().getThemedContext(),
-				ctx,
-				android.R.layout.simple_list_item_activated_1,
-				android.R.id.text1,
-				new String[]{ // todo: replace me with a string array generated or declared somewhere more thoughtful.
-						getString(R.string.title_section1),
-						getString(R.string.title_section2),
-						getString(R.string.title_section3),
-				}));
+		// add nav list items
+		// Todo: these can come in from the server in a custom order and with custom icons and names.
+		// todo: Will need to check server resp data for this list and override these defaults if it exists.
+		String iconURL;
+		mDrawerListItems = getResources().getStringArray(R.array.game_drawer_list_items);
+		for (int i=0; i < mDrawerListItems.length; i++) {
+			iconURL = "http://dummy.fillinlater.com/media.png";
+			mNavItems.add(new NavItem(mDrawerListItems[i], "Nosubtitle", Config.gameDrawerItemIconByName.get(mDrawerListItems[i]), iconURL));
+
+		}
+		// todo: this default action bar is white on black, the opposite of the previous pages with the custom actionbar. Find a way to match the custom style.
+		// note about built in action bar and drawer:
+		// the login and game picker activities use custom toolbars (xml based) and need to have a "NoActionBar" theme to work.
+		// To use the native actionbar stuff as we do here, you need to set the activity's theme to an action bar friendly theme
+		// E.g.: android:theme="Theme.AppCompat.Light.DarkActionBar"
+		DrawerListAdapter adapter = new DrawerListAdapter(getActivity(), mNavItems);
+		mDrawerListView.setAdapter(adapter);
+
 		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 		return mDrawerListView;
 	}
@@ -140,7 +159,7 @@ public class GamePlayNavDrawerFragment extends Fragment {
 		mDrawerToggle = new ActionBarDrawerToggle(
 				getActivity(),                    /* host Activity */
 				mDrawerLayout,                    /* DrawerLayout object */
-				R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
+//				R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret (param for .v4 only; hide for .v7 sem) */
 				R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
 				R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
 		) {
@@ -151,7 +170,8 @@ public class GamePlayNavDrawerFragment extends Fragment {
 					return;
 				}
 
-				getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+				getActivity().invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+//				getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
 			}
 
 			@Override
@@ -169,8 +189,9 @@ public class GamePlayNavDrawerFragment extends Fragment {
 							.getDefaultSharedPreferences(getActivity());
 					sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
 				}
+				getActivity().invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
 
-				getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+//				getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
 			}
 		};
 
@@ -188,10 +209,11 @@ public class GamePlayNavDrawerFragment extends Fragment {
 			}
 		});
 
+		mDrawerToggle.setDrawerIndicatorEnabled(true);
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 	}
 
-	private void selectItem(int position) {
+	private void selectItem(int position, String itemName) {
 		mCurrentSelectedPosition = position;
 		if (mDrawerListView != null) {
 			mDrawerListView.setItemChecked(position, true);
@@ -200,6 +222,7 @@ public class GamePlayNavDrawerFragment extends Fragment {
 			mDrawerLayout.closeDrawer(mFragmentContainerView);
 		}
 		if (mCallbacks != null) {
+//			mCallbacks.onNavigationDrawerItemSelected(itemName);
 			mCallbacks.onNavigationDrawerItemSelected(position);
 		}
 	}
@@ -223,6 +246,7 @@ public class GamePlayNavDrawerFragment extends Fragment {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
+		outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
 		outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
 	}
 
@@ -270,8 +294,6 @@ public class GamePlayNavDrawerFragment extends Fragment {
 	}
 
 	private ActionBar getActionBar() {
-		ActionBarActivity actionBarActivity = (ActionBarActivity) getActivity();
-		ActionBar ab =  actionBarActivity.getSupportActionBar(); // Todo: debug to this point in the demo drawer app and see what it is getting.
 		return ((ActionBarActivity) getActivity()).getSupportActionBar();
 	}
 
@@ -283,93 +305,87 @@ public class GamePlayNavDrawerFragment extends Fragment {
 		 * Called when an item in the navigation drawer is selected.
 		 */
 		void onNavigationDrawerItemSelected(int position);
+		void onNavigationDrawerItemSelected(String itemName);
 	}
-	// TODO: Rename parameter arguments, choose names that match
-//	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-//	private static final String ARG_PARAM1 = "param1";
-//	private static final String ARG_PARAM2 = "param2";
-//
-//	// TODO: Rename and change types of parameters
-//	private String mParam1;
-//	private String mParam2;
-//
-//	private OnFragmentInteractionListener mListener;
-//
-//	/**
-//	 * Use this factory method to create a new instance of
-//	 * this fragment using the provided parameters.
-//	 *
-//	 * @param param1 Parameter 1.
-//	 * @param param2 Parameter 2.
-//	 * @return A new instance of fragment GamePlayNavDrawerFragment.
-//	 */
-//	// TODO: Rename and change types and number of parameters
-//	public static GamePlayNavDrawerFragment newInstance(String param1, String param2) {
-//		GamePlayNavDrawerFragment fragment = new GamePlayNavDrawerFragment();
-//		Bundle args = new Bundle();
-//		args.putString(ARG_PARAM1, param1);
-//		args.putString(ARG_PARAM2, param2);
-//		fragment.setArguments(args);
-//		return fragment;
-//	}
-//
-//	public GamePlayNavDrawerFragment() {
-//		// Required empty public constructor
-//	}
-//
-//	@Override
-//	public void onCreate(Bundle savedInstanceState) {
-//		super.onCreate(savedInstanceState);
-//		if (getArguments() != null) {
-//			mParam1 = getArguments().getString(ARG_PARAM1);
-//			mParam2 = getArguments().getString(ARG_PARAM2);
-//		}
-//	}
-//
-//	@Override
-//	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//							 Bundle savedInstanceState) {
-//		// Inflate the layout for this fragment
-//		return inflater.inflate(R.layout.fragment_game_play_nav_drawer, container, false);
-//	}
-//
-//	// TODO: Rename method, update argument and hook method into UI event
-//	public void onButtonPressed(Uri uri) {
-//		if (mListener != null) {
-//			mListener.onFragmentInteraction(uri);
-//		}
-//	}
-//
-//	@Override
-//	public void onAttach(Activity activity) {
-//		super.onAttach(activity);
-//		try {
-//			mListener = (OnFragmentInteractionListener) activity;
-//		} catch (ClassCastException e) {
-//			throw new ClassCastException(activity.toString()
-//					+ " must implement OnFragmentInteractionListener");
-//		}
-//	}
-//
-//	@Override
-//	public void onDetach() {
-//		super.onDetach();
-//		mListener = null;
-//	}
-//
-//	/**
-//	 * This interface must be implemented by activities that contain this
-//	 * fragment to allow an interaction in this fragment to be communicated
-//	 * to the activity and potentially other fragments contained in that
-//	 * activity.
-//	 * <p/>
-//	 * See the Android Training lesson <a href=
-//	 * "http://developer.android.com/training/basics/fragments/communicating.html"
-//	 * >Communicating with Other Fragments</a> for more information.
-//	 */
-//	public interface OnFragmentInteractionListener {
-//		// TODO: Update argument type and name
-//		public void onFragmentInteraction(Uri uri);
-//	}
 
+	/**
+	 * classes for custom list item elements that have icons
+	 */
+	class NavItem {
+		String mTitle;
+		String mSubtitle;
+		int mIconResId;
+		String mIconURL;
+
+		public NavItem(String title, String subtitle, int iconResId, String iconURL) {
+			mTitle = title;
+			mSubtitle = subtitle;
+			mIconResId = iconResId;
+			mIconURL = iconURL;
+		}
+	}
+
+	class DrawerListAdapter extends BaseAdapter {
+
+		Context mContext;
+		ArrayList<NavItem> mNavItems;
+
+		public DrawerListAdapter(Context context, ArrayList<NavItem> navItems) {
+			mContext = context;
+			mNavItems = navItems;
+		}
+
+		@Override
+		public int getCount() {
+			return mNavItems.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return mNavItems.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return 0;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View view;
+
+			if (convertView == null) {
+				LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				view = inflater.inflate(R.layout.game_nav_drawer_item, null);
+			}
+			else {
+				view = convertView;
+			}
+
+			TextView titleView = (TextView) view.findViewById(R.id.title);
+			titleView.setText( mNavItems.get(position).mTitle );
+//			TextView subtitleView = (TextView) view.findViewById(R.id.subTitle);
+//			ImageView iconView = (ImageView) view.findViewById(R.id.icon); // orig imagevw
+
+//			subtitleView.setText( mNavItems.get(position).mSubtitle );
+//			iconView.setImageResource(mNavItems.get(position).mIconResId);
+
+			// set webview to display remote icon
+			WebView wvGameIcon = (WebView) view.findViewById(R.id.wv_nav_item_icon);
+			if (/*no custom icon from svr*/mNavItems.get(position).mIconResId != 0) { // 0 = custom icon (reverse from game item icons, btw)
+				wvGameIcon.setBackgroundColor(0x00000000);
+				wvGameIcon.setBackgroundResource(mNavItems.get(position).mIconResId); // set to a default icon
+			}
+			else { //  show custom icon.
+				wvGameIcon.getSettings().setJavaScriptEnabled(true);
+				wvGameIcon.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
+				wvGameIcon.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
+				wvGameIcon.getSettings().setUseWideViewPort(true);
+				// todo: send in a URL to this class also to use instead of resource id.
+				wvGameIcon.loadUrl(mNavItems.get(position).mIconURL);
+			}
+
+			return view;
+		}
+	}
 }
