@@ -282,7 +282,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		Log.i(Config.LOGTAG, "Json string Req to server: " + jsonParams);
+		Log.d(Config.LOGTAG, getClass().getSimpleName() + "Json string Req to server: " + jsonParams);
 
 		try {
 			entity = new StringEntity(jsonParams.toString());
@@ -307,7 +307,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 				}
 				@Override
 				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-					Log.e(Config.LOGTAG, "AsyncHttpClient failed server call. ", throwable);
+					Log.e(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient failed server call. ", throwable);
 					showProgress(false);
 					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 							Toast.LENGTH_SHORT);
@@ -326,9 +326,9 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 	}
 
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) {
-		Log.i(Config.LOGTAG, "Return status to server Req: " + jsonReturn.toString());
+		Log.d(Config.LOGTAG, getClass().getSimpleName() + "Return status to server Req: " + jsonReturn.toString());
  		if (callingReq.equals(HTTP_CLIENT_LOGIN_REQ_API)) {
-			Log.i(Config.LOGTAG, "Landed successfully in colling Req: " + HTTP_CLIENT_LOGIN_REQ_API);
+			Log.d(Config.LOGTAG, getClass().getSimpleName() + "Landed successfully in colling Req: " + HTTP_CLIENT_LOGIN_REQ_API);
 			try {
 				// check for login denial response from server
 				if (jsonReturn.has("returnCode") && jsonReturn.getInt(Config.SVR_RETURN_CODE) > 0) {
@@ -371,12 +371,12 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 				}
 			}
 			catch(JSONException e) {
-				Log.e(Config.LOGTAG, "Failed while parsing returning JSON from request:" + HTTP_CLIENT_LOGIN_REQ_API + " Error reported was: " + e.getCause());
+				Log.e(Config.LOGTAG, getClass().getSimpleName() + "Failed while parsing returning JSON from request:" + HTTP_CLIENT_LOGIN_REQ_API + " Error reported was: " + e.getCause());
 				e.printStackTrace();
 			}
 		}
 		else { // unknown callinRequest
-			Log.e(Config.LOGTAG, "AsyncHttpClient returned unknown server callingReq: " + callingReq);
+			Log.e(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient returned unknown server callingReq: " + callingReq);
 			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 					Toast.LENGTH_SHORT);
 			t.setGravity(Gravity.CENTER, 0, 0);

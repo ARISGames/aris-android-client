@@ -12,7 +12,7 @@ import edu.uoregon.casls.aris_android.R;
  */
 public class Config {
 
-	//	public static final String SERVER_URL_BASE = "http://10.223.178.105"; //localhost
+//	public static final String SERVER_URL_BASE = "http://10.223.178.105"; //localhost
 	public static final String SERVER_URL_BASE = "http://arisgames.org"; //aris server
 	public static final String SERVER_URL_MOBILE = SERVER_URL_BASE + "/server/json.php/";
 	public static final String LOGTAG = "ARIS_ANDROID";

@@ -11,8 +11,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -53,7 +53,6 @@ import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.Utilities.Config;
 import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.User;
-
 
 public class GamesListActivity extends ActionBarActivity {
 
@@ -229,7 +228,7 @@ public class GamesListActivity extends ActionBarActivity {
 	}
 
 	public void onClickNearbyBtn(View v) {
-		Log.i(Config.LOGTAG, getClass().getSimpleName() + ": onClickNearbyBtn");
+		Log.d(Config.LOGTAG, getClass().getSimpleName() + ": onClickNearbyBtn");
 		//hide time tab bar
 		mLlTimeTabBar.setVisibility(View.GONE);
 		mLlSearchBar.setVisibility(View.GONE);
@@ -239,7 +238,7 @@ public class GamesListActivity extends ActionBarActivity {
 	}
 
 	public void onClickPopularBtn(View v) {
-		Log.i(Config.LOGTAG, getClass().getSimpleName() + ": onClickPopularBtn");
+		Log.d(Config.LOGTAG, getClass().getSimpleName() + ": onClickPopularBtn");
 		mLlTimeTabBar.setVisibility(View.VISIBLE);
 		mLlSearchBar.setVisibility(View.GONE);
 		// get popular games from server
@@ -248,7 +247,7 @@ public class GamesListActivity extends ActionBarActivity {
 	}
 
 	public void onClickRecentBtn(View v) {
-		Log.i(Config.LOGTAG, getClass().getSimpleName() + ": onClickRecentBtn");
+		Log.d(Config.LOGTAG, getClass().getSimpleName() + ": onClickRecentBtn");
 		clearGamesList();
 		mLlTimeTabBar.setVisibility(View.GONE);
 		mLlSearchBar.setVisibility(View.GONE);
@@ -420,7 +419,7 @@ public class GamesListActivity extends ActionBarActivity {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		Log.d(Config.LOGTAG, "Json string Req to server: " + jsonMain);
+		Log.d(Config.LOGTAG, getClass().getSimpleName() + "Json string Req to server: " + jsonMain);
 
 		try {
 			entity = new StringEntity(jsonMain.toString());
@@ -449,7 +448,7 @@ public class GamesListActivity extends ActionBarActivity {
 				}
 				@Override
 				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-					Log.e(Config.LOGTAG, "AsyncHttpClient failed server call. ", throwable);
+					Log.e(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient failed server call. ", throwable);
 					showProgress(false);
 					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 							Toast.LENGTH_SHORT);
@@ -470,13 +469,13 @@ public class GamesListActivity extends ActionBarActivity {
 
 
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) throws JSONException {
-		Log.d(Config.LOGTAG, "Return status to server Req: " + jsonReturn.toString());
+		Log.d(Config.LOGTAG, getClass().getSimpleName() + "Return status to server Req: " + jsonReturn.toString());
 		if (callingReq.matches(HTTP_GET_NEARBY_GAMES_REQ_API
 				+ "|" +  HTTP_GET_POPULAR_GAMES_REQ_API
 				+ "|" +  HTTP_GET_RECENT_GAMES_REQ_API
 				+ "|" +  HTTP_GET_SEARCH_GAMES_REQ_API
 				+ "|" +  HTTP_GET_PLAYER_GAMES_REQ_API) ) { // true = debug temp hall pass for all
-			Log.i(Config.LOGTAG, "Landed successfully in colling Req: " + callingReq);
+			Log.d(Config.LOGTAG, getClass().getSimpleName() + "Landed successfully in colling Req: " + callingReq);
 			mFullGamesUpdated = 0; // reset found game count
 			try {
 				// process incoming json data
@@ -505,7 +504,7 @@ public class GamesListActivity extends ActionBarActivity {
 					}
 				}
 			} catch (JSONException e) {
-				Log.e(Config.LOGTAG, "Failed while parsing returning JSON from request:" + HTTP_GET_NEARBY_GAMES_REQ_API + " Error reported was: " + e.getCause());
+				Log.e(Config.LOGTAG, getClass().getSimpleName() + "Failed while parsing returning JSON from request:" + HTTP_GET_NEARBY_GAMES_REQ_API + " Error reported was: " + e.getCause());
 				e.printStackTrace();
 			}
 		}
@@ -518,7 +517,7 @@ public class GamesListActivity extends ActionBarActivity {
 			}
 		}
 		else { // unknown callinRequest
-			Log.e(Config.LOGTAG, "AsyncHttpClient returned successfully but with unhandled server callingReq: " + callingReq);
+			Log.e(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient returned successfully but with unhandled server callingReq: " + callingReq);
 			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 					Toast.LENGTH_SHORT);
 			t.setGravity(Gravity.CENTER, 0, 0);
@@ -531,6 +530,7 @@ public class GamesListActivity extends ActionBarActivity {
 		LinearLayout llGamesListLayout = (LinearLayout) findViewById(R.id.ll_games_list);
 		llGamesListLayout.removeAllViews(); // refresh visible views so they don't accumulate
 	}
+
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	private void updateAllViews() {
@@ -609,12 +609,16 @@ public class GamesListActivity extends ActionBarActivity {
 					@Override
 					public void onClick(View v) {
 						// start game cover page  activity
-						showProgress(true);
+						Log.d(Config.LOGTAG, getClass().getSimpleName() + "Clicked on Game Item, Game ID: " + gameItem.game_id);
+
+//						showProgress(true);
 						Intent i = new Intent(GamesListActivity.this, GameCoverPageActivity.class);
+						// GSON (Slow in debug mode. Ok in regular run mode)
 						Gson gson = new Gson();
 						String jsonGame = gson.toJson(gameItem);
-						i.putExtra("user", user.toJsonStr());
+
 						i.putExtra("game", jsonGame);
+						i.putExtra("user", user.toJsonStr());
 						i.putExtra("json_auth", mJsonAuth.toString());
 						startActivity(i, transitionAnimationBndl);
 

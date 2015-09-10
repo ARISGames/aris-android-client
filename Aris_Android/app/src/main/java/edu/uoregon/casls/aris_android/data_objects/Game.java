@@ -205,7 +205,7 @@ public class Game {
 			// get media block
 			JSONObject jsonMedia = jsonGameData.getJSONObject("media");
 			media = gson.fromJson(jsonMedia.toString(), Media.class);
-//			android.util.Log.d(Constant.LOGTAG, "Debug break to examine object media");
+//			android.util.Log.d(Config.LOGTAG, getClass().getSimpleName() + "Debug break to examine object media");
 
 		}
 		if (jsonGameData.has("icon_media")) {

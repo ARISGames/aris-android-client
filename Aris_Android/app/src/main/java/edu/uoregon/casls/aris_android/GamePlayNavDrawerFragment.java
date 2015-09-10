@@ -19,13 +19,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.net.URL;
 import java.util.ArrayList;
 
 import edu.uoregon.casls.aris_android.Utilities.Config;
@@ -102,13 +102,15 @@ public class GamePlayNavDrawerFragment extends Fragment {
 		mDrawerListView = (ListView) inflater.inflate(
 				R.layout.fragment_game_play_nav_drawer, container, false);
 		mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() { // todo: seem to have broken the item click listner FOR WED
+
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				TextView tv = (TextView) view.findViewById(R.id.title);
+				TextView tv = (TextView) view.findViewById(R.id.tv_drawer_item_name);
 				String itemName = tv.getText().toString();
 				selectItem(position, itemName);
 			}
 		});
+
 
 		// add nav list items
 		// Todo: these can come in from the server in a custom order and with custom icons and names.
@@ -129,6 +131,8 @@ public class GamePlayNavDrawerFragment extends Fragment {
 		mDrawerListView.setAdapter(adapter);
 
 		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
+
 		return mDrawerListView;
 	}
 
@@ -170,8 +174,9 @@ public class GamePlayNavDrawerFragment extends Fragment {
 					return;
 				}
 
-				getActivity().invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-//				getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+//				getActivity().invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+				getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+
 			}
 
 			@Override
@@ -189,9 +194,10 @@ public class GamePlayNavDrawerFragment extends Fragment {
 							.getDefaultSharedPreferences(getActivity());
 					sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
 				}
-				getActivity().invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-
-//				getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+//				getActivity().invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+				getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+				drawerView.bringToFront();
+//				mDrawerLayout.requestLayout();
 			}
 		};
 
@@ -247,7 +253,7 @@ public class GamePlayNavDrawerFragment extends Fragment {
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
-		outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
+//		outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
 	}
 
 	@Override
@@ -362,7 +368,7 @@ public class GamePlayNavDrawerFragment extends Fragment {
 				view = convertView;
 			}
 
-			TextView titleView = (TextView) view.findViewById(R.id.title);
+			TextView titleView = (TextView) view.findViewById(R.id.tv_drawer_item_name);
 			titleView.setText( mNavItems.get(position).mTitle );
 //			TextView subtitleView = (TextView) view.findViewById(R.id.subTitle);
 //			ImageView iconView = (ImageView) view.findViewById(R.id.icon); // orig imagevw
@@ -371,7 +377,11 @@ public class GamePlayNavDrawerFragment extends Fragment {
 //			iconView.setImageResource(mNavItems.get(position).mIconResId);
 
 			// set webview to display remote icon
+//			WebView wvGameIcon = new WebView(mContext);
+//			wvGameIcon = (WebView) view.findViewById(R.id.wv_nav_item_icon); // these two lines - same as below.
 			WebView wvGameIcon = (WebView) view.findViewById(R.id.wv_nav_item_icon);
+			wvGameIcon.setLayerType(View.LAYER_TYPE_SOFTWARE, null); // get rid of HWUI Protection error?
+//			wvGameIcon.setWebViewClient(new WebViewClient()); // no dif
 			if (/*no custom icon from svr*/mNavItems.get(position).mIconResId != 0) { // 0 = custom icon (reverse from game item icons, btw)
 				wvGameIcon.setBackgroundColor(0x00000000);
 				wvGameIcon.setBackgroundResource(mNavItems.get(position).mIconResId); // set to a default icon
