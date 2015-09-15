@@ -353,16 +353,16 @@ public class GamesListActivity extends ActionBarActivity {
 				throw new IllegalArgumentException("Invalid Time Range Selected: " + tabSelected);		}
 	}
 
-	private void pollServer(final String request_api, String auxData) {
+	private void pollServer(final String requestApi, String auxData) {
 		showProgress(true);
 		RequestParams rqParams = new RequestParams();
 
 		final Context context = this;
-		String request_url = Config.SERVER_URL_MOBILE + request_api;
+		String request_url = Config.SERVER_URL_MOBILE + requestApi;
 
 		user.location = AppUtils.getGeoLocation(context);
 
-		rqParams.put("request", request_api);
+		rqParams.put("request", requestApi);
 		StringEntity entity;
 		entity = null;
 		JSONObject jsonMain = new JSONObject();
@@ -372,7 +372,7 @@ public class GamesListActivity extends ActionBarActivity {
 			jsonMain.put("user_id", user.user_id);
 			jsonMain.put("page", 0); // todo: determine proper value for page. 0 is just a stand-in value.
 
-			switch (request_api) {
+			switch (requestApi) {
 				case (HTTP_GET_NEARBY_GAMES_REQ_API):
 					jsonMain.put("latitude", user.location.getLatitude());
 					jsonMain.put("longitude", user.location.getLongitude());
@@ -440,7 +440,7 @@ public class GamesListActivity extends ActionBarActivity {
 				public void onSuccess(int statusCode, Header[] headers, JSONObject jsonReturn) {
 					showProgress(false);
 					try {
-						processJsonHttpResponse(request_api, TAG_SERVER_SUCCESS, jsonReturn);
+						processJsonHttpResponse(requestApi, TAG_SERVER_SUCCESS, jsonReturn);
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}

@@ -246,6 +246,7 @@ public class GameCoverPageActivity extends ActionBarActivity {
 
 	private void startGamePlay() {
 		Intent i = new Intent(GameCoverPageActivity.this, GamePlayActivity.class);
+		i.putExtra("json_auth", mJsonAuth.toString());
 		i.putExtra("user", 		mUser.toJsonStr());
 //		i.putExtra("game_id", 	mGame.game_id); //todo: do I need the entire game object or just the game id. ei. does it just reload everything in gameplay?
 		Gson gson = new Gson();

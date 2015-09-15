@@ -101,8 +101,7 @@ public class GamePlayNavDrawerFragment extends Fragment {
 							 Bundle savedInstanceState) {
 		mDrawerListView = (ListView) inflater.inflate(
 				R.layout.fragment_game_play_nav_drawer, container, false);
-		mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() { // todo: seem to have broken the item click listner FOR WED
-
+		mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				TextView tv = (TextView) view.findViewById(R.id.tv_drawer_item_name);
@@ -116,7 +115,8 @@ public class GamePlayNavDrawerFragment extends Fragment {
 		// Todo: these can come in from the server in a custom order and with custom icons and names.
 		// todo: Will need to check server resp data for this list and override these defaults if it exists.
 		String iconURL;
-		mDrawerListItems = getResources().getStringArray(R.array.game_drawer_list_items);
+		mDrawerListItems = getResources().getStringArray(R.array.game_drawer_list_items); // temp. get fixed array from strings.xml
+
 		for (int i=0; i < mDrawerListItems.length; i++) {
 			iconURL = "http://dummy.fillinlater.com/media.png";
 			mNavItems.add(new NavItem(mDrawerListItems[i], "Nosubtitle", Config.gameDrawerItemIconByName.get(mDrawerListItems[i]), iconURL));

@@ -1,5 +1,7 @@
 package edu.uoregon.casls.aris_android;
 
+import android.app.ActivityOptions;
+import android.content.Context;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -8,9 +10,31 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.google.gson.Gson;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.entity.StringEntity;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import edu.uoregon.casls.aris_android.Utilities.AppUtils;
+import edu.uoregon.casls.aris_android.Utilities.Calls;
+import edu.uoregon.casls.aris_android.Utilities.Config;
+import edu.uoregon.casls.aris_android.data_objects.Game;
+import edu.uoregon.casls.aris_android.data_objects.User;
 
 public class GamePlayActivity extends ActionBarActivity
 		implements GamePlayNavDrawerFragment.NavigationDrawerCallbacks, GamePlayMapFragment.OnFragmentInteractionListener {
+
+
+	private final static String TAG_SERVER_SUCCESS = "success";
+	public Bundle mTransitionAnimationBndl;
+	public User mUser;
+	protected Game mGame;
+	private View mProgressView;
+	public JSONObject mJsonAuth;
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -31,10 +55,119 @@ public class GamePlayActivity extends ActionBarActivity
 				getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
 
-		// Set up the drawer.
+		Gson gson = new Gson();
+
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			mUser = new User(extras.getString("user"));
+			//GSON (Slow in debug mode. Ok in regular run mode)
+			mGame = gson.fromJson(extras.getString("game"), Game.class);
+
+			try {
+				mJsonAuth = new JSONObject(extras.getString("json_auth"));
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		// tell transitioning activities how to slide. eg: makeCustomAnimation(ctx, howNewMovesIn, howThisMovesOut) -sem
+		mTransitionAnimationBndl = ActivityOptions.makeCustomAnimation(getApplicationContext(),
+				R.animator.slide_in_from_right, R.animator.slide_out_to_left).toBundle();
+
+		// Start barrage of game related server requests
+		getGameDataFromServer();
+		// Set up the drawer. todo: move this to processServerResponse() for call getTabsForPlayer
 		mNavigationDrawerFragment.setUp(
 				R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
+	}
+
+	private void getGameDataFromServer() {
+		// here are all the calls made from iOS on starting or resuming a game:
+		pollServer(Calls.HTTP_GET_SCENES_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_TOUCH_SCENE_4_PLAYER, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_PLAQUES_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_ITEMS_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_TOUCH_ITEMS_4_PLAYER, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_DIALOGS_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_DIALOG_CHARS_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_DIALOG_SCRIPTS_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_DIALOG_OPTNS_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_WEB_PAGES_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_NOTES_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_NOTE_COMMNTS_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_TAGS_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_OBJ_TAGS_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_EVENTS_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_QUESTS_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_TRIGGERS_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_FACTORIES_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_OVERLAYS_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_INSTANCES_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_TABS_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_MEDIA_4_GAME, ""); // user auth json reqired
+		pollServer(Calls.HTTP_GET_USERS_4_GAME, ""); // user auth json reqired
+	}
+
+	private void pollServer(String requestApi, String auxData) {
+//		showProgress(true);
+		RequestParams rqParams = new RequestParams();
+
+		final Context context = this;
+		String request_url = Config.SERVER_URL_MOBILE + requestApi;
+
+		mUser.location = AppUtils.getGeoLocation(context);
+
+		rqParams.put("request", requestApi);
+		StringEntity entity;
+		entity = null;
+		JSONObject jsonMain = new JSONObject();
+		JSONObject jsonAuth = new JSONObject();
+
+		try {
+			// place the auth block.
+			jsonMain.put("auth", mJsonAuth);
+			//place additional required params:
+			switch (requestApi) {
+				case (HTTP_GET_NEARBY_GAMES_REQ_API):
+					jsonMain.put("latitude", user.location.getLatitude());
+					jsonMain.put("longitude", user.location.getLongitude());
+					jsonAuth.put("user_name", user.user_name);
+					jsonAuth.put("password", user.password);
+					break;
+				case (HTTP_GET_POPULAR_GAMES_REQ_API):
+					//sample: {"interval":"WEEK","longitude":"-89.409260","user_id":"1","latitude":"43.073128","page":0,"auth":{"user_id":1,"key":"F7...X4"}}
+					jsonMain.put("longitude", user.location.getLongitude());
+					jsonMain.put("interval", auxData);
+					jsonMain.put("latitude", user.location.getLatitude());
+					jsonAuth.put("user_name", user.user_name);
+					jsonAuth.put("password", user.password);
+					break;
+				case (HTTP_GET_PLAYER_GAMES_REQ_API):
+				case (HTTP_GET_RECENT_GAMES_REQ_API): // get player and get recent use the same Req param set.
+					//sample: {"longitude":"-89.409260","user_id":"1","latitude":"43.073128","page":0,"auth":{"user_id":1,"key":"F7...yzX4"}}
+					jsonMain.put("latitude", user.location.getLatitude());
+					jsonMain.put("longitude", user.location.getLongitude());
+					jsonAuth.put("user_name", user.user_name);
+					jsonAuth.put("password", user.password);
+					break;
+				case (HTTP_GET_SEARCH_GAMES_REQ_API):
+					//sample: {"auth":{"user_id":1,"key":"F7...zX4"},"longitude":"-89.409260","user_id":"1","latitude":"43.073128","text":"","page":0}
+					jsonMain.put("latitude", user.location.getLatitude());
+					jsonMain.put("longitude", user.location.getLongitude());
+					jsonMain.put("text", auxData);
+					break;
+				case (HTTP_GET_FULL_GAME_REQ_API):
+					jsonMain.put("game_id", Long.parseLong(auxData));
+					jsonAuth.put("user_name", user.user_name);
+					jsonAuth.put("password", user.password);
+					break;
+				default:
+					break;
+			}
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
