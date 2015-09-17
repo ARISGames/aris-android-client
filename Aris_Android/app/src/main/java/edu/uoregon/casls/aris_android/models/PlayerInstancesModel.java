@@ -13,6 +13,7 @@ public class PlayerInstancesModel {
 	}
 
 	public void touchPlayerInstances() {
+		// call (via two messages) Game.gamePieceReceived()
 
 	}
 }

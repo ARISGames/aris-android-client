@@ -245,7 +245,7 @@ public class GamePlayActivity extends ActionBarActivity
 							mGame.scenesModel.scenes.put(scene.scene_id, scene);
 							// tell the game class that we got one of the 27 required pieces.
 							// serving the function that the iOS "MODEL_GAME_PLAYER_PIECE_AVAILABLE" message would have.
-							mGame.gamePieceReceived();
+							if (!mGame.playerDataReceived) mGame.gamePlayerPieceReceived();
 						}
 					}
 				} catch (JSONException e) {
@@ -255,9 +255,8 @@ public class GamePlayActivity extends ActionBarActivity
 			}
 			else if (callingReq.equals(Calls.HTTP_TOUCH_SCENE_4_PLAYER)) {
 				if (jsonReturn.has("data")) {
-					// todo: fill in scene array population
-					JSONObject jsonData = jsonReturn.getJSONObject("data");
-					mGame.gamePieceReceived();
+					JSONObject jsonData = jsonReturn.getJSONObject("data"); // is there any data?
+					if (!mGame.playerDataReceived) mGame.gamePlayerPieceReceived();
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_PLAQUES_4_GAME)) {
@@ -269,6 +268,7 @@ public class GamePlayActivity extends ActionBarActivity
 						Plaque plaque = gson.fromJson(dataStr, Plaque.class);
 						//populate hashmap as <plaque_id, Plaque Obj>
 						mGame.plaquesModel.plaques.put(plaque.plaque_id, plaque);
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}
@@ -281,16 +281,18 @@ public class GamePlayActivity extends ActionBarActivity
 						Item item = gson.fromJson(dataStr, Item.class);
 						//populate hashmap as <plaque_id, Plaque Obj>
 						mGame.itemsModel.items.put(item.item_id, item);
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_TOUCH_ITEMS_4_PLAYER)) {
 				// is there any return data for this, or just acknowlegment?
 
-				// call PlayerInstancesModel.playerInstancesTouched()
-				mGame.playerInstancesModel.touchPlayerInstances();
+				// call PlayerInstancesModel.playerInstancesTouched()?
+//				mGame.playerInstancesModel.touchPlayerInstances(); // in iOS, this winds up calling Game.gamePieceReceived(); we'll do that directly:
+				if (!mGame.gameDataReceived) mGame.gamePieceReceived(); // Oddity: calls gamePieceReceived rather than gamePlayerPieceReceived "but IS a game-level fetch"
 				if (jsonReturn.has("data")) {
-//					JSONObject jsonData = jsonReturn.getJSONObject("data");
+//					JSONObject jsonData = jsonReturn.getJSONObject("data"); //do nothing; no data.
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_DIALOGS_4_GAME)) {
@@ -302,7 +304,7 @@ public class GamePlayActivity extends ActionBarActivity
 						Dialog dialog = gson.fromJson(dataStr, Dialog.class);
 						//populate hashmap as dialog_id, Dialog Obj>
 						mGame.dialogsModel.dialogs.put(dialog.dialog_id, dialog);
-						mGame.gamePieceReceived();
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}
@@ -315,7 +317,7 @@ public class GamePlayActivity extends ActionBarActivity
 						DialogCharacter dialogChar = gson.fromJson(dataStr, DialogCharacter.class);
 						//populate hashmap as dialogChars_id, DialogCharacter Obj>
 						mGame.dialogsModel.dialogCharacters.put(dialogChar.dialog_character_id, dialogChar);
-						mGame.gamePieceReceived();
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}
@@ -328,7 +330,7 @@ public class GamePlayActivity extends ActionBarActivity
 						DialogScript dialogScript = gson.fromJson(dataStr, DialogScript.class);
 						//populate hashmap as dialogScript_id, DialogScript Obj>
 						mGame.dialogsModel.dialogScript.put(dialogScript.dialog_character_id, dialogScript);
-						mGame.gamePieceReceived();
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}
@@ -341,7 +343,7 @@ public class GamePlayActivity extends ActionBarActivity
 						DialogOption dialogOption = gson.fromJson(dataStr, DialogOption.class);
 						//populate hashmap as dialog_option_id, DialogOption Obj>
 						mGame.dialogsModel.dialogOptions.put(dialogOption.dialog_option_id, dialogOption);
-						mGame.gamePieceReceived();
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}
@@ -354,7 +356,7 @@ public class GamePlayActivity extends ActionBarActivity
 						WebPage webpage = gson.fromJson(dataStr, WebPage.class);
 						//populate hashmap as dialog_id, Dialog Obj>
 						mGame.webPagesModel.webpages.put(webpage.web_page_id, webpage);
-						mGame.gamePieceReceived();
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}
@@ -367,7 +369,7 @@ public class GamePlayActivity extends ActionBarActivity
 						Note note = gson.fromJson(dataStr, Note.class);
 						//populate hashmap as note_id, Note Obj>
 						mGame.notesModel.notes.put(note.note_id, note);
-						mGame.gamePieceReceived();
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}
@@ -380,7 +382,7 @@ public class GamePlayActivity extends ActionBarActivity
 						NoteComment noteCmnt = gson.fromJson(dataStr, NoteComment.class);
 						//populate hashmap as Note_comment_id, NoteComment Obj>
 						mGame.notesModel.noteComments.put(noteCmnt.note_comment_id, noteCmnt); // todo: are these indexed by note id or note_comment_id?
-						mGame.gamePieceReceived();
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}
@@ -393,7 +395,7 @@ public class GamePlayActivity extends ActionBarActivity
 						Tag tag = gson.fromJson(dataStr, Tag.class);
 						//populate hashmap as tag_id, Tag Obj>
 						mGame.tagsModel.tags.put(tag.tag_id, tag);
-						mGame.gamePieceReceived();
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}
@@ -406,7 +408,7 @@ public class GamePlayActivity extends ActionBarActivity
 						ObjectTag objTag = gson.fromJson(dataStr, ObjectTag.class);
 						//populate hashmap as object_tag_id, ObjectTag Obj>
 						mGame.tagsModel.objectTags.put(objTag.object_tag_id, objTag);
-						mGame.gamePieceReceived();
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}
@@ -419,7 +421,7 @@ public class GamePlayActivity extends ActionBarActivity
 						Event event = gson.fromJson(dataStr, Event.class);
 						//populate hashmap as event_id, Event Obj>
 						mGame.eventsModel.events.put(event.event_id, event);
-						mGame.gamePieceReceived();
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}
@@ -432,7 +434,7 @@ public class GamePlayActivity extends ActionBarActivity
 						Quest quest = gson.fromJson(dataStr, Quest.class);
 						//populate hashmap as quest_id, Quest Obj>
 						mGame.questsModel.quests.put(quest.quest_id, quest);
-						mGame.gamePieceReceived();
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}
@@ -445,7 +447,7 @@ public class GamePlayActivity extends ActionBarActivity
 						Trigger trigger = gson.fromJson(dataStr, Trigger.class);
 						//populate hashmap as trigger_id, Quest Obj>
 						mGame.triggersModel.triggers.put(trigger.trigger_id, trigger);
-						mGame.gamePieceReceived();
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}
@@ -458,7 +460,7 @@ public class GamePlayActivity extends ActionBarActivity
 						Factory factory = gson.fromJson(dataStr, Factory.class);
 						//populate hashmap as factory_id, Factory Obj>
 						mGame.factoriesModel.factories.put(factory.factory_id, factory);
-						mGame.gamePieceReceived();
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}
@@ -471,7 +473,7 @@ public class GamePlayActivity extends ActionBarActivity
 						Overlay overlay = gson.fromJson(dataStr, Overlay.class);
 						//populate hashmap as overlayr_id, Overlay Obj>
 						mGame.overlaysModel.overlays.put(overlay.overlay_id, overlay);
-						mGame.gamePieceReceived();
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}
@@ -484,7 +486,7 @@ public class GamePlayActivity extends ActionBarActivity
 						Instance instance = gson.fromJson(dataStr, Instance.class);
 						//populate hashmap as instances_id, Instance Obj>
 						mGame.instancesModel.instances.put(instance.instance_id, instance);
-						mGame.gamePieceReceived();
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}
@@ -497,7 +499,7 @@ public class GamePlayActivity extends ActionBarActivity
 						Tab tab = gson.fromJson(dataStr, Tab.class);
 						//populate hashmap as tab_id, Tab Obj>
 						mGame.tabsModel.tabs.put(tab.tab_id, tab);
-						mGame.gamePieceReceived();
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}
@@ -515,7 +517,7 @@ public class GamePlayActivity extends ActionBarActivity
 						Media media = gson.fromJson(dataStr, Media.class);
 						//populate hashmap as media_id, Media Obj>
 						mGameMedia.put(media.media_id, media); // may wish to move this array into Game.class; don't see a particularly good reason to store it locally
-						mGame.gamePieceReceived();
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}
@@ -528,7 +530,7 @@ public class GamePlayActivity extends ActionBarActivity
 						User user = gson.fromJson(dataStr, User.class);
 						//populate hashmap as user_id, User Obj>
 						mGameUsers.put(user.user_id, user);
-						mGame.gamePieceReceived();
+						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
 			}

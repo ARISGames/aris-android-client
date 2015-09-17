@@ -39,10 +39,10 @@ public class Game {
 	static final long playerDatasToReceive = 7;
 
 	private long receivedGameData;
-	private Boolean gameDataReceived;
+	public Boolean gameDataReceived; // public for visibility but do not set outside of class please
 
 	private long receivedPlayerData;
-	private Boolean playerDataReceived;
+	public Boolean playerDataReceived; // public for visibility but do not set outside of class please
 
 //	public NSTimer *poller; todo: android equivalent
 	// todo: this will not serialize (crashes gson.toJson()) so I need to locate it in the gameplay activity itself.
