@@ -3,7 +3,6 @@ package edu.uoregon.casls.aris_android.models;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Scene;
 
 /**
@@ -11,7 +10,10 @@ import edu.uoregon.casls.aris_android.data_objects.Scene;
  */
 public class ScenesModel {
 
-	private Map<String, Scene> scenes = new LinkedHashMap<String, Scene>();
+	public Scene playerScene;
+
+	// array of scenes by scene_id (long)
+	public Map<Long, Scene> scenes = new LinkedHashMap<>();
 
 	public void ScenesModel() {
 		// same as init() in iOS
@@ -20,6 +22,11 @@ public class ScenesModel {
 
 	public void clearGameData() {
 		scenes.clear();
+	}
+
+	public void setPlayerScene(Scene s) {
+		playerScene = s;
+//		_ARIS_NOTIF_SEND_(@"MODEL_SCENES_PLAYER_SCENE_AVAILABLE",nil,nil); // for reference; iOS messages
 	}
 
 	public void clearPlayerData() {

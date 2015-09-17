@@ -8,22 +8,52 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.apache.http.Header;
 import org.apache.http.entity.StringEntity;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.Utilities.Calls;
 import edu.uoregon.casls.aris_android.Utilities.Config;
+import edu.uoregon.casls.aris_android.data_objects.Dialog;
+import edu.uoregon.casls.aris_android.data_objects.DialogCharacter;
+import edu.uoregon.casls.aris_android.data_objects.DialogOption;
+import edu.uoregon.casls.aris_android.data_objects.DialogScript;
+import edu.uoregon.casls.aris_android.data_objects.Event;
+import edu.uoregon.casls.aris_android.data_objects.Factory;
 import edu.uoregon.casls.aris_android.data_objects.Game;
+import edu.uoregon.casls.aris_android.data_objects.Instance;
+import edu.uoregon.casls.aris_android.data_objects.Item;
+import edu.uoregon.casls.aris_android.data_objects.Media;
+import edu.uoregon.casls.aris_android.data_objects.Note;
+import edu.uoregon.casls.aris_android.data_objects.NoteComment;
+import edu.uoregon.casls.aris_android.data_objects.ObjectTag;
+import edu.uoregon.casls.aris_android.data_objects.Overlay;
+import edu.uoregon.casls.aris_android.data_objects.Plaque;
+import edu.uoregon.casls.aris_android.data_objects.Quest;
+import edu.uoregon.casls.aris_android.data_objects.Scene;
+import edu.uoregon.casls.aris_android.data_objects.Tab;
+import edu.uoregon.casls.aris_android.data_objects.Tag;
+import edu.uoregon.casls.aris_android.data_objects.Trigger;
 import edu.uoregon.casls.aris_android.data_objects.User;
+import edu.uoregon.casls.aris_android.data_objects.WebPage;
 
 public class GamePlayActivity extends ActionBarActivity
 		implements GamePlayNavDrawerFragment.NavigationDrawerCallbacks, GamePlayMapFragment.OnFragmentInteractionListener {
@@ -32,9 +62,11 @@ public class GamePlayActivity extends ActionBarActivity
 	private final static String TAG_SERVER_SUCCESS = "success";
 	public Bundle mTransitionAnimationBndl;
 	public User mUser;
-	protected Game mGame;
-	private View mProgressView;
+	protected Game mGame = new Game();
+	private View mProgressView; // todo: install a progress spinner for server delays
 	public JSONObject mJsonAuth;
+	public Map<Long, Media> mGameMedia = new LinkedHashMap<>();
+	public Map<String, User> mGameUsers = new LinkedHashMap<>();
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -83,32 +115,41 @@ public class GamePlayActivity extends ActionBarActivity
 
 	private void getGameDataFromServer() {
 		// here are all the calls made from iOS on starting or resuming a game:
-		pollServer(Calls.HTTP_GET_SCENES_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_TOUCH_SCENE_4_PLAYER, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_PLAQUES_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_ITEMS_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_TOUCH_ITEMS_4_PLAYER, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_DIALOGS_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_DIALOG_CHARS_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_DIALOG_SCRIPTS_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_DIALOG_OPTNS_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_WEB_PAGES_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_NOTES_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_NOTE_COMMNTS_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_TAGS_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_OBJ_TAGS_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_EVENTS_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_QUESTS_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_TRIGGERS_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_FACTORIES_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_OVERLAYS_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_INSTANCES_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_TABS_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_MEDIA_4_GAME, ""); // user auth json reqired
-		pollServer(Calls.HTTP_GET_USERS_4_GAME, ""); // user auth json reqired
+		JSONObject jsonGameID = null, jsonAddlData = null;
+		try {
+			jsonGameID.put("game_id", mGame.game_id);
+			jsonAddlData.put("game_id", mGame.game_id);
+			jsonAddlData.put("owner_id", 0); // todo: is this always zero for getInstanceForGame?
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		pollServer(Calls.HTTP_GET_SCENES_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_TOUCH_SCENE_4_PLAYER, jsonGameID); 
+		pollServer(Calls.HTTP_GET_PLAQUES_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_GET_ITEMS_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_TOUCH_ITEMS_4_PLAYER, jsonGameID); 
+		pollServer(Calls.HTTP_GET_DIALOGS_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_GET_DIALOG_CHARS_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_GET_DIALOG_SCRIPTS_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_GET_DIALOG_OPTNS_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_GET_WEB_PAGES_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_GET_NOTES_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_GET_NOTE_COMMNTS_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_GET_TAGS_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_GET_OBJ_TAGS_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_GET_EVENTS_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_GET_QUESTS_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_GET_TRIGGERS_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_GET_FACTORIES_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_GET_OVERLAYS_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_GET_INSTANCES_4_GAME, jsonAddlData); 
+		pollServer(Calls.HTTP_GET_TABS_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_GET_MEDIA_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_GET_USERS_4_GAME, jsonGameID); 
 	}
 
-	private void pollServer(String requestApi, String auxData) {
+	private void pollServer(final String requestApi, JSONObject jsonMain) {
 //		showProgress(true);
 		RequestParams rqParams = new RequestParams();
 
@@ -120,53 +161,395 @@ public class GamePlayActivity extends ActionBarActivity
 		rqParams.put("request", requestApi);
 		StringEntity entity;
 		entity = null;
-		JSONObject jsonMain = new JSONObject();
+//		JSONObject jsonMain = new JSONObject();
 		JSONObject jsonAuth = new JSONObject();
 
 		try {
 			// place the auth block.
 			jsonMain.put("auth", mJsonAuth);
-			//place additional required params:
-			switch (requestApi) {
-				case (HTTP_GET_NEARBY_GAMES_REQ_API):
-					jsonMain.put("latitude", user.location.getLatitude());
-					jsonMain.put("longitude", user.location.getLongitude());
-					jsonAuth.put("user_name", user.user_name);
-					jsonAuth.put("password", user.password);
-					break;
-				case (HTTP_GET_POPULAR_GAMES_REQ_API):
-					//sample: {"interval":"WEEK","longitude":"-89.409260","user_id":"1","latitude":"43.073128","page":0,"auth":{"user_id":1,"key":"F7...X4"}}
-					jsonMain.put("longitude", user.location.getLongitude());
-					jsonMain.put("interval", auxData);
-					jsonMain.put("latitude", user.location.getLatitude());
-					jsonAuth.put("user_name", user.user_name);
-					jsonAuth.put("password", user.password);
-					break;
-				case (HTTP_GET_PLAYER_GAMES_REQ_API):
-				case (HTTP_GET_RECENT_GAMES_REQ_API): // get player and get recent use the same Req param set.
-					//sample: {"longitude":"-89.409260","user_id":"1","latitude":"43.073128","page":0,"auth":{"user_id":1,"key":"F7...yzX4"}}
-					jsonMain.put("latitude", user.location.getLatitude());
-					jsonMain.put("longitude", user.location.getLongitude());
-					jsonAuth.put("user_name", user.user_name);
-					jsonAuth.put("password", user.password);
-					break;
-				case (HTTP_GET_SEARCH_GAMES_REQ_API):
-					//sample: {"auth":{"user_id":1,"key":"F7...zX4"},"longitude":"-89.409260","user_id":"1","latitude":"43.073128","text":"","page":0}
-					jsonMain.put("latitude", user.location.getLatitude());
-					jsonMain.put("longitude", user.location.getLongitude());
-					jsonMain.put("text", auxData);
-					break;
-				case (HTTP_GET_FULL_GAME_REQ_API):
-					jsonMain.put("game_id", Long.parseLong(auxData));
-					jsonAuth.put("user_name", user.user_name);
-					jsonAuth.put("password", user.password);
-					break;
-				default:
-					break;
-			}
+			//place additional required params
+//			switch (requestApi) {
+//				case (HTTP_GET_NEARBY_GAMES_REQ_API):
+//					break;
+//				case (HTTP_GET_POPULAR_GAMES_REQ_API):
+//					//sample: {"interval":"WEEK","longitude":"-89.409260","user_id":"1","latitude":"43.073128","page":0,"auth":{"user_id":1,"key":"F7...X4"}}
+//					break;
+//				case (HTTP_GET_PLAYER_GAMES_REQ_API):
+//				case (HTTP_GET_RECENT_GAMES_REQ_API): // get player and get recent use the same Req param set.
+//					break;
+//				case (HTTP_GET_SEARCH_GAMES_REQ_API):
+//					break;
+//				case (HTTP_GET_FULL_GAME_REQ_API):
+//					break;
+//				default:
+//					break;
+//			}
 
 		} catch (JSONException e) {
 			e.printStackTrace();
+		}
+
+		// Post the request
+		// 	post data should look like this: {"auth":{"user_id":1,"key":"F7...yzX4"},"game_id":"6"}
+		if (AppUtils.isNetworkAvailable(getApplicationContext())) {
+			AsyncHttpClient client = new AsyncHttpClient();
+
+			client.post(context, request_url, entity, "application/json", new JsonHttpResponseHandler() {
+				@Override
+				public void onSuccess(int statusCode, Header[] headers, JSONObject jsonReturn) {
+//					showProgress(false);
+					try {
+						processJsonHttpResponse(requestApi, TAG_SERVER_SUCCESS, jsonReturn);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+
+				}
+				@Override
+				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+					Log.w(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient failed server call. ", throwable);
+//					showProgress(false);
+					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
+							Toast.LENGTH_SHORT);
+					t.setGravity(Gravity.CENTER, 0, 0);
+					t.show();
+					super.onFailure(statusCode, headers, responseString, throwable);
+				}
+			});
+		}
+		else {
+			Toast t = Toast.makeText(getApplicationContext(), "You are not connected to the internet currently. Please try again later.",
+					Toast.LENGTH_SHORT);
+			t.setGravity(Gravity.CENTER, 0, 0);
+			t.show();
+		}
+
+	}
+
+	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) throws JSONException {
+		Log.d(Config.LOGTAG, getClass().getSimpleName() + "Return status to server Req: " + jsonReturn.toString());
+		if (jsonReturn.has("returnCode") && jsonReturn.getLong("returnCode") == 0) {
+			if (callingReq.contentEquals(Calls.HTTP_GET_SCENES_4_GAME)) { // parse array of returns scenes
+				// Response looks like this:
+				// {"data":[{"scene_id":"98","game_id":"78","name":"James J Hill","description":"","editor_x":"0","editor_y":"0"}],"returnCode":0,"returnCodeDescription":null}
+				Log.d(Config.LOGTAG, getClass().getSimpleName() + "Landed successfully in colling Req: " + callingReq);
+				try {
+					// process incoming json data
+					if (jsonReturn.has("data")) {
+						JSONArray jsonScenes = jsonReturn.getJSONArray("data");
+						Gson gson = new Gson();
+						for (int i = 0; i < jsonScenes.length(); i++) {
+							String jsonSceneStr = jsonScenes.getJSONObject(i).toString();
+							Scene scene = gson.fromJson(jsonSceneStr, Scene.class);
+							//populate hashmap as <scene_id, Scene Obj>
+							mGame.scenesModel.scenes.put(scene.scene_id, scene);
+							// tell the game class that we got one of the 27 required pieces.
+							// serving the function that the iOS "MODEL_GAME_PLAYER_PIECE_AVAILABLE" message would have.
+							mGame.gamePieceReceived();
+						}
+					}
+				} catch (JSONException e) {
+					Log.e(Config.LOGTAG, getClass().getSimpleName() + "Failed while parsing returning JSON from request:" + callingReq + " Error reported was: " + e.getCause());
+					e.printStackTrace();
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_TOUCH_SCENE_4_PLAYER)) {
+				if (jsonReturn.has("data")) {
+					// todo: fill in scene array population
+					JSONObject jsonData = jsonReturn.getJSONObject("data");
+					mGame.gamePieceReceived();
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_PLAQUES_4_GAME)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						Plaque plaque = gson.fromJson(dataStr, Plaque.class);
+						//populate hashmap as <plaque_id, Plaque Obj>
+						mGame.plaquesModel.plaques.put(plaque.plaque_id, plaque);
+					}
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_ITEMS_4_GAME)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						Item item = gson.fromJson(dataStr, Item.class);
+						//populate hashmap as <plaque_id, Plaque Obj>
+						mGame.itemsModel.items.put(item.item_id, item);
+					}
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_TOUCH_ITEMS_4_PLAYER)) {
+				// is there any return data for this, or just acknowlegment?
+
+				// call PlayerInstancesModel.playerInstancesTouched()
+				mGame.playerInstancesModel.touchPlayerInstances();
+				if (jsonReturn.has("data")) {
+//					JSONObject jsonData = jsonReturn.getJSONObject("data");
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_DIALOGS_4_GAME)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						Dialog dialog = gson.fromJson(dataStr, Dialog.class);
+						//populate hashmap as dialog_id, Dialog Obj>
+						mGame.dialogsModel.dialogs.put(dialog.dialog_id, dialog);
+						mGame.gamePieceReceived();
+					}
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_DIALOG_CHARS_4_GAME)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						DialogCharacter dialogChar = gson.fromJson(dataStr, DialogCharacter.class);
+						//populate hashmap as dialogChars_id, DialogCharacter Obj>
+						mGame.dialogsModel.dialogCharacters.put(dialogChar.dialog_character_id, dialogChar);
+						mGame.gamePieceReceived();
+					}
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_DIALOG_SCRIPTS_4_GAME)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						DialogScript dialogScript = gson.fromJson(dataStr, DialogScript.class);
+						//populate hashmap as dialogScript_id, DialogScript Obj>
+						mGame.dialogsModel.dialogScript.put(dialogScript.dialog_character_id, dialogScript);
+						mGame.gamePieceReceived();
+					}
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_DIALOG_OPTNS_4_GAME)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						DialogOption dialogOption = gson.fromJson(dataStr, DialogOption.class);
+						//populate hashmap as dialog_option_id, DialogOption Obj>
+						mGame.dialogsModel.dialogOptions.put(dialogOption.dialog_option_id, dialogOption);
+						mGame.gamePieceReceived();
+					}
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_WEB_PAGES_4_GAME)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						WebPage webpage = gson.fromJson(dataStr, WebPage.class);
+						//populate hashmap as dialog_id, Dialog Obj>
+						mGame.webPagesModel.webpages.put(webpage.web_page_id, webpage);
+						mGame.gamePieceReceived();
+					}
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_TOUCH_SCENE_4_PLAYER)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						Note note = gson.fromJson(dataStr, Note.class);
+						//populate hashmap as note_id, Note Obj>
+						mGame.notesModel.notes.put(note.note_id, note);
+						mGame.gamePieceReceived();
+					}
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_NOTE_COMMNTS_4_GAME)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						NoteComment noteCmnt = gson.fromJson(dataStr, NoteComment.class);
+						//populate hashmap as Note_comment_id, NoteComment Obj>
+						mGame.notesModel.noteComments.put(noteCmnt.note_comment_id, noteCmnt); // todo: are these indexed by note id or note_comment_id?
+						mGame.gamePieceReceived();
+					}
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_TAGS_4_GAME)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						Tag tag = gson.fromJson(dataStr, Tag.class);
+						//populate hashmap as tag_id, Tag Obj>
+						mGame.tagsModel.tags.put(tag.tag_id, tag);
+						mGame.gamePieceReceived();
+					}
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_OBJ_TAGS_4_GAME)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						ObjectTag objTag = gson.fromJson(dataStr, ObjectTag.class);
+						//populate hashmap as object_tag_id, ObjectTag Obj>
+						mGame.tagsModel.objectTags.put(objTag.object_tag_id, objTag);
+						mGame.gamePieceReceived();
+					}
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_EVENTS_4_GAME)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						Event event = gson.fromJson(dataStr, Event.class);
+						//populate hashmap as event_id, Event Obj>
+						mGame.eventsModel.events.put(event.event_id, event);
+						mGame.gamePieceReceived();
+					}
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_QUESTS_4_GAME)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						Quest quest = gson.fromJson(dataStr, Quest.class);
+						//populate hashmap as quest_id, Quest Obj>
+						mGame.questsModel.quests.put(quest.quest_id, quest);
+						mGame.gamePieceReceived();
+					}
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_TRIGGERS_4_GAME)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						Trigger trigger = gson.fromJson(dataStr, Trigger.class);
+						//populate hashmap as trigger_id, Quest Obj>
+						mGame.triggersModel.triggers.put(trigger.trigger_id, trigger);
+						mGame.gamePieceReceived();
+					}
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_FACTORIES_4_GAME)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						Factory factory = gson.fromJson(dataStr, Factory.class);
+						//populate hashmap as factory_id, Factory Obj>
+						mGame.factoriesModel.factories.put(factory.factory_id, factory);
+						mGame.gamePieceReceived();
+					}
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_OVERLAYS_4_GAME)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						Overlay overlay = gson.fromJson(dataStr, Overlay.class);
+						//populate hashmap as overlayr_id, Overlay Obj>
+						mGame.overlaysModel.overlays.put(overlay.overlay_id, overlay);
+						mGame.gamePieceReceived();
+					}
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_INSTANCES_4_GAME)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						Instance instance = gson.fromJson(dataStr, Instance.class);
+						//populate hashmap as instances_id, Instance Obj>
+						mGame.instancesModel.instances.put(instance.instance_id, instance);
+						mGame.gamePieceReceived();
+					}
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_TABS_4_GAME)) { // returns array of teh items for the game mode drawer
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						Tab tab = gson.fromJson(dataStr, Tab.class);
+						//populate hashmap as tab_id, Tab Obj>
+						mGame.tabsModel.tabs.put(tab.tab_id, tab);
+						mGame.gamePieceReceived();
+					}
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_MEDIA_4_GAME)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					// Note: this model works differently, at least in iOS: it broadcasts the receipt event to the actual Media model.
+					// See MediaModel.m (in iOS). Follows this method flow from listener: initWithContext->mediasReceived->ipdateMedias
+
+					// Not sure at the point of this coding why this differs, and as there is not "mediasModel: class in iOS,
+					// I'm going to just populate the media objects in as a class var (array of model obj) of this GamePlayActivity.
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						Media media = gson.fromJson(dataStr, Media.class);
+						//populate hashmap as media_id, Media Obj>
+						mGameMedia.put(media.media_id, media); // may wish to move this array into Game.class; don't see a particularly good reason to store it locally
+						mGame.gamePieceReceived();
+					}
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_USERS_4_GAME)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						User user = gson.fromJson(dataStr, User.class);
+						//populate hashmap as user_id, User Obj>
+						mGameUsers.put(user.user_id, user);
+						mGame.gamePieceReceived();
+					}
+				}
+			}
+			else if (callingReq.equals("")) { // stub
+				if (jsonReturn.has("data")) {
+					JSONObject jsonData = jsonReturn.getJSONObject("data");
+				}
+			}
+			else { // unknown callinRequest
+				Log.e(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient returned successfully but with unhandled server callingReq: " + callingReq);
+				Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
+						Toast.LENGTH_SHORT);
+				t.setGravity(Gravity.CENTER, 0, 0);
+				t.show();
+
+			}
+		}
+		else {
+			Log.e(Config.LOGTAG, getClass().getSimpleName() + "Server request " + callingReq + " failed; server returned code: " + jsonReturn.getLong("returnCode")
+					+ "\nPlayer Id: " + mUser.user_id
+					+ "\nGame Id: " + mGame.game_id);
 		}
 	}
 

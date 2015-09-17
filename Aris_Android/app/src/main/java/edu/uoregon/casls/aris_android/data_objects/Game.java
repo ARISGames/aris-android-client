@@ -38,11 +38,11 @@ public class Game {
 	static final long gameDatasToReceive = 23;
 	static final long playerDatasToReceive = 7;
 
-	public long receivedGameData;
-	public Boolean gameDataReceived;
+	private long receivedGameData;
+	private Boolean gameDataReceived;
 
-	public long receivedPlayerData;
-	public Boolean playerDataReceived;
+	private long receivedPlayerData;
+	private Boolean playerDataReceived;
 
 //	public NSTimer *poller; todo: android equivalent
 	// todo: this will not serialize (crashes gson.toJson()) so I need to locate it in the gameplay activity itself.
@@ -84,23 +84,28 @@ public class Game {
 	public long inventory_weight_cap;
 
 	// Game subcomponent classes
-	ScenesModel scenesModel;
-	PlaquesModel plaquesModel;
-	ItemsModel itemsModel;
-	DialogsModel dialogsModel;
-	WebPagesModel webPagesModel;
-	NotesModel notesModel;
-	TagsModel tagsModel;
-	EventsModel eventsModel;
-	TriggersModel triggersModel;
-	FactoriesModel factoriesModel;
-	OverlaysModel overlaysModel;
-	InstancesModel instancesModel;
-	PlayerInstancesModel playerInstancesModel;
-	TabsModel tabsModel;
-	LogsModel logsModel;
-	QuestsModel questsModel;
-	DisplayQueueModel displayQueueModel;
+	public ScenesModel 			scenesModel;		// Game Piece
+	public PlaquesModel 		plaquesModel;		// Game Piece
+	public ItemsModel 			itemsModel;		// Game Piece
+	public DialogsModel 		dialogsModel;		// Game Piece
+	public WebPagesModel 		webPagesModel;
+	public NotesModel 			notesModel;		// Game Piece
+	public TagsModel 			tagsModel;
+	public EventsModel 			eventsModel;			// Game Piece
+	public TriggersModel 		triggersModel;
+	public FactoriesModel 		factoriesModel;		// Game Piece
+	public OverlaysModel 		overlaysModel;		// Game Piece
+	public InstancesModel 		instancesModel;		// Game Piece
+	public PlayerInstancesModel playerInstancesModel;		// Game Piece todo: is this where gameUsers go? Players == Users??
+	public TabsModel 			tabsModel;
+	public LogsModel 			logsModel;
+	public QuestsModel			questsModel;		// Game Piece
+	public DisplayQueueModel 	displayQueueModel;
+	// medias (in GamePlayAct 		// Game Piece
+
+	// Empty Constructor
+	public Game() {
+	}
 
 	// Basic Constructor with json game block
 	public Game(JSONObject jsonGame) throws JSONException {
