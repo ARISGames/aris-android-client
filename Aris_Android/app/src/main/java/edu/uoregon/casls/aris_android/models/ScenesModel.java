@@ -8,7 +8,7 @@ import edu.uoregon.casls.aris_android.data_objects.Scene;
 /**
  * Created by smorison on 8/20/15.
  */
-public class ScenesModel {
+public class ScenesModel extends ARISModel {
 
 	public Scene playerScene;
 
@@ -18,10 +18,12 @@ public class ScenesModel {
 	public void ScenesModel() {
 		// same as init() in iOS
 		// may need to separate inti an actual init() method if called separately.
+
 	}
 
 	public void clearGameData() {
 		scenes.clear();
+		n_game_data_received = 0;
 	}
 
 	public void setPlayerScene(Scene s) {
@@ -42,5 +44,10 @@ public class ScenesModel {
 
 	public void requestPlayerScene() {
 
+	}
+
+	public long nGameDataToReceive ()
+	{
+		return 2;
 	}
 }

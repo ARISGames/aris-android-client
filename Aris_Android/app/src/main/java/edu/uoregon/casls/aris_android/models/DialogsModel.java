@@ -11,15 +11,19 @@ import edu.uoregon.casls.aris_android.data_objects.DialogScript;
 /**
  * Created by smorison on 8/20/15.
  */
-public class DialogsModel {
+public class DialogsModel extends ARISModel {
 
 	public Map<Long, Dialog> dialogs = new LinkedHashMap<>();
 	public Map<Long, DialogCharacter> dialogCharacters = new LinkedHashMap<>();
-	public Map<Long, DialogScript> dialogScript = new LinkedHashMap<>();
+	public Map<Long, DialogScript> dialogScripts = new LinkedHashMap<>();
 	public Map<Long, DialogOption> dialogOptions = new LinkedHashMap<>();
 
 	public void clearGameData() {
-
+		dialogs.clear();
+		dialogCharacters.clear();
+		dialogScripts.clear();
+		dialogOptions.clear();
+		n_game_data_received = 0;
 	}
 
 	public void requestDialogs() {

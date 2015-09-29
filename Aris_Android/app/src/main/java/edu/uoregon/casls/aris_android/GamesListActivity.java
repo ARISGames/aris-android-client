@@ -470,59 +470,65 @@ public class GamesListActivity extends ActionBarActivity {
 
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) throws JSONException {
 		Log.d(Config.LOGTAG, getClass().getSimpleName() + "Return status to server Req: " + jsonReturn.toString());
-		if (callingReq.matches(HTTP_GET_NEARBY_GAMES_REQ_API
-				+ "|" +  HTTP_GET_POPULAR_GAMES_REQ_API
-				+ "|" +  HTTP_GET_RECENT_GAMES_REQ_API
-				+ "|" +  HTTP_GET_SEARCH_GAMES_REQ_API
-				+ "|" +  HTTP_GET_PLAYER_GAMES_REQ_API) ) { // true = debug temp hall pass for all
-			Log.d(Config.LOGTAG, getClass().getSimpleName() + "Landed successfully in colling Req: " + callingReq);
-			mFullGamesUpdated = 0; // reset found game count
-			try {
-				// process incoming json data
-				if (jsonReturn.has("data")) {
-//					int returnCode = (jsonReturn.has("returnCode")) ? jsonReturn.getInt("returnCode") : null; // what do I do?
-//					String returnCodeDescription = (jsonReturn.has("returnCode")) ? jsonReturn.getString("returnCodeDescription") : ""; // For what?
-					JSONArray jsonGamesList = jsonReturn.getJSONArray("data");
-					mJsonGamesList = jsonGamesList;
-					mTotalGamesCount = jsonGamesList.length();
-//					JSONObject game = new JSONObject();
-					if (jsonGamesList.length() > 0) { // get games - Parse through here or send entire array to special method?
-						// send JSON gamesList object to parser method
+		int returnCode = (jsonReturn.has("returnCode")) ? jsonReturn.getInt("returnCode") : null; // what do I do?
+		String returnCodeDescription = (jsonReturn.has("returnCode")) ? jsonReturn.getString("returnCodeDescription") : ""; // For what?
+		if (returnCode == 0) { // return code 0 is good; all other values bad.
+			if (callingReq.matches(HTTP_GET_NEARBY_GAMES_REQ_API
+					+ "|" + HTTP_GET_POPULAR_GAMES_REQ_API
+					+ "|" + HTTP_GET_RECENT_GAMES_REQ_API
+					+ "|" + HTTP_GET_SEARCH_GAMES_REQ_API
+					+ "|" + HTTP_GET_PLAYER_GAMES_REQ_API)) { // true = debug temp hall pass for all
+				Log.d(Config.LOGTAG, getClass().getSimpleName() + "Landed successfully in colling Req: " + callingReq);
+				mFullGamesUpdated = 0; // reset found game count
+				try {
+					// process incoming json data
+					if (jsonReturn.has("data")) {
+						JSONArray jsonGamesList = jsonReturn.getJSONArray("data");
+						mJsonGamesList = jsonGamesList;
+						mTotalGamesCount = jsonGamesList.length();
+//						JSONObject game = new JSONObject();
+						if (jsonGamesList.length() > 0) { // get games - Parse through here or send entire array to special method?
+							// send JSON gamesList object to parser method
 
-						mListedGamesMap = parseGamesToMap(jsonGamesList);
-						// do we get the full game now and add the extra bits to the Games List? I guess so.
-						// After all game basic blocks have loaded, poll for the additional (full) game data.
-						getFullGames();
+							mListedGamesMap = parseGamesToMap(jsonGamesList);
+							// do we get the full game now and add the extra bits to the Games List? I guess so.
+							// After all game basic blocks have loaded, poll for the additional (full) game data.
+							getFullGames();
+						}
+						else { // no data in return set
+							mListedGamesMap.clear(); // empty the games list map
+							updateAllViews();
+							Toast t = Toast.makeText(getApplicationContext(), "No games found.",
+									Toast.LENGTH_SHORT);
+							t.setGravity(Gravity.CENTER, 0, 0);
+							t.show();
+						}
 					}
-					else { // no data in return set
-						mListedGamesMap.clear(); // empty the games list map
-						updateAllViews();
-						Toast t = Toast.makeText(getApplicationContext(), "No games found.",
-								Toast.LENGTH_SHORT);
-						t.setGravity(Gravity.CENTER, 0, 0);
-						t.show();
-					}
+				} catch (JSONException e) {
+					Log.e(Config.LOGTAG, getClass().getSimpleName() + "Failed while parsing returning JSON from request:" + HTTP_GET_NEARBY_GAMES_REQ_API + " Error reported was: " + e.getCause());
+					e.printStackTrace();
 				}
-			} catch (JSONException e) {
-				Log.e(Config.LOGTAG, getClass().getSimpleName() + "Failed while parsing returning JSON from request:" + HTTP_GET_NEARBY_GAMES_REQ_API + " Error reported was: " + e.getCause());
-				e.printStackTrace();
 			}
-		}
-		else if (callingReq.contentEquals(HTTP_GET_FULL_GAME_REQ_API)) {
-			// Fill in full game data
-			fillInFullGameData(jsonReturn);
-			mFullGamesUpdated++;
-			if (mFullGamesUpdated == mTotalGamesCount) {
-				updateAllViews();
+			else if (callingReq.contentEquals(HTTP_GET_FULL_GAME_REQ_API)) {
+				// Fill in full game data
+				fillInFullGameData(jsonReturn);
+				mFullGamesUpdated++;
+				if (mFullGamesUpdated == mTotalGamesCount) {
+					updateAllViews();
+				}
 			}
-		}
-		else { // unknown callinRequest
-			Log.e(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient returned successfully but with unhandled server callingReq: " + callingReq);
-			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
-					Toast.LENGTH_SHORT);
-			t.setGravity(Gravity.CENTER, 0, 0);
-			t.show();
+			else { // unknown callinRequest
+				Log.e(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient returned successfully but with unhandled server callingReq: " + callingReq);
+				Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
+						Toast.LENGTH_SHORT);
+				t.setGravity(Gravity.CENTER, 0, 0);
+				t.show();
 
+			}
+		}
+		else {	// Return code was non zero indicating a server decline of some sort
+			Log.e(Config.LOGTAG, getClass().getSimpleName() + "Aris Server returned a non-zero return Code: " + returnCode + " with the returnCodeDescription: " + returnCodeDescription);
+			// todo: tell user something bad happened and they'll have to try later, or just move on with life...
 		}
 	}
 
@@ -633,10 +639,16 @@ public class GamesListActivity extends ActionBarActivity {
 
 	private void fillInFullGameData(JSONObject jsonFullGameHTTPReturnSet) throws JSONException {
 		//get "data" block
-		JSONObject jsonFullGameData = jsonFullGameHTTPReturnSet.getJSONObject("data");
-		String game_id = jsonFullGameData.getString("game_id"); // get game id from json block
-		Game game = mListedGamesMap.get(game_id); // get game instance
-		game.initFullGameDetailsWithJson(jsonFullGameHTTPReturnSet);
+		if (jsonFullGameHTTPReturnSet.getJSONObject("data") != null) {
+			JSONObject jsonFullGameData = jsonFullGameHTTPReturnSet.getJSONObject("data");
+			String game_id = jsonFullGameData.getString("game_id"); // get game id from json block
+			Game game = mListedGamesMap.get(game_id); // get game instance
+			game.initFullGameDetailsWithJson(jsonFullGameHTTPReturnSet);
+		}
+		else { //json "data" block was null
+			Log.e(Config.LOGTAG, getClass().getSimpleName() + "Json \"data\" block returned was null in fillInFullGameData(). This is bad. You should have never arrived here.");
+
+		}
 	}
 
 	private void getFullGames() {

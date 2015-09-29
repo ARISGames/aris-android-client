@@ -58,6 +58,7 @@ import edu.uoregon.casls.aris_android.data_objects.WebPage;
 public class GamePlayActivity extends ActionBarActivity
 		implements GamePlayNavDrawerFragment.NavigationDrawerCallbacks, GamePlayMapFragment.OnFragmentInteractionListener {
 
+// Todo 9.29.15: Need to see what happens now when the game tries to load, and then set about setting up the cyclic app status calls
 
 	private final static String TAG_SERVER_SUCCESS = "success";
 	public Bundle mTransitionAnimationBndl;
@@ -101,10 +102,13 @@ public class GamePlayActivity extends ActionBarActivity
 				e.printStackTrace();
 			}
 		}
+
 		// tell transitioning activities how to slide. eg: makeCustomAnimation(ctx, howNewMovesIn, howThisMovesOut) -sem
 		mTransitionAnimationBndl = ActivityOptions.makeCustomAnimation(getApplicationContext(),
 				R.animator.slide_in_from_right, R.animator.slide_out_to_left).toBundle();
 
+		// initialize game object's inner classes and variables.
+		mGame.getReadyToPlay();
 		// Start barrage of game related server requests
 		getGameDataFromServer();
 		// Set up the drawer. todo: move this to processServerResponse() for call getTabsForPlayer
@@ -115,7 +119,8 @@ public class GamePlayActivity extends ActionBarActivity
 
 	private void getGameDataFromServer() {
 		// here are all the calls made from iOS on starting or resuming a game:
-		JSONObject jsonGameID = null, jsonAddlData = null;
+		JSONObject jsonGameID = new JSONObject();
+		JSONObject jsonAddlData = new JSONObject();
 		try {
 			jsonGameID.put("game_id", mGame.game_id);
 			jsonAddlData.put("game_id", mGame.game_id);
@@ -227,7 +232,7 @@ public class GamePlayActivity extends ActionBarActivity
 	}
 
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) throws JSONException {
-		Log.d(Config.LOGTAG, getClass().getSimpleName() + "Return status to server Req: " + jsonReturn.toString());
+		Log.d(Config.LOGTAG, getClass().getSimpleName() + " Server response to Req: " + callingReq + "; data: " + jsonReturn.toString());
 		if (jsonReturn.has("returnCode") && jsonReturn.getLong("returnCode") == 0) {
 			if (callingReq.contentEquals(Calls.HTTP_GET_SCENES_4_GAME)) { // parse array of returns scenes
 				// Response looks like this:
@@ -242,6 +247,7 @@ public class GamePlayActivity extends ActionBarActivity
 							String jsonSceneStr = jsonScenes.getJSONObject(i).toString();
 							Scene scene = gson.fromJson(jsonSceneStr, Scene.class);
 							//populate hashmap as <scene_id, Scene Obj>
+
 							mGame.scenesModel.scenes.put(scene.scene_id, scene);
 							// tell the game class that we got one of the 27 required pieces.
 							// serving the function that the iOS "MODEL_GAME_PLAYER_PIECE_AVAILABLE" message would have.
@@ -329,7 +335,7 @@ public class GamePlayActivity extends ActionBarActivity
 						String dataStr = jsonData.getJSONObject(i).toString();
 						DialogScript dialogScript = gson.fromJson(dataStr, DialogScript.class);
 						//populate hashmap as dialogScript_id, DialogScript Obj>
-						mGame.dialogsModel.dialogScript.put(dialogScript.dialog_character_id, dialogScript);
+						mGame.dialogsModel.dialogScripts.put(dialogScript.dialog_character_id, dialogScript);
 						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
 				}
@@ -548,7 +554,7 @@ public class GamePlayActivity extends ActionBarActivity
 
 			}
 		}
-		else {
+		else { // server denial. Probably need to alert user (?)
 			Log.e(Config.LOGTAG, getClass().getSimpleName() + "Server request " + callingReq + " failed; server returned code: " + jsonReturn.getLong("returnCode")
 					+ "\nPlayer Id: " + mUser.user_id
 					+ "\nGame Id: " + mGame.game_id);

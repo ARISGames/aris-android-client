@@ -35,7 +35,7 @@ import edu.uoregon.casls.aris_android.models.WebPagesModel;
  */
 public class Game {
 
-	static final long gameDatasToReceive = 23;
+	static final long gameDatasToReceive = 23; // old way todo use new way
 	static final long playerDatasToReceive = 7;
 
 	private long receivedGameData;
@@ -82,6 +82,7 @@ public class Game {
 	public boolean notebook_allow_player_tags;
 
 	public long inventory_weight_cap;
+
 
 	// Game subcomponent classes
 	public ScenesModel 			scenesModel;		// Game Piece
@@ -255,6 +256,8 @@ public class Game {
 
 		receivedPlayerData = 0;
 		playerDataReceived = false;
+
+
 
 		scenesModel          = new ScenesModel();
 		plaquesModel         = new PlaquesModel();

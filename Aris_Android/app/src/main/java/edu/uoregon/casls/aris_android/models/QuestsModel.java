@@ -8,11 +8,13 @@ import edu.uoregon.casls.aris_android.data_objects.Quest;
 /**
  * Created by smorison on 8/20/15.
  */
-public class QuestsModel {
+public class QuestsModel extends ARISModel {
 
 	public Map<Long, Quest> quests = new LinkedHashMap<>();
 
 	public void clearGameData() {
+		quests.clear();
+		n_game_data_received = 0;
 	}
 
 	public void clearPlayerData() {
@@ -24,5 +26,9 @@ public class QuestsModel {
 
 	public void requestPlayerQuests() {
 
+	}
+
+	public long nGameDataToReceive () {
+		return 1;
 	}
 }

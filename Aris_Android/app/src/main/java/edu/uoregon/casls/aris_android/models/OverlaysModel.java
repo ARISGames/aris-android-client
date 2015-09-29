@@ -8,12 +8,13 @@ import edu.uoregon.casls.aris_android.data_objects.Overlay;
 /**
  * Created by smorison on 8/20/15.
  */
-public class OverlaysModel {
+public class OverlaysModel extends ARISModel {
 
 	public Map<Long, Overlay> overlays = new LinkedHashMap<>();
 
 	public void clearGameData() {
-		
+		overlays.clear();
+		n_game_data_received = 0;
 	}
 
 	public void clearPlayerData() {
@@ -25,5 +26,9 @@ public class OverlaysModel {
 
 	public void requestPlayerOverlays() {
 
+	}
+
+	public long nGameDataToReceive () {
+		return 1;
 	}
 }
