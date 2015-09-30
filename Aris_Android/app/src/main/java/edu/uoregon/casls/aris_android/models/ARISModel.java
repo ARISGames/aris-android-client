@@ -15,13 +15,11 @@ public class ARISModel {
 	public long nGameDataToReceive() { return 0; }
 	public long nPlayerDataToReceive() { return 0; }
 
-	public long nGameDataReceived()
-	{
+	public long nGameDataReceived() {
 		if(n_game_data_received > this.nGameDataToReceive()) return this.nGameDataToReceive();
 		return n_game_data_received;
 	}
-	public long nPlayerDataReceived()
-	{
+	public long nPlayerDataReceived() {
 		if(n_player_data_received > this.nPlayerDataToReceive()) return this.nPlayerDataToReceive();
 		return n_player_data_received;
 	}
@@ -30,8 +28,8 @@ public class ARISModel {
 	{
 		return n_game_data_received >= this.nGameDataToReceive();
 	}
-	public Boolean playerDataReceived()
-	{
+
+	public Boolean playerDataReceived() {
 		return n_player_data_received >= this.nPlayerDataToReceive();
 	}
 
@@ -45,8 +43,7 @@ public class ARISModel {
 		return "";
 	}
 
-	public void deserializeGameData(String data)
-	{
+	public void deserializeGameData(String data) {
 
 	}
 
@@ -55,8 +52,7 @@ public class ARISModel {
 		return "";
 	}
 
-	public void deserializePlayerData(String data)
-	{
+	public void deserializePlayerData(String data) {
 
 	}
 

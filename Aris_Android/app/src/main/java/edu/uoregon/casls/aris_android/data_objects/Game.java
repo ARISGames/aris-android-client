@@ -10,12 +10,17 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
+import edu.uoregon.casls.aris_android.models.ARISModel;
 import edu.uoregon.casls.aris_android.models.DialogsModel;
 import edu.uoregon.casls.aris_android.models.DisplayQueueModel;
 import edu.uoregon.casls.aris_android.models.EventsModel;
 import edu.uoregon.casls.aris_android.models.FactoriesModel;
+import edu.uoregon.casls.aris_android.models.GameInstancesModel;
+import edu.uoregon.casls.aris_android.models.GroupInstancesModel;
+import edu.uoregon.casls.aris_android.models.GroupsModel;
 import edu.uoregon.casls.aris_android.models.InstancesModel;
 import edu.uoregon.casls.aris_android.models.ItemsModel;
 import edu.uoregon.casls.aris_android.models.LogsModel;
@@ -24,6 +29,7 @@ import edu.uoregon.casls.aris_android.models.OverlaysModel;
 import edu.uoregon.casls.aris_android.models.PlaquesModel;
 import edu.uoregon.casls.aris_android.models.PlayerInstancesModel;
 import edu.uoregon.casls.aris_android.models.QuestsModel;
+import edu.uoregon.casls.aris_android.models.RequirementsModel;
 import edu.uoregon.casls.aris_android.models.ScenesModel;
 import edu.uoregon.casls.aris_android.models.TabsModel;
 import edu.uoregon.casls.aris_android.models.TagsModel;
@@ -35,19 +41,13 @@ import edu.uoregon.casls.aris_android.models.WebPagesModel;
  */
 public class Game {
 
-	static final long gameDatasToReceive = 23; // old way todo use new way
-	static final long playerDatasToReceive = 7;
-
-	private long receivedGameData;
-	public Boolean gameDataReceived; // public for visibility but do not set outside of class please
-
-	private long receivedPlayerData;
-	public Boolean playerDataReceived; // public for visibility but do not set outside of class please
+	long n_game_data_to_receive;
+	long n_game_data_received;
+	long n_player_data_to_receive;
+	long n_player_data_received;
 
 //	public NSTimer *poller; todo: android equivalent
 	// todo: this will not serialize (crashes gson.toJson()) so I need to locate it in the gameplay activity itself.
-//	private int pollerInterval = 1000; // Move the timer to the activity that will be in charge of the game play.?
-//	private final Handler poller = new Handler();
 
 	private static final String HTTP_GET_FULL_GAME_REQ_API = "v2.games.getFullGame/";
 	public long game_id;
@@ -68,8 +68,8 @@ public class Game {
 
 	public long intro_scene_id;
 
-	public List<User> authors = new ArrayList<User>();
-//	public List<GameComment> comments = new ArrayList<GameComment>();
+	public List<User> authors = new ArrayList<>();
+	public List<GameComment> comments = new ArrayList<GameComment>();
 
 	public String map_type;
 	public double map_zoom_level;
@@ -82,10 +82,15 @@ public class Game {
 	public boolean notebook_allow_player_tags;
 
 	public long inventory_weight_cap;
+	public String network_level;
+	public boolean allow_download;
+	public boolean preload_media;
 
+	public List<ARISModel> models = new ArrayList<>(); // List of all the models below for iteration convenience
 
 	// Game subcomponent classes
 	public ScenesModel 			scenesModel;		// Game Piece
+	public GroupsModel 			groupsModel;		// Game Piece
 	public PlaquesModel 		plaquesModel;		// Game Piece
 	public ItemsModel 			itemsModel;		// Game Piece
 	public DialogsModel 		dialogsModel;		// Game Piece
@@ -93,15 +98,18 @@ public class Game {
 	public NotesModel 			notesModel;		// Game Piece
 	public TagsModel 			tagsModel;
 	public EventsModel 			eventsModel;			// Game Piece
+	public RequirementsModel 	requirementsModel;			// Game Piece
 	public TriggersModel 		triggersModel;
 	public FactoriesModel 		factoriesModel;		// Game Piece
 	public OverlaysModel 		overlaysModel;		// Game Piece
 	public InstancesModel 		instancesModel;		// Game Piece
 	public PlayerInstancesModel playerInstancesModel;		// Game Piece todo: is this where gameUsers go? Players == Users??
+	public GameInstancesModel 	gameInstancesModel;
+	public GroupInstancesModel 	groupInstancesModel;
 	public TabsModel 			tabsModel;
 	public LogsModel 			logsModel;
 	public QuestsModel			questsModel;		// Game Piece
-	public DisplayQueueModel 	displayQueueModel;
+//	public DisplayQueueModel 	displayQueueModel; // iOS only for now
 	// medias (in GamePlayAct 		// Game Piece
 
 	// Empty Constructor
@@ -251,42 +259,47 @@ public class Game {
 //		_ARIS_NOTIF_LISTEN_(@"MODEL_GAME_PIECE_AVAILABLE",self,@selector(gamePieceReceived),null);
 //		_ARIS_NOTIF_LISTEN_(@"MODEL_GAME_PLAYER_PIECE_AVAILABLE",self,@selector(gamePlayerPieceReceived),null);
 
-		receivedGameData = 0;
-		gameDataReceived = false;
 
-		receivedPlayerData = 0;
-		playerDataReceived = false;
+		scenesModel          = new ScenesModel(); 			models.add(scenesModel         );
+		plaquesModel         = new PlaquesModel(); 			models.add(plaquesModel        );
+		itemsModel           = new ItemsModel(); 			models.add(itemsModel          );
+		dialogsModel         = new DialogsModel(); 			models.add(dialogsModel        );
+		webPagesModel        = new WebPagesModel(); 		models.add(webPagesModel       );
+		notesModel           = new NotesModel(); 			models.add(notesModel          );
+		tagsModel            = new TagsModel(); 			models.add(tagsModel           );
+		eventsModel          = new EventsModel(); 			models.add(eventsModel         );
+		requirementsModel    = new RequirementsModel(); 	models.add(requirementsModel   );
+		triggersModel        = new TriggersModel(); 		models.add(triggersModel       );
+		factoriesModel       = new FactoriesModel(); 		models.add(factoriesModel      );
+		overlaysModel        = new OverlaysModel(); 		models.add(overlaysModel       );
+		instancesModel       = new InstancesModel(); 		models.add(instancesModel      );
+		playerInstancesModel = new PlayerInstancesModel();	models.add(playerInstancesModel);
+		gameInstancesModel   = new GameInstancesModel();	models.add(gameInstancesModel  );
+		groupInstancesModel  = new GroupInstancesModel();	models.add(groupInstancesModel );
+		tabsModel            = new TabsModel(); 			models.add(tabsModel           );
+		logsModel            = new LogsModel(); 			models.add(logsModel           );
+		questsModel          = new QuestsModel(); 			models.add(questsModel         );
+//		displayQueueModel    = new DisplayQueueModel();	 	models.add(displayQueueModel   ); // iOS only for now
 
-
-
-		scenesModel          = new ScenesModel();
-		plaquesModel         = new PlaquesModel();
-		itemsModel           = new ItemsModel();
-		dialogsModel         = new DialogsModel();
-		webPagesModel        = new WebPagesModel();
-		notesModel           = new NotesModel();
-		tagsModel            = new TagsModel();
-		eventsModel          = new EventsModel();
-		triggersModel        = new TriggersModel();
-		factoriesModel       = new FactoriesModel();
-		overlaysModel        = new OverlaysModel();
-		instancesModel       = new InstancesModel();
-		playerInstancesModel = new PlayerInstancesModel();
-		tabsModel            = new TabsModel();
-		logsModel            = new LogsModel();
-		questsModel          = new QuestsModel();
-		displayQueueModel    = new DisplayQueueModel();
+		n_game_data_to_receive = 0;
+		n_player_data_to_receive = 0;
+		for (ARISModel model : models) {
+			n_game_data_to_receive   += model.nGameDataToReceive();
+			n_player_data_to_receive += model.nPlayerDataToReceive();
+		}
 	}
 
 	//to remove models while retaining the game stub for lists and such
 	public void endPlay() {
-		receivedGameData = 0;
-		gameDataReceived = false;
+		n_game_data_to_receive = 0;
+		n_game_data_received = 0;
+		n_player_data_to_receive = 0;
+		n_player_data_received = 0;
 
-		receivedPlayerData = 0;
-		playerDataReceived = false;
+		models = null;
 
 		scenesModel          = null;
+		groupsModel          = null;
 		plaquesModel         = null;
 		itemsModel           = null;
 		dialogsModel         = null;
@@ -294,19 +307,22 @@ public class Game {
 		notesModel           = null;
 		tagsModel            = null;
 		eventsModel          = null;
+		requirementsModel    = null;
 		triggersModel        = null;
 		factoriesModel       = null;
 		overlaysModel        = null;
 		instancesModel       = null;
 		playerInstancesModel = null;
+		gameInstancesModel   = null;
+		groupInstancesModel  = null;
 		tabsModel            = null;
 		questsModel          = null;
 		logsModel            = null;
-		displayQueueModel    = null;
+//		displayQueueModel    = null; // iOS
 	}
 
-	public void requestGameData() {
-		receivedGameData = 0;
+	public void requestGameData() {  // Androis Aris departs from iOS here where we make all our requests from GamePlayActivity
+
 		scenesModel.requestScenes();
 		scenesModel.touchPlayerScene();
 		plaquesModel.requestPlaques();
@@ -331,8 +347,7 @@ public class Game {
 //		_MODEL_USERS_ requestUsers();
 	}
 
-	public void requestPlayerData() {
-		receivedPlayerData = 0;
+	public void requestPlayerData() { // This is all done in GamePlayActivity in Android
 		scenesModel.requestPlayerScene();
 		instancesModel.requestPlayerInstances();
 		triggersModel.requestPlayerTriggers();
@@ -343,27 +358,33 @@ public class Game {
 	}
 
 	public void gamePieceReceived() {
-		receivedGameData++;
-		if(!gameDataReceived && receivedGameData >= gameDatasToReceive)
-		{
-//			_ARIS_NOTIF_SEND_(@"MODEL_GAME_DATA_LOADED", null, null);
-			gameDataReceived = true;
+		n_game_data_received++;
+		if (this.allGameDataReceived()) {
+			n_game_data_received = n_game_data_to_receive; //should already be exactly this...
+//			_ARIS_NOTIF_SEND_(@"MODEL_GAME_DATA_LOADED", nil, nil);
 		}
 		percentLoadedChanged();
 	}
 
 	public void gamePlayerPieceReceived() {
-		receivedPlayerData++;
-		if(receivedPlayerData >= playerDatasToReceive)
-		{
-//			_ARIS_NOTIF_SEND_(@"MODEL_GAME_PLAYER_DATA_LOADED", null, null);
-			playerDataReceived = true;
+		n_player_data_received++;
+		if (n_player_data_received >= n_player_data_to_receive) {
+//			_ARIS_NOTIF_SEND_(@"MODEL_GAME_PLAYER_DATA_LOADED", null, null); // broadcast to any listeners that game data is ready
 		}
 		percentLoadedChanged();
 	}
 
+	public boolean allGameDataReceived() {
+
+		for (ARISModel model : models) // iterate through all models
+			if(!model.gameDataReceived()) { // stop if one reports it's not received all its data.
+				return false;
+			}
+		return true;
+	}
+
 	public void percentLoadedChanged() {
-		float percentReceived = (receivedGameData + receivedPlayerData) / (gameDatasToReceive + playerDatasToReceive);
+		float percentReceived = (n_game_data_received + n_player_data_received)/(n_game_data_to_receive + n_player_data_to_receive);
 //		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PERCENT_LOADED", null, @{@"percent":percentReceived});
 	}
 
@@ -390,47 +411,26 @@ public class Game {
 
 
 	public void clearModels() {
-		receivedGameData = 0;
-		gameDataReceived = false;
+		n_game_data_received = 0;
+		n_player_data_received = 0;
 
-		receivedPlayerData = 0;
-		playerDataReceived = false;
+		for (ARISModel model : models) {
+			model.clearPlayerData();
+		}
+		for (ARISModel model : models) {
+			model.clearGameData();
+		}
 
-		scenesModel.clearGameData();
-		plaquesModel.clearGameData();
-		itemsModel.clearGameData();
-		dialogsModel.clearGameData();
-		webPagesModel.clearGameData();
-		notesModel.clearGameData();
-		tagsModel.clearGameData();
-		eventsModel.clearGameData();
-		questsModel.clearGameData();
-		triggersModel.clearGameData();
-		factoriesModel.clearGameData();
-		overlaysModel.clearGameData();
-		instancesModel.clearGameData();
-		playerInstancesModel.clearGameData();
-		tabsModel.clearGameData();
-
-		scenesModel.clearPlayerData();
-		questsModel.clearPlayerData();
-		triggersModel.clearPlayerData();
-		overlaysModel.clearPlayerData();
-		instancesModel.clearPlayerData();
-		playerInstancesModel.clearPlayerData();
-		tabsModel.clearPlayerData();
-		logsModel.clearPlayerData();
-
-		displayQueueModel.clear();
+//		displayQueueModel.clear();
 	}
 
-//	public long rating() {
-//		if(!comments.count) return 0;
-//		long rating = 0;
-//		for(long i = 0; i < comments.count; i++)
-//			rating += ((GameComment *)[comments objectAtIndex:i]).rating;
-//		return rating/comments.count;
-//	}
+	public long rating() {
+		if(comments.isEmpty()) return 0;
+		long rating = 0;
+		for(GameComment comment : comments)
+			rating += comment.rating;
+		return rating/comments.size();
+	}
 
 	public String description()
 	{

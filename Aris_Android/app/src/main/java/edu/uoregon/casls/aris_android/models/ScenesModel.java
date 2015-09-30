@@ -38,6 +38,22 @@ public class ScenesModel extends ARISModel {
 
 	}
 
+	public void scenesReceived() { // method here to conform with iOS version of this class
+		this.updateScenes();
+	}
+
+	private void updateScenes() {
+		n_game_data_received++;
+//		_ARIS_NOTIF_SEND_(@"MODEL_SCENES_AVAILABLE",nil,nil);
+//		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+	}
+
+	public void sceneTouched() {
+		n_game_data_received++;
+//		_ARIS_NOTIF_SEND_(@"MODEL_SCENE_TOUCHED",nil,nil);
+//		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+	}
+
 	public void touchPlayerScene() {
 
 	}

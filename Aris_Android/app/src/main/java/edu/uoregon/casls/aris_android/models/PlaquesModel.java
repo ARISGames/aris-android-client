@@ -17,6 +17,16 @@ public class PlaquesModel extends ARISModel {
 		n_game_data_received = 0;
 	}
 
+	public void plaquesReceived() { // method here to conform with iOS version of this class
+		this.updatePlaques();
+	}
+
+	private void updatePlaques() {
+		n_game_data_received++;
+//		_ARIS_NOTIF_SEND_(@"MODEL_SCENES_AVAILABLE",nil,nil);
+//		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+	}
+
 	public void requestPlaques() {
 
 	}

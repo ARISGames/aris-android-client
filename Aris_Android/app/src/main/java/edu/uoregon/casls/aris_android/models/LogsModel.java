@@ -27,4 +27,14 @@ public class LogsModel extends ARISModel {
 	public long nGameDataToReceive () {
 		return 1;
 	}
+
+	public void playerReceivedItemId(long item_id, long qty) {
+	}
+
+	public void playerLostItemId(long item_id, long qty) {
+	}
+
+	public long[] objectIdsOfType(String item, long tag_id) {
+		return new long[0]; // todo stub temp
+	}
 }

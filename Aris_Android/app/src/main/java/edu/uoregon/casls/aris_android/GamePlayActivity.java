@@ -39,6 +39,7 @@ import edu.uoregon.casls.aris_android.data_objects.DialogScript;
 import edu.uoregon.casls.aris_android.data_objects.Event;
 import edu.uoregon.casls.aris_android.data_objects.Factory;
 import edu.uoregon.casls.aris_android.data_objects.Game;
+import edu.uoregon.casls.aris_android.data_objects.Group;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
 import edu.uoregon.casls.aris_android.data_objects.Item;
 import edu.uoregon.casls.aris_android.data_objects.Media;
@@ -62,7 +63,7 @@ public class GamePlayActivity extends ActionBarActivity
 
 	private final static String TAG_SERVER_SUCCESS = "success";
 	public Bundle mTransitionAnimationBndl;
-	public User mUser;
+	public User mPlayer; // Sanity note: Now that the game is "playing" we will refer to the logged in User as "Player"
 	protected Game mGame = new Game();
 	private View mProgressView; // todo: install a progress spinner for server delays
 	public JSONObject mJsonAuth;
@@ -92,7 +93,7 @@ public class GamePlayActivity extends ActionBarActivity
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			mUser = new User(extras.getString("user"));
+			mPlayer = new User(extras.getString("user")); // we're now a "Player", BTW.
 			//GSON (Slow in debug mode. Ok in regular run mode)
 			mGame = gson.fromJson(extras.getString("game"), Game.class);
 
@@ -132,7 +133,8 @@ public class GamePlayActivity extends ActionBarActivity
 		pollServer(Calls.HTTP_GET_SCENES_4_GAME, jsonGameID); 
 		pollServer(Calls.HTTP_TOUCH_SCENE_4_PLAYER, jsonGameID); 
 		pollServer(Calls.HTTP_GET_PLAQUES_4_GAME, jsonGameID); 
-		pollServer(Calls.HTTP_GET_ITEMS_4_GAME, jsonGameID); 
+		pollServer(Calls.HTTP_GET_GROUPS_4_GAME, jsonGameID);
+		pollServer(Calls.HTTP_GET_ITEMS_4_GAME, jsonGameID);
 		pollServer(Calls.HTTP_TOUCH_ITEMS_4_PLAYER, jsonGameID); 
 		pollServer(Calls.HTTP_GET_DIALOGS_4_GAME, jsonGameID); 
 		pollServer(Calls.HTTP_GET_DIALOG_CHARS_4_GAME, jsonGameID); 
@@ -154,6 +156,10 @@ public class GamePlayActivity extends ActionBarActivity
 		pollServer(Calls.HTTP_GET_USERS_4_GAME, jsonGameID); 
 	}
 
+	public void dropItem(long item_id, long qty) {
+
+	}
+
 	private void pollServer(final String requestApi, JSONObject jsonMain) {
 //		showProgress(true);
 		RequestParams rqParams = new RequestParams();
@@ -161,12 +167,11 @@ public class GamePlayActivity extends ActionBarActivity
 		final Context context = this;
 		String request_url = Config.SERVER_URL_MOBILE + requestApi;
 
-		mUser.location = AppUtils.getGeoLocation(context);
+		mPlayer.location = AppUtils.getGeoLocation(context);
 
 		rqParams.put("request", requestApi);
 		StringEntity entity;
 		entity = null;
-//		JSONObject jsonMain = new JSONObject();
 		JSONObject jsonAuth = new JSONObject();
 
 		try {
@@ -248,11 +253,12 @@ public class GamePlayActivity extends ActionBarActivity
 							Scene scene = gson.fromJson(jsonSceneStr, Scene.class);
 							//populate hashmap as <scene_id, Scene Obj>
 
-							mGame.scenesModel.scenes.put(scene.scene_id, scene);
+							mGame.scenesModel.scenes.put(scene.scene_id, scene); // in iOS the object is added in the class itself
 							// tell the game class that we got one of the 27 required pieces.
 							// serving the function that the iOS "MODEL_GAME_PLAYER_PIECE_AVAILABLE" message would have.
-							if (!mGame.playerDataReceived) mGame.gamePlayerPieceReceived();
+//							if (!mGame.playerDataReceived) mGame.gamePlayerPieceReceived();
 						}
+						mGame.scenesModel.scenesReceived();
 					}
 				} catch (JSONException e) {
 					Log.e(Config.LOGTAG, getClass().getSimpleName() + "Failed while parsing returning JSON from request:" + callingReq + " Error reported was: " + e.getCause());
@@ -262,7 +268,7 @@ public class GamePlayActivity extends ActionBarActivity
 			else if (callingReq.equals(Calls.HTTP_TOUCH_SCENE_4_PLAYER)) {
 				if (jsonReturn.has("data")) {
 					JSONObject jsonData = jsonReturn.getJSONObject("data"); // is there any data?
-					if (!mGame.playerDataReceived) mGame.gamePlayerPieceReceived();
+					mGame.scenesModel.sceneTouched();
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_PLAQUES_4_GAME)) {
@@ -274,8 +280,21 @@ public class GamePlayActivity extends ActionBarActivity
 						Plaque plaque = gson.fromJson(dataStr, Plaque.class);
 						//populate hashmap as <plaque_id, Plaque Obj>
 						mGame.plaquesModel.plaques.put(plaque.plaque_id, plaque);
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
+					mGame.plaquesModel.plaquesReceived();
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_GROUPS_4_GAME)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						Group group = gson.fromJson(dataStr, Group.class);
+						//populate hashmap as <plaque_id, Plaque Obj>
+						mGame.groupsModel.groups.put(group.group_id, group);
+					}
+					mGame.plaquesModel.plaquesReceived();
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_ITEMS_4_GAME)) {
@@ -556,7 +575,7 @@ public class GamePlayActivity extends ActionBarActivity
 		}
 		else { // server denial. Probably need to alert user (?)
 			Log.e(Config.LOGTAG, getClass().getSimpleName() + "Server request " + callingReq + " failed; server returned code: " + jsonReturn.getLong("returnCode")
-					+ "\nPlayer Id: " + mUser.user_id
+					+ "\nPlayer Id: " + mPlayer.user_id
 					+ "\nGame Id: " + mGame.game_id);
 		}
 	}

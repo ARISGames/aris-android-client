@@ -9,6 +9,7 @@ public class Calls {
 	// Game initialization
 	public static final String HTTP_GET_SCENES_4_GAME 		= "v2.scenes.getScenesForGame/";		// Game Piece Avail
 	public static final String HTTP_TOUCH_SCENE_4_PLAYER 	= "v2.client.touchSceneForPlayer/";		// Game Piece Avail
+	public static final String HTTP_GET_GROUPS_4_GAME 		= "v2.plaques.getGroupsForGame/";		// Game Piece Avail
 	public static final String HTTP_GET_PLAQUES_4_GAME 		= "v2.plaques.getPlaquesForGame/";		// Game Piece Avail
 	public static final String HTTP_GET_ITEMS_4_GAME 		= "v2.items.getItemsForGame/";			// Game Piece Avail
 	public static final String HTTP_TOUCH_ITEMS_4_PLAYER 	= "v2.client.touchItemsForPlayer/";		// Game Piece Avail
