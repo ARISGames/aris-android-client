@@ -3,6 +3,7 @@ package edu.uoregon.casls.aris_android.models;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.data_objects.Trigger;
 
 /**
@@ -11,6 +12,11 @@ import edu.uoregon.casls.aris_android.data_objects.Trigger;
 public class TriggersModel extends ARISModel {
 
 	public Map<Long, Trigger> triggers = new LinkedHashMap<>();
+	public GamePlayActivity mGamePlayAct;
+
+	public void initContext(GamePlayActivity gamePlayAct) {
+		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
+	}
 
 	public void clearGameData() {
 		triggers.clear();

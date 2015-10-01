@@ -1,5 +1,7 @@
 package edu.uoregon.casls.aris_android.models;
 
+import edu.uoregon.casls.aris_android.GamePlayActivity;
+
 /**
  * Created by smorison on 9/29/15.
  */
@@ -14,6 +16,13 @@ public class ARISModel {
 
 	public long nGameDataToReceive() { return 0; }
 	public long nPlayerDataToReceive() { return 0; }
+
+	public GamePlayActivity mGamePlayAct;
+
+	public void initContext(GamePlayActivity gamePlayAct) { // for visibility to game play activity elements
+		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
+	}
+
 
 	public long nGameDataReceived() {
 		if(n_game_data_received > this.nGameDataToReceive()) return this.nGameDataToReceive();

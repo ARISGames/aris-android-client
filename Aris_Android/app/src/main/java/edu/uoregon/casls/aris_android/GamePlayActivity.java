@@ -64,7 +64,7 @@ public class GamePlayActivity extends ActionBarActivity
 	private final static String TAG_SERVER_SUCCESS = "success";
 	public Bundle mTransitionAnimationBndl;
 	public User mPlayer; // Sanity note: Now that the game is "playing" we will refer to the logged in User as "Player"
-	protected Game mGame = new Game();
+	public Game mGame;
 	private View mProgressView; // todo: install a progress spinner for server delays
 	public JSONObject mJsonAuth;
 	public Map<Long, Media> mGameMedia = new LinkedHashMap<>();
@@ -96,6 +96,7 @@ public class GamePlayActivity extends ActionBarActivity
 			mPlayer = new User(extras.getString("user")); // we're now a "Player", BTW.
 			//GSON (Slow in debug mode. Ok in regular run mode)
 			mGame = gson.fromJson(extras.getString("game"), Game.class);
+			mGame.setContext(this); // to allow upward visibility to activities various game/player objects
 
 			try {
 				mJsonAuth = new JSONObject(extras.getString("json_auth"));
@@ -673,6 +674,17 @@ public class GamePlayActivity extends ActionBarActivity
 	@Override
 	public void onSecondFragButtonClick(String message) {
 		String gotit = message;
+	}
+
+	public void fetchNoteById(long object_id) {
+		JSONObject jsonAddlData = new JSONObject();
+		try {
+			jsonAddlData.put("note_id", mGame.game_id);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		pollServer(Calls.HTTP_GET_NOTE, jsonAddlData);
 	}
 
 //	@Override

@@ -3,10 +3,12 @@ package edu.uoregon.casls.aris_android.models;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.data_objects.Dialog;
 import edu.uoregon.casls.aris_android.data_objects.DialogCharacter;
 import edu.uoregon.casls.aris_android.data_objects.DialogOption;
 import edu.uoregon.casls.aris_android.data_objects.DialogScript;
+import edu.uoregon.casls.aris_android.data_objects.Item;
 
 /**
  * Created by smorison on 8/20/15.
@@ -28,5 +30,9 @@ public class DialogsModel extends ARISModel {
 
 	public void requestDialogs() {
 
+	}
+
+	public Dialog dialogForId(long object_id) {
+		return dialogs.get(object_id);
 	}
 }

@@ -3,6 +3,8 @@ package edu.uoregon.casls.aris_android.models;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import edu.uoregon.casls.aris_android.GamePlayActivity;
+import edu.uoregon.casls.aris_android.data_objects.Item;
 import edu.uoregon.casls.aris_android.data_objects.Scene;
 
 /**
@@ -11,6 +13,7 @@ import edu.uoregon.casls.aris_android.data_objects.Scene;
 public class ScenesModel extends ARISModel {
 
 	public Scene playerScene;
+	public GamePlayActivity mGamePlayAct;
 
 	// array of scenes by scene_id (long)
 	public Map<Long, Scene> scenes = new LinkedHashMap<>();
@@ -19,6 +22,10 @@ public class ScenesModel extends ARISModel {
 		// same as init() in iOS
 		// may need to separate inti an actual init() method if called separately.
 
+	}
+
+	public void initContext(GamePlayActivity gamePlayAct) {
+		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
 	}
 
 	public void clearGameData() {
@@ -65,5 +72,10 @@ public class ScenesModel extends ARISModel {
 	public long nGameDataToReceive ()
 	{
 		return 2;
+	}
+
+
+	public Scene sceneForId(long object_id) {
+		return scenes.get(object_id);
 	}
 }

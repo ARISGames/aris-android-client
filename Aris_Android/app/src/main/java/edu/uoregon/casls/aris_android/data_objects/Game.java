@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.models.ARISModel;
 import edu.uoregon.casls.aris_android.models.DialogsModel;
 import edu.uoregon.casls.aris_android.models.DisplayQueueModel;
@@ -112,8 +113,13 @@ public class Game {
 //	public DisplayQueueModel 	displayQueueModel; // iOS only for now
 	// medias (in GamePlayAct 		// Game Piece
 
+	GamePlayActivity mGamePlayAct;
 	// Empty Constructor
 	public Game() {
+	}
+
+	public void setContext(GamePlayActivity gamePlayActivity) {
+		mGamePlayAct = gamePlayActivity;
 	}
 
 	// Basic Constructor with json game block
@@ -286,6 +292,14 @@ public class Game {
 		for (ARISModel model : models) {
 			n_game_data_to_receive   += model.nGameDataToReceive();
 			n_player_data_to_receive += model.nPlayerDataToReceive();
+		}
+
+		initModelContexts();
+	}
+
+	private void initModelContexts() { // pass on the context for upward visibility in object instantiation tree
+		for (ARISModel model : models) {
+			model.initContext(mGamePlayAct);
 		}
 	}
 

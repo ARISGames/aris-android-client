@@ -3,6 +3,7 @@ package edu.uoregon.casls.aris_android.models;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.data_objects.ObjectTag;
 import edu.uoregon.casls.aris_android.data_objects.Tag;
 
@@ -13,6 +14,11 @@ public class TagsModel extends ARISModel {
 
 	public Map<Long, Tag> tags = new LinkedHashMap<>();
 	public Map<Long, ObjectTag> objectTags = new LinkedHashMap<>();
+	public GamePlayActivity mGamePlayAct;
+
+	public void initContext(GamePlayActivity gamePlayAct) {
+		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
+	}
 
 	public void clearGameData() {
 		tags.clear();

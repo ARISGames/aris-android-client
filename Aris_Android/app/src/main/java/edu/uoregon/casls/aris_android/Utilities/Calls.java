@@ -46,4 +46,5 @@ public class Calls {
 	public static final String HTTP_LOG_PLAYER_MOVED 		= "v2.client.logPlayerMoved/"; // "game_id","scene_id"
 
 
+	public static final String HTTP_GET_NOTE = "v2.notes.getNote/"; // todo check this call syntax and server prefix paths
 }
