@@ -190,8 +190,8 @@ public class InstancesModel extends ARISModel {
 		if (i == null)
 		{
 			blacklist setObject:@"true" forKey:NSNumber numberWithLong:instance_id;
-			this.requestInstance:instance_id;
-			return Instance alloc init;
+			this.requestInstance(instance_id);
+			return new Instance;
 		}
 		return i;
 	}

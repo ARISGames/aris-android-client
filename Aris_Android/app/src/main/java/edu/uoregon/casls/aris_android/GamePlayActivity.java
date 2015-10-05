@@ -413,8 +413,9 @@ public class GamePlayActivity extends ActionBarActivity
 						NoteComment noteCmnt = gson.fromJson(dataStr, NoteComment.class);
 						//populate hashmap as Note_comment_id, NoteComment Obj>
 						mGame.notesModel.noteComments.put(noteCmnt.note_comment_id, noteCmnt); // todo: are these indexed by note id or note_comment_id?
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
+//						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
+					mGame.notesModel.noteCommentesReceived();
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_TAGS_4_GAME)) {
@@ -440,8 +441,9 @@ public class GamePlayActivity extends ActionBarActivity
 						ObjectTag objTag = gson.fromJson(dataStr, ObjectTag.class);
 						//populate hashmap as object_tag_id, ObjectTag Obj>
 						mGame.tagsModel.objectTags.put(objTag.object_tag_id, objTag);
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
+//						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
+					mGame.tagsModel.objectTagsReceived();
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_EVENTS_4_GAME)) {
@@ -453,8 +455,9 @@ public class GamePlayActivity extends ActionBarActivity
 						Event event = gson.fromJson(dataStr, Event.class);
 						//populate hashmap as event_id, Event Obj>
 						mGame.eventsModel.events.put(event.event_id, event);
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
+//						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
+					mGame.eventsModel.eventsReceived();
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_QUESTS_4_GAME)) {
@@ -466,8 +469,9 @@ public class GamePlayActivity extends ActionBarActivity
 						Quest quest = gson.fromJson(dataStr, Quest.class);
 						//populate hashmap as quest_id, Quest Obj>
 						mGame.questsModel.quests.put(quest.quest_id, quest);
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
+//						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
+					mGame.questsModel.questsReceived();
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_TRIGGERS_4_GAME)) {
@@ -479,8 +483,9 @@ public class GamePlayActivity extends ActionBarActivity
 						Trigger trigger = gson.fromJson(dataStr, Trigger.class);
 						//populate hashmap as trigger_id, Quest Obj>
 						mGame.triggersModel.triggers.put(trigger.trigger_id, trigger);
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
+//						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
+					mGame.triggersModel.triggersReceived();
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_FACTORIES_4_GAME)) {
@@ -492,8 +497,9 @@ public class GamePlayActivity extends ActionBarActivity
 						Factory factory = gson.fromJson(dataStr, Factory.class);
 						//populate hashmap as factory_id, Factory Obj>
 						mGame.factoriesModel.factories.put(factory.factory_id, factory);
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
+//						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
+					mGame.factoriesModel.factoriesReceived();
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_OVERLAYS_4_GAME)) {
@@ -505,8 +511,9 @@ public class GamePlayActivity extends ActionBarActivity
 						Overlay overlay = gson.fromJson(dataStr, Overlay.class);
 						//populate hashmap as overlayr_id, Overlay Obj>
 						mGame.overlaysModel.overlays.put(overlay.overlay_id, overlay);
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
+//						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
+					mGame.overlaysModel.overlaysReceived();
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_INSTANCES_4_GAME)) {
@@ -531,8 +538,9 @@ public class GamePlayActivity extends ActionBarActivity
 						Tab tab = gson.fromJson(dataStr, Tab.class);
 						//populate hashmap as tab_id, Tab Obj>
 						mGame.tabsModel.tabs.put(tab.tab_id, tab);
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
+//						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
+					mGame.tabsModel.tabsReceived();
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_MEDIA_4_GAME)) {
