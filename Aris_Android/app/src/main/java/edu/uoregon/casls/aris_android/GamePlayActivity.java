@@ -307,8 +307,9 @@ public class GamePlayActivity extends ActionBarActivity
 						Item item = gson.fromJson(dataStr, Item.class);
 						//populate hashmap as <plaque_id, Plaque Obj>
 						mGame.itemsModel.items.put(item.item_id, item);
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
+//						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
+					mGame.itemsModel.itemsReceived();
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_TOUCH_ITEMS_4_PLAYER)) {
@@ -330,8 +331,9 @@ public class GamePlayActivity extends ActionBarActivity
 						Dialog dialog = gson.fromJson(dataStr, Dialog.class);
 						//populate hashmap as dialog_id, Dialog Obj>
 						mGame.dialogsModel.dialogs.put(dialog.dialog_id, dialog);
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
+//						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
+					mGame.dialogsModel.dialogsReceived();
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_DIALOG_CHARS_4_GAME)) {
@@ -343,8 +345,9 @@ public class GamePlayActivity extends ActionBarActivity
 						DialogCharacter dialogChar = gson.fromJson(dataStr, DialogCharacter.class);
 						//populate hashmap as dialogChars_id, DialogCharacter Obj>
 						mGame.dialogsModel.dialogCharacters.put(dialogChar.dialog_character_id, dialogChar);
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
+//						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
+					mGame.dialogsModel.dialogsReceived();
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_DIALOG_SCRIPTS_4_GAME)) {
@@ -356,8 +359,9 @@ public class GamePlayActivity extends ActionBarActivity
 						DialogScript dialogScript = gson.fromJson(dataStr, DialogScript.class);
 						//populate hashmap as dialogScript_id, DialogScript Obj>
 						mGame.dialogsModel.dialogScripts.put(dialogScript.dialog_character_id, dialogScript);
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
+//						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
+					mGame.dialogsModel.dialogsReceived();
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_DIALOG_OPTNS_4_GAME)) {
@@ -382,8 +386,9 @@ public class GamePlayActivity extends ActionBarActivity
 						WebPage webpage = gson.fromJson(dataStr, WebPage.class);
 						//populate hashmap as dialog_id, Dialog Obj>
 						mGame.webPagesModel.webpages.put(webpage.web_page_id, webpage);
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
+//						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
+					mGame.webPagesModel.webPagesReceived();
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_TOUCH_SCENE_4_PLAYER)) {
@@ -423,6 +428,7 @@ public class GamePlayActivity extends ActionBarActivity
 						mGame.tagsModel.tags.put(tag.tag_id, tag);
 						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
+					mGame.tagsModel.tagsReceived();
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_OBJ_TAGS_4_GAME)) {
