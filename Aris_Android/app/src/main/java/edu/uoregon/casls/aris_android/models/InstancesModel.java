@@ -29,48 +29,6 @@ public class InstancesModel extends ARISModel {
 		n_game_data_received = 0;
 	}
 
-	public void requestInstances() {
-	}
-
-	public void requestPlayerInstances() {
-
-	}
-
-
-	public long setQtyForInstanceId(long instance_id, long qty) {
-		Instance i = this.instanceForId(instance_id);
-		if(i == null) return 0;
-		if(qty < 0) qty = 0;
-
-		// todo: un iOS-ify everything below
-//		if(!_MODEL_GAME_.network_level isEqualToString:@"REMOTE")
-//		{
-//			long oldQty = i.qty;
-//			i.qty = qty;
-//			NSDictionary deltas;
-//			if(qty > oldQty) deltas = @{@"lost":@,@"added":@@{@"instance":i,@"delta":NSNumber numberWithLong:qty-oldQty}};
-//			if(qty < oldQty) deltas = @{@"added":@,@"lost":@@{@"instance":i,@"delta":NSNumber numberWithLong:qty-oldQty}};
-//
-//			if(deltas)
-//			{
-//				if(i.owner_type isEqualToString:@"USER" && i.owner_id == _MODEL_PLAYER_.user_id)
-//				this.sendNotifsForGameDeltas:nil playerDeltas:deltas;
-//				else if(i.owner_type isEqualToString:@"GAME_CONTENT")
-//				this.sendNotifsForGameDeltas:deltas playerDeltas:nil;
-//			}
-//		}
-//
-//		if(!_MODEL_GAME_.network_level isEqualToString:@"LOCAL")
-//		_SERVICES_ setQtyForInstanceId:instance_id qty:qty;
-		return qty;
-	}
-
-//	private Instance instanceForId(long instance_id) {
-//		Instance i = null; // todo temp stub
-//
-//		return i;
-//	}
-
 	public long nGameDataToReceive () {
 		return 1;
 	}
@@ -143,12 +101,12 @@ public class InstancesModel extends ARISModel {
 				d.put("instance", existingInstance);
 				d.put("delta", delta);
 
-			if(existingInstance.owner_id == _MODEL_PLAYER_.user_id) HERE HERE HERE
+			if(existingInstance.owner_id == Long.getLong(mGamePlayAct.mPlayer.user_id))
 			{
-				if(!this.playerDataReceived || _MODEL_GAME_.network_level isEqualToString:@"REMOTE") //only local should be making changes to player. fixes race cond (+1, -1, +1 notifs)
+				if(!this.playerDataReceived || mGamePlayAct.mGame.network_level.contentEquals("REMOTE")) //only local should be making changes to player. fixes race cond (+1, -1, +1 notifs)
 				{
 					if(delta > 0) (playerDeltas.get("added")).add(d); //) addObject:d;
-					if(delta < 0) (playerDeltas.get("lost")) addObject:d;
+					if(delta < 0) (playerDeltas.get("lost")).add(d);
 				}
 			}
 			else
@@ -168,40 +126,41 @@ public class InstancesModel extends ARISModel {
 		{
 			if(((NSArray )playerDeltas@"added").count > 0) _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_GAINED",nil,playerDeltas);
 			if(((NSArray )playerDeltas@"lost").count  > 0) _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_LOST",  nil,playerDeltas);
-			_ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_AVAILABLE",nil,playerDeltas);
+//			_ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_AVAILABLE",nil,playerDeltas);
 		}
 
 		if(gameDeltas)
 		{
 			if(((NSArray )gameDeltas@"added").count > 0) _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_GAINED",nil,gameDeltas);
 			if(((NSArray )gameDeltas@"lost").count  > 0) _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_LOST",  nil,gameDeltas);
-			_ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_AVAILABLE",nil,gameDeltas);
+//			_ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_AVAILABLE",nil,gameDeltas);
 		}
 	}
 
-	public void requestInstances       { _SERVICES_ fetchInstances;   }
-	public void requestInstance:(long)i { _SERVICES_ fetchInstanceById:i;   }
-	public void requestPlayerInstances
+	public void requestInstances()       { _SERVICES_ fetchInstances90;   }
+	public void requestInstance(long i) { _SERVICES_ fetchInstanceById(i);   }
+	public void requestPlayerInstances()
 	{
 		if(this.playerDataReceived &&
-		!_MODEL_GAME_.network_level isEqualToString:@"REMOTE")
+		!mGamePlayAct.mGame.network_level.contentEquals("REMOTE"))
 		{
-			NSArray *pinsts = instances allValues;
-			_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_INSTANCES_RECEIVED",nil,@{@"instances":pinsts});
+			Collection<Instance> pinsts = instances.values();
+//			_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_INSTANCES_RECEIVED",nil,@{@"instances":pinsts});
 		}
 		if(!this.playerDataReceived ||
-		_MODEL_GAME_.network_level isEqualToString:@"HYBRID" ||
-		_MODEL_GAME_.network_level isEqualToString:@"REMOTE")
+				mGamePlayAct.mGame.network_level.contentEquals("HYBRID") ||
+			mGamePlayAct.mGame.network_level.contentEquals("REMOTE"))
 		_SERVICES_ fetchInstancesForPlayer;
 	}
 
-	public long setQtyForInstanceId:(long)instance_id qty:(long)qty
+	public long setQtyForInstanceId(long instance_id, long qty)
 	{
-		Instance *i = this.instanceForId:instance_id;
-		if(!i) return 0;
-		if(qty < 0) qty = 0;
+		Instance i = this.instanceForId(instance_id);
+		if (i == null) return 0;
+		if (qty < 0) qty = 0;
 
-		if(!_MODEL_GAME_.network_level isEqualToString:@"REMOTE")
+//		if (!_MODEL_GAME_.network_level isEqualToString:@"REMOTE")
+		if (!mGamePlayAct.mGame.network_level.contentEquals("REMOTE"))
 		{
 			long oldQty = i.qty;
 			i.qty = qty;
@@ -211,14 +170,14 @@ public class InstancesModel extends ARISModel {
 
 			if(deltas)
 			{
-				if(i.owner_type isEqualToString:@"USER" && i.owner_id == _MODEL_PLAYER_.user_id)
+				if (i.owner_type.contentEquals("USER") && i.owner_id == Long.getLong(mGamePlayAct.mPlayer.user_id))
 				this.sendNotifsForGameDeltas:nil playerDeltas:deltas;
-				else if(i.owner_type isEqualToString:@"GAME_CONTENT")
+				else if (i.owner_type.contentEquals("GAME_CONTENT"))
 				this.sendNotifsForGameDeltas:deltas playerDeltas:nil;
 			}
 		}
 
-		if(!_MODEL_GAME_.network_level isEqualToString:@"LOCAL")
+		if (!mGamePlayAct.mGame.network_level.contentEquals("LOCAL"))
 		_SERVICES_ setQtyForInstanceId:instance_id qty:qty;
 		return qty;
 	}
@@ -226,8 +185,9 @@ public class InstancesModel extends ARISModel {
 // null instance (id == 0) NOT flyweight!!! (to allow for temporary customization safety)
 	public Instance instanceForId(long instance_id) {
 		if(instance_id != 0) return new Instance;
-		Instance i = instances objectForKey:NSNumber numberWithLong:instance_id;
-		if(!i)
+//		Instance i = instances objectForKey:NSNumber numberWithLong:instance_id;
+		Instance i = instances.get(instance_id);
+		if (i == null)
 		{
 			blacklist setObject:@"true" forKey:NSNumber numberWithLong:instance_id;
 			this.requestInstance:instance_id;
@@ -236,55 +196,52 @@ public class InstancesModel extends ARISModel {
 		return i;
 	}
 
-	- (NSArray ) instancesForType:(NSString )object_type id:(long)object_id
+	public List<Instance> instancesForType(String object_type, long object_id)
 	{
-		NSMutableArray a = NSMutableArray alloc init;
-		for(long i = 0; i < instances.count; i++)
+//		NSMutableArray a = NSMutableArray alloc init;
+		List<Instance> a = new ArrayList<>();
+//		for(long i = 0; i < instances.count; i++)
+		Collection<Instance> allInstances = instances.values();
+		for (Instance inst : allInstances)
 		{
-			Instance inst = instances allValuesi;
-			if(inst.object_id == object_id && inst.object_type isEqualToString:object_type)
-			a addObject:inst;
+//			Instance inst = instances allValuesi;
+			if(inst.object_id == object_id && inst.object_type.contentEquals(object_type))
+			a.add(inst);// addObject:inst;
 		}
 		return a;
 	}
 
 	public List<Instance> playerInstances()
 	{
-		NSMutableArray pInstances = NSMutableArray alloc init;
-		NSArray allInstances = instances allValues;
-		for(long i = 0; i < allInstances.count; i++)
-		{
-			Instance inst = allInstancesi;
-			if(inst.owner_type isEqualToString:@"USER" &&
-			inst.owner_id == _MODEL_PLAYER_.user_id)
-			pInstances addObject:allInstancesi;
+		List<Instance> pInstances = new ArrayList<>();
+		Collection<Instance> allInstances = instances.values();
+		for (Instance inst : allInstances) {
+			if (inst.owner_type.contentEquals("USER") &&
+					inst.owner_id == Long.getLong(mGamePlayAct.mPlayer.user_id))
+				pInstances.add(inst);
 		}
 		return pInstances;
 	}
 
-	- (NSArray ) gameOwnedInstances
+	public List<Instance> gameOwnedInstances()
 	{
-		NSMutableArray gInstances = NSMutableArray alloc init;
-		NSArray allInstances = instances allValues;
-		for(long i = 0; i < allInstances.count; i++)
-		{
-			Instance inst = allInstancesi;
-			if(inst.owner_type isEqualToString:@"GAME")
-			gInstances addObject:allInstancesi;
+		List<Instance> gInstances = new ArrayList<>();
+		Collection<Instance> allInstances = instances.values();
+		for (Instance inst : allInstances) {
+			if (inst.owner_type.contentEquals("GAME"))
+			gInstances.add(inst);
 		}
 		return gInstances;
 	}
 
-	- (NSArray ) groupOwnedInstances
+	public List<Instance> groupOwnedInstances()
 	{
-		NSMutableArray gInstances = NSMutableArray alloc init;
-		NSArray allInstances = instances allValues;
-		for(long i = 0; i < allInstances.count; i++)
-		{
-			Instance inst = allInstancesi;
-			if(inst.owner_type isEqualToString:@"GROUP" &&
-			inst.owner_id == _MODEL_GROUPS_.playerGroup.group_id)
-			gInstances addObject:allInstancesi;
+		List<Instance> gInstances = new ArrayList<>();
+		Collection<Instance> allInstances = instances.values();
+		for (Instance inst : allInstances) {
+			if(inst.owner_type.contentEquals("GROUP") &&
+			inst.owner_id == mGamePlayAct.mGame.groupsModel.playerGroup.group_id)
+			gInstances.add(inst);
 		}
 		return gInstances;
 	}
