@@ -1,9 +1,13 @@
 package edu.uoregon.casls.aris_android.Utilities;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
+import edu.uoregon.casls.aris_android.data_objects.Dialog;
+import edu.uoregon.casls.aris_android.data_objects.DialogCharacter;
+import edu.uoregon.casls.aris_android.data_objects.DialogScript;
 import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
 import edu.uoregon.casls.aris_android.data_objects.User;
@@ -37,9 +41,21 @@ public class Dispatcher {
 //	LowMemoryWarning",nil,nil);
 //	MODEL_ANYWHERE_GAMES_AVAILABLE",nil,nil); }
 //	MODEL_DIALOG_CHARACTERS_AVAILABLE",nil,nil);
+public void model_dialog_characters_available() {
+	// no one to field this one. Oh well. Die in space.
+}
 //	MODEL_DIALOG_OPTIONS_AVAILABLE",nil,nil);
+public void model_dialog_options_available() {
+	// nope. me neither.
+}
 //	MODEL_DIALOG_SCRIPTS_AVAILABLE",nil,nil);
+public void model_dialog_scripts_available() {
+	// no one for this call either.
+}
 //	MODEL_DIALOGS_AVAILABLE",nil,nil);
+public void model_dialogs_available() {
+	// no listeners in this version?
+}
 //	MODEL_DISPLAY_NEW_ENQUEUED", nil, nil);
 //	MODEL_DOWNLOADED_GAMES_AVAILABLE",nil,nil); }
 //	MODEL_EVENTS_AVAILABLE",nil,nil);
@@ -48,6 +64,10 @@ public class Dispatcher {
 //	MODEL_GAME_BEGAN",nil,nil);
 //	MODEL_GAME_CHOSEN",nil,nil);
 //	MODEL_GAME_DATA_LOADED", nil, nil);
+public void model_game_data_loaded() {
+	// in iOS would call LoadingViewController.gameDataLoaded(), which then calls Game.requestPlayerData(); I'll call it directly.
+	mGame.requestPlayerData();
+}
 //	MODEL_GAME_INSTANCES_AVAILABLE",nil,nil);
 //	MODEL_GAME_INSTANCES_TOUCHED",nil,nil);
 //	MODEL_GAME_LEFT",nil,nil);
@@ -83,6 +103,7 @@ public class Dispatcher {
 	}
 //	MODEL_INSTANCES_PLAYER_LOST",  nil,playerDeltas);
 	public void model_instances_player_lost(Map<String, Map<String, Object>> playerDeltas) {
+		// todo: see UI change behavour that this causes in (iOS) GameNotificationViewController.parseLostInstancesIntoNotifications()
 	}
 
 //	MODEL_ITEMS_AVAILABLE",nil,nil);
@@ -117,6 +138,9 @@ public class Dispatcher {
 //	MODEL_REQUIREMENT_AND_PACKAGES_AVAILABLE",nil,nil);
 //	MODEL_REQUIREMENT_ATOMS_AVAILABLE",nil,nil);
 //	MODEL_REQUIREMENT_ROOT_PACKAGES_AVAILABLE",nil,nil);
+public void model_requirement_root_packages_available() {
+	// nada.
+}
 //	MODEL_SCENE_TOUCHED",nil,nil);
 //	MODEL_SCENES_AVAILABLE",nil,nil);
 //	MODEL_SCENES_PLAYER_SCENE_AVAILABLE",nil,nil);
@@ -137,13 +161,22 @@ public class Dispatcher {
 //	PusherWebPageEventReceived",event,nil);
 //	SERVICES_ANYWHERE_GAMES_RECEIVED", nil, @{@"games":[self parseGames:(NSArray *)result.resultData]});
 //	SERVICES_DIALOG_CHARACTERS_RECEIVED", nil, @{@"dialogCharacters":dialogCharacters});
+public void services_dialog_characters_received(List<DialogCharacter> dialogCharacters) {
+	mGame.dialogsModel.dialogCharactersReceived(dialogCharacters);
+}
 //	SERVICES_DIALOG_OPTIONS_RECEIVED", nil, @{@"dialogOptions":dialogOptions});
 //	SERVICES_DIALOG_RECEIVED", nil, @{@"dialog_character":dialogCharacter});
 //	SERVICES_DIALOG_RECEIVED", nil, @{@"dialog_option":dialogOption});
 //	SERVICES_DIALOG_RECEIVED", nil, @{@"dialog_script":dialogScript});
 //	SERVICES_DIALOG_RECEIVED", nil, @{@"dialog":dialog});
 //	SERVICES_DIALOG_SCRIPTS_RECEIVED", nil, @{@"dialogScripts":dialogScripts});
+public void services_dialog_scipts_received(List<DialogScript> dialogScripts) {
+	mGame.dialogsModel.dialogScriptsReceived(dialogScripts);
+}
 //	SERVICES_DIALOGS_RECEIVED", nil, @{@"dialogs":dialogs});
+public void services_dialog_received(List<Dialog> dialogs) {
+	mGame.dialogsModel.dialogsReceived(dialogs);
+}
 //	SERVICES_DOWNLOADED_GAMES_RECEIVED", nil, @{@"games":d_games});
 //	SERVICES_EVENT_RECEIVED", nil, @{@"event":event});
 //	SERVICES_EVENTS_RECEIVED", nil, @{@"events":events});
@@ -181,6 +214,12 @@ public class Dispatcher {
 public void services_player_instances_rceived(Collection<Instance> insts) {
 }
 //	SERVICES_PLAYER_INSTANCES_TOUCHED", nil, nil);
+public void services_player_instances_touched() {
+	mGame.playerInstancesModel.playerInstancesTouched();
+}
+
+
+
 //	SERVICES_PLAYER_LOGS_RECEIVED", nil, @{@"logs":logs});
 //	SERVICES_PLAYER_OVERLAYS_RECEIVED", nil, @{@"overlays":overlays});
 //	SERVICES_PLAYER_OVERLAYS_RECEIVED",nil,@{@"triggers":ptrigs});

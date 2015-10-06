@@ -61,8 +61,8 @@ public class PlayerInstancesModel extends ARISModel {
 
 	public void playerInstancesTouched() {
 		n_game_data_received++;
-//		_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_INSTANCES_TOUCHED",nil,nil);
-//		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.services_player_instances_touched(); //		_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_INSTANCES_TOUCHED",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void touchPlayerInstances() {
@@ -186,7 +186,7 @@ public class PlayerInstancesModel extends ARISModel {
 		Collection<Instance> instancearray = playerInstances.values();
 		for (Instance inst : instancearray) {
 
-			Item item = inst.object();
+			Item item = (Item) inst.object();
 			if (item.type.contentEquals("NORMAL") || item.type.contentEquals("URL"))
 			inventory.put(inst.instance_id, inst);
 		}
@@ -199,7 +199,7 @@ public class PlayerInstancesModel extends ARISModel {
 		attributes = new LinkedHashMap<>();
 		Collection<Instance> instancearray = playerInstances.values();
 		for (Instance inst : instancearray) {
-			Item item = inst.object();
+			Item item = (Item) inst.object();
 			if (item.type.contentEquals("ATTRIB"))
 			attributes.put(inst.instance_id, inst);
 		}

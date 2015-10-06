@@ -33,4 +33,18 @@ public class Services {
 	public void setQtyForInstanceId(long instance_id, long qty) {
 
 	}
+
+	public void fetchOptionsForPlayerForDialog(long dialog_id, long dialog_script_id) {
+
+	}
+
+	public void fetchRequirementAtoms() {
+	}
+
+	public void fetchRequirementAnds() {
+	}
+
+	public void fetchRequirementRoots() {
+
+	}
 }

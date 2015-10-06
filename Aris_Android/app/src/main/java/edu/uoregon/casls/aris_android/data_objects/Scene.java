@@ -7,5 +7,5 @@ public class Scene {
 	public long scene_id = 0;
 	public String name = "";
 
-
+	public long icon_media_id; // may be irrelevant
 }

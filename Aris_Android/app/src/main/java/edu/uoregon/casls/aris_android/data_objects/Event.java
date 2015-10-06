@@ -10,4 +10,6 @@ public class Event {
 	public long content_id;
 	public long qty;
 
+	public long icon_media_id; // may be irrelevant
+	public String name; // may be irrelevant
 }

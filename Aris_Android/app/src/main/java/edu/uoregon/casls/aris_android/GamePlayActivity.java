@@ -26,7 +26,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
@@ -322,52 +325,57 @@ public class GamePlayActivity extends ActionBarActivity
 				// is there any return data for this, or just acknowlegment?
 
 				// call PlayerInstancesModel.playerInstancesTouched()?
-//				mGame.playerInstancesModel.touchPlayerInstances(); // in iOS, this winds up calling Game.gamePieceReceived(); we'll do that directly:
-				if (!mGame.gameDataReceived) mGame.gamePieceReceived(); // Oddity: calls gamePieceReceived rather than gamePlayerPieceReceived "but IS a game-level fetch"
-				if (jsonReturn.has("data")) {
-//					JSONObject jsonData = jsonReturn.getJSONObject("data"); //do nothing; no data.
-				}
+				mDispatch.services_player_instances_touched(); //_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_INSTANCES_TOUCHED", nil, nil);
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_DIALOGS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
+					List<Dialog> dialogs = new LinkedList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						Dialog dialog = gson.fromJson(dataStr, Dialog.class);
 						//populate hashmap as dialog_id, Dialog Obj>
-						mGame.dialogsModel.dialogs.put(dialog.dialog_id, dialog);
+//						mGame.dialogsModel.dialogs.put(dialog.dialog_id, dialog);
+						dialogs.add(dialog);
 //						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
-					mGame.dialogsModel.dialogsReceived();
+					mDispatch.services_dialog_received(dialogs); //_ARIS_NOTIF_SEND_(@"SERVICES_DIALOGS_RECEIVED", nil, @{@"dialogs":dialogs});
+//					mGame.dialogsModel.dialogsReceived(); // called directly rather than through Dispatch?
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_DIALOG_CHARS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
+					List<DialogCharacter> dialogCharacters = new LinkedList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						DialogCharacter dialogChar = gson.fromJson(dataStr, DialogCharacter.class);
 						//populate hashmap as dialogChars_id, DialogCharacter Obj>
-						mGame.dialogsModel.dialogCharacters.put(dialogChar.dialog_character_id, dialogChar);
+//						mGame.dialogsModel.dialogCharacters.put(dialogChar.dialog_character_id, dialogChar);
+						dialogCharacters.add(dialogChar);
 //						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
-					mGame.dialogsModel.dialogsReceived();
+//					mGame.dialogsModel.dialogsReceived(dialogs);
+					mDispatch.services_dialog_characters_received(dialogCharacters); // _ARIS_NOTIF_SEND_(@"SERVICES_DIALOG_CHARACTERS_RECEIVED", nil, @{@"dialogCharacters":dialogCharacters});
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_DIALOG_SCRIPTS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
+					List<DialogScript> dialogScripts = new LinkedList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						DialogScript dialogScript = gson.fromJson(dataStr, DialogScript.class);
 						//populate hashmap as dialogScript_id, DialogScript Obj>
-						mGame.dialogsModel.dialogScripts.put(dialogScript.dialog_character_id, dialogScript);
+//						mGame.dialogsModel.dialogScripts.put(dialogScript.dialog_character_id, dialogScript);
+						dialogScripts.add(dialogScript);
 //						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
-					mGame.dialogsModel.dialogsReceived();
+//					mGame.dialogsModel.dialogsReceived(dialogs);
+					mDispatch.services_dialog_scipts_received(dialogScripts); // _ARIS_NOTIF_SEND_(@"SERVICES_DIALOG_SCRIPTS_RECEIVED", nil, @{@"dialogScripts":dialogScripts});
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_DIALOG_OPTNS_4_GAME)) {

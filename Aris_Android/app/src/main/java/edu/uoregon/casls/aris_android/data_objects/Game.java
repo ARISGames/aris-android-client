@@ -377,7 +377,7 @@ public class Game {
 		n_game_data_received++;
 		if (this.allGameDataReceived()) {
 			n_game_data_received = n_game_data_to_receive; //should already be exactly this...
-//			_ARIS_NOTIF_SEND_(@"MODEL_GAME_DATA_LOADED", nil, nil);
+			mGamePlayAct.mDispatch.model_game_data_loaded(); //			_ARIS_NOTIF_SEND_(@"MODEL_GAME_DATA_LOADED", nil, nil);
 		}
 		percentLoadedChanged();
 	}

@@ -9,4 +9,5 @@ public class WebPage {
 	public String url;
 	public long icon_media_id;
 
+	public long media_id;
 }

@@ -16,4 +16,5 @@ public class Note {
 	public long object_tag_id;
 	public Date created = new Date();
 
+	public long icon_media_id; // irrelevant?
 }
