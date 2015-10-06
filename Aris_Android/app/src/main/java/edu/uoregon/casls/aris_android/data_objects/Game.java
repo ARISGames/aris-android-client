@@ -47,6 +47,8 @@ public class Game {
 	long n_player_data_to_receive;
 	long n_player_data_received;
 
+	boolean listen_model_game_player_piece_available;
+	boolean listen_model_game_piece_available;
 //	public NSTimer *poller; todo: android equivalent
 	// todo: this will not serialize (crashes gson.toJson()) so I need to locate it in the gameplay activity itself.
 
@@ -262,8 +264,8 @@ public class Game {
 	}
 
 	public void getReadyToPlay() {
-//		_ARIS_NOTIF_LISTEN_(@"MODEL_GAME_PIECE_AVAILABLE",self,@selector(gamePieceReceived),null);
-//		_ARIS_NOTIF_LISTEN_(@"MODEL_GAME_PLAYER_PIECE_AVAILABLE",self,@selector(gamePlayerPieceReceived),null);
+		listen_model_game_player_piece_available = true; //_ARIS_NOTIF_LISTEN_(@"MODEL_GAME_PLAYER_PIECE_AVAILABLE",self,@selector(gamePlayerPieceReceived),null);
+		listen_model_game_piece_available = true; // _ARIS_NOTIF_LISTEN_(@"MODEL_GAME_PIECE_AVAILABLE",self,@selector(gamePieceReceived),null);
 
 
 		scenesModel          = new ScenesModel(); 			models.add(scenesModel         );
@@ -403,8 +405,8 @@ public class Game {
 	}
 
 	public void gameBegan() {
-//		_ARIS_NOTIF_IGNORE_(@"MODEL_GAME_PIECE_AVAILABLE", self, null);
-//		_ARIS_NOTIF_IGNORE_(@"MODEL_GAME_PLAYER_PIECE_AVAILABLE", self, null);
+		listen_model_game_piece_available = false; // _ARIS_NOTIF_IGNORE_(@"MODEL_GAME_PIECE_AVAILABLE", self, null);
+		listen_model_game_player_piece_available = false; // _ARIS_NOTIF_IGNORE_(@"MODEL_GAME_PLAYER_PIECE_AVAILABLE", self, null);
 //		poller = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(requestPlayerData) userInfo:null repeats:YES];
 	}
 

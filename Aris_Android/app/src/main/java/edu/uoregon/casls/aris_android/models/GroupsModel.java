@@ -13,6 +13,7 @@ public class GroupsModel extends ARISModel {
 
 	public Map<Long, Group> groups = new LinkedHashMap<>();
 	public GamePlayActivity mGamePlayAct;
+	public Group playerGroup;
 
 	public void initContext(GamePlayActivity gamePlayAct) {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.

@@ -18,6 +18,8 @@ import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Map;
+
 import edu.uoregon.casls.aris_android.GamesListActivity;
 
 /**
@@ -55,4 +57,7 @@ public class AppUtils {
 	}
 
 
+	public class deltaMap {
+		Map<String, Map<String, Object>> deltas;
+	}
 }

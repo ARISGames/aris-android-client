@@ -32,6 +32,8 @@ import java.util.Map;
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.Utilities.Calls;
 import edu.uoregon.casls.aris_android.Utilities.Config;
+import edu.uoregon.casls.aris_android.Utilities.Dispatcher;
+import edu.uoregon.casls.aris_android.Utilities.Services;
 import edu.uoregon.casls.aris_android.data_objects.Dialog;
 import edu.uoregon.casls.aris_android.data_objects.DialogCharacter;
 import edu.uoregon.casls.aris_android.data_objects.DialogOption;
@@ -65,6 +67,8 @@ public class GamePlayActivity extends ActionBarActivity
 	public Bundle mTransitionAnimationBndl;
 	public User mPlayer; // Sanity note: Now that the game is "playing" we will refer to the logged in User as "Player"
 	public Game mGame;
+	public Dispatcher mDispatch;
+	public Services mServices;
 	private View mProgressView; // todo: install a progress spinner for server delays
 	public JSONObject mJsonAuth;
 	public Map<Long, Media> mGameMedia = new LinkedHashMap<>();
@@ -109,6 +113,8 @@ public class GamePlayActivity extends ActionBarActivity
 		mTransitionAnimationBndl = ActivityOptions.makeCustomAnimation(getApplicationContext(),
 				R.animator.slide_in_from_right, R.animator.slide_out_to_left).toBundle();
 
+		mDispatch = new Dispatcher(this); // Centralized place for object to object messaging
+		mServices = new Services(this); // Centralized place for server calls.
 		// initialize game object's inner classes and variables.
 		mGame.getReadyToPlay();
 		// Start barrage of game related server requests
