@@ -71,14 +71,15 @@ public class InstancesModel extends ARISModel {
 	{
 		long newInstanceId;
 
-//		NSDictionary playerDeltas = @{@"added":NSMutableArray alloc init,@"lost":NSMutableArray alloc init};
-//		NSDictionary gameDeltas   = @{@"added":NSMutableArray alloc init,@"lost":NSMutableArray alloc init};
+//		NSDictionary playerDeltas = @{@"added":NSMutableArray alloc init,@"lost":NSMutableArray alloc init}; // orig iOS hashmap (NSDict)
+//		NSDictionary gameDeltas   = @{@"added":NSMutableArray alloc init,@"lost":NSMutableArray alloc init}; // orig iOS hashmap (NSDict)
 		ArrayList<User> alPlayerAdded, alPlayerLost;
 		ArrayList<Game> alGameAdded, alGameLost;
-		Map<String, ArrayList<User>> playerDeltas = new HashMap<>();
-		Map<String, ArrayList<Game>> gameDeltas = new HashMap<>();
-		playerDeltas.put("added", alPlayerAdded); playerDeltas.put("lost", alPlayerLost);
-		gameDeltas.put("added", alGameAdded); gameDeltas.put("lost", alGameLost);
+
+		// Hashmaps of->[HashMap of variable object types]
+		//  e.g. playerDeltas = [ "added"->["instance"->(Instance obj), "delta"->(Long obj)]], "lost"->["instance"->(Instance obj), "delta"->(Long obj)]] ]
+		Map<String, Map<String, Object>> playerDeltas = new HashMap<>();
+		Map<String, Map<String, Object>> gameDeltas = new HashMap<>();
 
 		for (Instance newInstance : newInstances) {
 			newInstanceId = newInstance.instance_id;
@@ -97,43 +98,38 @@ public class InstancesModel extends ARISModel {
 			existingInstance.mergeDataFromInstance(newInstance);
 
 //			NSDictionary d = @{@"instance":existingInstance,@"delta":NSNumber numberWithLong:delta};
-			Map<String, Object> d = new HashMap<String, Object>();
+			Map<String, Object> d = new HashMap<>();
 				d.put("instance", existingInstance);
 				d.put("delta", delta);
 
-			if(existingInstance.owner_id == Long.getLong(mGamePlayAct.mPlayer.user_id))
-			{
-				if(!this.playerDataReceived || mGamePlayAct.mGame.network_level.contentEquals("REMOTE")) //only local should be making changes to player. fixes race cond (+1, -1, +1 notifs)
-				{
-					if(delta > 0) (playerDeltas.get("added")).add(d); //) addObject:d;
-					if(delta < 0) (playerDeltas.get("lost")).add(d);
+			if(existingInstance.owner_id == Long.getLong(mGamePlayAct.mPlayer.user_id)) {
+				if(!this.playerDataReceived() || mGamePlayAct.mGame.network_level.contentEquals("REMOTE")) { //only local should be making changes to player. fixes race cond (+1, -1, +1 notifs)
+					if (delta > 0) playerDeltas.put("added", d); //) addObject:d;
+					if (delta < 0) playerDeltas.put("lost", d);
 				}
 			}
-			else
-			{
+			else {
 				//race cond (above) still applies here, but notifs oughtn't be a problem, and fixes this.over time
-				if(delta > 0) ((NSMutableArray )gameDeltas@"added") addObject:d;
-				if(delta < 0) ((NSMutableArray )gameDeltas@"lost" ) addObject:d;
+				if (delta > 0) gameDeltas.put("added", d);
+				if (delta < 0) gameDeltas.put("lost", d);
 			}
 		}
 
-		this.sendNotifsForGameDeltas:gameDeltas playerDeltas:playerDeltas;
+		this.sendNotifsForGameDeltas(gameDeltas, playerDeltas);
 	}
 
-	public void sendNotifsForGameDeltas:(NSDictionary )gameDeltas playerDeltas:(NSDictionary )playerDeltas
+	public void sendNotifsForGameDeltas(Map<String, Map<String, Object>> gameDeltas, Map<String, Map<String, Object>> playerDeltas)
 	{
-		if(playerDeltas)
-		{
-			if(((NSArray )playerDeltas@"added").count > 0) _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_GAINED",nil,playerDeltas);
-			if(((NSArray )playerDeltas@"lost").count  > 0) _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_LOST",  nil,playerDeltas);
-//			_ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_AVAILABLE",nil,playerDeltas);
+		if(playerDeltas != null) {
+			if(playerDeltas.get("added").size() > 0) {}//todo: _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_GAINED",nil,playerDeltas);
+			if(playerDeltas.get("lost").size()  > 0) {}//todo: _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_LOST",  nil,playerDeltas);
+//	todo		_ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_AVAILABLE",nil,playerDeltas);
 		}
 
-		if(gameDeltas)
-		{
-			if(((NSArray )gameDeltas@"added").count > 0) _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_GAINED",nil,gameDeltas);
-			if(((NSArray )gameDeltas@"lost").count  > 0) _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_LOST",  nil,gameDeltas);
-//			_ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_AVAILABLE",nil,gameDeltas);
+		if(gameDeltas != null) {
+			if(gameDeltas.get("added").size() > 0) {}//todo: _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_GAINED",nil,gameDeltas);
+			if(gameDeltas.get("lost").size()  > 0) {}//todo: _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_LOST",  nil,gameDeltas);
+//	todo		_ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_AVAILABLE",nil,gameDeltas);
 		}
 	}
 
