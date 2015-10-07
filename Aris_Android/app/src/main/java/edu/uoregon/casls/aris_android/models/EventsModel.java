@@ -36,4 +36,7 @@ public class EventsModel extends ARISModel {
 	public Event eventPackageForId(long object_id) {
 		return events.get(object_id);
 	}
+
+	public void runEventPackageId(long active_event_package_id) {
+	}
 }

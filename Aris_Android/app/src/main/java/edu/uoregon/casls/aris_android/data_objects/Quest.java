@@ -24,4 +24,6 @@ public class Quest {
 
 	public long sort_index;
 
+	public long active_requirement_root_package_id;
+	public long complete_requirement_root_package_id;
 }

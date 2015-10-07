@@ -47,4 +47,100 @@ public class Services {
 	public void fetchRequirementRoots() {
 
 	}
+
+	public void touchItemsForGame() {
+
+	}
+
+	public void dropItem(long item_id, long qty) {
+
+	}
+
+	public void fetchLogsForPlayer() {
+
+	}
+
+	public void logPlayerEnteredGame() {
+
+	}
+
+	public void logPlayerMoved() {
+
+	}
+
+	public void logPlayerViewedTabId(long tab_id) {
+
+	}
+
+	public void logPlayerViewedPlaqueId(long content_id) {
+	}
+
+	public void logPlayerViewedItemId(long content_id) {
+	}
+
+	public void logPlayerViewedDialogId(long content_id) {
+	}
+
+	public void logPlayerViewedDialogScriptId(long content_id) {
+	}
+
+	public void logPlayerViewedWebPageId(long content_id) {
+	}
+
+	public void logPlayerViewedNoteId(long content_id) {
+	}
+
+	public void logPlayerViewedSceneId(long content_id) {
+	}
+
+	public void logPlayerViewedInstanceId(long instance_id) {
+	}
+
+	public void logPlayerTriggeredTriggerId(long trigger_id) {
+	}
+
+	public void logPlayerReceivedItemId(long item_id, long qty) {
+	}
+
+	public void logPlayerLostItemId(long item_id, long qty) {
+	}
+
+	public void logGameReceivedItemId(long item_id, long qty) {
+	}
+
+	public void logGameLostItemId(long item_id, long qty) {
+	}
+
+	public void logGroupReceivedItemId(long item_id, long qty) {
+	}
+
+	public void logGroupLostItemId(long item_id, long qty) {
+	}
+
+	public void logPlayerSetSceneId(long scene_id) {
+	}
+
+	public void logPlayerJoinedGroupId(long group_id) {
+	}
+
+	public void logPlayerRanEventPackageId(long event_package_id) {
+	}
+
+	public void fetchDialogs() {
+	}
+
+	public void fetchDialogCharacters() {
+	}
+
+	public void fetchDialogScripts() {
+	}
+
+	public void fetchDialogOptions() {
+	}
+
+	public void fetchQuestsForPlayer() {
+	}
+
+	public void fetchQuests() {
+	}
 }

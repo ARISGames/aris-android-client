@@ -10,6 +10,7 @@ import edu.uoregon.casls.aris_android.data_objects.DialogCharacter;
 import edu.uoregon.casls.aris_android.data_objects.DialogScript;
 import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
+import edu.uoregon.casls.aris_android.data_objects.Quest;
 import edu.uoregon.casls.aris_android.data_objects.User;
 
 /**
@@ -69,7 +70,13 @@ public void model_game_data_loaded() {
 	mGame.requestPlayerData();
 }
 //	MODEL_GAME_INSTANCES_AVAILABLE",nil,nil);
+public void model_game_instances_available() {
+	// not listened for;
+}
 //	MODEL_GAME_INSTANCES_TOUCHED",nil,nil);
+public void model_game_instance_touched() {
+	// no action assigned to this yet.
+}
 //	MODEL_GAME_LEFT",nil,nil);
 //	MODEL_GAME_PERCENT_LOADED", nil, @{@"percent":percentReceived});
 //	MODEL_GAME_PIECE_AVAILABLE",nil,nil);
@@ -111,6 +118,9 @@ public void model_game_data_loaded() {
 //	MODEL_LOGGED_OUT",nil,nil);
 //	MODEL_LOGIN_FAILED",nil,nil); }
 //	MODEL_LOGS_AVAILABLE",nil,nil);
+public void model_logs_available() {
+//	briadcast only; no receivers
+}
 //	MODEL_MEDIA_AVAILABLE",nil,nil);
 //	MODEL_MEDIA_DATA_COMPLETE",nil,nil);
 //	MODEL_MEDIA_DATA_LOADED",nil,nil);
@@ -130,13 +140,28 @@ public void model_game_data_loaded() {
 //	MODEL_PLAYER_TRIGGERS_AVAILABLE",nil,nil);
 //	MODEL_POPULAR_GAMES_AVAILABLE",nil,nil); }
 //	MODEL_QUESTS_ACTIVE_LESS_AVAILABLE",nil,deltas);
+public void model_quests_active_less_available(Map<String, List<Quest>> deltas) {
+	// todo: listeners
+}
 //	MODEL_QUESTS_ACTIVE_NEW_AVAILABLE",nil,deltas);
+public void model_quests_active_new_available(Map<String, List<Quest>> deltas) {
+	// todo: find listeners
+}
 //	MODEL_QUESTS_AVAILABLE",nil,nil);
+public void model_quests_available() {
+	// no listeners
+}
 //	MODEL_QUESTS_COMPLETE_LESS_AVAILABLE",nil,deltas);
 //	MODEL_QUESTS_COMPLETE_NEW_AVAILABLE",nil,deltas);
 //	MODEL_RECENT_GAMES_AVAILABLE",nil,nil); }
 //	MODEL_REQUIREMENT_AND_PACKAGES_AVAILABLE",nil,nil);
+public void model_requirement_and_packages_available() {
+	// No recipients
+}
 //	MODEL_REQUIREMENT_ATOMS_AVAILABLE",nil,nil);
+public void model_requirement_atoms_packages_available() {
+	// Adrift at sea with no destination
+}
 //	MODEL_REQUIREMENT_ROOT_PACKAGES_AVAILABLE",nil,nil);
 public void model_requirement_root_packages_available() {
 	// nada.
@@ -225,6 +250,9 @@ public void services_player_instances_touched() {
 //	SERVICES_PLAYER_OVERLAYS_RECEIVED",nil,@{@"triggers":ptrigs});
 //	SERVICES_PLAYER_PLAYED_GAME_RECEIVED", nil, (NSDictionary *)result.resultData);
 //	SERVICES_PLAYER_QUESTS_RECEIVED", nil, quests);
+public void services_player_quests_received(Map<String, List<Quest>> pquests) {
+	mGame.questsModel.playerQuestsReceived(pquests);
+}
 //	SERVICES_PLAYER_SCENE_RECEIVED", nil, @{@"scene":s});
 //	SERVICES_PLAYER_SCENE_RECEIVED",nil,@{@"scene":playerScene}); //just return current
 //	SERVICES_PLAYER_SCRIPT_OPTIONS_RECEIVED", nil, uInfo);
@@ -256,6 +284,14 @@ public void services_player_instances_touched() {
 //	SERVICES_WEB_PAGE_RECEIVED", nil, @{@"web_page":webPage});
 //	SERVICES_WEB_PAGES_RECEIVED", nil, @{@"webPages":webPages});
 //	USER_MOVED",nil,nil);
+public void user_moved() {
+	// todo: display Queue Model reevaluateAutoTriggers() - update UI locations e.g. map
+	// todo: also MapViewController.playerMoved()
+
+}
+
+
+
 //	WIFI_CONNECTED",self,nil); break;
 
 }

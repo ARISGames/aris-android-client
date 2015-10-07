@@ -29,17 +29,12 @@ public class DialogsModel extends ARISModel {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
 	}
 
-
 	public void clearGameData() {
 		dialogs.clear();
 		dialogCharacters.clear();
 		dialogScripts.clear();
 		dialogOptions.clear();
 		n_game_data_received = 0;
-	}
-
-	public void requestDialogs() {
-
 	}
 
 	// to be consistent with iOS these are here to do what the listener declarations did in iOS
