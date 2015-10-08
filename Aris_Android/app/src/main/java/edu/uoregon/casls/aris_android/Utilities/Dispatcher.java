@@ -89,7 +89,13 @@ public void model_game_instance_touched() {
 		mGame.gamePlayerPieceReceived();
 	}
 //	MODEL_GROUP_INSTANCES_AVAILABLE",nil,nil);
+public void model_group_instances_available() {
+	// no listeners
+}
 //	MODEL_GROUP_INSTANCES_TOUCHED",nil,nil);
+public void model_group_instances_touched() {
+	// no listeners currently
+}
 //	MODEL_GROUP_TOUCHED",nil,nil);
 //	MODEL_GROUPS_AVAILABLE",nil,nil);
 //	MODEL_GROUPS_PLAYER_GROUP_AVAILABLE",nil,nil);
@@ -119,7 +125,7 @@ public void model_game_instance_touched() {
 //	MODEL_LOGIN_FAILED",nil,nil); }
 //	MODEL_LOGS_AVAILABLE",nil,nil);
 public void model_logs_available() {
-//	briadcast only; no receivers
+//	broadcast only; no receivers
 }
 //	MODEL_MEDIA_AVAILABLE",nil,nil);
 //	MODEL_MEDIA_DATA_COMPLETE",nil,nil);
@@ -129,6 +135,9 @@ public void model_logs_available() {
 //	MODEL_NOTE_COMMENTS_AVAILABLE",nil,nil);
 //	MODEL_NOTES_AVAILABLE",nil,nil);
 //	MODEL_OBJECT_TAGS_AVAILABLE",nil,nil);
+public void model_object_tags_available() {
+	// no listeners
+}
 //	MODEL_OVERLAYS_AVAILABLE",nil,nil);
 //	MODEL_OVERLAYS_LESS_AVAILABLE",nil,@{@"removed":removedOverlays});
 //	MODEL_OVERLAYS_NEW_AVAILABLE",nil,@{@"added":addedOverlays});
@@ -141,18 +150,30 @@ public void model_logs_available() {
 //	MODEL_POPULAR_GAMES_AVAILABLE",nil,nil); }
 //	MODEL_QUESTS_ACTIVE_LESS_AVAILABLE",nil,deltas);
 public void model_quests_active_less_available(Map<String, List<Quest>> deltas) {
-	// todo: listeners
+	// todo: duplicate (UI) behaviour of IconQuestsViewController.refreshViewFromModel()
+	// todo: duplicate UI of QuestsViewController.refreshViewFromModel()
 }
 //	MODEL_QUESTS_ACTIVE_NEW_AVAILABLE",nil,deltas);
 public void model_quests_active_new_available(Map<String, List<Quest>> deltas) {
-	// todo: find listeners
+	// todo: duplicate UI of GameNotificationViewController.parseActiveQuestsIntoNotifications(deltas)
+	// todo: duplicate UI of IconQuestsViewController.refreshViewFromModel()
+	// todo: duplicate UI of QuestsViewController.refreshViewFromModel()
 }
 //	MODEL_QUESTS_AVAILABLE",nil,nil);
 public void model_quests_available() {
 	// no listeners
 }
 //	MODEL_QUESTS_COMPLETE_LESS_AVAILABLE",nil,deltas);
+public void model_quests_complete_less_available(Map<String, List<Quest>> deltas) {
+	// todo: duplicate (UI) behaviour of IconQuestsViewController.refreshViewFromModel()
+	// todo: duplicate UI of QuestsViewController.refreshViewFromModel()
+}
 //	MODEL_QUESTS_COMPLETE_NEW_AVAILABLE",nil,deltas);
+public void model_quests_complete_new_available(Map<String, List<Quest>> deltas) {
+	// todo: duplicate UI of GameNotificationViewController.parseCompleteQuestsIntoNotifications(deltas)
+	// todo: duplicate UI of IconQuestsViewController.refreshViewFromModel()
+	// todo: duplicate UI of QuestsViewController.refreshViewFromModel()
+}
 //	MODEL_RECENT_GAMES_AVAILABLE",nil,nil); }
 //	MODEL_REQUIREMENT_AND_PACKAGES_AVAILABLE",nil,nil);
 public void model_requirement_and_packages_available() {
@@ -174,6 +195,9 @@ public void model_requirement_root_packages_available() {
 //	MODEL_TABS_LESS_AVAILABLE",nil,deltas);
 //	MODEL_TABS_NEW_AVAILABLE",nil,deltas);
 //	MODEL_TAGS_AVAILABLE",nil,nil);
+public void model_tags_available() {
+	// no listeners
+}
 //	MODEL_TRIGGERS_AVAILABLE",nil,nil);
 //	MODEL_TRIGGERS_INVALIDATED",nil,@{@"invalidated_triggers":invalidatedTriggers});
 //	MODEL_TRIGGERS_LESS_AVAILABLE",nil,@{@"removed":removedTriggers});

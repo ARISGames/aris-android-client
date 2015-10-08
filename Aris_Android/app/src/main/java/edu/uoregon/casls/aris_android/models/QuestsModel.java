@@ -1,7 +1,5 @@
 package edu.uoregon.casls.aris_android.models;
 
-import com.google.android.gms.games.quest.QuestEntity;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -32,59 +30,56 @@ public class QuestsModel extends ARISModel {
 		mGame = mGamePlayAct.mGame;
 	}
 
-	public void requestPlayerData()
-	{
+	public void requestPlayerData() {
 		this.requestPlayerQuests();
 	}
-	public void clearPlayerData()
-	{
+
+	public void clearPlayerData() {
 		visibleActiveQuests.clear();
 		visibleCompleteQuests.clear();
 		n_player_data_received = 0;
 	}
-	public long nPlayerDataToReceive()
-	{
+
+	public long nPlayerDataToReceive() {
 		return 1;
 	}
 
-	public void requestGameData()
-	{
+	public void requestGameData() {
 		this.requestQuests();
 	}
-	public void clearGameData()
-	{
+
+	public void clearGameData() {
 		this.clearPlayerData();
 		quests.clear();
 		n_game_data_received = 0;
 	}
-	public long nGameDataToReceive()
-	{
+
+	public long nGameDataToReceive() {
 		return 1;
 	}
 
-	public void questsReceived(List<Quest> newQuests)
-	{
+	public void questsReceived(List<Quest> newQuests) {
 		this.updateQuests(newQuests);
 	}
 
-	public void updateQuests(List<Quest> newQuests)
-	{
+	public void updateQuests(List<Quest> newQuests) {
 		long newQuestId;
 		for (Quest newQuest : newQuests) {
 			newQuestId = newQuest.quest_id;
-			if(quests.get(newQuestId) != null) quests.put(newQuestId, newQuest); // setObject:newQuest forKey:newQuestId;
+			if (quests.get(newQuestId) != null)
+				quests.put(newQuestId, newQuest); // setObject:newQuest forKey:newQuestId;
 		}
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_quests_available(); // _ARIS_NOTIF_SEND_(@"MODEL_QUESTS_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.model_game_piece_available(); // _ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
-	public void requestQuests()      { mGamePlayAct.mServices.fetchQuests(); }
+	public void requestQuests() {
+		mGamePlayAct.mServices.fetchQuests();
+	}
 
-	public void requestPlayerQuests()
-	{
-		if (this.playerDataReceived() && !mGame.network_level.contentEquals("REMOTE"))
-		{
+	public void requestPlayerQuests() {
+		if (this.playerDataReceived() && !mGame.network_level.contentEquals("REMOTE")) {
 			this.logAnyNewlyCompletedQuests();
 //			NSDictionary *pquests =
 //				@{
@@ -92,13 +87,11 @@ public class QuestsModel extends ARISModel {
 //				@"complete" : [[NSMutableArray alloc] init]
 //			};
 			Map<String, List<Quest>> pquests = new HashMap<>();
-				List<Quest> qListComplete = new LinkedList<>();	pquests.put("complete", qListComplete);
-				List<Quest> qListActive = new LinkedList<>(); 	pquests.put("active", qListActive);
+			List<Quest> qListComplete = new LinkedList<>();	pquests.put("complete", qListComplete);
+			List<Quest> qListActive = new LinkedList<>(); 	pquests.put("active", qListActive);
 			Collection<Quest> qs = quests.values();// allValues;
-			for (Quest q : qs)
-			{ 
-				if (mGame.requirementsModel.evaluateRequirementRoot(q.active_requirement_root_package_id))
-				{
+			for (Quest q : qs) {
+				if (mGame.requirementsModel.evaluateRequirementRoot(q.active_requirement_root_package_id)) {
 					if (mGame.logsModel.hasLogType("COMPLETE_QUEST", q.quest_id)) {
 						qListComplete.add(q); //[@"complete"] addObject(q;
 					}
@@ -110,20 +103,16 @@ public class QuestsModel extends ARISModel {
 			mGamePlayAct.mDispatch.services_player_quests_received(pquests); // _ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_QUESTS_RECEIVED",nil,pquests);
 		}
 		if (!this.playerDataReceived() ||
-		mGame.network_level.contentEquals("HYBRID") ||
-		mGame.network_level.contentEquals("REMOTE"))
+				mGame.network_level.contentEquals("HYBRID") ||
+				mGame.network_level.contentEquals("REMOTE"))
 			mGamePlayAct.mServices.fetchQuestsForPlayer();
 	}
 
-	public void logAnyNewlyCompletedQuests()
-	{
+	public void logAnyNewlyCompletedQuests() {
 		Collection<Quest> qs = quests.values();// allValues;
-		for (Quest q : qs)
-		{
-			if(!mGame.logsModel.hasLogType("COMPLETE_QUEST", q.quest_id))
-			{
-				if(mGame.requirementsModel.evaluateRequirementRoot(q.complete_requirement_root_package_id))
-				{
+		for (Quest q : qs) {
+			if (!mGame.logsModel.hasLogType("COMPLETE_QUEST", q.quest_id)) {
+				if (mGame.requirementsModel.evaluateRequirementRoot(q.complete_requirement_root_package_id)) {
 					mGame.requirementsModel.evaluateRequirementRoot(q.complete_requirement_root_package_id);
 					mGame.logsModel.playerCompletedQuestId(q.quest_id);
 				}
@@ -131,13 +120,11 @@ public class QuestsModel extends ARISModel {
 		}
 	}
 
-//admittedly a bit silly, but a great way to rid any risk of deviation from flyweight by catching it at the beginning
-	public List<Quest> conformQuestListToFlyweight(List<Quest> newQuests)
-	{
+	//admittedly a bit silly, but a great way to rid any risk of deviation from flyweight by catching it at the beginning
+	public List<Quest> conformQuestListToFlyweight(List<Quest> newQuests) {
 //		NSMutableArray *conformingQuests = [[NSMutableArray alloc] init;
 		List<Quest> conformingQuests = new LinkedList<>();
-		for (Quest q : newQuests)
-		{
+		for (Quest q : newQuests) {
 			if (this.questForId(q.quest_id) != null)
 				conformingQuests.add(q); // addObject(q;
 		}
@@ -147,107 +134,87 @@ public class QuestsModel extends ARISModel {
 
 	public void playerQuestsReceived(Map<String, List<Quest>> pquests) //todo: params needed???
 	{
-		this.updateCompleteQuests(this.conformQuestListToFlyweight(pquests.get("complete")); //objectForKey:@"complete"]];
-		this.updateActiveQuests(this.conformQuestListToFlyweight(pquests.get("active")); //.userInfo objectForKey:@"active"]];
+		this.updateCompleteQuests(this.conformQuestListToFlyweight(pquests.get("complete"))); //objectForKey:@"complete"]];
+		this.updateActiveQuests(this.conformQuestListToFlyweight(pquests.get("active"))); //.userInfo objectForKey:@"active"]];
 		n_player_data_received++;
 		mGamePlayAct.mDispatch.model_game_player_piece_available(); // _ARIS_NOTIF_SEND_(@"MODEL_GAME_PLAYER_PIECE_AVAILABLE",nil,nil);
 	}
 
-	public void updateActiveQuests(List<Quest> newQuests)
-	{
-//		NSDictionary *deltas = this.findDeltasInNew(newQuests, visibleActiveQuests);
-		Map<String, List<Quest>> deltas = this.findDeltasInNew(newQuests, visibleActiveQuests);;
+	public void updateActiveQuests(List<Quest> newQuests) {
+		Map<String, List<Quest>> deltas = this.findDeltasInNew(newQuests, visibleActiveQuests);
+		;
 		visibleActiveQuests = newQuests; //assumes already conforms to flyweight
 
-//		NSArray *addedDeltas = deltas[@"added";
 		List<Quest> addedDeltas = deltas.get("added");
-		if(addedDeltas.size() > 0)
+		if (addedDeltas.size() > 0)
 			mGamePlayAct.mDispatch.model_quests_active_new_available(deltas); // _ARIS_NOTIF_SEND_(@"MODEL_QUESTS_ACTIVE_NEW_AVAILABLE",nil,deltas);
-		if(this.playerDataReceived())
-		{
-//			for(long i = 0; i < addedDeltas.size(); i++)
+		if (this.playerDataReceived()) {
 			for (Quest addedDelta : addedDeltas)
-			mGame.eventsModel.runEventPackageId(addedDelta.active_event_package_id);
+				mGame.eventsModel.runEventPackageId(addedDelta.active_event_package_id);
 		}
 
-//		NSArray *removedDeltas = deltas[@"removed";
 		List<Quest> removedDeltas = deltas.get("removed");
-		if(removedDeltas.size() > 0)
+		if (removedDeltas.size() > 0)
 			mGamePlayAct.mDispatch.model_quests_active_less_available(deltas); // _ARIS_NOTIF_SEND_(@"MODEL_QUESTS_ACTIVE_LESS_AVAILABLE",nil,deltas);
 	}
 
-	public void updateCompleteQuests(List<Quest> newQuests)
-	{
-		NSDictionary *deltas = this.findDeltasInNew(newQuests fromOld:visibleCompleteQuests;
+	public void updateCompleteQuests(List<Quest> newQuests) {
+		Map<String, List<Quest>> deltas = this.findDeltasInNew(newQuests, visibleCompleteQuests);
 		visibleCompleteQuests = newQuests; //assumes already conforms to flyweight
 
-		NSArray *addedDeltas = deltas[@"added";
-		if(addedDeltas.count > 0)
-			mGamePlayAct.mDispatch. // _ARIS_NOTIF_SEND_(@"MODEL_QUESTS_COMPLETE_NEW_AVAILABLE",nil,deltas);
-		if(this.playerDataReceived])
-		{
-			for(long i = 0; i < addedDeltas.count; i++)
-			mGame.eventsModel.runEventPackageId((QuestaddedDeltas[i]).complete_event_package_id;
+		List<Quest> addedDeltas = deltas.get("added");
+		if (addedDeltas.size() > 0)
+			mGamePlayAct.mDispatch.model_quests_complete_new_available(deltas); // _ARIS_NOTIF_SEND_(@"MODEL_QUESTS_COMPLETE_NEW_AVAILABLE",nil,deltas);
+		if (this.playerDataReceived()) {
+			for (Quest addedDelta : addedDeltas)
+				mGame.eventsModel.runEventPackageId(addedDelta.complete_event_package_id);
 		}
 
-		NSArray *removedDeltas = deltas[@"removed";
-		if(removedDeltas.count > 0)
-			mGamePlayAct.mDispatch. // _ARIS_NOTIF_SEND_(@"MODEL_QUESTS_COMPLETE_LESS_AVAILABLE",nil,deltas);
+		List<Quest> removedDeltas = deltas.get("removed");
+		if (removedDeltas.size() > 0)
+			mGamePlayAct.mDispatch.model_quests_complete_less_available(deltas); // _ARIS_NOTIF_SEND_(@"MODEL_QUESTS_COMPLETE_LESS_AVAILABLE",nil,deltas);
 	}
 
-//finds deltas in quest lists generally, so I can just use same code for complete/active
-	public Map<String, List<Quest>> findDeltasInNew(List<Quest> newQuests, List<Quest> oldQuests)
-	{
-		NSDictionary *qDeltas = @{ @"added"([NSMutableArray alloc] init], @"removed"([NSMutableArray alloc] init] };
-
-		//placeholders for comparison
-		Quest *newQuest;
-		Quest *oldQuest;
+	//finds deltas in quest lists generally, so I can just use same code for complete/active
+	public Map<String, List<Quest>> findDeltasInNew(List<Quest> newQuests, List<Quest> oldQuests) {
+//		NSDictionary *qDeltas = @{ @"added"([NSMutableArray alloc] init], @"removed"([NSMutableArray alloc] init] };
+		Map<String, List<Quest>> qDeltas = new HashMap<>();
+		List<Quest> qListAdded = new LinkedList<>(); 	qDeltas.put("added", qListAdded);
+		List<Quest> qListRemoved = new LinkedList<>(); 	qDeltas.put("removed", qListRemoved);
 
 		//find added
-		BOOL newq;
-		for(long i = 0; i < newQuests.count; i++)
-		{
-			newq = YES;
-			newQuest = newQuests[i;
-			for(long j = 0; j < oldQuests.count; j++)
-			{
-				oldQuest = oldQuests[j;
-				if(newQuest.quest_id == oldQuest.quest_id) newq = NO;
+		boolean newq;
+		for (Quest newQuest : newQuests) {
+			newq = true;
+			for (Quest oldQuest : oldQuests) {
+				if (newQuest.quest_id == oldQuest.quest_id) newq = false;
 			}
-			if(newq) [qDeltas[@"added"] addObject(newQuests[i];
+			if (newq) qListAdded.add(newQuest); //[qDeltas[@"added"] addObject(newQuests[i];
 		}
 
 		//find removed
-		BOOL removed;
-		for(long i = 0; i < oldQuests.count; i++)
-		{
-			removed = YES;
-			oldQuest = oldQuests[i;
-			for(long j = 0; j < newQuests.count; j++)
-			{
-				newQuest = newQuests[j;
-				if(newQuest.quest_id == oldQuest.quest_id) removed = NO;
+		boolean removed;
+		for (Quest oldQuest : oldQuests) {
+			removed = true;
+			for (Quest newQuest : newQuests) {
+				if (newQuest.quest_id == oldQuest.quest_id) removed = false;
 			}
-			if(removed) [qDeltas[@"removed"] addObject(oldQuests[i];
+			if (removed) qListRemoved.add(oldQuest); // [qDeltas[@"removed"] addObject(oldQuests[i];
 		}
 
 		return qDeltas;
 	}
 
-	public Quest questForId(long quest_id
-	{
-		if(!quest_id) return [[Quest alloc] init;
-		return [quests objectForKey(NSNumber numberWithLong(quest_id];
+	public Quest questForId(long quest_id) {
+		if (quest_id == 0) return new Quest();
+		return quests.get(quest_id);// objectForKey(NSNumber numberWithLong(quest_id];
 	}
 
-	public List<Quest> visibleActiveQuests()
-	{
+	public List<Quest> visibleActiveQuests() {
 		return visibleActiveQuests;
 	}
 
-	public List<Quest> visibleCompleteQuests()
-	{
+	public List<Quest> visibleCompleteQuests() {
 		return visibleCompleteQuests;
 	}
 

@@ -161,9 +161,9 @@ public class PlayerInstancesModel extends ARISModel {
 
 	public long qtyOwnedForTag(long tag_id) {
 		long q = 0;
-		long[] item_ids = mGamePlayAct.mGame.logsModel.objectIdsOfType("ITEM" , tag_id);
-		for (int i = 0; i < item_ids.length; i++)
-			q += this.qtyOwnedForItem(item_ids[i]);
+		List<Long> item_ids = mGamePlayAct.mGame.tagsModel.objectIdsOfType("ITEM" , tag_id);
+		for (int i = 0; i < item_ids.size(); i++)
+			q += this.qtyOwnedForItem(item_ids.get(i));
 		return q;
 	}
 

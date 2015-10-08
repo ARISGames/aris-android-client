@@ -143,4 +143,13 @@ public class Services {
 
 	public void fetchQuests() {
 	}
+
+	public void touchItemsForGroups() {
+	}
+
+	public void fetchTags() {
+	}
+
+	public void fetchObjectTags() {
+	}
 }

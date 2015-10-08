@@ -12,5 +12,6 @@ public class DialogOption {
 	public long link_id;
 	public String link_info;
 	public long sort_index;
+	public long requirement_root_package_id;
 
 }
