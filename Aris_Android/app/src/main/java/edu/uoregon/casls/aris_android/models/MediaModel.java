@@ -1,6 +1,7 @@
 package edu.uoregon.casls.aris_android.models;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import edu.uoregon.casls.aris_android.data_objects.Media;
 public class MediaModel extends ARISModel {
 
 	public Map<Long, Media> medias = new LinkedHashMap<>();
+	public List<Long> mediaIDsToLoad = new LinkedList<>();
 	public GamePlayActivity mGamePlayAct;
 
 	public MediaModel(GamePlayActivity gamePlayActivity) {
@@ -26,7 +28,7 @@ public class MediaModel extends ARISModel {
 
 	public void clearGameData() {
 		medias.clear();
-//		mediaIDsToLoad.clear();
+		mediaIDsToLoad.clear();
 		n_game_data_received = 0;
 	}
 
@@ -45,8 +47,14 @@ public class MediaModel extends ARISModel {
 		return 1;
 	}
 
-
-	- (NSArray *) mediaForPredicate:(NSPredicate *)predicate
+// todo: figure out how to encorporate this iOS voodoo into the android app
+	// Essentially this is a database call to a (device) persistent database.
+	// The predicate is the SQL to be executed
+	// the context (NSManagedObjectContext) is the database
+	// The EntityDescription is the table and database to be queried.
+	// The FetchRequest encapsulates the whole statement with both the source (ie table) and the predicate (ie SQL expression)
+	// The call to executeFetchRequest() will perfom the request and return any data or errors if there are any
+	- (NSArray *) mediaForPredicate:(NSPredicate *)predicate // return an array of raw Media K/V pair sets
 	{
 		NSError *error;
 		NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -82,12 +90,6 @@ public class MediaModel extends ARISModel {
 	{
 		this.requestMedia();
 	}
-	public void clearGameData()
-	{
-		medias = [[NSMutableDictionary alloc] init];
-		mediaIdsToLoad = [[NSMutableDictionary alloc] init];
-		n_game_data_received = 0;
-	}
 
 	public void mediasReceived(List<Map<String, String>> rawMediaArr) {
 		this.updateMedias(rawMediaArr);
@@ -101,12 +103,13 @@ public class MediaModel extends ARISModel {
 	public void updateMedias(List<Map<String, String>> mediaToCacheDicts)
 	{
 		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(game_id = 0) OR (game_id = %ld)", _MODEL_GAME_.game_id];
-		NSArray *currentlyCachedMediaArray = this.mediaForPredicate:predicate];
+//		NSArray *currentlyCachedMediaArray = this.mediaForPredicate(predicate);
+		NSArray *currentlyCachedMediaArray = this.mediaForPredicate(predicate); // get the raw array of media map arrays
 
 		//Turn array to dict for quick check of existence in cache
 		NSMutableDictionary *currentlyCachedMediaMap = [[NSMutableDictionary alloc] init];
-		for(long i = 0; i < currentlyCachedMediaArray.count; i++)
-		[currentlyCachedMediaMap setObject:currentlyCachedMediaArray[i] forKey:((MediaCD *)currentlyCachedMediaArray[i]).media_id];
+		for(long i = 0; i < currentlyCachedMediaArray.count; i++) // convert outtermost obj array to key/value pair.
+			[currentlyCachedMediaMap setObject:currentlyCachedMediaArray[i] forKey:((MediaCD *)currentlyCachedMediaArray[i]).media_id];
 
 		MediaCD *tmpMedia;
 		for(long i = 0; i < mediaToCacheDicts.count; i++)

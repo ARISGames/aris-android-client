@@ -2,6 +2,11 @@ package edu.uoregon.casls.aris_android.Utilities;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.data_objects.Game;
+import edu.uoregon.casls.aris_android.data_objects.Media;
+import edu.uoregon.casls.aris_android.data_objects.Note;
+import edu.uoregon.casls.aris_android.data_objects.NoteComment;
+import edu.uoregon.casls.aris_android.data_objects.Tag;
+import edu.uoregon.casls.aris_android.data_objects.Trigger;
 import edu.uoregon.casls.aris_android.data_objects.User;
 
 /**
@@ -155,5 +160,26 @@ public class Services {
 	}
 
 	public void fetchMedias() {
+	}
+
+	public void createNote(Note n, Tag t, Media m, Trigger tr) {
+	}
+
+	public void updateNote(Note n, Tag t, Media m, Trigger tr) {
+	}
+
+	public void deleteNoteId(long note_id) {
+	}
+
+	public void fetchNotes() {
+	}
+
+	public void createNoteComment(NoteComment n) {
+	}
+
+	public void updateNoteComment(NoteComment n) {
+	}
+
+	public void deleteNoteCommentId(long note_comment_id) {
 	}
 }

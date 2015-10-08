@@ -1,6 +1,7 @@
 package edu.uoregon.casls.aris_android.models;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
@@ -27,6 +28,7 @@ public class NotesModel extends ARISModel {
 	}
 
 	public void clearGameData() {
+		this.invalidateCaches();
 		noteComments.clear();
 		notes.clear();
 		n_game_data_received = 0;
@@ -38,21 +40,14 @@ public class NotesModel extends ARISModel {
 	public void requestNoteComments() {
 	}
 
-	public long nGameDataToReceive () {
+	public long nGameDataToReceive() {
 		return 2;
 	}
 
-	public void requestGameData
+	public void requestGameData()
 	{
 		this.requestNotes];
 		this.requestNoteComments];
-	}
-	public void clearGameData
-	{
-		this.invalidateCaches];
-		notes         = [[NSMutableDictionary alloc] init];
-		note_comments = [[NSMutableDictionary alloc] init];
-		n_game_data_received = 0;
 	}
 
 	public void createNote(Note n, Tag t, Media m, Trigger tr)
@@ -63,49 +58,49 @@ public class NotesModel extends ARISModel {
 	{
 		mGamePlayAct.mServices.updateNote(n, t, m, tr); //just forward to services
 	}
-	public void deleteNoteId(long)note_id
+	public void deleteNoteId(long note_id)
 	{
-		mGamePlayAct.mServices.deleteNoteId:note_id]; //just forward to services
-		[notes removeObjectForKey:[NSNumber numberWithLong:note_id]];
-		this.invalidateCaches];
+		mGamePlayAct.mServices.deleteNoteId(note_id); //just forward to services
+		notes.remove(note_id);
+		this.invalidateCaches();
 	}
 
-	public void createNoteComment:(NoteComment *)n
+	public void createNoteComment(NoteComment n)
 	{
-		mGamePlayAct.mServices.createNoteComment:n]; //just forward to services
+		mGamePlayAct.mServices.createNoteComment(n); //just forward to services
 	}
-	public void saveNoteComment:(NoteComment *)n
+	public void saveNoteComment(NoteComment n)
 	{
-		mGamePlayAct.mServices.updateNoteComment:n]; //just forward to services
+		mGamePlayAct.mServices.updateNoteComment(n); //just forward to services
 	}
-	public void deleteNoteCommentId:(long)note_comment_id
+	public void deleteNoteCommentId(long note_comment_id)
 	{
-		mGamePlayAct.mServices.deleteNoteCommentId:note_comment_id]; //just forward to services
-		[note_comments removeObjectForKey:[NSNumber numberWithLong:note_comment_id]];
+		mGamePlayAct.mServices.deleteNoteCommentId(note_comment_id); //just forward to services
+		noteComments.remove(note_comment_id);// removeObjectForKey:[NSNumber numberWithLong:note_comment_id]];
 	}
 
 	public void invalidateCaches()
 	{
-		playerNotes = nil;
-		listNotes = nil;
-		notesMatchingTag = nil;
+		playerNotes.clear();
+		listNotes.clear();
+		notesMatchingTag.clear();
 	}
 
-	public void notesReceived:(NSNotification *)notif
+	public void notesReceived(List<Note> notes)
 	{
-		this.updateNotes:notif.userInfo[@"notes"]];
+		this.updateNotes(notes);
 	}
 
-	public void noteReceived:(NSNotification *)notif
+	public void noteReceived(List<Note> notes)
 	{
-		this.updateNotes:@[notif.userInfo[@"note"]]];
+		this.updateNotes(notes);
 	}
 
-	public void updateNotes:(NSArray *)newNotes
+	public void updateNotes(List<Note> newNotes)
 	{
-		this.invalidateCaches];
-		Note *newNote;
-		NSNumber *newNoteId;
+		this.invalidateCaches();
+		Note newNote;
+		NSNumber newNoteId;
 		for(long i = 0; i < newNotes.count; i++)
 		{
 			newNote = [newNotes objectAtIndex:i];
@@ -113,26 +108,26 @@ public class NotesModel extends ARISModel {
 			if(!notes[newNoteId]) [notes setObject:newNote forKey:newNoteId];
 		}
 		n_game_data_received++;
-		_ARIS_NOTIF_SEND_(@"MODEL_NOTES_AVAILABLE",nil,nil);
-		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_notes_avaialble(); //_ARIS_NOTIF_SEND_(@"MODEL_NOTES_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void requestNotes
 	{
-		mGamePlayAct.mServices.fetchNotes];
+		mGamePlayAct.mServices.fetchNotes();
 	}
 
-	public void noteCommentsReceived:(NSNotification *)notif
+	public void noteCommentsReceived(List<NoteComment> newNoteComments)
 	{
-		this.updateNoteComments:notif.userInfo[@"note_comments"]];
+		this.updateNoteComments(newNoteComments);
 	}
 
-	public void noteCommentReceived:(NSNotification *)notif
+	public void noteCommentReceived(List<NoteComment> newNoteComments)
 	{
-		this.updateNoteComments:@[notif.userInfo[@"note_comment"]]];
+		this.updateNoteComments(newNoteComments);
 	}
 
-	public void updateNoteComments:(NSArray *)newNoteComments
+	public void updateNoteComments(List<NoteComment> newNoteComments)
 	{
 		NoteComment *newComment;
 		NSNumber *newCommentId;
@@ -140,11 +135,11 @@ public class NotesModel extends ARISModel {
 		{
 			newComment = [newNoteComments objectAtIndex:i];
 			newCommentId = [NSNumber numberWithLong:newComment.note_comment_id];
-			if(!note_comments[newCommentId]) [note_comments setObject:newComment forKey:newCommentId];
+			if(!noteComments[newCommentId]) [noteComments setObject:newComment forKey:newCommentId];
 		}
 		n_game_data_received++;
-		_ARIS_NOTIF_SEND_(@"MODEL_NOTE_COMMENTS_AVAILABLE",nil,nil);
-		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.note_comments_available(); //_ARIS_NOTIF_SEND_(@"MODEL_NOTE_COMMENTS_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void requestNoteComments
@@ -212,18 +207,18 @@ public class NotesModel extends ARISModel {
 	- (NoteComment *) noteCommentForId:(long)note_comment_id
 	{
 		if(!note_comment_id) return [[NoteComment alloc] init];
-		return note_comments[[NSNumber numberWithLong:note_comment_id]];
+		return noteComments[[NSNumber numberWithLong:note_comment_id]];
 	}
 
 	- (NSArray *) noteComments
 	{
-		return [note_comments allValues];
+		return [noteComments allValues];
 	}
 
 	- (NSArray *) noteCommentsForNoteId:(long)note_id
 	{
 		NSMutableArray *noteCommentsMatchingNote = [[NSMutableArray alloc] init];
-		NSArray *ncs = [note_comments allValues];
+		NSArray *ncs = [noteComments allValues];
 		for(long i = 0; i < ncs.count; i++)
 			if(((NoteComment *)ncs[i]).note_id == note_id) [noteCommentsMatchingNote addObject:ncs[i]];
 		return _ARIS_ARRAY_SORTED_ON_(noteCommentsMatchingNote,@"created");

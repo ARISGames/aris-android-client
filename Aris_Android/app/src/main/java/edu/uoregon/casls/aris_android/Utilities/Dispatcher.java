@@ -146,7 +146,13 @@ public void model_logs_available() {
 //	MODEL_MINE_GAMES_AVAILABLE",nil,nil); }
 //	MODEL_NEARBY_GAMES_AVAILABLE",nil,nil); }
 //	MODEL_NOTE_COMMENTS_AVAILABLE",nil,nil);
+public void note_comments_available() {
+	// no listeners
+}
 //	MODEL_NOTES_AVAILABLE",nil,nil);
+public void model_notes_avaialble() {
+	// no Listeners
+}
 //	MODEL_OBJECT_TAGS_AVAILABLE",nil,nil);
 public void model_object_tags_available() {
 	// no listeners
@@ -291,7 +297,7 @@ public void services_object_tags_received(List<ObjectTag> objectTags) {
 //	SERVICES_OVERLAY_RECEIVED", nil, @{@"overlay":overlay});
 //	SERVICES_OVERLAYS_RECEIVED", nil, @{@"overlays":overlays});
 public void services_overlays_received(List<Overlay> overlays) {
-	mGame.overlaysModel.overlaysReceived();
+	mGame.overlaysModel.overlaysReceived(overlays);
 }
 //	SERVICES_PLAQUE_RECEIVED", nil, @{@"plaque":plaque});
 //	SERVICES_PLAQUES_RECEIVED", nil, @{@"plaques":plaques});
