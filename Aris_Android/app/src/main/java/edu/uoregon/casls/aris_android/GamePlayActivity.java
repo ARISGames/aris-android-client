@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -60,6 +61,7 @@ import edu.uoregon.casls.aris_android.data_objects.Tag;
 import edu.uoregon.casls.aris_android.data_objects.Trigger;
 import edu.uoregon.casls.aris_android.data_objects.User;
 import edu.uoregon.casls.aris_android.data_objects.WebPage;
+import edu.uoregon.casls.aris_android.models.MediaModel;
 
 public class GamePlayActivity extends ActionBarActivity
 		implements GamePlayNavDrawerFragment.NavigationDrawerCallbacks, GamePlayMapFragment.OnFragmentInteractionListener {
@@ -72,6 +74,7 @@ public class GamePlayActivity extends ActionBarActivity
 	public Game mGame;
 	public Dispatcher mDispatch;
 	public Services mServices;
+	public MediaModel mMediaModel;
 	private View mProgressView; // todo: install a progress spinner for server delays
 	public JSONObject mJsonAuth;
 	public Map<Long, Media> mGameMedia = new LinkedHashMap<>();
@@ -118,6 +121,7 @@ public class GamePlayActivity extends ActionBarActivity
 
 		mDispatch = new Dispatcher(this); // Centralized place for object to object messaging
 		mServices = new Services(this); // Centralized place for server calls.
+		mMediaModel = new MediaModel(this);
 		// initialize game object's inner classes and variables.
 		mGame.getReadyToPlay();
 		// Start barrage of game related server requests
@@ -382,197 +386,231 @@ public class GamePlayActivity extends ActionBarActivity
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
+					List<DialogOption> dialogOptions = new LinkedList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						DialogOption dialogOption = gson.fromJson(dataStr, DialogOption.class);
 						//populate hashmap as dialog_option_id, DialogOption Obj>
-						mGame.dialogsModel.dialogOptions.put(dialogOption.dialog_option_id, dialogOption);
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
+						dialogOptions.add(dialogOption);
+//						mGame.dialogsModel.dialogOptions.put(dialogOption.dialog_option_id, dialogOption);
+//						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
+					mDispatch.services_dialog_options_received(dialogOptions);
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_WEB_PAGES_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
+					List<WebPage> webPages = new LinkedList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						WebPage webpage = gson.fromJson(dataStr, WebPage.class);
 						//populate hashmap as dialog_id, Dialog Obj>
-						mGame.webPagesModel.webpages.put(webpage.web_page_id, webpage);
+						webPages.add(webpage);
+//						mGame.webPagesModel.webpages.put(webpage.web_page_id, webpage);
 //						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
-					mGame.webPagesModel.webPagesReceived();
+					mDispatch.services_web_pages_received(webPages);
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_TOUCH_SCENE_4_PLAYER)) {
-				if (jsonReturn.has("data")) {
-					JSONArray jsonData = jsonReturn.getJSONArray("data");
-					Gson gson = new Gson();
-					for (int i = 0; i < jsonData.length(); i++) {
-						String dataStr = jsonData.getJSONObject(i).toString();
-						Note note = gson.fromJson(dataStr, Note.class);
-						//populate hashmap as note_id, Note Obj>
-						mGame.notesModel.notes.put(note.note_id, note);
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
-					}
-				}
+				mDispatch.services_scene_touched(); //_ARIS_NOTIF_SEND_(@"SERVICES_SCENE_TOUCHED", nil, nil);
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_NOTE_COMMNTS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
+					List<NoteComment> noteComments = new LinkedList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						NoteComment noteCmnt = gson.fromJson(dataStr, NoteComment.class);
 						//populate hashmap as Note_comment_id, NoteComment Obj>
-						mGame.notesModel.noteComments.put(noteCmnt.note_comment_id, noteCmnt); // todo: are these indexed by note id or note_comment_id?
+						noteComments.add(noteCmnt);
+//						mGame.notesModel.noteComments.put(noteCmnt.note_comment_id, noteCmnt); // todo: are these indexed by note id or note_comment_id?
 //						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
-					mGame.notesModel.noteCommentesReceived();
+					mDispatch.services_note_comments_received(noteComments);
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_TAGS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
+					List<Tag> tags = new LinkedList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						Tag tag = gson.fromJson(dataStr, Tag.class);
 						//populate hashmap as tag_id, Tag Obj>
-						mGame.tagsModel.tags.put(tag.tag_id, tag);
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
+						tags.add(tag);
+//						mGame.tagsModel.tags.put(tag.tag_id, tag);
+//						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
-					mGame.tagsModel.tagsReceived();
+					mDispatch.services_tags_received(tags);
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_OBJ_TAGS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
+					List<ObjectTag> objectTags = new LinkedList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						ObjectTag objTag = gson.fromJson(dataStr, ObjectTag.class);
 						//populate hashmap as object_tag_id, ObjectTag Obj>
-						mGame.tagsModel.objectTags.put(objTag.object_tag_id, objTag);
+						objectTags.add(objTag);
+//						mGame.tagsModel.objectTags.put(objTag.object_tag_id, objTag);
 //						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
-					mGame.tagsModel.objectTagsReceived();
+					mDispatch.services_object_tags_received(objectTags);
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_EVENTS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
+					List<Event> events = new LinkedList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						Event event = gson.fromJson(dataStr, Event.class);
 						//populate hashmap as event_id, Event Obj>
-						mGame.eventsModel.events.put(event.event_id, event);
+						events.add(event);
+//						mGame.eventsModel.events.put(event.event_id, event);
 //						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
-					mGame.eventsModel.eventsReceived();
+					mDispatch.services_events_received(events);
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_QUESTS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
+					List<Quest> quests = new LinkedList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						Quest quest = gson.fromJson(dataStr, Quest.class);
 						//populate hashmap as quest_id, Quest Obj>
-						mGame.questsModel.quests.put(quest.quest_id, quest);
+						quests.add(quest);
+//						mGame.questsModel.quests.put(quest.quest_id, quest);
 //						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
-					mGame.questsModel.questsReceived();
+					mDispatch.services_quests_received(quests);
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_TRIGGERS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
+					List<Trigger> triggers = new LinkedList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						Trigger trigger = gson.fromJson(dataStr, Trigger.class);
 						//populate hashmap as trigger_id, Quest Obj>
-						mGame.triggersModel.triggers.put(trigger.trigger_id, trigger);
+						triggers.add(trigger);
+//						mGame.triggersModel.triggers.put(trigger.trigger_id, trigger);
 //						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
-					mGame.triggersModel.triggersReceived();
+					mDispatch.services_triggers_received(triggers);
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_FACTORIES_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
+					List<Factory> factories = new LinkedList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						Factory factory = gson.fromJson(dataStr, Factory.class);
 						//populate hashmap as factory_id, Factory Obj>
-						mGame.factoriesModel.factories.put(factory.factory_id, factory);
+						factories.add(factory);
+//						mGame.factoriesModel.factories.put(factory.factory_id, factory);
 //						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
-					mGame.factoriesModel.factoriesReceived();
+					mDispatch.services_factories_received(factories);
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_OVERLAYS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
+					List<Overlay> overlays = new LinkedList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						Overlay overlay = gson.fromJson(dataStr, Overlay.class);
 						//populate hashmap as overlayr_id, Overlay Obj>
-						mGame.overlaysModel.overlays.put(overlay.overlay_id, overlay);
+						overlays.add(overlay);
+//						mGame.overlaysModel.overlays.put(overlay.overlay_id, overlay);
 //						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
-					mGame.overlaysModel.overlaysReceived();
+					mDispatch.services_overlays_received(overlays);
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_INSTANCES_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
+					List<Instance> instances = new LinkedList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						Instance instance = gson.fromJson(dataStr, Instance.class);
 						//populate hashmap as instances_id, Instance Obj>
-						mGame.instancesModel.instances.put(instance.instance_id, instance);
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
+						instances.add(instance);
+//						mGame.instancesModel.instances.put(instance.instance_id, instance);
+//						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
+					mDispatch.services_instances_received(instances);
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_TABS_4_GAME)) { // returns array of teh items for the game mode drawer
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
+					List<Tab> tabs = new LinkedList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						Tab tab = gson.fromJson(dataStr, Tab.class);
 						//populate hashmap as tab_id, Tab Obj>
-						mGame.tabsModel.tabs.put(tab.tab_id, tab);
+						tabs.add(tab);
+//						mGame.tabsModel.tabs.put(tab.tab_id, tab);
 //						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
-					mGame.tabsModel.tabsReceived();
+					mDispatch.services_tabs_received(tabs);
 				}
 			}
+//			else if (callingReq.equals(Calls.HTTP_GET_MEDIA_4_GAME)) {
+//				if (jsonReturn.has("data")) {
+//					JSONArray jsonData = jsonReturn.getJSONArray("data");
+//					// Note: this model works differently, at least in iOS: it broadcasts the receipt event to the actual Media model.
+//					// See MediaModel.m (in iOS). Follows this method flow from listener: initWithContext->mediasReceived->ipdateMedias
+//
+//					// Not sure at the point of this coding why this differs, and as there is not "mediasModel: class in iOS,
+//					// I'm going to just populate the media objects in as a class var (array of model obj) of this GamePlayActivity.
+//					Gson gson = new Gson();
+//					for (int i = 0; i < jsonData.length(); i++) {
+//						String dataStr = jsonData.getJSONObject(i).toString();
+//						Media media = gson.fromJson(dataStr, Media.class);
+//						//populate hashmap as media_id, Media Obj>
+//						mGameMedia.put(media.media_id, media); // may wish to move this array into Game.class; don't see a particularly good reason to store it locally
+//						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
+//					}
+//					//note that this intentionally only sends the dictionaries, not fully populated Media objects
+//					// _ARIS_NOTIF_SEND_(@"SERVICES_MEDIA_RECEIVED", nil, @{@"media":mediaDict}); // fakes an entire list and does same as fetching all media
+//				}
+//			}
 			else if (callingReq.equals(Calls.HTTP_GET_MEDIA_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
-					// Note: this model works differently, at least in iOS: it broadcasts the receipt event to the actual Media model.
-					// See MediaModel.m (in iOS). Follows this method flow from listener: initWithContext->mediasReceived->ipdateMedias
-
-					// Not sure at the point of this coding why this differs, and as there is not "mediasModel: class in iOS,
-					// I'm going to just populate the media objects in as a class var (array of model obj) of this GamePlayActivity.
 					Gson gson = new Gson();
+//					List<Map<String, Object>> rawMediaArr = new LinkedList<>(); // orig.
+					List<Map<String, String>> rawMediaArr = new LinkedList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
-						Media media = gson.fromJson(dataStr, Media.class);
-						//populate hashmap as media_id, Media Obj>
-						mGameMedia.put(media.media_id, media); // may wish to move this array into Game.class; don't see a particularly good reason to store it locally
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
+						Map<String, String> aMediaRec = gson.fromJson(dataStr, new TypeToken<HashMap<String, Object>>() {}.getType());
+						//populate List with this Key->Val pair set. (Map)
+						rawMediaArr.add(aMediaRec);
 					}
+					//note that this intentionally only sends the dictionaries, not fully populated Media objects
+					mDispatch.services_medias_received(rawMediaArr); // _ARIS_NOTIF_SEND_(@"SERVICES_MEDIAS_RECEIVED", nil, @{@"medias":mediaDicts}); // fakes an entire list and does same as fetching all media
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_USERS_4_GAME)) {

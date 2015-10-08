@@ -39,6 +39,7 @@ public class DialogsModel extends ARISModel {
 
 	// to be consistent with iOS these are here to do what the listener declarations did in iOS
 	public void dialogsReceived(List<Dialog> dialogs) { this.updateDialogs(dialogs); }
+	public void dialogOptionsReceived(List<DialogOption> dialogOptions) { this.updateDialogOptions(dialogOptions); }
 	public void dialogCharactersReceived(List<DialogCharacter> dialogCharacters) { this.updateDialogCharacters(dialogCharacters);}
 	public void dialogScriptsReceived(List<DialogScript> dialogScripts) { this.updateDialogScripts(dialogScripts);}
 

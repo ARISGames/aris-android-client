@@ -151,5 +151,9 @@ public class Services {
 	}
 
 	public void fetchObjectTags() {
+
+	}
+
+	public void fetchMedias() {
 	}
 }

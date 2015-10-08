@@ -7,11 +7,22 @@ import java.util.Map;
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.data_objects.Dialog;
 import edu.uoregon.casls.aris_android.data_objects.DialogCharacter;
+import edu.uoregon.casls.aris_android.data_objects.DialogOption;
 import edu.uoregon.casls.aris_android.data_objects.DialogScript;
+import edu.uoregon.casls.aris_android.data_objects.Event;
+import edu.uoregon.casls.aris_android.data_objects.Factory;
 import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
+import edu.uoregon.casls.aris_android.data_objects.NoteComment;
+import edu.uoregon.casls.aris_android.data_objects.ObjectTag;
+import edu.uoregon.casls.aris_android.data_objects.Overlay;
 import edu.uoregon.casls.aris_android.data_objects.Quest;
+import edu.uoregon.casls.aris_android.data_objects.Tab;
+import edu.uoregon.casls.aris_android.data_objects.Tag;
+import edu.uoregon.casls.aris_android.data_objects.Trigger;
 import edu.uoregon.casls.aris_android.data_objects.User;
+import edu.uoregon.casls.aris_android.data_objects.WebPage;
+import edu.uoregon.casls.aris_android.models.MediaModel;
 
 /**
  * Created by smorison on 10/6/15.
@@ -22,6 +33,7 @@ public class Dispatcher {
 	public GamePlayActivity mGamePlayAct;
 	public Game mGame;
 	public User mPlayer;
+	public MediaModel mMediaModel;
 
 	public Dispatcher(GamePlayActivity gamePlayActivity) {
 		// reference to GamePlayActivity
@@ -29,6 +41,7 @@ public class Dispatcher {
 		//convenience references:
 		mGame = mGamePlayAct.mGame;
 		mPlayer = mGamePlayAct.mPlayer;
+		mMediaModel = mGamePlayAct.mMediaModel;
 	}
 
 	// replicate the _ARIS_NOTIF_ mechanism from iOS with a rudimentary method calls
@@ -214,6 +227,9 @@ public void services_dialog_characters_received(List<DialogCharacter> dialogChar
 	mGame.dialogsModel.dialogCharactersReceived(dialogCharacters);
 }
 //	SERVICES_DIALOG_OPTIONS_RECEIVED", nil, @{@"dialogOptions":dialogOptions});
+public void services_dialog_options_received(List<DialogOption> dialogOptions) {
+	mGame.dialogsModel.dialogOptionsReceived(dialogOptions);
+}
 //	SERVICES_DIALOG_RECEIVED", nil, @{@"dialog_character":dialogCharacter});
 //	SERVICES_DIALOG_RECEIVED", nil, @{@"dialog_option":dialogOption});
 //	SERVICES_DIALOG_RECEIVED", nil, @{@"dialog_script":dialogScript});
@@ -229,7 +245,13 @@ public void services_dialog_received(List<Dialog> dialogs) {
 //	SERVICES_DOWNLOADED_GAMES_RECEIVED", nil, @{@"games":d_games});
 //	SERVICES_EVENT_RECEIVED", nil, @{@"event":event});
 //	SERVICES_EVENTS_RECEIVED", nil, @{@"events":events});
+public void services_events_received(List<Event> events) {
+	mGame.eventsModel.eventsReceived(events);
+}
 //	SERVICES_FACTORIES_RECEIVED", nil, @{@"factories":factories});
+public void services_factories_received(List<Factory> factories) {
+	mGame.factoriesModel.factoriesReceived(factories);
+}
 //	SERVICES_FACTORY_RECEIVED", nil, @{@"factory":factory});
 //	SERVICES_GAME_FETCH_FAILED", nil, nil); }
 //	SERVICES_GAME_INSTANCES_TOUCHED", nil, nil);
@@ -240,22 +262,37 @@ public void services_dialog_received(List<Dialog> dialogs) {
 //	SERVICES_GROUPS_RECEIVED", nil, @{@"groups":groups});
 //	SERVICES_INSTANCE_RECEIVED", nil, @{@"instance":instance});
 //	SERVICES_INSTANCES_RECEIVED", nil, @{@"instances":instances});
+public void services_instances_received(List<Instance> instances) {
+	mGame.instancesModel.gameInstancesReceived(instances);
+}
 //	SERVICES_ITEM_RECEIVED", nil, @{@"item":item});
 //	SERVICES_ITEMS_RECEIVED", nil, @{@"items":items});
 //	SERVICES_LOGIN_FAILED",nil,nil); return; }
 //	SERVICES_LOGIN_RECEIVED",nil,@{@"user":user});
 //	SERVICES_MEDIA_RECEIVED", nil, @{@"media":mediaDict}); // fakes an entire list and does same as fetching all media
 //	SERVICES_MEDIAS_RECEIVED", nil, @{@"medias":mediaDicts});
+public void services_medias_received(List<Map<String, String>> rawMediaArr) {
+
+	mMediaModel.mediasReceived(rawMediaArr);
+}
 //	SERVICES_MINE_GAMES_RECEIVED", nil, @{@"games":[self parseGames:(NSArray *)result.resultData]});
 //	SERVICES_NEARBY_GAMES_RECEIVED", nil, @{@"games":[self parseGames:(NSArray *)result.resultData]});
 //	SERVICES_NOTE_COMMENT_RECEIVED", nil, @{@"note_comment":noteComment});
 //	SERVICES_NOTE_COMMENTS_RECEIVED", nil, @{@"note_comments":noteComments});
+public void services_note_comments_received(List<NoteComment> noteComments) {
+	mGame.notesModel.noteCommentsReceived(noteComments);
+}
 //	SERVICES_NOTE_RECEIVED", nil, @{@"note":note});
 //	SERVICES_NOTES_RECEIVED", nil, @{@"notes":notes});
-//	SERVICES_OBJECT_TAGS_RECEIVED", nil, @{@"object_tags":@[newObjectTag]});
 //	SERVICES_OBJECT_TAGS_RECEIVED", nil, @{@"object_tags":objectTags});
+public void services_object_tags_received(List<ObjectTag> objectTags) {
+	mGame.tagsModel.objectTagsReceived(objectTags);
+}
 //	SERVICES_OVERLAY_RECEIVED", nil, @{@"overlay":overlay});
 //	SERVICES_OVERLAYS_RECEIVED", nil, @{@"overlays":overlays});
+public void services_overlays_received(List<Overlay> overlays) {
+	mGame.overlaysModel.overlaysReceived();
+}
 //	SERVICES_PLAQUE_RECEIVED", nil, @{@"plaque":plaque});
 //	SERVICES_PLAQUES_RECEIVED", nil, @{@"plaques":plaques});
 //	SERVICES_PLAYER_GROUP_RECEIVED",nil,@{@"group":playerGroup}); //just return current
@@ -266,8 +303,6 @@ public void services_player_instances_rceived(Collection<Instance> insts) {
 public void services_player_instances_touched() {
 	mGame.playerInstancesModel.playerInstancesTouched();
 }
-
-
 
 //	SERVICES_PLAYER_LOGS_RECEIVED", nil, @{@"logs":logs});
 //	SERVICES_PLAYER_OVERLAYS_RECEIVED", nil, @{@"overlays":overlays});
@@ -287,26 +322,44 @@ public void services_player_quests_received(Map<String, List<Quest>> pquests) {
 //	SERVICES_POPULAR_GAMES_RECEIVED", nil, @{@"games":[self parseGames:(NSArray *)result.resultData]});
 //	SERVICES_QUEST_RECEIVED", nil, @{@"quest":quest});
 //	SERVICES_QUESTS_RECEIVED", nil, @{@"quests":quests});
+public void services_quests_received(List<Quest> quests) {
+	mGame.questsModel.questsReceived(quests);
+}
 //	SERVICES_RECENT_GAMES_RECEIVED", nil, @{@"games":[self parseGames:(NSArray *)result.resultData]});
 //	SERVICES_REQUIREMENT_AND_PACKAGES_RECEIVED", nil, @{@"requirement_and_packages":raps});
 //	SERVICES_REQUIREMENT_ATOMS_RECEIVED", nil, @{@"requirement_atoms":as});
 //	SERVICES_REQUIREMENT_ROOT_PACKAGES_RECEIVED", nil, @{@"requirement_root_packages":rrps});
 //	SERVICES_SCENE_RECEIVED", nil, @{@"scene":scene});
 //	SERVICES_SCENE_TOUCHED", nil, nil);
+public void services_scene_touched() {
+	mGame.scenesModel.sceneTouched();
+}
 //	SERVICES_SCENES_RECEIVED", nil, @{@"scenes":scenes});
 //	SERVICES_SEARCH_GAMES_RECEIVED", nil, @{@"games":[self parseGames:(NSArray *)result.resultData]});
 //	SERVICES_TAB_RECEIVED", nil, @{@"tab":tab});
 //	SERVICES_TABS_RECEIVED", nil, @{@"tabs":tabs});
+public void services_tabs_received(List<Tab> tabs) {
+	mGame.tabsModel.tabsReceived(tabs);
+}
 //	SERVICES_TAG_RECEIVED", nil, @{@"tag":tag});
 //	SERVICES_TAGS_RECEIVED", nil, @{@"tags":tags});
+public void services_tags_received(List<Tag> tags) {
+	mGame.tagsModel.tagsReceived(tags);
+}
 //	SERVICES_TRIGGER_RECEIVED", nil, @{@"trigger":trigger});
 //	SERVICES_TRIGGERS_RECEIVED", nil, @{@"triggers":triggers});
+public void services_triggers_received(List<Trigger> triggers) {
+	mGame.triggersModel.triggersReceived(triggers);
+}
 //	SERVICES_UPDATE_USER_FAILED",nil,nil); return; }
 //	SERVICES_UPDATE_USER_RECEIVED",nil,@{@"user":user});
 //	SERVICES_USER_RECEIVED", nil, @{@"user":user});
 //	SERVICES_USERS_RECEIVED", nil, @{@"users":users});
 //	SERVICES_WEB_PAGE_RECEIVED", nil, @{@"web_page":webPage});
 //	SERVICES_WEB_PAGES_RECEIVED", nil, @{@"webPages":webPages});
+public void services_web_pages_received(List<WebPage> webPages) {
+	mGame.webPagesModel.webPagesReceived(webPages);
+}
 //	USER_MOVED",nil,nil);
 public void user_moved() {
 	// todo: display Queue Model reevaluateAutoTriggers() - update UI locations e.g. map

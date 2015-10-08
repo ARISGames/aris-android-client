@@ -1,6 +1,7 @@
 package edu.uoregon.casls.aris_android.models;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
@@ -31,5 +32,49 @@ public class FactoriesModel extends ARISModel {
 	public long nGameDataToReceive () {
 		return 1;
 	}
+
+
+	public void requestGameData
+	{
+		this.requestFactories];
+	}
+	public void clearGameData
+	{
+		factories.clear();
+		n_game_data_received = 0;
+	}
+
+	public void factoriesReceived(List<Factory> newFactories)
+	{
+		this.updateFactories(newFactories);
+	}
+
+	public void updateFactories(List<Factory> newFactories)
+	{
+		Factory *newFactory;
+		NSNumber *newFactoryId;
+		for(long i = 0; i < newFactories.count; i++)
+		{
+			newFactory = [newFactories objectAtIndex:i];
+			newFactoryId = [NSNumber numberWithLong:newFactory.factory_id];
+			if(!factories[newFactoryId]) [factories setObject:newFactory forKey:newFactoryId];
+		}
+		_ARIS_NOTIF_SEND_(@"MODEL_FACTORIES_AVAILABLE",nil,nil);
+		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		n_game_data_received = 1;
+	}
+
+	public void requestFactories
+	{
+		[_SERVICES_ fetchFactories];
+	}
+
+// null factory (id == 0) NOT flyweight!!! (to allow for temporary customization safety)
+	- (Factory *) factoryForId:(long)factory_id
+	{
+		if(!factory_id) return [[Factory alloc] init];
+		return factories[[NSNumber numberWithLong:factory_id]];
+	}
+
 
 }

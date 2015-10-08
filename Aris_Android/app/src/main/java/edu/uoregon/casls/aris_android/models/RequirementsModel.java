@@ -156,7 +156,7 @@ public class RequirementsModel extends ARISModel {
 		}
 		if(a.requirement.contentEquals("PLAYER_HAS_ITEM"))
 		{
-			return a.bool_operator == (mGame.playerInstancesModel.qtyOwnedForItem(a.content_id) >= a.qty) //_MODEL_PLAYER_INSTANCES_ qtyOwnedForItem:a.content_id >= a.qty);
+			return a.bool_operator == (mGame.playerInstancesModel.qtyOwnedForItem(a.content_id) >= a.qty); //_MODEL_PLAYER_INSTANCES_ qtyOwnedForItem:a.content_id >= a.qty);
 		}
 		if(a.requirement.contentEquals("PLAYER_HAS_TAGGED_ITEM"))
 		{
@@ -220,7 +220,7 @@ public class RequirementsModel extends ARISModel {
 		}
 		if(a.requirement.contentEquals("PLAYER_HAS_COMPLETED_QUEST"))
 		{
-			return a.bool_operator == mGame.logsModel.hasLogType("COMPLETE_QUEST", a.content_id;
+			return a.bool_operator == mGame.logsModel.hasLogType("COMPLETE_QUEST", a.content_id);
 		}
 		if(a.requirement.contentEquals("PLAYER_HAS_RECEIVED_INCOMING_WEB_HOOK"))
 		{
@@ -255,7 +255,7 @@ public class RequirementsModel extends ARISModel {
 	{
 		Requirement r = new Requirement();
 		RequirementRootPackage rrp = new RequirementRootPackage();
-		if (requirement_root_package_id == 0) return new RequirementRootPackage;
+		if (requirement_root_package_id == 0) return new RequirementRootPackage();
 		return requirementRootPackages.get(requirement_root_package_id); // objectForKey:NSNumber numberWithLong:requirement_root_package_id;
 	}
 	public RequirementAndPackage requirementAndPackageForId(long requirement_and_package_id)
