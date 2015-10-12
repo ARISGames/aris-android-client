@@ -1,6 +1,8 @@
 package edu.uoregon.casls.aris_android.models;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +15,7 @@ import edu.uoregon.casls.aris_android.data_objects.Item;
  */
 public class EventsModel extends ARISModel {
 
-	public Map<Long, Event> events = new LinkedHashMap<>();
+	public Collection<Event> events = new LinkedList<>();
 	public GamePlayActivity mGamePlayAct;
 
 	public void initContext(GamePlayActivity gamePlayAct) {
@@ -44,7 +46,7 @@ public class EventsModel extends ARISModel {
 
 	public void requestGameData
 	{
-		this.requestEvents];
+		this.requestEvents();
 	}
 	
 	public void eventsReceived(List<Event> newEvents)
@@ -120,14 +122,14 @@ public class EventsModel extends ARISModel {
 		[_MODEL_LOGS_ playerRanEventPackageId:event_package_id];
 	}
 
-	public void requestEvents
+	public void requestEvents()
 	{
-		[_SERVICES_ fetchEvents];
+		[_SERVICES_ fetchEvents();
 	}
 
-	- (NSArray *) eventsForEventPackageId:(long)event_package_id
+	public List<Event> eventsForEventPackageId(long event_package_id)
 	{
-		Event *e;
+		Event e;
 		NSMutableArray *package_events = [[NSMutableArray alloc] init];
 		NSArray *allEvents = [events allValues];
 		for(long i = 0; i < allEvents.count; i++)
@@ -139,22 +141,22 @@ public class EventsModel extends ARISModel {
 		return package_events;
 	}
 
-	- (NSArray *) events
+	public List<Event> events()
 	{
-		return [events allValues];
+		return events.values; // allValues];
 	}
 
 // null event (id == 0) NOT flyweight!!! (to allow for temporary customization safety)
-	- (Event *) eventForId:(long)event_id
+	public Event eventForId(long event_id)
 	{
 		if(!event_id) return [[Event alloc] init];
 		return [events objectForKey:[NSNumber numberWithLong:event_id]];
 	}
 
 // NOT flyweight!!! (because joke objects)
-	- (EventPackage *) eventPackageForId:(long)event_package_id
+	public EventPackage eventPackageForId(long event_package_id)
 	{
-		EventPackage *ep = [[EventPackage alloc] init];
+		EventPackage ep = new EventPackage();
 		ep.event_package_id = event_package_id;
 		return ep;
 	}
