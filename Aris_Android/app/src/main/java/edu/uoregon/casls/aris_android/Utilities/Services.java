@@ -174,6 +174,9 @@ public class Services {
 	public void fetchNotes() {
 	}
 
+	public void fetchNoteComments() {
+	}
+
 	public void createNoteComment(NoteComment n) {
 	}
 
@@ -181,5 +184,24 @@ public class Services {
 	}
 
 	public void deleteNoteCommentId(long note_comment_id) {
+	}
+
+	public void fetchEvents() {
+	}
+
+	public void fetchFactories() {
+	}
+
+	public void fetchGroups() {
+	}
+
+	public void touchGroupForPlayer() {
+	}
+
+	public void fetchGroupForPlayer() {
+	}
+
+	public void setPlayerGroupId(long group_id) {
+
 	}
 }

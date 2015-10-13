@@ -25,23 +25,14 @@ public class FactoriesModel extends ARISModel {
 		n_game_data_received = 0;
 	}
 
-	public void requestFactories() {
-
-	}
-
 	public long nGameDataToReceive () {
 		return 1;
 	}
 
 
-	public void requestGameData
+	public void requestGameData()
 	{
-		this.requestFactories];
-	}
-	public void clearGameData
-	{
-		factories.clear();
-		n_game_data_received = 0;
+		this.requestFactories();
 	}
 
 	public void factoriesReceived(List<Factory> newFactories)
@@ -51,29 +42,27 @@ public class FactoriesModel extends ARISModel {
 
 	public void updateFactories(List<Factory> newFactories)
 	{
-		Factory *newFactory;
-		NSNumber *newFactoryId;
-		for(long i = 0; i < newFactories.count; i++)
+		long newFactoryId;
+		for (Factory newFactory : newFactories)
 		{
-			newFactory = [newFactories objectAtIndex:i];
-			newFactoryId = [NSNumber numberWithLong:newFactory.factory_id];
-			if(!factories[newFactoryId]) [factories setObject:newFactory forKey:newFactoryId];
+			newFactoryId = newFactory.factory_id;
+			if(!factories.containsKey(newFactoryId)) factories.put(newFactoryId, newFactory);
 		}
-		_ARIS_NOTIF_SEND_(@"MODEL_FACTORIES_AVAILABLE",nil,nil);
-		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_factories_available(); //_ARIS_NOTIF_SEND_(@"MODEL_FACTORIES_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
 		n_game_data_received = 1;
 	}
 
-	public void requestFactories
+	public void requestFactories()
 	{
-		[_SERVICES_ fetchFactories];
+		mGamePlayAct.mServices.fetchFactories();
 	}
 
 // null factory (id == 0) NOT flyweight!!! (to allow for temporary customization safety)
-	- (Factory *) factoryForId:(long)factory_id
+	public Factory factoryForId(long factory_id)
 	{
-		if(!factory_id) return [[Factory alloc] init];
-		return factories[[NSNumber numberWithLong:factory_id]];
+		if(factory_id != 0) return new Factory();
+		return factories.get(factory_id); //NSNumber numberWithLong:factory_id]];
 	}
 
 

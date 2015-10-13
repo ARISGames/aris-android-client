@@ -49,7 +49,7 @@ public class TagsModel extends ARISModel {
 		long newTagId;
 		for (Tag newTag : newTags) {
 			newTagId = newTag.tag_id;
-			if (tags.get(newTagId) == null)
+			if (!tags.containsKey(newTagId))
 				tags.put(newTagId, newTag);// setObject:newTag forKey:newTagId];
 		}
 		n_game_data_received++;
@@ -61,7 +61,7 @@ public class TagsModel extends ARISModel {
 		long newObjectTagId;
 		for (ObjectTag newObjectTag : newObjectTags) {
 			newObjectTagId = newObjectTag.object_tag_id;
-			if (objectTags.get(newObjectTagId) == null)
+			if (!objectTags.containsKey(newObjectTagId))
 				objectTags.put(newObjectTagId, newObjectTag);// setObject:newObjectTag forKey:newObjectTagId];
 		}
 		n_game_data_received++;
@@ -74,12 +74,12 @@ public class TagsModel extends ARISModel {
 		mGamePlayAct.mServices.fetchObjectTags();
 	}
 
-	public List<ObjectTag> tagsForObjectType(String t, long object_id) {
+	public List<Tag> tagsForObjectType(String t, long object_id) {
 		Collection<ObjectTag> otags = objectTags.values();// allValues];
-		List<ObjectTag> objects_tags = new LinkedList<>();
+		List<Tag> objects_tags = new LinkedList<>();
 		for (ObjectTag otag : otags) {
 			if (otag.object_type.contentEquals(t) && otag.object_id == object_id)
-				objects_tags.add(otag);// addObject:this.tagForId:otag.tag_id]];
+				objects_tags.add(this.tagForId(otag.tag_id));
 		}
 		return objects_tags;
 	}

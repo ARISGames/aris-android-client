@@ -24,8 +24,7 @@ public class Media {
 
 //	public MediaCD mediaCD = new MediaCD(); // unsure how this plays in
 
-	// From iOS. Carl suggested these hold the actual file binary data.
-	// Could not find any place in iOS where data is getting store locally on client.
+	// From iOS. These (CDs) are all in local Core Data presistent storage database
 //	@property (nonatomic, strong) NSData *data;
 //	@property (nonatomic, strong) NSData *thumb;
 

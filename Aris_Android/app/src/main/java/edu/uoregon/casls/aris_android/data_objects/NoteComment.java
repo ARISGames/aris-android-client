@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by smorison on 8/19/15.
  */
-public class NoteComment {
+public class NoteComment implements Comparable<NoteComment> {
 	public long note_comment_id;
 	public long note_id;
 	public long user_id;
@@ -14,4 +14,7 @@ public class NoteComment {
 	public String user_display_name;
 	public Date created = new Date();
 
+	public int compareTo(NoteComment ncToCompare) { // just compares create
+		return created.compareTo(ncToCompare.created);
+	}
 }

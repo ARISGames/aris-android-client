@@ -1,6 +1,7 @@
 package edu.uoregon.casls.aris_android.models;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
@@ -24,18 +25,101 @@ public class GroupsModel extends ARISModel {
 		n_game_data_received = 0;
 	}
 
-	public void groupsReceived() { // method here to conform with iOS version of this class
-		this.updateGroups();
+	public void requestGameData() {
+		this.requestGroups();
+		this.touchPlayerGroup();
 	}
 
-	private void updateGroups() {
-		n_game_data_received++;
-//		_ARIS_NOTIF_SEND_(@"MODEL_GROUPS_AVAILABLE",nil,nil);
-//		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+	public long nGameDataToReceive() {
+		return 2;
 	}
 
-	public long nGameDataToReceive () {
+	public void requestPlayerData() {
+		this.requestPlayerGroup();
+	}
+
+	public void clearPlayerData() {
+		playerGroup = null;
+		n_player_data_received = 0;
+	}
+
+	public long nPlayerDataToReceive() {
 		return 1;
+	}
+
+	public void groupsReceived(List<Group> newGroups) {
+		this.updateGroups(newGroups);
+	}
+
+	public void playerGroupReceived(Group newGroup) {
+//		Group s = this.groupForId(((Group)notif.userInfo["group"]).group_id); //todo: figure out if this is needed for now I'm shorting the circuit
+//		this.updatePlayerGroup(s);
+		this.updatePlayerGroup(newGroup);
+	}
+
+	public void groupTouched(long groupId) {
+		n_game_data_received++;
+		mGamePlayAct.mDispatch.model_group_touched(); //_ARIS_NOTIF_SEND_("MODEL_GROUP_TOUCHED", null, null);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_("MODEL_GAME_PIECE_AVAILABLE", null, null);
+	}
+
+	public void updateGroups(List<Group> newGroups) {
+		long newGroupId;
+		int size = newGroups.size();
+		for (Group newGroup : newGroups) {
+			newGroupId = newGroup.group_id;
+			if (!groups.containsKey(newGroupId)) {
+				groups.put(newGroupId, newGroup); //setObject:newGroup forKey:newGroupId];
+			}
+		}
+		n_game_data_received++;
+		mGamePlayAct.mDispatch.model_groups_available(); //_ARIS_NOTIF_SEND_("MODEL_GROUPS_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_("MODEL_GAME_PIECE_AVAILABLE", null, null);
+	}
+
+	public void updatePlayerGroup(Group newGroup) {
+		playerGroup = newGroup;
+		n_player_data_received++;
+		mGamePlayAct.mDispatch.model_groups_player_group_available(); //_ARIS_NOTIF_SEND_("MODEL_GROUPS_PLAYER_GROUP_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.model_game_player_piece_available(); //_ARIS_NOTIF_SEND_("MODEL_GAME_PLAYER_PIECE_AVAILABLE", null, null);
+	}
+
+	public void requestGroups() {
+		mGamePlayAct.mServices.fetchGroups();
+	}
+
+	public void touchPlayerGroup() {
+		mGamePlayAct.mServices.touchGroupForPlayer();
+	}
+
+	public void requestPlayerGroup() {
+		if (this.playerDataReceived() && !mGamePlayAct.mGame.network_level.equals("REMOTE")) {
+			mGamePlayAct.mDispatch.services_player_group_received(playerGroup); //_ARIS_NOTIF_SEND_("SERVICES_PLAYER_GROUP_RECEIVED", null, @{@"group":playerGroup}); //just return current
+		}
+		if (!this.playerDataReceived() || mGamePlayAct.mGame.network_level.equals("HYBRID") || mGamePlayAct.mGame.network_level.equals("REMOTE")) {
+			mGamePlayAct.mServices.fetchGroupForPlayer();
+		}
+	}
+
+	public Group playerGroup() {
+		return playerGroup;
+	}
+
+	public void setPlayerGroup(Group g) {
+		playerGroup = g;
+		mGamePlayAct.mGame.logsModel.playerChangedGroupId(g.group_id);
+		if (!mGamePlayAct.mGame.network_level.equals("LOCAL")) {
+			mGamePlayAct.mServices.setPlayerGroupId(g.group_id);
+		}
+		mGamePlayAct.mDispatch.model_groups_player_group_available(); //_ARIS_NOTIF_SEND_("MODEL_GROUPS_PLAYER_GROUP_AVAILABLE", null, null);
+	}
+
+	//null group (id == 0) NOT flyweight!!! (to allow for temporary customization safety)
+	public Group groupForId(long group_id) {
+		if (group_id == 0) {
+			return new Group();
+		}
+		return groups.get(group_id);
 	}
 
 }

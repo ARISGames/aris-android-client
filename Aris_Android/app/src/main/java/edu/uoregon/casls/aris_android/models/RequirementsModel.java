@@ -64,7 +64,7 @@ public class RequirementsModel extends ARISModel {
 
 	public void updateRequirementRootPackages(List<RequirementRootPackage> newRRPs) {
 		for (RequirementRootPackage newRRP : newRRPs) {
-			if (requirementRootPackages.get(newRRP.requirement_root_package_id) == null)
+			if (!requirementRootPackages.containsKey(newRRP.requirement_root_package_id))
 				requirementRootPackages.put(newRRP.requirement_root_package_id, newRRP); // setObject:newRRP forKey:newRRPId;
 		}
 		n_game_data_received++;
@@ -78,7 +78,7 @@ public class RequirementsModel extends ARISModel {
 	}
 	public void updateRequirementAndPackages(List<RequirementAndPackage> newRAPs) {
 		for (RequirementAndPackage newRAP : newRAPs) {
-			if (requirementAndPackages.get(newRAP.requirement_and_package_id) == null)
+			if (!requirementAndPackages.containsKey(newRAP.requirement_and_package_id))
 				requirementAndPackages.put(newRAP.requirement_and_package_id, newRAP);
 		}
 		n_game_data_received++;
@@ -92,7 +92,7 @@ public class RequirementsModel extends ARISModel {
 	}
 	public void updateRequirementAtoms(List<RequirementAtom> newRAs) {
 		for (RequirementAtom newRA : newRAs) {
-			if(requirementAtoms.get(newRA.requirement_atom_id) == null) requirementAtoms.put(newRA.requirement_atom_id, newRA); //objectForKey:newRAId) requirementAtoms setObject:newRA forKey:newRAId;
+			if(!requirementAtoms.containsKey(newRA.requirement_atom_id)) requirementAtoms.put(newRA.requirement_atom_id, newRA); //objectForKey:newRAId) requirementAtoms setObject:newRA forKey:newRAId;
 		}
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_requirement_atoms_packages_available(); //_ARIS_NOTIF_SEND_(@"MODEL_REQUIREMENT_ATOMS_AVAILABLE",nil,nil);

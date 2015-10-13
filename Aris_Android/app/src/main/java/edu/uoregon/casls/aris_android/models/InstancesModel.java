@@ -8,9 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
-import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
-import edu.uoregon.casls.aris_android.data_objects.User;
 
 /**
  * Created by smorison on 8/20/15.
@@ -83,7 +81,7 @@ public class InstancesModel extends ARISModel {
 
 		for (Instance newInstance : newInstances) {
 			newInstanceId = newInstance.instance_id;
-			if (instances.get(newInstanceId) == null) {
+			if (!instances.containsKey(newInstanceId)) {
 				//No instance exists- give player instance with 0 qty and let it be updated like all the others
 				Instance fakeExistingInstance = new Instance();
 				fakeExistingInstance.initContext(mGamePlayAct);
@@ -138,7 +136,7 @@ public class InstancesModel extends ARISModel {
 		if(this.playerDataReceived() &&
 		!mGamePlayAct.mGame.network_level.contentEquals("REMOTE")) {
 			Collection<Instance> pinsts = instances.values();
-			mGamePlayAct.mDispatch.services_player_instances_rceived(pinsts); // ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_INSTANCES_RECEIVED",nil,@{@"instances":pinsts});
+			mGamePlayAct.mDispatch.services_player_instances_received(pinsts); // ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_INSTANCES_RECEIVED",nil,@{@"instances":pinsts});
 		}
 		if (!this.playerDataReceived() ||
 			mGamePlayAct.mGame.network_level.contentEquals("HYBRID") ||

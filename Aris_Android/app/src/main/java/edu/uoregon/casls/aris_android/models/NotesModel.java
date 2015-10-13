@@ -1,11 +1,16 @@
 package edu.uoregon.casls.aris_android.models;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.data_objects.Game;
+import edu.uoregon.casls.aris_android.data_objects.Instance;
 import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.data_objects.Note;
 import edu.uoregon.casls.aris_android.data_objects.NoteComment;
@@ -19,6 +24,9 @@ public class NotesModel extends ARISModel {
 
 	public Map<Long, Note> notes = new LinkedHashMap<>();
 	public Map<Long, NoteComment> noteComments = new LinkedHashMap<>();
+	public List<Note> playerNotes = new LinkedList<>();
+	public List<Note> listNotes = new LinkedList<>();
+	public List<Note> notesMatchingTag = new LinkedList<>();
 	public GamePlayActivity mGamePlayAct;
 	public Game mGame;
 
@@ -34,197 +42,163 @@ public class NotesModel extends ARISModel {
 		n_game_data_received = 0;
 	}
 
-	public void requestNotes() {
-	}
-
-	public void requestNoteComments() {
-	}
-
 	public long nGameDataToReceive() {
 		return 2;
 	}
 
-	public void requestGameData()
-	{
-		this.requestNotes];
-		this.requestNoteComments];
+	public void requestGameData() {
+		this.requestNotes();
+		this.requestNoteComments();
 	}
 
-	public void createNote(Note n, Tag t, Media m, Trigger tr)
-	{
+	public void createNote(Note n, Tag t, Media m, Trigger tr) {
 		mGamePlayAct.mServices.createNote(n, t, m, tr); //just forward to services
 	}
-	public void saveNote(Note n, Tag t, Media m, Trigger tr)
-	{
+
+	public void saveNote(Note n, Tag t, Media m, Trigger tr) {
 		mGamePlayAct.mServices.updateNote(n, t, m, tr); //just forward to services
 	}
-	public void deleteNoteId(long note_id)
-	{
+
+	public void deleteNoteId(long note_id) {
 		mGamePlayAct.mServices.deleteNoteId(note_id); //just forward to services
 		notes.remove(note_id);
 		this.invalidateCaches();
 	}
 
-	public void createNoteComment(NoteComment n)
-	{
+	public void createNoteComment(NoteComment n) {
 		mGamePlayAct.mServices.createNoteComment(n); //just forward to services
 	}
-	public void saveNoteComment(NoteComment n)
-	{
+
+	public void saveNoteComment(NoteComment n) {
 		mGamePlayAct.mServices.updateNoteComment(n); //just forward to services
 	}
-	public void deleteNoteCommentId(long note_comment_id)
-	{
+
+	public void deleteNoteCommentId(long note_comment_id) {
 		mGamePlayAct.mServices.deleteNoteCommentId(note_comment_id); //just forward to services
 		noteComments.remove(note_comment_id);// removeObjectForKey:[NSNumber numberWithLong:note_comment_id]];
 	}
 
-	public void invalidateCaches()
-	{
+	public void invalidateCaches() {
 		playerNotes.clear();
 		listNotes.clear();
 		notesMatchingTag.clear();
 	}
 
-	public void notesReceived(List<Note> notes)
-	{
+	public void notesReceived(List<Note> notes) {
 		this.updateNotes(notes);
 	}
 
-	public void noteReceived(List<Note> notes)
-	{
+	public void noteReceived(List<Note> notes) {
 		this.updateNotes(notes);
 	}
 
-	public void updateNotes(List<Note> newNotes)
-	{
+	public void updateNotes(List<Note> newNotes) {
 		this.invalidateCaches();
-		Note newNote;
-		NSNumber newNoteId;
-		for(long i = 0; i < newNotes.count; i++)
-		{
-			newNote = [newNotes objectAtIndex:i];
-			newNoteId = [NSNumber numberWithLong:newNote.note_id];
-			if(!notes[newNoteId]) [notes setObject:newNote forKey:newNoteId];
+		long newNoteId;
+		for (Note newNote : newNotes) {
+			newNoteId = newNote.note_id;
+//			if(!notes[newNoteId]) [notes setObject:newNote forKey:newNoteId];
+			if (!notes.containsKey(newNoteId)) notes.put(newNoteId, newNote);
 		}
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_notes_avaialble(); //_ARIS_NOTIF_SEND_(@"MODEL_NOTES_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
-	public void requestNotes
-	{
+	public void requestNotes() {
 		mGamePlayAct.mServices.fetchNotes();
 	}
 
-	public void noteCommentsReceived(List<NoteComment> newNoteComments)
-	{
+	public void noteCommentsReceived(List<NoteComment> newNoteComments) {
 		this.updateNoteComments(newNoteComments);
 	}
 
-	public void noteCommentReceived(List<NoteComment> newNoteComments)
-	{
+	public void noteCommentReceived(List<NoteComment> newNoteComments) {
 		this.updateNoteComments(newNoteComments);
 	}
 
-	public void updateNoteComments(List<NoteComment> newNoteComments)
-	{
-		NoteComment *newComment;
-		NSNumber *newCommentId;
-		for(long i = 0; i < newNoteComments.count; i++)
-		{
-			newComment = [newNoteComments objectAtIndex:i];
-			newCommentId = [NSNumber numberWithLong:newComment.note_comment_id];
-			if(!noteComments[newCommentId]) [noteComments setObject:newComment forKey:newCommentId];
+	public void updateNoteComments(List<NoteComment> newNoteComments) {
+		long newCommentId;
+		for (NoteComment newComment : newNoteComments) {
+			newCommentId = newComment.note_comment_id;
+			if (!noteComments.containsKey(newCommentId)) noteComments.put(newCommentId, newComment);
 		}
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.note_comments_available(); //_ARIS_NOTIF_SEND_(@"MODEL_NOTE_COMMENTS_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
-	public void requestNoteComments
-	{
-		mGamePlayAct.mServices.fetchNoteComments];
+	public void requestNoteComments() {
+		mGamePlayAct.mServices.fetchNoteComments();
 	}
 
-// null note (id == 0) NOT flyweight!!! (to allow for temporary customization safety)
-	- (Note *) noteForId:(long)note_id
-	{
-		if(!note_id) return [[Note alloc] init];
-		return notes[[NSNumber numberWithLong:note_id]];
+	// null note (id == 0) NOT flyweight!!! (to allow for temporary customization safety)
+	public Note noteForId(long note_id) {
+		if (note_id == 0) return new Note();
+		return notes.get(note_id);
 	}
 
-	- (NSArray *) notes
-	{
-		return [notes allValues];
+	public List<Note> notes() {
+		return new ArrayList(notes.values());// allValues];
 	}
 
-	- (NSArray *) playerNotes
-	{
-		if(playerNotes) return playerNotes;
-		playerNotes = [[NSMutableArray alloc] init];
-		NSArray *ns = [notes allValues];
-		for(long i = 0; i < ns.count; i++)
-			if(((Note *)ns[i]).user_id == _MODEL_PLAYER_.user_id) [playerNotes addObject:ns[i]];
+	public List<Note> playerNotes() {
+		if (!playerNotes.isEmpty()) return playerNotes;
+//		playerNotes = new List<Note>;
+		Collection<Note> ns = notes.values();
+		for (Note n : ns)
+			if (n.user_id == Long.getLong(mGamePlayAct.mPlayer.user_id)) playerNotes.add(n);
 		return playerNotes;
 	}
 
-	- (NSArray *) listNotes
-	{
-		if(listNotes) return listNotes;
-		listNotes = [[NSMutableArray alloc] init];
+	public List<Note> listNotes() {
+		if (!listNotes.isEmpty()) return listNotes;
+//		listNotes = new List<Note>;
 
-		for(long i = 0; i < _MODEL_TRIGGERS_.playerTriggers.count; i++)
-		{
-			Trigger  *trigger  = _MODEL_TRIGGERS_.playerTriggers[i];
-			Instance *instance = [_MODEL_INSTANCES_ instanceForId:trigger.instance_id];
+		for (int i = 0; i < mGame.triggersModel.playerTriggers.size(); i++) {
+			Trigger trigger = mGame.triggersModel.playerTriggers.get(i);
+			Instance instance = mGame.instancesModel.instanceForId(trigger.instance_id);
 
-			if([instance.object_type isEqualToString:@"NOTE"])
-			{
-				Note *note = (Note *)instance.object;
-				if(note) [listNotes addObject:note];
+			if (instance.object_type.contentEquals("NOTE")) {
+				Note note = (Note) instance.object();
+				if (note != null) listNotes.add(note); //[listNotes addObject:note];
 			}
 		}
 
 		return listNotes;
 	}
 
-	- (NSArray *) notesMatchingTag:(Tag*)tag
-	{
-		if(notesMatchingTag) return notesMatchingTag;
-		notesMatchingTag = [[NSMutableArray alloc] init];
-		NSArray *ns = [notes allValues];
-		for(long i = 0; i < ns.count; i++)
-		{
-			NSArray *tags = [_MODEL_TAGS_ tagsForObjectType:@"NOTE" id:((Note *)ns[i]).note_id];
-			for(long j = 0; j < tags.count; j++)
-				if(tag == tags[j]) [notesMatchingTag addObject:ns[i]];
+	public List<Note> notesMatchingTag(Tag tag) {
+		if (!notesMatchingTag.isEmpty()) return notesMatchingTag;
+		Collection<Note> ns = notes.values();
+		for (Note n : ns) {
+			List<Tag> tags = mGame.tagsModel.tagsForObjectType("NOTE", n.note_id);
+			for (Tag t : tags)
+				if (tag == t) notesMatchingTag.add(n);// addObject:ns[i]];
 		}
 		return notesMatchingTag;
 	}
 
-// null note (id == 0) NOT flyweight!!! (to allow for temporary customization safety)
-	- (NoteComment *) noteCommentForId:(long)note_comment_id
-	{
-		if(!note_comment_id) return [[NoteComment alloc] init];
-		return noteComments[[NSNumber numberWithLong:note_comment_id]];
+	// null note (id == 0) NOT flyweight!!! (to allow for temporary customization safety)
+	public NoteComment noteCommentForId(long note_comment_id) {
+		if (note_comment_id == 0) return new NoteComment();
+		return noteComments.get(note_comment_id);
 	}
 
-	- (NSArray *) noteComments
-	{
-		return [noteComments allValues];
+	public List<NoteComment> noteComments() {
+		return new ArrayList<>(noteComments.values());// allValues];
 	}
 
-	- (NSArray *) noteCommentsForNoteId:(long)note_id
-	{
-		NSMutableArray *noteCommentsMatchingNote = [[NSMutableArray alloc] init];
-		NSArray *ncs = [noteComments allValues];
-		for(long i = 0; i < ncs.count; i++)
-			if(((NoteComment *)ncs[i]).note_id == note_id) [noteCommentsMatchingNote addObject:ncs[i]];
-		return _ARIS_ARRAY_SORTED_ON_(noteCommentsMatchingNote,@"created");
+	public List<NoteComment> noteCommentsForNoteId(long note_id) {
+		List<NoteComment> noteCommentsMatchingNote = new ArrayList<>();
+		Collection<NoteComment> ncs = noteComments.values();// allValues];
+		for (NoteComment nc : ncs)
+			if (nc.note_id == note_id) noteCommentsMatchingNote.add(nc);
+
+		// sort by created field and return
+//		return _ARIS_ARRAY_SORTED_ON_(noteCommentsMatchingNote,@"created");
+		Collections.sort(noteCommentsMatchingNote);
+		return noteCommentsMatchingNote;
 	}
 
-	public Note noteForId(long object_id) {
-		return notes.get(object_id);
-	}
 }

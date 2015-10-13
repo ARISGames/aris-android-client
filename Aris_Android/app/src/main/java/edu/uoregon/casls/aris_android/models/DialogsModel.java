@@ -47,7 +47,8 @@ public class DialogsModel extends ARISModel {
 		long newDialogId;
 		for(Dialog newDialog : newDialogs) {
 			newDialogId = newDialog.dialog_id;
-			if(dialogs.get(newDialogId) == null) dialogs.put(newDialogId, newDialog); // setObject:newDialog forKey:newDialogId];
+			if(!dialogs.containsKey(newDialogId))
+				dialogs.put(newDialogId, newDialog); // setObject:newDialog forKey:newDialogId];
 		}
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_dialogs_available(); // a call to no one.		_ARIS_NOTIF_SEND_(@"MODEL_DIALOGS_AVAILABLE",nil,nil);
@@ -80,7 +81,8 @@ public class DialogsModel extends ARISModel {
 		long newDialogOptionId;
 		for(DialogOption newDialogOption : newDialogOptions) {
 			newDialogOptionId = newDialogOption.dialog_option_id;
-			if(dialogOptions.get(newDialogOptionId) == null) dialogOptions.put(newDialogOptionId, newDialogOption); // setObject:newDialogOption forKey:newDialogOptionId];
+			if (!dialogOptions.containsKey(newDialogOptionId))
+				dialogOptions.put(newDialogOptionId, newDialogOption); // setObject:newDialogOption forKey:newDialogOptionId];
 		}
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_dialog_options_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_DIALOG_OPTIONS_AVAILABLE",nil,nil);

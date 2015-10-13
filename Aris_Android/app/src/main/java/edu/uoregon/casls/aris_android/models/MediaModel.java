@@ -144,7 +144,7 @@ public class MediaModel extends ARISModel {
 		mGamePlayAct.mServices.fetchMedias();
 	}
 
-	public void requestMediaData
+	public void requestMediaData()
 	{
 		NSArray *media_ids = [mediaIdsToLoad allKeys];
 		Media *m;
@@ -171,7 +171,7 @@ public class MediaModel extends ARISModel {
 		[_SERVICES_MEDIA_ loadMedia:mediaDataLoadMedia[i] delegateHandle:mediaDataLoadDelegateHandles[i]]; //calls 'mediaLoaded' upon complete
 	}
 
-	public void mediaLoaded:(Media *)m
+	public void mediaLoaded(Media m)
 	{
 		mediaDataLoaded++;
 		_ARIS_NOTIF_SEND_(@"MODEL_MEDIA_DATA_LOADED",nil,nil);
@@ -183,7 +183,7 @@ public class MediaModel extends ARISModel {
 		}
 	}
 
-	- (Media *) mediaForId:(long)media_id
+	public Media mediaForId(long media_id)
 	{
 		if(media_id == 0) return nil;
 
@@ -285,7 +285,7 @@ public class MediaModel extends ARISModel {
 		return media;
 	}
 
-	- (Media *) newMedia
+	public Media newMedia()
 	{
 		MediaCD *mediaCD = [NSEntityDescription insertNewObjectForEntityForName:@"MediaCD" inManagedObjectContext:context];
 		mediaCD.media_id = [NSNumber numberWithLong:0];
@@ -294,7 +294,7 @@ public class MediaModel extends ARISModel {
 		return [[Media alloc] initWithMediaCD:mediaCD];
 	}
 
-	public void saveAlteredMedia:(Media *)m //yuck
+	public void saveAlteredMedia(Media m) //yuck
 	{
 		this.commitContext];
 	}

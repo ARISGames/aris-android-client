@@ -66,7 +66,7 @@ public class Instance {
 		if (this.object_type.contentEquals("SCENE"))    return mGamePlayAct.mGame.scenesModel.sceneForId(this.object_id).name;
 		if (this.object_type.contentEquals("NOTE"))
 		{
-			if(mGamePlayAct.mGame.notesModel.noteForId(this.object_id) == null)
+			if (mGamePlayAct.mGame.notesModel.noteForId(this.object_id) == null)
 			{
 				mGamePlayAct.fetchNoteById(this.object_id);
 			}
@@ -85,7 +85,7 @@ public class Instance {
 		if (this.object_type.contentEquals("SCENE"))    return mGamePlayAct.mGame.scenesModel.sceneForId(this.object_id).icon_media_id;
 		if (this.object_type.contentEquals("NOTE"))
 		{
-			if(mGamePlayAct.mGame.notesModel.noteForId(this.object_id) == null)
+			if (mGamePlayAct.mGame.notesModel.noteForId(this.object_id) == null)
 			{
 				mGamePlayAct.fetchNoteById(this.object_id);
 			}

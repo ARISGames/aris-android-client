@@ -52,7 +52,8 @@ public class LogsModel extends ARISModel {
 		long newLogId;
 		for (Log newLog : newLogs) {
 			newLogId = newLog.log_id;
-			if (logs.get(newLogId) == null)
+//			if (logs.get(newLogId) == null)
+			if (!logs.containsKey(newLogId))
 				logs.put(newLogId, newLog); // setObject:newLog forKey:newLogId);
 		}
 		mGamePlayAct.mDispatch.model_logs_available(); //_ARIS_NOTIF_SEND_(@"MODEL_LOGS_AVAILABLE",nil,nil);
