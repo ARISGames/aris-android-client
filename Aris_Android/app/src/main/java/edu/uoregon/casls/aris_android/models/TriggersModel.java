@@ -1,5 +1,6 @@
 package edu.uoregon.casls.aris_android.models;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,7 +15,7 @@ import edu.uoregon.casls.aris_android.data_objects.Trigger;
 public class TriggersModel extends ARISModel {
 
 	public Map<Long, Trigger> triggers = new LinkedHashMap<>();
-	public List<Trigger> playerTriggers = new LinkedList<>();
+	public List<Trigger> playerTriggers = new ArrayList<>();
 	public GamePlayActivity mGamePlayAct;
 
 	public void initContext(GamePlayActivity gamePlayAct) {

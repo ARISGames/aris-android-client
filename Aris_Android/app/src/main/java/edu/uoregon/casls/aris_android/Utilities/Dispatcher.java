@@ -133,7 +133,8 @@ public class Dispatcher {
 	public void model_group_touched() {
 		// no listeners
 	}
-//	MODEL_GROUPS_AVAILABLE",nil,nil);
+
+	//	MODEL_GROUPS_AVAILABLE",nil,nil);
 	public void model_groups_available() {
 		// no listeners
 	}
@@ -178,9 +179,21 @@ public class Dispatcher {
 	}
 
 	//	MODEL_MEDIA_AVAILABLE",nil,nil);
-//	MODEL_MEDIA_DATA_COMPLETE",nil,nil);
-//	MODEL_MEDIA_DATA_LOADED",nil,nil);
-//	MODEL_MINE_GAMES_AVAILABLE",nil,nil); }
+	public void model_media_available() {
+		// todo: iOS call = ARISMediaLoader.retryLoadingAllMedia()
+	}
+
+	//	MODEL_MEDIA_DATA_COMPLETE",nil,nil);
+	public void model_media_data_complete() {
+		// todo: iOS Call = LoadingViewController.mediaDataComplete() (calls beginGame!)
+	}
+
+	//	MODEL_MEDIA_DATA_LOADED",nil,nil);
+	public void model_media_data_loaded() {
+		// todo: iOS Call = LoadingViewController.mediaDataLoaded()
+	}
+
+	//	MODEL_MINE_GAMES_AVAILABLE",nil,nil); }
 //	MODEL_NEARBY_GAMES_AVAILABLE",nil,nil); }
 //	MODEL_NOTE_COMMENTS_AVAILABLE",nil,nil);
 	public void note_comments_available() {
@@ -365,7 +378,8 @@ public class Dispatcher {
 	public void services_player_group_received(Group playerGroup) {
 		mGame.groupsModel.playerGroupReceived(playerGroup);
 	}
-//	SERVICES_PLAYER_INSTANCES_RECEIVED",nil,@{@"instances":pinsts});
+
+	//	SERVICES_PLAYER_INSTANCES_RECEIVED",nil,@{@"instances":pinsts});
 	public void services_player_instances_received(Collection<Instance> insts) {
 		// todo: something here?
 	}
@@ -444,7 +458,6 @@ public class Dispatcher {
 		// todo: also MapViewController.playerMoved()
 
 	}
-
 
 
 //	WIFI_CONNECTED",self,nil); break;

@@ -1,21 +1,38 @@
 package edu.uoregon.casls.aris_android.models;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
+import edu.uoregon.casls.aris_android.Utilities.DBHelper;
 import edu.uoregon.casls.aris_android.data_objects.Media;
+import edu.uoregon.casls.aris_android.data_objects.cd_data_objects.MediaCD;
 
 /**
  * Created by smorison on 8/20/15.
  */
 public class MediaModel extends ARISModel {
 
-	public Map<Long, Media> medias = new LinkedHashMap<>();
+	public Map<Long, Media> medias = new LinkedHashMap<>();//light cache on mediaCD wrappers ('Media' objects)
 	public List<Long> mediaIDsToLoad = new LinkedList<>();
 	public GamePlayActivity mGamePlayAct;
+//	NSManagedObjectContext *context; // for CoreData reference // todo: Android relevant?
+//	NSMutableArray *mediaDataLoadDelegateHandles; // todo: Android relevant?
+//	NSMutableArray *mediaDataLoadMedia; // todo: Android relevant?
+	int mediaDataLoaded;
+
+	private SQLiteDatabase db;
+	private DBHelper dbHelper;
+
 
 	public MediaModel(GamePlayActivity gamePlayActivity) {
 		super();
@@ -24,6 +41,7 @@ public class MediaModel extends ARISModel {
 
 	public void initContext(GamePlayActivity gamePlayAct) {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
+		dbHelper = new DBHelper(gamePlayAct);
 	}
 
 	public void clearGameData() {
@@ -54,7 +72,7 @@ public class MediaModel extends ARISModel {
 	// The EntityDescription is the table and database to be queried.
 	// The FetchRequest encapsulates the whole statement with both the source (ie table) and the predicate (ie SQL expression)
 	// The call to executeFetchRequest() will perfom the request and return any data or errors if there are any
-	- (NSArray *) mediaForPredicate:(NSPredicate *)predicate // return an array of raw Media K/V pair sets
+/*	- (NSArray *) mediaForPredicate:(NSPredicate *)predicate // return an array of raw Media K/V pair sets
 	{
 		NSError *error;
 		NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -63,7 +81,41 @@ public class MediaModel extends ARISModel {
 		[fetchRequest setPredicate:predicate];
 		NSArray *cachedMediaArray = [context executeFetchRequest:fetchRequest error:&error] ;
 
-		return cachedMediaArray;
+		return cachedMediaArray; // return array (list) of MediaCD objects
+	}*/
+
+
+	public Map<Integer, MediaCD> mediaForPredicate(String whereClause) {
+		Map<Integer, MediaCD> listOfMedia = new HashMap<>();
+//		Cursor cursor =  db.rawQuery( "select * from contacts where id="+id+"", null );
+		Cursor cursor =  db.query(DBHelper.MEDIA, 	// db name
+				DBHelper.MEDIA_ALL_COLS, 			// columns to return
+				whereClause,
+				null, 								// selection Args
+				null, 								// group by
+				null, 								// having
+				null ); 							// order by
+
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			MediaCD mediaCDItem = parseMedia(cursor);
+			listOfMedia.put(mediaCDItem.media_id, mediaCDItem);
+			cursor.moveToNext();
+		}
+
+		cursor.close();
+
+		return listOfMedia;
+	}
+
+	private MediaCD parseMedia(Cursor cursor) {
+		MediaCD mediaCD = new MediaCD();
+		mediaCD.media_id = cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.MEDIA_ID));
+		mediaCD.game_id = cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_ID));
+		mediaCD.user_id = cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.USER_ID));
+		mediaCD.localURL = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.LOCAL_URL));
+		mediaCD.remoteURL = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.REMOTE_URL));
+		return mediaCD;
 	}
 
 	public void commitContext()
@@ -102,22 +154,24 @@ public class MediaModel extends ARISModel {
 //Different than other models, as it expects raw dicts rather than fully populated objects
 	public void updateMedias(List<Map<String, String>> mediaToCacheDicts)
 	{
-		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(game_id = 0) OR (game_id = %ld)", _MODEL_GAME_.game_id];
+		// set up query (get by game_id=0 (ARIS generic??) or game_id = [current game id]
+//		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(game_id = 0) OR (game_id = %ld)", _MODEL_GAME_.game_id];
+		// get the raw array of media map arrays from the device persistent DB
 //		NSArray *currentlyCachedMediaArray = this.mediaForPredicate(predicate);
-		NSArray *currentlyCachedMediaArray = this.mediaForPredicate(predicate); // get the raw array of media map arrays
-
+		List<Map<String, Media>> currentlyCachedMediaArray = new LinkedList<>();// null; // todo: populate from local DB call above
 		//Turn array to dict for quick check of existence in cache
-		NSMutableDictionary *currentlyCachedMediaMap = [[NSMutableDictionary alloc] init];
-		for(long i = 0; i < currentlyCachedMediaArray.count; i++) // convert outtermost obj array to key/value pair.
+		Map<Long, Map<String, Media>> currentlyCachedMediaMap = new HashMap<>(); // [[NSMutableDictionary alloc] init];
+		for(long i = 0; i < currentlyCachedMediaArray.count; i++) // convert outtermost obj array to key/value pair. <media_id, MediaCD>
 			[currentlyCachedMediaMap setObject:currentlyCachedMediaArray[i] forKey:((MediaCD *)currentlyCachedMediaArray[i]).media_id];
 
-		MediaCD *tmpMedia;
+		MediaCD tmpMedia;
+		// iterate through the "dict" versions of the media data and do...?
 		for(long i = 0; i < mediaToCacheDicts.count; i++)
 		{
-			NSDictionary *mediaDict = mediaToCacheDicts[i];
+			NSDictionary *mediaDict = mediaToCacheDicts[i]; // get individual element
 
-			long media_id = [mediaDict validIntForKey:@"media_id"];
-			[mediaIdsToLoad setObject:[NSNumber numberWithLong:media_id] forKey:[NSNumber numberWithLong:media_id]];
+			long media_id = [mediaDict validIntForKey:@"media_id"]; // get the id from k/v pair with key "media_id"
+			mediaIDsToLoad.add(media_id); // setObject:[NSNumber numberWithLong:media_id] forKey:[NSNumber numberWithLong:media_id]];
 			if(!(tmpMedia = currentlyCachedMediaMap[[NSNumber numberWithLong:media_id]]))
 			{
 				tmpMedia = [NSEntityDescription insertNewObjectForEntityForName:@"MediaCD" inManagedObjectContext:context];
@@ -135,8 +189,8 @@ public class MediaModel extends ARISModel {
 		}
 		this.commitContext];
 		n_game_data_received++;
-		_ARIS_NOTIF_SEND_(@"MODEL_MEDIA_AVAILABLE",nil,nil);
-		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_media_available(); //_ARIS_NOTIF_SEND_(@"MODEL_MEDIA_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void requestMedia()
@@ -146,7 +200,7 @@ public class MediaModel extends ARISModel {
 
 	public void requestMediaData()
 	{
-		NSArray *media_ids = [mediaIdsToLoad allKeys];
+		List<Long> media_ids = mediaIdsToLoad.// allKeys];
 		Media *m;
 		ARISDelegateHandle *d;
 
@@ -174,10 +228,11 @@ public class MediaModel extends ARISModel {
 	public void mediaLoaded(Media m)
 	{
 		mediaDataLoaded++;
-		_ARIS_NOTIF_SEND_(@"MODEL_MEDIA_DATA_LOADED",nil,nil);
+		mGamePlayAct.mDispatch.model_media_data_loaded(); //_ARIS_NOTIF_SEND_(@"MODEL_MEDIA_DATA_LOADED",nil,nil);
 		if(mediaDataLoaded >= mediaDataLoadDelegateHandles.count)
 		{
-			_ARIS_NOTIF_SEND_(@"MODEL_MEDIA_DATA_COMPLETE",nil,nil);
+			// ultimately calls beginGame:
+			mGamePlayAct.mDispatch.model_media_data_complete(); //_ARIS_NOTIF_SEND_(@"MODEL_MEDIA_DATA_COMPLETE",nil,nil);
 			mediaDataLoadMedia = nil;
 			mediaDataLoadDelegateHandles = nil;
 		}
