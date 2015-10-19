@@ -1,8 +1,9 @@
-package edu.uoregon.casls.aris_android.models;
+//package edu.uoregon.casls.aris_android.models;
+package groupsmodel;
+
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import edu.uoregon.casls.aris_android.data_objects.Trigger;
  */
 public class TriggersModel extends ARISModel {
 
-	public Map<Long, Trigger> triggers = new LinkedHashMap<>();
+	public Map<Long, Trigger> triggers = new HashMap<>();
 	public List<Trigger> playerTriggers = new ArrayList<>();
 	public GamePlayActivity mGamePlayAct;
 
@@ -27,254 +28,299 @@ public class TriggersModel extends ARISModel {
 		n_game_data_received = 0;
 	}
 
+//	public void clearGameData() {
+//		this.clearPlayerData();
+//		triggers  = [[NSMutableDictionary alloc] init];
+//		blacklist = [[NSMutableDictionary alloc] init];
+//		n_game_data_received = 0;
+//	}
+
 	public void clearPlayerData() {
 
-	}
-
-	public void requestTriggers() {
-	}
-
-	public void requestPlayerTriggers() {
-
-	}
-
-	public long nGameDataToReceive () {
-		return 1;
-	}
-
-
-	public void requestPlayerData
-	{
-		this.requestPlayerTriggers];
-	}
-	public void clearPlayerData
-	{
-		playerTriggers = [[NSArray alloc] init];
+		playerTriggers.clear();
 		n_player_data_received = 0;
 	}
-	- (long) nPlayerDataToReceive
-	{
+
+	public void requestPlayerData() {
+
+		this.requestPlayerTriggers();
+	}
+
+	public long nPlayerDataToReceive() {
+
 		return 1;
 	}
 
-	public void requestGameData
-	{
-		this.requestTriggers];
+	public void requestGameData() {
+
+		this.requestTriggers();
 	}
-	public void clearGameData
-	{
-		this.clearPlayerData];
-		triggers  = [[NSMutableDictionary alloc] init];
-		blacklist = [[NSMutableDictionary alloc] init];
-		n_game_data_received = 0;
-	}
-	- (long) nGameDataToReceive
-	{
+
+
+	public long nGameDataToReceive() {
+
 		return 1;
 	}
 
-	public void triggersReceived(List<Trigger> newTriggers)
-	{
+	public void triggersReceived(List<Trigger> newTriggers) {
+
 		this.updateTriggers(newTriggers);
 	}
 
-	public void triggerReceived:(NSNotification *)notif
-	{
+	public void triggerReceived(NSNotification notif) {
+
+		//TODO unsure of noticications
 		this.updateTriggers:@[notif.userInfo[@"trigger"]]];
 	}
 
-	public void updateTriggers(List<Trigger> newTriggers)
-	{
-		Trigger *newTrigger;
+	public void updateTriggers(List<Trigger> newTriggers) {
+
+		Trigger newTrigger;
+		//TODO unsure of NSNumber
 		NSNumber *newTriggerId;
-		NSMutableArray *invalidatedTriggers = [[NSMutableArray alloc] init];
-		for(long i = 0; i < newTriggers.count; i++)
+		List<Trigger> invalidatedTriggers = new ArrayList<>();
+
+		int size = newTriggers.size();
+		for (int i = 0; i < size; i++)
 		{
-			newTrigger = [newTriggers objectAtIndex:i];
-			newTriggerId = [NSNumber numberWithLong:newTrigger.trigger_id];
-			if(![triggers objectForKey:newTriggerId])
-			{
-				[triggers setObject:newTrigger forKey:newTriggerId];
-				[blacklist removeObjectForKey:[NSNumber numberWithLong:newTriggerId]];
+			newTrigger = newTriggers[i];
+			newTriggerId = newTrigger.trigger_id;
+
+			if (!triggers.get(newTriggerId)) {
+
+				triggers.put(newTriggerId, newTrigger);
+				blacklist.remove(newTriggerId);
 			}
-			else
-			if(![[triggers objectForKey:newTriggerId] mergeDataFromTrigger:newTrigger])
-			[invalidatedTriggers addObject:[triggers objectForKey:newTriggerId]];
+			//TODO the following line may be incorrect
+			else if (!triggers.get(newTriggerId).mergeDataFromTrigger(newTrigger)) {
+
+				invalidatedTriggers.add(triggers.get(newTriggerId));
+			}
 		}
-		if(invalidatedTriggers.count) _ARIS_NOTIF_SEND_(@"MODEL_TRIGGERS_INVALIDATED",nil,@{@"invalidated_triggers":invalidatedTriggers});
+		if (invalidatedTriggers.size()) {
+			//TODO unsure of final argument, name for all such funtions
+			_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_INVALIDATED", null, @{@"invalidated_triggers":invalidatedTriggers});
+		}
 
 		n_game_data_received++;
-		_ARIS_NOTIF_SEND_(@"MODEL_TRIGGERS_AVAILABLE",nil,nil);
-		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_AVAILABLE", null, null);
+		_ARIS_NOTIF_SEND_("MODEL_GAME_PIECE_AVAILABLE", null, null);
 	}
 
-	- (NSArray *) conformTriggersListToFlyweight:(NSArray *)newTriggers
-	{
-		NSMutableArray *conformingTriggers = [[NSMutableArray alloc] init];
-		NSMutableArray *invalidatedTriggers = [[NSMutableArray alloc] init];
-		for(long i = 0; i < newTriggers.count; i++)
-		{
-			Trigger *newt = newTriggers[i];
-			Trigger *exist = this.triggerForId:newt.trigger_id];
+	public List<Trigger> conformTriggersListToFlyweight(List<Trigger> newTriggers) {
 
-			if(exist)
-			{
-				if(![exist mergeDataFromTrigger:newt]) [invalidatedTriggers addObject:exist];
-				[conformingTriggers addObject:exist];
+		List<Trigger> conformingTriggers = new ArrayList<>();
+		List<Trigger> invalidatedTriggers = new ArrayList<>();
+
+		int size = newTriggers.size();
+		for (int i = 0; i < size; i++) {
+
+			Trigger newt = newTriggers[i];
+			Trigger exist = this.triggerForId(newt.trigger_id);
+
+			if (exist) {
+				if (!exist.mergeDataFromTrigger(newt)) {
+					invalidatedTriggers.add(exist);
+				}
+				conformingTriggers.add(exist);
 			}
-			else
-			{
-				[triggers setObject:newt forKey:[NSNumber numberWithLong:newt.trigger_id]];
-				[conformingTriggers addObject:newt];
+			else {
+				triggers.put(newt.trigger_id, newt);
+				conformingTriggers.add(newt);
 			}
 		}
-		if(invalidatedTriggers.count) _ARIS_NOTIF_SEND_(@"MODEL_TRIGGERS_INVALIDATED",nil,@{@"invalidated_triggers":invalidatedTriggers});
+		if (invalidatedTriggers.size()) {
+			_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_INVALIDATED", null, @{@"invalidated_triggers":invalidatedTriggers});
+		}
 		return conformingTriggers;
 	}
 
-	public void playerTriggersReceived:(NSNotification *)notif
-	{
-		this.updatePlayerTriggers:this.conformTriggersListToFlyweight:notif.userInfo[@"triggers"]]];
+	public void playerTriggersReceived(NSNotification notif) {
+
+		this.updatePlayerTriggers(this.conformTriggersListToFlyweight(notif.userInfo[@"triggers"]));
 	}
 
-	public void updatePlayerTriggers:(NSArray *)newTriggers
-	{
-		NSMutableArray *addedTriggers = [[NSMutableArray alloc] init];
-		NSMutableArray *removedTriggers = [[NSMutableArray alloc] init];
+	public void updatePlayerTriggers(List<Trigger> newTriggers) {
+
+		List<Object> addedTriggers = new ArrayList<>();
+		List<Object> removedTriggers = new ArrayList<>();
 
 		//placeholders for comparison
-		Trigger *newTrigger;
-		Trigger *oldTrigger;
+		Trigger newTrigger;
+		Trigger oldTrigger;
 
 		//find added
-		BOOL new;
-		for(long i = 0; i < newTriggers.count; i++)
-		{
-			new = YES;
+		boolean flag;
+		int isize = newTriggers.size();
+		int jsize = playerTriggers.size();
+
+		for (int i = 0; i < isize; i++) {
+
+			flag = true;
 			newTrigger = newTriggers[i];
-			for(long j = 0; j < playerTriggers.count; j++)
-			{
+
+			for (int j = 0; j < jsize; j++) {
 				oldTrigger = playerTriggers[j];
-				if(newTrigger.trigger_id == oldTrigger.trigger_id) new = NO;
+				if (newTrigger.trigger_id == oldTrigger.trigger_id) {
+					flag = false;
+				}
 			}
-			if(new) [addedTriggers addObject:newTriggers[i]];
+			if (flag) {
+				addedTriggers.add(newTriggers[i]);
+			}
 		}
 
 		//find removed
-		BOOL removed;
-		for(long i = 0; i < playerTriggers.count; i++)
-		{
-			removed = YES;
+		boolean removed;
+		for (int i = 0; i < jsize; i++) {
+
+			removed = true;
 			oldTrigger = playerTriggers[i];
-			for(long j = 0; j < newTriggers.count; j++)
-			{
+
+			for (int j = 0; j < isize; j++) {
+
 				newTrigger = newTriggers[j];
-				if(newTrigger.trigger_id == oldTrigger.trigger_id) removed = NO;
+
+				if (newTrigger.trigger_id == oldTrigger.trigger_id) {
+					removed = false;
+				}
 			}
-			if(removed) [removedTriggers addObject:playerTriggers[i]];
+			if (removed) {
+				removedTriggers.add(playerTriggers[i]);
+			}
 		}
 
 		playerTriggers = newTriggers;
 		n_player_data_received++;
 
-		if(addedTriggers.count > 0)   _ARIS_NOTIF_SEND_(@"MODEL_TRIGGERS_NEW_AVAILABLE",nil,@{@"added":addedTriggers});
-		if(removedTriggers.count > 0) _ARIS_NOTIF_SEND_(@"MODEL_TRIGGERS_LESS_AVAILABLE",nil,@{@"removed":removedTriggers});
-		_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_TRIGGERS_AVAILABLE",nil,nil);
-		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PLAYER_PIECE_AVAILABLE",nil,nil);
+		if (addedTriggers.size() > 0) {
+			_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_NEW_AVAILABLE", null, @{@"added":addedTriggers});
+		}
+		if (removedTriggers.size() > 0) {
+			_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_LESS_AVAILABLE", null, @{@"removed":removedTriggers});
+		}
+		_ARIS_NOTIF_SEND_("MODEL_PLAYER_TRIGGERS_AVAILABLE", null, null);
+		_ARIS_NOTIF_SEND_("MODEL_GAME_PLAYER_PIECE_AVAILABLE", null, null);
 	}
 
-	public void requestTriggers { [_SERVICES_ fetchTriggers]; }
-	public void requestTrigger:(long)t { [_SERVICES_ fetchTriggerById:t]; }
-	public void requestPlayerTriggers
-	{
-		if(this.playerDataReceived] &&
-		![_MODEL_GAME_.network_level isEqualToString:@"REMOTE"])
-		{
-			NSMutableArray *rejected = [[NSMutableArray alloc] init];
-			NSMutableArray *ptrigs = [[NSMutableArray alloc] init];
-			NSArray *ts = [triggers allValues];
-			for(int i = 0; i < ts.count; i++)
-			{
-				Trigger *t = ts[i];
-				if(t.scene_id != _MODEL_SCENES_.playerScene.scene_id  || ![_MODEL_REQUIREMENTS_ evaluateRequirementRoot:t.requirement_root_package_id]) continue;
+	public void requestTriggers() {
+		_SERVICES_.fetchTriggers();
+	}
+	public void requestTrigger(long t) {
+		_SERVICES_.fetchTriggerById(t);
+	}
 
+	public void requestPlayerTriggers() {
+
+		if (this.playerDataReceived() && !_MODEL_GAME_.network_level.equals("REMOTE")) {
+
+			List<Trigger> rejected = new ArrayList<>();
+			List<Trigger> ptrigs = new ArrayList<>();
+			List<Trigger> ts = new ArrayList<>(triggers.values());
+
+			int size = ts.size();
+			for (int i = 0; i < size; i++) {
+				Trigger t = ts[i];
+				if (t.scene_id != _MODEL_SCENES_.playerScene.scene_id  || ![_MODEL_REQUIREMENTS_.evaluateRequirementRoot(t.requirement_root_package_id)) {
+					continue;
+				}
+				//TODO unsure of instances
 				Instance *i = [_MODEL_INSTANCES_ instanceForId:t.instance_id];
-				if(!i) continue;
 
-				if(i.factory_id)
-				{
-					Factory *f = [_MODEL_FACTORIES_ factoryForId:i.factory_id];
-					if(!f) continue;
+				if (!i) {
+					continue;
+				}
+				if (i.factory_id) {
+					Factory f = _MODEL_FACTORIES_.factoryForId(i.factory_id);
+					if (!f) {
+						continue;
+					}
+					//TODO unsure of time
 					int time = [[NSDate date] timeIntervalSinceDate:i.created];
 					NSLog(@"%d",time);
-					if(time > f.produce_expiration_time)
-					{
-						[rejected addObject:i];
+					if (time > f.produce_expiration_time) {
+						rejected.add(i);
 						continue;
 					}
 				}
-				[ptrigs addObject:t];
+				ptrigs.add(t);
 			}
+			//TODO unsure of logging
 			NSLog(@"Accepted: %lu, Rejected: %lu",(unsigned long)ptrigs.count,(unsigned long)rejected.count);
-			_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_TRIGGERS_RECEIVED",nil,@{@"triggers":ptrigs});
+			_ARIS_NOTIF_SEND_("SERVICES_PLAYER_TRIGGERS_RECEIVED", null, @{@"triggers":ptrigs});
 		}
-		if(!this.playerDataReceived] ||
-		[_MODEL_GAME_.network_level isEqualToString:@"HYBRID"] ||
-		[_MODEL_GAME_.network_level isEqualToString:@"REMOTE"])
-		[_SERVICES_ fetchTriggersForPlayer];
+		if (!this.playerDataReceived() || _MODEL_GAME_.network_level.equals("HYBRID") || _MODEL_GAME_.network_level.equals("REMOTE")) {
+			_SERVICES_.fetchTriggersForPlayer();
+		}
 	}
 
-// null trigger (id == 0) NOT flyweight!!! (to allow for temporary customization safety)
-	- (Trigger *) triggerForId:(long)trigger_id
-	{
-		if(!trigger_id) return [[Trigger alloc] init];
-		Trigger *t = [triggers objectForKey:[NSNumber numberWithLong:trigger_id]];
-		if(!t)
-		{
-			[blacklist setObject:@"true" forKey:[NSNumber numberWithLong:trigger_id]];
-			this.requestTrigger:trigger_id];
+	// null trigger (id == 0) NOT flyweight!!! (to allow for temporary customization safety)
+	public Trigger triggerForId(long trigger_id) {
+
+		if (!trigger_id) {
+			//TODO unsure of in situ alloc
+			return [[Trigger alloc] init];
+		}
+
+		Trigger t = triggers.get(trigger_id);
+
+		if (!t) {
+			blacklist.put(trigger_id, "true");
+			this.requestTrigger(trigger_id);
+			//TODO unsure of in situ alloc
 			return [[Trigger alloc] init];
 		}
 		return t;
 	}
 
-	- (NSArray *) triggersForInstanceId:(long)instance_id
-	{
-		NSMutableArray *a = [[NSMutableArray alloc] init];
-		for(long i = 0; i < triggers.count; i++)
-		{
-			Trigger *t = [triggers allValues][i];
-			if(t.instance_id == instance_id)
-			[a addObject:t];
+	public List<Trigger> triggersForInstanceId(long instance_id) {
+
+		List<Trigger> a = new ArrayList<>();
+
+		int size = triggers.size();
+		for (long i = 0; i < size; i++) {
+
+			Trigger t = triggers.get(i);
+
+			if (t.instance_id == instance_id) {
+				a.add(t);
+			}
 		}
 		return a;
 	}
 
-	- (Trigger *) triggerForQRCode:(NSString *)code
-	{
-		Trigger *t;
-		for(long i = 0; i < playerTriggers.count; i++)
-		{
+	public Trigger triggerForQRCode(String code) {
+
+		Trigger t;
+
+		int size = playerTriggers.size();
+		for (long i = 0; i < size; i++) {
+
 			t = playerTriggers[i];
-			if([t.type isEqualToString:@"QR"] && [t.qr_code isEqualToString:code]) return t;
+			if (t.type.equals("QR") && t.qr_code.equals(code)) {
+				return t;
+			}
 		}
-		return nil;
+		return null;
 	}
 
-	- (NSArray *) playerTriggers
-	{
+	public List<Trigger> playerTriggers() {
 		return playerTriggers;
 	}
 
-	public void expireTriggersForInstanceId:(long)instance_id
-	{
-		NSMutableArray *newTriggers = [[NSMutableArray alloc] init];
-		for(long i = 0; i < playerTriggers.count; i++)
-		{
-			if(((Trigger *)playerTriggers[i]).instance_id != instance_id)
-			[newTriggers addObject:playerTriggers[i]];
+	public void expireTriggersForInstanceId(long instance_id) {
+
+		List<Trigger> newTriggers = new ArrayList<>();
+
+		int size = playerTriggers.size();
+		for (long i = 0; i < size; i++) {
+
+			if (((Trigger )playerTriggers[i]).instance_id != instance_id) {
+
+				newTriggers.add(playerTriggers[i]);
+			}
 		}
-		this.updatePlayerTriggers:newTriggers];
+		this.updatePlayerTriggers(newTriggers);
 	}
 
 }
