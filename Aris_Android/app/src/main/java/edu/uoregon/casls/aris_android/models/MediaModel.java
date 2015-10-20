@@ -2,10 +2,8 @@ package edu.uoregon.casls.aris_android.models;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -13,7 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
-import edu.uoregon.casls.aris_android.Utilities.DBHelper;
+import edu.uoregon.casls.aris_android.R;
+import edu.uoregon.casls.aris_android.Utilities.Config;
+import edu.uoregon.casls.aris_android.Utilities.DBDealer;
 import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.data_objects.cd_data_objects.MediaCD;
 
@@ -23,15 +23,15 @@ import edu.uoregon.casls.aris_android.data_objects.cd_data_objects.MediaCD;
 public class MediaModel extends ARISModel {
 
 	public Map<Long, Media> medias = new LinkedHashMap<>();//light cache on mediaCD wrappers ('Media' objects)
-	public List<Long> mediaIDsToLoad = new LinkedList<>();
+	public List<Integer> mediaIDsToLoad = new LinkedList<>();
 	public GamePlayActivity mGamePlayAct;
-//	NSManagedObjectContext *context; // for CoreData reference // todo: Android relevant?
+	//	NSManagedObjectContext *context; // for CoreData reference // todo: Android relevant?
 //	NSMutableArray *mediaDataLoadDelegateHandles; // todo: Android relevant?
 //	NSMutableArray *mediaDataLoadMedia; // todo: Android relevant?
 	int mediaDataLoaded;
 
 	private SQLiteDatabase db;
-	private DBHelper dbHelper;
+	private DBDealer dbDealer;
 
 
 	public MediaModel(GamePlayActivity gamePlayActivity) {
@@ -41,7 +41,7 @@ public class MediaModel extends ARISModel {
 
 	public void initContext(GamePlayActivity gamePlayAct) {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
-		dbHelper = new DBHelper(gamePlayAct);
+		dbDealer = new DBDealer(gamePlayAct);
 	}
 
 	public void clearGameData() {
@@ -61,7 +61,7 @@ public class MediaModel extends ARISModel {
 
 	}
 
-	public long nGameDataToReceive () {
+	public long nGameDataToReceive() {
 		return 1;
 	}
 
@@ -84,19 +84,19 @@ public class MediaModel extends ARISModel {
 		return cachedMediaArray; // return array (list) of MediaCD objects
 	}*/
 
+	/**
+	 * mediaForPredicate(where)
+	 *
+	 * @param whereClause SQL where string w/o "where"; e.g. "name = 'Bob' AND (this = 1 OR that >= 33)"
+	 * @return Map of resulting MediaCD objs indexed by mediaID.
+	 */
 
 	public Map<Integer, MediaCD> mediaForPredicate(String whereClause) {
 		Map<Integer, MediaCD> listOfMedia = new HashMap<>();
-//		Cursor cursor =  db.rawQuery( "select * from contacts where id="+id+"", null );
-		Cursor cursor =  db.query(DBHelper.MEDIA, 	// db name
-				DBHelper.MEDIA_ALL_COLS, 			// columns to return
-				whereClause,
-				null, 								// selection Args
-				null, 								// group by
-				null, 								// having
-				null ); 							// order by
 
+		Cursor cursor = dbDealer.getMedias(whereClause);
 		cursor.moveToFirst();
+		// convert cursor to Map of mediaCDs
 		while (!cursor.isAfterLast()) {
 			MediaCD mediaCDItem = parseMedia(cursor);
 			listOfMedia.put(mediaCDItem.media_id, mediaCDItem);
@@ -110,36 +110,28 @@ public class MediaModel extends ARISModel {
 
 	private MediaCD parseMedia(Cursor cursor) {
 		MediaCD mediaCD = new MediaCD();
-		mediaCD.media_id = cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.MEDIA_ID));
-		mediaCD.game_id = cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_ID));
-		mediaCD.user_id = cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.USER_ID));
-		mediaCD.localURL = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.LOCAL_URL));
-		mediaCD.remoteURL = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.REMOTE_URL));
+		mediaCD.media_id = cursor.getInt(cursor.getColumnIndexOrThrow(DBDealer.MEDIA_ID));
+		mediaCD.game_id = cursor.getInt(cursor.getColumnIndexOrThrow(DBDealer.GAME_ID));
+		mediaCD.user_id = cursor.getInt(cursor.getColumnIndexOrThrow(DBDealer.USER_ID));
+		mediaCD.localURL = cursor.getString(cursor.getColumnIndexOrThrow(DBDealer.LOCAL_URL));
+		mediaCD.remoteURL = cursor.getString(cursor.getColumnIndexOrThrow(DBDealer.REMOTE_URL));
 		return mediaCD;
 	}
 
-	public void commitContext()
+//	public void commitContext()
+//	{
+//		NSError *error;
+//		if(![context save:&error])
+//		_ARIS_LOG_(@"Error saving media context - error:%@",error);
+//	}
+
+	public void clearCache() // delete all stored rows in media table.
 	{
-		NSError *error;
-		if(![context save:&error])
-		_ARIS_LOG_(@"Error saving media context - error:%@",error);
+		dbDealer.deleteAllMedias();
+		Log.i(Config.LOGTAG, getClass().getSimpleName() + "All Media deleted from Local DB."); //this is really only useful because this potentially takes a while, and this shows that its not frozen
 	}
 
-	public void clearCache()
-	{
-		NSArray *cachedMediaArray = this.mediaForPredicate:nil];
-
-		for(NSManagedObject *managedObject in cachedMediaArray)
-		{
-			[context deleteObject:managedObject];
-			_ARIS_LOG_(@"Media object deleted"); //this is really only useful because this potentially takes a while, and this shows that its not frozen
-		}
-
-		this.commitContext();
-	}
-
-	public void requestGameData()
-	{
+	public void requestGameData() {
 		this.requestMedia();
 	}
 
@@ -151,207 +143,200 @@ public class MediaModel extends ARISModel {
 		this.updateMedias(rawMediaArr);
 	}
 
-//Different than other models, as it expects raw dicts rather than fully populated objects
-	public void updateMedias(List<Map<String, String>> mediaToCacheDicts)
-	{
+	//Different than other models, as it expects raw dicts rather than fully populated objects
+	public void updateMedias(List<Map<String, String>> mediaToCacheDicts) {
 		// set up query (get by game_id=0 (ARIS generic??) or game_id = [current game id]
-//		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(game_id = 0) OR (game_id = %ld)", _MODEL_GAME_.game_id];
+		String where = "(game_id = 0) OR (game_id = " + mGamePlayAct.mGame.game_id + ")";
 		// get the raw array of media map arrays from the device persistent DB
-//		NSArray *currentlyCachedMediaArray = this.mediaForPredicate(predicate);
-		List<Map<String, Media>> currentlyCachedMediaArray = new LinkedList<>();// null; // todo: populate from local DB call above
-		//Turn array to dict for quick check of existence in cache
-		Map<Long, Map<String, Media>> currentlyCachedMediaMap = new HashMap<>(); // [[NSMutableDictionary alloc] init];
-		for(long i = 0; i < currentlyCachedMediaArray.count; i++) // convert outtermost obj array to key/value pair. <media_id, MediaCD>
-			[currentlyCachedMediaMap setObject:currentlyCachedMediaArray[i] forKey:((MediaCD *)currentlyCachedMediaArray[i]).media_id];
+		Map<Integer, MediaCD> currentlyCachedMediaMap = this.mediaForPredicate(where);// null; // todo: populate from local DB call above
 
 		MediaCD tmpMedia;
 		// iterate through the "dict" versions of the media data and do...?
-		for(long i = 0; i < mediaToCacheDicts.count; i++)
-		{
-			NSDictionary *mediaDict = mediaToCacheDicts[i]; // get individual element
+		for (Map<String, String> mediaDict : mediaToCacheDicts) {
 
-			long media_id = [mediaDict validIntForKey:@"media_id"]; // get the id from k/v pair with key "media_id"
+			int media_id = Integer.getInteger(mediaDict.get("media_id"));// [mediaDict validIntForKey:@"media_id"]; // get the id from k/v pair with key "media_id"
 			mediaIDsToLoad.add(media_id); // setObject:[NSNumber numberWithLong:media_id] forKey:[NSNumber numberWithLong:media_id]];
-			if(!(tmpMedia = currentlyCachedMediaMap[[NSNumber numberWithLong:media_id]]))
+			tmpMedia = currentlyCachedMediaMap.get(media_id);
+			if (tmpMedia == null) // currentlyCachedMediaMap[[NSNumber numberWithLong:media_id]]))
 			{
-				tmpMedia = [NSEntityDescription insertNewObjectForEntityForName:@"MediaCD" inManagedObjectContext:context];
-				tmpMedia.media_id = [NSNumber numberWithLong:media_id];
+//				tmpMedia = insertNewObjectForEntityForName("MediaCD");
+				tmpMedia = new MediaCD();
+				tmpMedia.media_id = media_id;
 			}
 
-			NSString *remoteURL = [mediaDict validObjectForKey:@"url"];
-			if(![remoteURL isEqualToString:tmpMedia.remoteURL]) //if remote URL changed, invalidate local URL
-			tmpMedia.localURL = nil;
+			String remoteURL = mediaDict.get("url"); // validObjectForKey:@"url"];
+			if (!remoteURL.contentEquals(tmpMedia.remoteURL)) //if remote URL changed, invalidate local URL
+				tmpMedia.localURL = "";
 			tmpMedia.remoteURL = remoteURL;
 
-			tmpMedia.game_id = [NSNumber numberWithLong:[mediaDict validIntForKey:@"game_id"]];
-			tmpMedia.user_id = [NSNumber numberWithLong:[mediaDict validIntForKey:@"user_id"]];
-			_ARIS_LOG_(@"Media cache   : Media id:%ld cached:%@",media_id,tmpMedia.remoteURL);
+			tmpMedia.game_id = Integer.getInteger(mediaDict.get("game_id"));
+			tmpMedia.user_id = Integer.getInteger(mediaDict.get("user_id"));
+			if (dbDealer.insertMedia(tmpMedia))
+				Log.i(Config.LOGTAG, getClass().getSimpleName() + "Media cache   : Media id:" + media_id + " cached:" + tmpMedia.remoteURL);
+			else
+				Log.e(Config.LOGTAG, getClass().getSimpleName() + "Failed to insert Media: Media id:" + media_id + " cached:" + tmpMedia.remoteURL);
 		}
-		this.commitContext];
+//		this.commitContext(); // as best I can tell the intention is to insert each of these incoming "medicCDs" but why/how are they being set up for individual insertion in the loop above?
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_media_available(); //_ARIS_NOTIF_SEND_(@"MODEL_MEDIA_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
-	public void requestMedia()
-	{
+
+	public void requestMedia() {
 		mGamePlayAct.mServices.fetchMedias();
 	}
 
-	public void requestMediaData()
-	{
-		List<Long> media_ids = mediaIdsToLoad.// allKeys];
-		Media *m;
-		ARISDelegateHandle *d;
 
-		mediaDataLoadDelegateHandles = [[NSMutableArray alloc] init];
-		mediaDataLoadMedia = [[NSMutableArray alloc] init];
-		mediaDataLoaded = 0;
+	// may be irrelevant to Andoid...
+//	public void requestMediaData()
+//	{
+//		List<Integer> media_ids = mediaIDsToLoad;  // allKeys];
+//		Media m;
+////		ARISDelegateHandle *d; // ??
+//
+//		mediaDataLoadDelegateHandles = [[NSMutableArray alloc] init];
+//		mediaDataLoadMedia = [[NSMutableArray alloc] init];
+//		mediaDataLoaded = 0;
+//
+//		for(int i = 0; i < media_ids.count; i++)
+//		{
+//			m = this.mediaForId:[((NSNumber *)media_ids[i]) longValue]];
+//			if(!m.data)
+//			{
+//				d = [[ARISDelegateHandle alloc] initWithDelegate:self];
+//				[mediaDataLoadDelegateHandles addObject:d];
+//				[mediaDataLoadMedia addObject:m];
+//			}
+//		}
+//		if(mediaDataLoadDelegateHandles.count == 0)
+//		this.mediaLoaded:nil];
+//
+//		for(int i = 0; i < mediaDataLoadMedia.count; i++) //needs separate loop so notif doesn't get sent in same stack as generating count
+//		[_SERVICES_MEDIA_ loadMedia:mediaDataLoadMedia[i] delegateHandle:mediaDataLoadDelegateHandles[i]]; //calls 'mediaLoaded' upon complete
+//	}
 
-		for(int i = 0; i < media_ids.count; i++)
-		{
-			m = this.mediaForId:[((NSNumber *)media_ids[i]) longValue]];
-			if(!m.data)
-			{
-				d = [[ARISDelegateHandle alloc] initWithDelegate:self];
-				[mediaDataLoadDelegateHandles addObject:d];
-				[mediaDataLoadMedia addObject:m];
-			}
-		}
-		if(mediaDataLoadDelegateHandles.count == 0)
-		this.mediaLoaded:nil];
+//	public void mediaLoaded(Media m)
+//	{
+//		mediaDataLoaded++;
+//		mGamePlayAct.mDispatch.model_media_data_loaded(); //_ARIS_NOTIF_SEND_(@"MODEL_MEDIA_DATA_LOADED",nil,nil);
+//		if(mediaDataLoaded >= mediaDataLoadDelegateHandles.)
+//		{
+//			// ultimately calls beginGame:
+//			mGamePlayAct.mDispatch.model_media_data_complete(); //_ARIS_NOTIF_SEND_(@"MODEL_MEDIA_DATA_COMPLETE",nil,nil);
+//			mediaDataLoadMedia = nil;
+//			mediaDataLoadDelegateHandles = nil;
+//		}
+//	}
 
-		for(int i = 0; i < mediaDataLoadMedia.count; i++) //needs separate loop so notif doesn't get sent in same stack as generating count
-		[_SERVICES_MEDIA_ loadMedia:mediaDataLoadMedia[i] delegateHandle:mediaDataLoadDelegateHandles[i]]; //calls 'mediaLoaded' upon complete
-	}
-
-	public void mediaLoaded(Media m)
-	{
-		mediaDataLoaded++;
-		mGamePlayAct.mDispatch.model_media_data_loaded(); //_ARIS_NOTIF_SEND_(@"MODEL_MEDIA_DATA_LOADED",nil,nil);
-		if(mediaDataLoaded >= mediaDataLoadDelegateHandles.count)
-		{
-			// ultimately calls beginGame:
-			mGamePlayAct.mDispatch.model_media_data_complete(); //_ARIS_NOTIF_SEND_(@"MODEL_MEDIA_DATA_COMPLETE",nil,nil);
-			mediaDataLoadMedia = nil;
-			mediaDataLoadDelegateHandles = nil;
-		}
-	}
-
-	public Media mediaForId(long media_id)
-	{
-		if(media_id == 0) return nil;
+	public Media mediaForId(int media_id) {
+		if (media_id == 0) return null;
 
 		//oh my hack
-		if(media_id == DEFAULT_PLAQUE_ICON_MEDIA_ID)
-		{
-			MediaCD *mediaCD = [NSEntityDescription insertNewObjectForEntityForName:@"MediaCD" inManagedObjectContext:context];
-			mediaCD.media_id = [NSNumber numberWithLong:media_id];
-			mediaCD.game_id  = [NSNumber numberWithLong:0];
-			mediaCD.user_id  = [NSNumber numberWithLong:0];
-			Media *media = [[Media alloc] initWithMediaCD:mediaCD];
-			media.data =  UIImagePNGRepresentation([UIImage imageNamed:@"plaque_icon_120"]);
+		if (media_id == Media.DEFAULT_PLAQUE_ICON_MEDIA_ID) {
+			MediaCD mediaCD = new MediaCD();
+			mediaCD.media_id = media_id;
+			mediaCD.game_id = 0;
+			mediaCD.user_id = 0;
+			Media media = new Media(mediaCD);
+			// UIImagePNGRepresentation = Return the data for the specified image in PNG format
+			// get data from drawable image and lode into object field
+			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.plaque_icon_120);//UIImagePNGRepresentation([UIImage imageNamed:@"plaque_icon_120"]);
 			media.thumb = media.data;
-			[media setPartialLocalURL:@"blah.png"]; //fake name to get it to know it's of type "IMAGE"
+			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
-		if(media_id == DEFAULT_ITEM_ICON_MEDIA_ID)
-		{
-			MediaCD *mediaCD = [NSEntityDescription insertNewObjectForEntityForName:@"MediaCD" inManagedObjectContext:context];
-			mediaCD.media_id = [NSNumber numberWithLong:media_id];
-			mediaCD.game_id  = [NSNumber numberWithLong:0];
-			mediaCD.user_id  = [NSNumber numberWithLong:0];
-			Media *media = [[Media alloc] initWithMediaCD:mediaCD];
-			media.data =  UIImagePNGRepresentation([UIImage imageNamed:@"item_icon_120"]);
+		if (media_id == Media.DEFAULT_ITEM_ICON_MEDIA_ID) {
+			MediaCD mediaCD = new MediaCD();
+			mediaCD.media_id = media_id;
+			mediaCD.game_id = 0;
+			mediaCD.user_id = 0;
+			Media media = new Media(mediaCD);
+			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.item_icon_120);
 			media.thumb = media.data;
-			[media setPartialLocalURL:@"blah.png"]; //fake name to get it to know it's of type "IMAGE"
+			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
-		if(media_id == DEFAULT_DIALOG_ICON_MEDIA_ID)
-		{
-			MediaCD *mediaCD = [NSEntityDescription insertNewObjectForEntityForName:@"MediaCD" inManagedObjectContext:context];
-			mediaCD.media_id = [NSNumber numberWithLong:media_id];
-			mediaCD.game_id  = [NSNumber numberWithLong:0];
-			mediaCD.user_id  = [NSNumber numberWithLong:0];
-			Media *media = [[Media alloc] initWithMediaCD:mediaCD];
-			media.data =  UIImagePNGRepresentation([UIImage imageNamed:@"conversation_icon_120"]);
+		if (media_id == Media.DEFAULT_DIALOG_ICON_MEDIA_ID) {
+			MediaCD mediaCD = new MediaCD();
+			mediaCD.media_id = media_id;
+			mediaCD.game_id = 0;
+			mediaCD.user_id = 0;
+			Media media = new Media(mediaCD);
+			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.conversation_icon_120);
 			media.thumb = media.data;
-			[media setPartialLocalURL:@"blah.png"]; //fake name to get it to know it's of type "IMAGE"
+			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
-		if(media_id == DEFAULT_WEB_PAGE_ICON_MEDIA_ID)
-		{
-			MediaCD *mediaCD = [NSEntityDescription insertNewObjectForEntityForName:@"MediaCD" inManagedObjectContext:context];
-			mediaCD.media_id = [NSNumber numberWithLong:media_id];
-			mediaCD.game_id  = [NSNumber numberWithLong:0];
-			mediaCD.user_id  = [NSNumber numberWithLong:0];
-			Media *media = [[Media alloc] initWithMediaCD:mediaCD];
-			media.data =  UIImagePNGRepresentation([UIImage imageNamed:@"webpage_icon_120"]);
+		if (media_id == Media.DEFAULT_WEB_PAGE_ICON_MEDIA_ID) {
+			MediaCD mediaCD = new MediaCD();
+			mediaCD.media_id = media_id;
+			mediaCD.game_id = 0;
+			mediaCD.user_id = 0;
+			Media media = new Media(mediaCD);
+			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.webpage_icon_120);
 			media.thumb = media.data;
-			[media setPartialLocalURL:@"blah.png"]; //fake name to get it to know it's of type "IMAGE"
+			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
-		if(media_id == LOGO_ICON_MEDIA_ID)
-		{
-			MediaCD *mediaCD = [NSEntityDescription insertNewObjectForEntityForName:@"MediaCD" inManagedObjectContext:context];
-			mediaCD.media_id = [NSNumber numberWithLong:media_id];
-			mediaCD.game_id  = [NSNumber numberWithLong:0];
-			mediaCD.user_id  = [NSNumber numberWithLong:0];
-			Media *media = [[Media alloc] initWithMediaCD:mediaCD];
-			media.data =  UIImagePNGRepresentation([UIImage imageNamed:@"logo_icon"]);
+		if (media_id == Media.LOGO_ICON_MEDIA_ID) {
+			MediaCD mediaCD = new MediaCD();
+			mediaCD.media_id = media_id;
+			mediaCD.game_id = 0;
+			mediaCD.user_id = 0;
+			Media media = new Media(mediaCD);
+			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.logo_icon);
 			media.thumb = media.data;
-			[media setPartialLocalURL:@"blah.png"]; //fake name to get it to know it's of type "IMAGE"
+			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
-		if(media_id == DEFAULT_NOTE_ICON_MEDIA_ID)
-		{
-			MediaCD *mediaCD = [NSEntityDescription insertNewObjectForEntityForName:@"MediaCD" inManagedObjectContext:context];
-			mediaCD.media_id = [NSNumber numberWithLong:media_id];
-			mediaCD.game_id  = [NSNumber numberWithLong:0];
-			mediaCD.user_id  = [NSNumber numberWithLong:0];
-			Media *media = [[Media alloc] initWithMediaCD:mediaCD];
-			media.data =  UIImagePNGRepresentation([UIImage imageNamed:@"note_icon"]);
+		if (media_id == Media.DEFAULT_NOTE_ICON_MEDIA_ID) {
+			MediaCD mediaCD = new MediaCD();
+			mediaCD.media_id = media_id;
+			mediaCD.game_id = 0;
+			mediaCD.user_id = 0;
+			Media media = new Media(mediaCD);
+			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.note_icon);
 			media.thumb = media.data;
-			[media setPartialLocalURL:@"blah.png"]; //fake name to get it to know it's of type "IMAGE"
+			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
 
-		Media *media;
-		if(!(media = medias[[NSNumber numberWithLong:media_id]])) //if doesn't exist in light cache...
+		Media media = medias.get(media_id); //[[NSNumber numberWithLong:media_id]
+		if (media == null) //if doesn't exist in light cache...
 		{
-			NSPredicate *predicate = [NSPredicate predicateWithFormat: @"media_id = %ld", media_id];
-			NSArray *matchingCachedMediaArray = this.mediaForPredicate:predicate];
+			String where = "media_id = " + media_id;
+			Map<Integer, MediaCD> matchingCachedMediaArray = this.mediaForPredicate(where);
 
-			if(matchingCachedMediaArray.count != 0) //if DOES exist in disk cache
-				media = [[Media alloc] initWithMediaCD:(MediaCD *)matchingCachedMediaArray[0]];
+			if (matchingCachedMediaArray.size() != 0) //if DOES exist in disk cache
+				media = new Media(matchingCachedMediaArray.get(0)); //[[Media alloc] initWithMediaCD:(MediaCD *)matchingCachedMediaArray[0]];
 			else //if doesn't yet exist
 			{
-				MediaCD *mediaCD = [NSEntityDescription insertNewObjectForEntityForName:@"MediaCD" inManagedObjectContext:context];
-				mediaCD.media_id = [NSNumber numberWithLong:media_id];
-				mediaCD.game_id  = [NSNumber numberWithLong:0];
-				mediaCD.user_id  = [NSNumber numberWithLong:0];
-				media = [[Media alloc] initWithMediaCD:mediaCD];
+				MediaCD mediaCD = new MediaCD();
+				mediaCD.media_id = media_id;
+				mediaCD.game_id = 0;
+				mediaCD.user_id = 0;
+				media = new Media(mediaCD);
 			}
 		}
-		medias[[NSNumber numberWithLong:media.media_id]] = media; //set light cache
+		medias.put(media.media_id, media); // [[NSNumber numberWithLong:media.media_id]] = media; //set light cache
 
-		this.commitContext];
+//		this.commitContext();
 
 		return media;
 	}
 
-	public Media newMedia()
-	{
-		MediaCD *mediaCD = [NSEntityDescription insertNewObjectForEntityForName:@"MediaCD" inManagedObjectContext:context];
-		mediaCD.media_id = [NSNumber numberWithLong:0];
-		mediaCD.game_id  = [NSNumber numberWithLong:0];
-		mediaCD.user_id  = [NSNumber numberWithLong:0];
-		return [[Media alloc] initWithMediaCD:mediaCD];
+	public Media newMedia() {
+		MediaCD mediaCD = new MediaCD();
+		mediaCD.media_id = 0;
+		mediaCD.game_id = 0;
+		mediaCD.user_id = 0;
+		return new Media(mediaCD);
 	}
 
 	public void saveAlteredMedia(Media m) //yuck
 	{
-		this.commitContext];
+//		this.commitContext();
 	}
 
 

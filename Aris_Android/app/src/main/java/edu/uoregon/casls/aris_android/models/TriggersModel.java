@@ -1,13 +1,19 @@
-//package edu.uoregon.casls.aris_android.models;
-package groupsmodel;
+package edu.uoregon.casls.aris_android.models;
 
+
+import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
+import edu.uoregon.casls.aris_android.Utilities.Config;
+import edu.uoregon.casls.aris_android.data_objects.Factory;
+import edu.uoregon.casls.aris_android.data_objects.Game;
+import edu.uoregon.casls.aris_android.data_objects.Instance;
 import edu.uoregon.casls.aris_android.data_objects.Trigger;
 
 /**
@@ -18,9 +24,12 @@ public class TriggersModel extends ARISModel {
 	public Map<Long, Trigger> triggers = new HashMap<>();
 	public List<Trigger> playerTriggers = new ArrayList<>();
 	public GamePlayActivity mGamePlayAct;
+	public Game mGame;
+	public Map<Long, String> blacklist = new HashMap<>(); //list of ids attempting / attempted and failed to load
 
 	public void initContext(GamePlayActivity gamePlayAct) {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
+		mGame = mGamePlayAct.mGame;
 	}
 
 	public void clearGameData() {
@@ -67,44 +76,38 @@ public class TriggersModel extends ARISModel {
 		this.updateTriggers(newTriggers);
 	}
 
-	public void triggerReceived(NSNotification notif) {
+	public void triggerReceived(Trigger newTrigger) {
 
-		//TODO unsure of noticications
-		this.updateTriggers:@[notif.userInfo[@"trigger"]]];
+		List<Trigger> newTrigs = new ArrayList<>();
+		newTrigs.add(newTrigger);
+		this.updateTriggers(newTrigs);
 	}
 
 	public void updateTriggers(List<Trigger> newTriggers) {
 
-		Trigger newTrigger;
-		//TODO unsure of NSNumber
-		NSNumber *newTriggerId;
+		Long newTriggerId;
 		List<Trigger> invalidatedTriggers = new ArrayList<>();
 
-		int size = newTriggers.size();
-		for (int i = 0; i < size; i++)
+		for (Trigger newTrigger : newTriggers)
 		{
-			newTrigger = newTriggers[i];
 			newTriggerId = newTrigger.trigger_id;
 
-			if (!triggers.get(newTriggerId)) {
-
+			if (!triggers.containsKey(newTriggerId)) {
 				triggers.put(newTriggerId, newTrigger);
 				blacklist.remove(newTriggerId);
 			}
-			//TODO the following line may be incorrect
 			else if (!triggers.get(newTriggerId).mergeDataFromTrigger(newTrigger)) {
 
 				invalidatedTriggers.add(triggers.get(newTriggerId));
 			}
 		}
-		if (invalidatedTriggers.size()) {
-			//TODO unsure of final argument, name for all such funtions
-			_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_INVALIDATED", null, @{@"invalidated_triggers":invalidatedTriggers});
+		if (!invalidatedTriggers.isEmpty()) {
+			mGamePlayAct.mDispatch.model_triggers_available(); //("MODEL_TRIGGERS_INVALIDATED", null, @{@"invalidated_triggers":invalidatedTriggers});
 		}
 
 		n_game_data_received++;
-		_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_AVAILABLE", null, null);
-		_ARIS_NOTIF_SEND_("MODEL_GAME_PIECE_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.model_triggers_available(); //_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.model_game_piece_available();//_ARIS_NOTIF_SEND_("MODEL_GAME_PIECE_AVAILABLE", null, null);
 	}
 
 	public List<Trigger> conformTriggersListToFlyweight(List<Trigger> newTriggers) {
@@ -113,12 +116,11 @@ public class TriggersModel extends ARISModel {
 		List<Trigger> invalidatedTriggers = new ArrayList<>();
 
 		int size = newTriggers.size();
-		for (int i = 0; i < size; i++) {
+		for (Trigger newt : newTriggers) {
 
-			Trigger newt = newTriggers[i];
 			Trigger exist = this.triggerForId(newt.trigger_id);
 
-			if (exist) {
+			if (exist != null) {
 				if (!exist.mergeDataFromTrigger(newt)) {
 					invalidatedTriggers.add(exist);
 				}
@@ -129,115 +131,100 @@ public class TriggersModel extends ARISModel {
 				conformingTriggers.add(newt);
 			}
 		}
-		if (invalidatedTriggers.size()) {
-			_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_INVALIDATED", null, @{@"invalidated_triggers":invalidatedTriggers});
+		if (!invalidatedTriggers.isEmpty()) {
+			mGamePlayAct.mDispatch.model_triggers_invalidated(invalidatedTriggers); //_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_INVALIDATED", null, @{@"invalidated_triggers":invalidatedTriggers});
 		}
 		return conformingTriggers;
 	}
 
-	public void playerTriggersReceived(NSNotification notif) {
+	public void playerTriggersReceived(List<Trigger> newTriggers) {
 
-		this.updatePlayerTriggers(this.conformTriggersListToFlyweight(notif.userInfo[@"triggers"]));
+		this.updatePlayerTriggers(this.conformTriggersListToFlyweight(newTriggers));
 	}
 
 	public void updatePlayerTriggers(List<Trigger> newTriggers) {
 
-		List<Object> addedTriggers = new ArrayList<>();
-		List<Object> removedTriggers = new ArrayList<>();
-
-		//placeholders for comparison
-		Trigger newTrigger;
-		Trigger oldTrigger;
+		List<Trigger> addedTriggers = new ArrayList<>();
+		List<Trigger> removedTriggers = new ArrayList<>();
 
 		//find added
 		boolean flag;
 		int isize = newTriggers.size();
 		int jsize = playerTriggers.size();
 
-		for (int i = 0; i < isize; i++) {
-
+		for (Trigger newTrigger : newTriggers) {
 			flag = true;
-			newTrigger = newTriggers[i];
-
+			for (Trigger oldTrigger : playerTriggers)
 			for (int j = 0; j < jsize; j++) {
-				oldTrigger = playerTriggers[j];
 				if (newTrigger.trigger_id == oldTrigger.trigger_id) {
 					flag = false;
 				}
 			}
 			if (flag) {
-				addedTriggers.add(newTriggers[i]);
+				addedTriggers.add(newTrigger);
 			}
 		}
 
 		//find removed
 		boolean removed;
-		for (int i = 0; i < jsize; i++) {
-
+		for (Trigger oldTrigger : playerTriggers) {
 			removed = true;
-			oldTrigger = playerTriggers[i];
 
-			for (int j = 0; j < isize; j++) {
-
-				newTrigger = newTriggers[j];
-
+			for (Trigger newTrigger : newTriggers) {
 				if (newTrigger.trigger_id == oldTrigger.trigger_id) {
 					removed = false;
 				}
 			}
 			if (removed) {
-				removedTriggers.add(playerTriggers[i]);
+				removedTriggers.add(oldTrigger);
 			}
 		}
 
 		playerTriggers = newTriggers;
 		n_player_data_received++;
 
-		if (addedTriggers.size() > 0) {
-			_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_NEW_AVAILABLE", null, @{@"added":addedTriggers});
+		if (!addedTriggers.isEmpty()) {
+			mGamePlayAct.mDispatch.model_triggers_new_available(addedTriggers);//_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_NEW_AVAILABLE", null, @{@"added":addedTriggers});
 		}
-		if (removedTriggers.size() > 0) {
-			_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_LESS_AVAILABLE", null, @{@"removed":removedTriggers});
+		if (!removedTriggers.isEmpty()) {
+			mGamePlayAct.mDispatch.model_triggers_less_available(removedTriggers);//_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_LESS_AVAILABLE", null, @{@"removed":removedTriggers});
 		}
-		_ARIS_NOTIF_SEND_("MODEL_PLAYER_TRIGGERS_AVAILABLE", null, null);
-		_ARIS_NOTIF_SEND_("MODEL_GAME_PLAYER_PIECE_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.model_player_triggers_available(); //_ARIS_NOTIF_SEND_("MODEL_PLAYER_TRIGGERS_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.model_game_player_piece_available();//_ARIS_NOTIF_SEND_("MODEL_GAME_PLAYER_PIECE_AVAILABLE", null, null);
 	}
 
 	public void requestTriggers() {
-		_SERVICES_.fetchTriggers();
+		mGamePlayAct.mServices.fetchTriggers();
 	}
 	public void requestTrigger(long t) {
-		_SERVICES_.fetchTriggerById(t);
+		mGamePlayAct.mServices.fetchTriggerById(t);
 	}
 
 	public void requestPlayerTriggers() {
 
-		if (this.playerDataReceived() && !_MODEL_GAME_.network_level.equals("REMOTE")) {
+		if (this.playerDataReceived() && !mGame.network_level.equals("REMOTE")) {
 
-			List<Trigger> rejected = new ArrayList<>();
+			List<Instance> rejected = new ArrayList<>();
 			List<Trigger> ptrigs = new ArrayList<>();
 			List<Trigger> ts = new ArrayList<>(triggers.values());
 
-			int size = ts.size();
-			for (int i = 0; i < size; i++) {
-				Trigger t = ts[i];
-				if (t.scene_id != _MODEL_SCENES_.playerScene.scene_id  || ![_MODEL_REQUIREMENTS_.evaluateRequirementRoot(t.requirement_root_package_id)) {
+			for (Trigger t : ts) {
+				if (t.scene_id != mGame.scenesModel.playerScene.scene_id  || !mGame.requirementsModel.evaluateRequirementRoot(t.requirement_root_package_id)) {
 					continue;
 				}
-				//TODO unsure of instances
-				Instance *i = [_MODEL_INSTANCES_ instanceForId:t.instance_id];
+				Instance i = mGame.instancesModel.instanceForId(t.instance_id);
 
-				if (!i) {
+				if (i == null) {
 					continue;
 				}
-				if (i.factory_id) {
-					Factory f = _MODEL_FACTORIES_.factoryForId(i.factory_id);
-					if (!f) {
+				if (i.factory_id != 0) {
+					Factory f = mGame.factoriesModel.factoryForId(i.factory_id);
+					if (f == null) {
 						continue;
 					}
-					//TODO unsure of time
-					int time = [[NSDate date] timeIntervalSinceDate:i.created];
-					NSLog(@"%d",time);
+					Date now = new Date(); // should be now.
+					int time = now.compareTo(i.created); //[[NSDate date] timeIntervalSinceDate:i.created];
+//					NSLog(@"%d",time);
 					if (time > f.produce_expiration_time) {
 						rejected.add(i);
 						continue;
@@ -246,29 +233,27 @@ public class TriggersModel extends ARISModel {
 				ptrigs.add(t);
 			}
 			//TODO unsure of logging
-			NSLog(@"Accepted: %lu, Rejected: %lu",(unsigned long)ptrigs.count,(unsigned long)rejected.count);
-			_ARIS_NOTIF_SEND_("SERVICES_PLAYER_TRIGGERS_RECEIVED", null, @{@"triggers":ptrigs});
+			Log.i(Config.LOGTAG, getClass().getSimpleName() + "Accepted: " + ptrigs.size() + ", Rejected: " + rejected.size());
+			mGamePlayAct.mDispatch.services_player_trigger_received(ptrigs); //("SERVICES_PLAYER_TRIGGERS_RECEIVED", null, @{@"triggers":ptrigs});
 		}
-		if (!this.playerDataReceived() || _MODEL_GAME_.network_level.equals("HYBRID") || _MODEL_GAME_.network_level.equals("REMOTE")) {
-			_SERVICES_.fetchTriggersForPlayer();
+		if (!this.playerDataReceived() || mGame.network_level.equals("HYBRID") || mGame.network_level.equals("REMOTE")) {
+			mGamePlayAct.mServices.fetchTriggersForPlayer();
 		}
 	}
 
 	// null trigger (id == 0) NOT flyweight!!! (to allow for temporary customization safety)
 	public Trigger triggerForId(long trigger_id) {
 
-		if (!trigger_id) {
-			//TODO unsure of in situ alloc
-			return [[Trigger alloc] init];
+		if (trigger_id != 0) {
+			return new Trigger();
 		}
 
 		Trigger t = triggers.get(trigger_id);
 
-		if (!t) {
+		if (t == null) {
 			blacklist.put(trigger_id, "true");
 			this.requestTrigger(trigger_id);
-			//TODO unsure of in situ alloc
-			return [[Trigger alloc] init];
+			return new Trigger();
 		}
 		return t;
 	}
@@ -291,12 +276,8 @@ public class TriggersModel extends ARISModel {
 
 	public Trigger triggerForQRCode(String code) {
 
-		Trigger t;
 
-		int size = playerTriggers.size();
-		for (long i = 0; i < size; i++) {
-
-			t = playerTriggers[i];
+		for (Trigger t : playerTriggers) {
 			if (t.type.equals("QR") && t.qr_code.equals(code)) {
 				return t;
 			}
@@ -312,12 +293,9 @@ public class TriggersModel extends ARISModel {
 
 		List<Trigger> newTriggers = new ArrayList<>();
 
-		int size = playerTriggers.size();
-		for (long i = 0; i < size; i++) {
-
-			if (((Trigger )playerTriggers[i]).instance_id != instance_id) {
-
-				newTriggers.add(playerTriggers[i]);
+		for (Trigger t : playerTriggers) {
+			if (t.instance_id != instance_id) {
+				newTriggers.add(t);
 			}
 		}
 		this.updatePlayerTriggers(newTriggers);

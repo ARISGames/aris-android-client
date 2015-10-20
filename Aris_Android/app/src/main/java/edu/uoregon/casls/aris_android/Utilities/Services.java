@@ -204,4 +204,13 @@ public class Services {
 	public void setPlayerGroupId(long group_id) {
 
 	}
+
+	public void fetchTriggers() {
+	}
+
+	public void fetchTriggerById(long t) {
+	}
+
+	public void fetchTriggersForPlayer() {
+	}
 }

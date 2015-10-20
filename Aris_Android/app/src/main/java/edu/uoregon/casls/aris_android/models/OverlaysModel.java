@@ -1,5 +1,6 @@
 package edu.uoregon.casls.aris_android.models;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,19 +14,11 @@ import edu.uoregon.casls.aris_android.data_objects.Overlay;
 public class OverlaysModel extends ARISModel {
 
 	public Map<Long, Overlay> overlays = new LinkedHashMap<>();
+	public List<Overlay> playerOverlays = new ArrayList<>();
 	public GamePlayActivity mGamePlayAct;
 
 	public void initContext(GamePlayActivity gamePlayAct) {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
-	}
-
-	public void clearGameData() {
-		overlays.clear();
-		n_game_data_received = 0;
-	}
-
-	public void clearPlayerData() {
-
 	}
 
 	public void requestOverlays() {
@@ -44,6 +37,7 @@ public class OverlaysModel extends ARISModel {
 	{
 		this.requestPlayerOverlays();
 	}
+
 	public void clearPlayerData()
 	{
 		playerOverlays.clear();
@@ -56,13 +50,9 @@ public class OverlaysModel extends ARISModel {
 	}
 	public void clearGameData()
 	{
-		this.clearPlayerData];
-		overlays = [[NSMutableDictionary alloc] init];
+		this.clearPlayerData();
+		overlays.clear();// = [[NSMutableDictionary alloc] init];
 		n_game_data_received = 0;
-	}
-	public long nGameDataToReceive
-	{
-		return 1;
 	}
 
 	public void overlaysReceived(List<Overlay> newOverlays)
@@ -72,18 +62,17 @@ public class OverlaysModel extends ARISModel {
 
 	public void updateOverlays(List<Overlay> newOverlays)
 	{
-		Overlay *newOverlay;
-		NSNumber *newOverlayId;
-		for(long i = 0; i < newOverlays.count; i++)
+//		Overlay *newOverlay;
+		Long newOverlayId;
+		for (Overlay newOverlay : newOverlays)
 		{
-			newOverlay = [newOverlays objectAtIndex:i];
-			newOverlayId = [NSNumber numberWithLong:newOverlay.overlay_id];
-			if(![overlays objectForKey:newOverlayId])
-			[overlays setObject:newOverlay forKey:newOverlayId];
+			newOverlayId = newOverlay.overlay_id;
+			if(!overlays.containsKey(newOverlayId))
+			overlays.put(newOverlayId, newOverlay);// setObject:newOverlay forKey:newOverlayId];
 		}
 		n_game_data_received++;
-		_ARIS_NOTIF_SEND_(@"MODEL_OVERLAYS_AVAILABLE",nil,nil);
-		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_overlays_available(overlays); //_ARIS_NOTIF_SEND_(@"MODEL_OVERLAYS_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available();//_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	- (NSArray *) conformOverlaysListToFlyweight:(NSArray *)newOverlays

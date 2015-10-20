@@ -1,5 +1,7 @@
 package edu.uoregon.casls.aris_android.data_objects;
 
+import java.util.Date;
+
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.models.ARISModel;
 
@@ -16,6 +18,7 @@ public class Instance {
 	public long qty;
 	public Boolean infinite_qty;
 	public long factory_id;
+	public Date created;
 
 	public GamePlayActivity mGamePlayAct;
 
