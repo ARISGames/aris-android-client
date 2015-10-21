@@ -25,49 +25,39 @@ public class WebPagesModel extends ARISModel {
 		n_game_data_received = 0;
 	}
 
-	public void requestWebPages() {
-
-	}
-
 	public long nGameDataToReceive ()
 	{
 		return 1;
-	}
-
-	public WebPage webPageForId(long object_id) {
-		return webpages.get(object_id);
 	}
 
 	public void webPagesReceived(List<WebPage> webPages) {
 		this.updateWebPages(webPages);
 	}
 
-
 	public void updateWebPages(List<WebPage> newWebPages)
 	{
-		WebPage *newWebPage;
-		NSNumber *newWebPageId;
-		for(long i = 0; i < newWebPages.count; i++)
+		long newWebPageId;
+
+		for (WebPage newWebPage : newWebPages)
 		{
-			newWebPage = [newWebPages objectAtIndex:i];
-			newWebPageId = [NSNumber numberWithLong:newWebPage.web_page_id];
-			if(![webPages objectForKey:newWebPageId]) [webPages setObject:newWebPage forKey:newWebPageId];
+			newWebPageId = newWebPage.web_page_id;
+			if(!webpages.containsKey(newWebPageId)) webpages.put(newWebPageId, newWebPage); // setObject:newWebPage forKey:newWebPageId];
 		}
-		_ARIS_NOTIF_SEND_(@"MODEL_WEB_PAGES_AVAILABLE",nil,nil);
-		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_web_pages_available(); //;_ARIS_NOTIF_SEND_(@"MODEL_WEB_PAGES_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
 		n_game_data_received++;
 	}
 
-	- (void) requestWebPages
+	public void requestWebPages()
 	{
-		[_SERVICES_ fetchWebPages];
+		mGamePlayAct.mServices.fetchWebPages();
 	}
 
 // null webpage (id == 0) NOT flyweight!!! (to allow for temporary customization safety)
-	- (WebPage *) webPageForId:(long)web_page_id
+	public WebPage webPageForId(long web_page_id)
 	{
-		if(!web_page_id) return [[WebPage alloc] init];
-		return [webPages objectForKey:[NSNumber numberWithLong:web_page_id]];
+		if(web_page_id == 0) return new WebPage();
+		return webpages.get(web_page_id); // objectForKey:[NSNumber numberWithLong:web_page_id]];
 	}
 
 }

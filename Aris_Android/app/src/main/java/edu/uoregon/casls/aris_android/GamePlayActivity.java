@@ -62,6 +62,7 @@ import edu.uoregon.casls.aris_android.data_objects.Trigger;
 import edu.uoregon.casls.aris_android.data_objects.User;
 import edu.uoregon.casls.aris_android.data_objects.WebPage;
 import edu.uoregon.casls.aris_android.models.MediaModel;
+import edu.uoregon.casls.aris_android.models.UsersModel;
 
 public class GamePlayActivity extends ActionBarActivity
 		implements GamePlayNavDrawerFragment.NavigationDrawerCallbacks, GamePlayMapFragment.OnFragmentInteractionListener {
@@ -75,6 +76,8 @@ public class GamePlayActivity extends ActionBarActivity
 	public Dispatcher mDispatch;
 	public Services mServices;
 	public MediaModel mMediaModel;
+	public UsersModel mUsersModel;
+//	public GamesModel mGamesModel; // todo: needed for Andoird?
 	private View mProgressView; // todo: install a progress spinner for server delays
 	public JSONObject mJsonAuth;
 	public Map<Long, Media> mGameMedia = new LinkedHashMap<>();
@@ -122,6 +125,7 @@ public class GamePlayActivity extends ActionBarActivity
 		mDispatch = new Dispatcher(this); // Centralized place for object to object messaging
 		mServices = new Services(this); // Centralized place for server calls.
 		mMediaModel = new MediaModel(this);
+		mUsersModel = new UsersModel(this);
 		// initialize game object's inner classes and variables.
 		mGame.getReadyToPlay();
 		// Start barrage of game related server requests
@@ -622,8 +626,9 @@ public class GamePlayActivity extends ActionBarActivity
 						User user = gson.fromJson(dataStr, User.class);
 						//populate hashmap as user_id, User Obj>
 						mGameUsers.put(user.user_id, user);
-						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
 					}
+					mDispatch.services_users_received(mGameUsers); // _ARIS_NOTIF_SEND_(@"SERVICES_USERS_RECEIVED", nil, @{@"users":users});
+
 				}
 			}
 			else if (callingReq.equals("")) { // stub

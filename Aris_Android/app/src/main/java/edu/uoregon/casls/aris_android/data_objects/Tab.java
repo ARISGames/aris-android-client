@@ -11,5 +11,6 @@ public class Tab {
 	public long content_id;
 	public String info;
 	public long sort_index;
+	public long requirement_root_package_id;
 
 }

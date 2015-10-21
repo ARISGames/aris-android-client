@@ -80,4 +80,8 @@ public class User {
 		}
 		return jsonUser.toString();
 	}
+
+	public void mergeDataFromUser(User newUser) {
+
+	}
 }

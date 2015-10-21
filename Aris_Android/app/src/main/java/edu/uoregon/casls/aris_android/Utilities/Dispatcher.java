@@ -211,23 +211,33 @@ public class Dispatcher {
 	}
 
 	//	MODEL_OVERLAYS_AVAILABLE",nil,nil);
-//	MODEL_OVERLAYS_LESS_AVAILABLE",nil,@{@"removed":removedOverlays});
-//	MODEL_OVERLAYS_NEW_AVAILABLE",nil,@{@"added":addedOverlays});
 	public void model_overlays_available(Map<Long, Overlay> overlays) {
+		// no listeners
+	}
+
+	//	MODEL_OVERLAYS_LESS_AVAILABLE",nil,@{@"removed":removedOverlays});
+	public void model_overlays_less_available(List<Overlay> removedOverlays) {
 		// todo: MapViewController.refreshViewFromModel()
 	}
-//	MODEL_PLAQUES_AVAILABLE",nil,nil);
+
+	//	MODEL_OVERLAYS_NEW_AVAILABLE",nil,@{@"added":addedOverlays});
+	public void model_overlays_new_available(List<Overlay> addedOverlays) {
+		// todo: MapViewController.refreshViewFromModel()
+	}
+
+	//	MODEL_PLAQUES_AVAILABLE",nil,nil);
 //	MODEL_PLAYER_INSTANCES_AVAILABLE",nil,nil);
 //	MODEL_PLAYER_INSTANCES_TOUCHED",nil,nil);
 //	MODEL_PLAYER_PLAYED_GAME_AVAILABLE",nil,notif.userInfo);
 //	MODEL_PLAYER_SCRIPT_OPTIONS_AVAILABLE",nil,uInfo);
 //	MODEL_PLAYER_TRIGGERS_AVAILABLE",nil,nil);
-public void model_player_triggers_available() {
-	// todo: MapViewController.refreshViewFromModel()
-	// todo: NotebookNotesViewController.newNoteListAvailable()
-	mGame.notesModel.invalidateCaches();
-}
-//	MODEL_POPULAR_GAMES_AVAILABLE",nil,nil); }
+	public void model_player_triggers_available() {
+		// todo: MapViewController.refreshViewFromModel()
+		// todo: NotebookNotesViewController.newNoteListAvailable()
+		mGame.notesModel.invalidateCaches();
+	}
+
+	//	MODEL_POPULAR_GAMES_AVAILABLE",nil,nil); }
 //	MODEL_QUESTS_ACTIVE_LESS_AVAILABLE",nil,deltas);
 	public void model_quests_active_less_available(Map<String, List<Quest>> deltas) {
 		// todo: duplicate (UI) behaviour of IconQuestsViewController.refreshViewFromModel()
@@ -280,9 +290,21 @@ public void model_player_triggers_available() {
 //	MODEL_SCENES_PLAYER_SCENE_AVAILABLE",nil,nil);
 //	MODEL_SEARCH_GAMES_AVAILABLE",nil,nil); }
 //	MODEL_TABS_AVAILABLE",nil,nil);
+	public void model_tabs_available() {
+		// no listeners
+	}
 //	MODEL_TABS_LESS_AVAILABLE",nil,deltas);
-//	MODEL_TABS_NEW_AVAILABLE",nil,deltas);
-//	MODEL_TAGS_AVAILABLE",nil,nil);
+
+	public void model_tabs_less_available(Map<String, List<Tab>> deltas) {
+		// todo: GamePlayTabSelectorViewController.refreshFromModel()
+	}
+
+	//	MODEL_TABS_NEW_AVAILABLE",nil,deltas);
+	public void model_tabs_new_available(Map<String, List<Tab>> deltas) {
+		// todo: GamePlayTabSelectorViewController.refreshFromModel()
+	}
+
+	//	MODEL_TAGS_AVAILABLE",nil,nil);
 	public void model_tags_available() {
 		// no listeners
 	}
@@ -291,21 +313,31 @@ public void model_player_triggers_available() {
 	public void model_triggers_available() {
 		// no listeners
 	}
-//	MODEL_TRIGGERS_INVALIDATED",nil,@{@"invalidated_triggers":invalidatedTriggers});
-public void model_triggers_invalidated(List<Trigger> invalidatedTriggers) {
-	// todo: DisplayQueueModel.reevaluateAutoTriggers(invalidatedTriggers)
-	// todo: MapViewController.triggersInvalidated(invalidatedTriggers)
-}
-//	MODEL_TRIGGERS_LESS_AVAILABLE",nil,@{@"removed":removedTriggers});
+
+	//	MODEL_TRIGGERS_INVALIDATED",nil,@{@"invalidated_triggers":invalidatedTriggers});
+	public void model_triggers_invalidated(List<Trigger> invalidatedTriggers) {
+		// todo: DisplayQueueModel.reevaluateAutoTriggers(invalidatedTriggers)
+		// todo: MapViewController.triggersInvalidated(invalidatedTriggers)
+	}
+
+	//	MODEL_TRIGGERS_LESS_AVAILABLE",nil,@{@"removed":removedTriggers});
 	public void model_triggers_less_available(List<Trigger> removedTriggers) {
 		// todo: DisplayQueueModel.reevaluateAutoTriggers(removedTriggers)
 	}
-//	MODEL_TRIGGERS_NEW_AVAILABLE",nil,@{@"added":addedTriggers});
-public void model_triggers_new_available(List<Trigger> addedTriggers) {
-	// todo: DisplayQueueModel.reevaluateAutoTriggers(addedTriggers)
-}
+
+	//	MODEL_TRIGGERS_NEW_AVAILABLE",nil,@{@"added":addedTriggers});
+	public void model_triggers_new_available(List<Trigger> addedTriggers) {
+		// todo: DisplayQueueModel.reevaluateAutoTriggers(addedTriggers)
+	}
+
 	//	MODEL_USERS_AVAILABLE",nil,nil);
+	public void model_users_available() {
+		//no listeners
+	}
 //	MODEL_WEB_PAGES_AVAILABLE",nil,nil);
+	public void model_web_pages_available() {
+		// no listeners
+	}
 //	PusherGameEventReceived",event,nil);
 //	PusherGroupEventReceived",event,nil);
 //	PusherPlayerEventReceived",event,nil);
@@ -413,7 +445,11 @@ public void model_triggers_new_available(List<Trigger> addedTriggers) {
 	//	SERVICES_PLAYER_LOGS_RECEIVED", nil, @{@"logs":logs});
 //	SERVICES_PLAYER_OVERLAYS_RECEIVED", nil, @{@"overlays":overlays});
 //	SERVICES_PLAYER_OVERLAYS_RECEIVED",nil,@{@"triggers":ptrigs});
-//	SERVICES_PLAYER_PLAYED_GAME_RECEIVED", nil, (NSDictionary *)result.resultData);
+	public void services_player_overlays_received(List<Overlay> overlays) {
+		mGame.overlaysModel.playerOverlaysReceived(overlays);
+	}
+
+	//	SERVICES_PLAYER_PLAYED_GAME_RECEIVED", nil, (NSDictionary *)result.resultData);
 //	SERVICES_PLAYER_QUESTS_RECEIVED", nil, quests);
 	public void services_player_quests_received(Map<String, List<Quest>> pquests) {
 		mGame.questsModel.playerQuestsReceived(pquests);
@@ -422,15 +458,19 @@ public void model_triggers_new_available(List<Trigger> addedTriggers) {
 	//	SERVICES_PLAYER_SCENE_RECEIVED", nil, @{@"scene":s});
 //	SERVICES_PLAYER_SCENE_RECEIVED",nil,@{@"scene":playerScene}); //just return current
 //	SERVICES_PLAYER_SCRIPT_OPTIONS_RECEIVED", nil, uInfo);
-//	SERVICES_PLAYER_TABS_RECEIVED", nil, @{@"tabs":tabs});
 //	SERVICES_PLAYER_TABS_RECEIVED",nil,@{@"tabs":ptabs});
-//	SERVICES_PLAYER_TRIGGERS_RECEIVED",nil,@{@"triggers":ptrigs});
+	public void services_player_tabs_received(List<Tab> tabs) {
+		mGame.tabsModel.playerTabsReceived(tabs);
+	}
+
+	//	SERVICES_PLAYER_TRIGGERS_RECEIVED",nil,@{@"triggers":ptrigs});
 	public void services_player_trigger_received(List<Trigger> ptrigs) {
 		// todo: MapViewController.refreshViewFromModel(ptrigs)
 		// todo: NotebookNotesViewController.newNoteListAvailable()
 		mGame.notesModel.invalidateCaches();
 	}
-//	SERVICES_POPULAR_GAMES_RECEIVED", nil, @{@"games":[self parseGames:(NSArray *)result.resultData]});
+
+	//	SERVICES_POPULAR_GAMES_RECEIVED", nil, @{@"games":[self parseGames:(NSArray *)result.resultData]});
 //	SERVICES_QUEST_RECEIVED", nil, @{@"quest":quest});
 //	SERVICES_QUESTS_RECEIVED", nil, @{@"quests":quests});
 	public void services_quests_received(List<Quest> quests) {
@@ -471,6 +511,9 @@ public void model_triggers_new_available(List<Trigger> addedTriggers) {
 //	SERVICES_UPDATE_USER_RECEIVED",nil,@{@"user":user});
 //	SERVICES_USER_RECEIVED", nil, @{@"user":user});
 //	SERVICES_USERS_RECEIVED", nil, @{@"users":users});
+	public void services_users_received(Map<String, User> mGameUsers) {
+		mGamePlayAct.mUsersModel.usersReceived(mGameUsers);
+	}
 //	SERVICES_WEB_PAGE_RECEIVED", nil, @{@"web_page":webPage});
 //	SERVICES_WEB_PAGES_RECEIVED", nil, @{@"webPages":webPages});
 	public void services_web_pages_received(List<WebPage> webPages) {

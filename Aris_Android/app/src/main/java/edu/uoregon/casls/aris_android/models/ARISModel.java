@@ -6,6 +6,28 @@ import edu.uoregon.casls.aris_android.GamePlayActivity;
  * Created by smorison on 9/29/15.
  */
 public class ARISModel {
+	/*
+	*
+- (void) requestGameData;
+- (void) requestPlayerData;
+
+- (void) clearGameData;
+- (void) clearPlayerData;
+
+- (long) nGameDataToReceive;
+- (long) nPlayerDataToReceive;
+- (long) nGameDataReceived;
+- (long) nPlayerDataReceived;
+
+- (BOOL) gameDataReceived;
+- (BOOL) playerDataReceived;
+
+- (NSString *) serializedName;
+- (NSString *) serializeGameData;
+- (void) deserializeGameData:(NSString *)data;
+- (NSString *) serializePlayerData;
+- (void) deserializePlayerData:(NSString *)data;
+*/
 	public long n_game_data_received;
 	public long n_player_data_received;
 

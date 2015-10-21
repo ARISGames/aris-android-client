@@ -135,9 +135,9 @@ public class GroupInstancesModel extends ARISModel {
 	public long qtyOwnedForTag(long tag_id)
 	{
 		long q = 0;
-		long[] item_ids = mGame.tagsModel.objectIdsOfType("ITEM", tag_id);
-		for(int i = 0; i < item_ids.length; i++)
-			q += this.qtyOwnedForItem(item_ids[i]);
+		List<Long> item_ids = mGame.tagsModel.objectIdsOfType("ITEM", tag_id);
+		for (Long item_id : item_ids)
+			q += this.qtyOwnedForItem(item_id);
 		return q;
 	}
 

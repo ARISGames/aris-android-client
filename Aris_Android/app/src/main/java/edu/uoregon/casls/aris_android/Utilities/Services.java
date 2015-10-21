@@ -213,4 +213,26 @@ public class Services {
 
 	public void fetchTriggersForPlayer() {
 	}
+
+	public void fetchOverlays() {
+	}
+
+	public void fetchOverlaysForPlayer() {
+	}
+
+	public void fetchTabs() {
+		
+	}
+
+	public void fetchTabsForPlayer() {
+	}
+
+	public void fetchWebPages() {
+	}
+
+	public void fetchUsers() {
+	}
+
+	public void fetchUserById(long t) {
+	}
 }

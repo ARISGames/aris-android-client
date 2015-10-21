@@ -1,10 +1,13 @@
 package edu.uoregon.casls.aris_android.models;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
+import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Tab;
 
 /**
@@ -12,27 +15,14 @@ import edu.uoregon.casls.aris_android.data_objects.Tab;
  */
 public class TabsModel extends ARISModel {
 
-	public Map<Long, Tab> tabs = new LinkedHashMap<>();
+	public Map<Long, Tab> tabs = new HashMap<>();
+	public List<Tab> playerTabs = new ArrayList<>();
 	public GamePlayActivity mGamePlayAct;
+	public Game mGame;
 
 	public void initContext(GamePlayActivity gamePlayAct) {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
-	}
-
-	public void clearGameData() {
-		tabs.clear();
-		n_game_data_received = 0;
-	}
-
-	public void clearPlayerData() {
-
-	}
-
-	public void requestTabs() {
-	}
-
-	public void requestPlayerTabs() {
-
+		mGame = mGamePlayAct.mGame;
 	}
 
 	public long nGameDataToReceive () {
@@ -40,9 +30,9 @@ public class TabsModel extends ARISModel {
 	}
 
 
-	public void requestPlayerData
+	public void requestPlayerData()
 	{
-		this.requestPlayerTabs];
+		this.requestPlayerTabs();
 	}
 	public void clearPlayerData()
 	{
@@ -50,17 +40,16 @@ public class TabsModel extends ARISModel {
 		n_player_data_received = 0;
 	}
 
-	public void requestGameData
+	public void requestGameData()
 	{
-		this.requestTabs];
+		this.requestTabs();
 	}
-	public void clearGameData
+	public void clearGameData()
 	{
-		this.clearPlayerData];
-		tabs = [[NSMutableDictionary alloc] init];
+		this.clearPlayerData();
+		tabs.clear();
 		n_game_data_received = 0;
 	}
-
 
 	public void tabsReceived(List<Tab> newTabs)
 	{
@@ -69,141 +58,130 @@ public class TabsModel extends ARISModel {
 
 	public void updateTabs(List<Tab> newTabs)
 	{
-		Tab *newTab;
-		NSNumber *newTabId;
-		for(long i = 0; i < newTabs.count; i++)
+		long newTabId;
+		for (Tab newTab : newTabs)
 		{
-			newTab = [newTabs objectAtIndex:i];
-			newTabId = [NSNumber numberWithLong:newTab.tab_id];
-			if(![tabs objectForKey:newTabId]) [tabs setObject:newTab forKey:newTabId];
+			newTabId = newTab.tab_id;
+			if(!tabs.containsKey(newTabId)) tabs.put(newTabId, newTab); // setObject:newTab forKey:newTabId];
 		}
 		n_game_data_received++;
-		_ARIS_NOTIF_SEND_(@"MODEL_TABS_AVAILABLE",nil,nil);
-		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_tabs_available(); //_ARIS_falseTIF_SEND_(@"MODEL_TABS_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_falseTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
-	public void requestTabs       { [_SERVICES_ fetchTabs]; }
+	public void requestTabs()       { mGamePlayAct.mServices.fetchTabs(); }
 
-	public void requestPlayerTabs
+	public void requestPlayerTabs()
 	{
-		if(this.playerDataReceived] &&
-		![_MODEL_GAME_.network_level isEqualToString:@"REMOTE"])
+		if(this.playerDataReceived() && !mGame.network_level.contentEquals("REMOTE"))
 		{
-			NSMutableArray *ptabs = [[NSMutableArray alloc] init];
-			NSArray *ts = [tabs allValues];
-			for(int i = 0; i < ts.count; i++)
+			List<Tab> ptabs = new ArrayList<>();
+			Collection<Tab> ts = tabs.values();// allValues];
+			for (Tab t : ts)
 			{
-				Tab *t = ts[i];
-				if([_MODEL_REQUIREMENTS_ evaluateRequirementRoot:t.requirement_root_package_id])
-				[ptabs addObject:t];
+				if(mGame.requirementsModel.evaluateRequirementRoot(t.requirement_root_package_id))
+				ptabs.add(t); // addObject:t];
 			}
-			_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_TABS_RECEIVED",nil,@{@"tabs":ptabs});
+			mGamePlayAct.mDispatch.services_player_tabs_received(ptabs); //_ARIS_falseTIF_SEND_(@"SERVICES_PLAYER_TABS_RECEIVED",nil,@{@"tabs":ptabs});
 		}
-		if(!this.playerDataReceived] ||
-		[_MODEL_GAME_.network_level isEqualToString:@"HYBRID"] ||
-		[_MODEL_GAME_.network_level isEqualToString:@"REMOTE"])
-		[_SERVICES_ fetchTabsForPlayer];
+		if(!this.playerDataReceived() ||
+		mGame.network_level.contentEquals("HYBRID") ||
+		mGame.network_level.contentEquals("REMOTE"))
+		mGamePlayAct.mServices.fetchTabsForPlayer();
 	}
 
 //admittedly a bit silly, but a great way to rid any risk of deviation from flyweight by catching it at the beginning
-	- (NSArray *) conformTabListToFlyweight:(NSArray *)newTabs
+	public List<Tab> conformTabListToFlyweight(List<Tab> newTabs)
 	{
-		NSMutableArray *conformingTabs = [[NSMutableArray alloc] init];
-		Tab *t;
-		for(long i = 0; i < newTabs.count; i++)
+		List<Tab>  conformingTabs = new ArrayList<>();
+		for (Tab t : newTabs)
 		{
-			if((t = this.tabForId:((Tab *)newTabs[i]).tab_id]))
-			[conformingTabs addObject:t];
+			if((t = this.tabForId(t.tab_id)) != null)
+			conformingTabs.add(t); // addObject:t];
 		}
 
 		return conformingTabs;
 	}
 
-	public void playerTabsReceived:(NSNotification *)notification
+	public void playerTabsReceived(List<Tab> newTabs)
 	{
-		this.updatePlayerTabs:this.conformTabListToFlyweight:[notification.userInfo objectForKey:@"tabs"]]];
+		this.updatePlayerTabs(this.conformTabListToFlyweight(newTabs));
 	}
 
-	public void updatePlayerTabs:(NSArray *)newTabs
+	public void updatePlayerTabs(List<Tab> newTabs)
 	{
-		NSDictionary *deltas = this.findDeltasInNew:newTabs fromOld:playerTabs];
+		Map<String, List<Tab>> deltas = this.findDeltasInNew(newTabs, playerTabs);
 		playerTabs = newTabs; //assumes already conforms to flyweight
 		n_player_data_received++;
-		if(((NSArray *)deltas[@"added"]).count > 0)
-		_ARIS_NOTIF_SEND_(@"MODEL_TABS_NEW_AVAILABLE",nil,deltas);
-		if(((NSArray *)deltas[@"removed"]).count > 0)
-		_ARIS_NOTIF_SEND_(@"MODEL_TABS_LESS_AVAILABLE",nil,deltas);
-		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PLAYER_PIECE_AVAILABLE",nil,nil);
+		if(deltas.get("added").size() > 0)
+		mGamePlayAct.mDispatch.model_tabs_new_available(deltas); //_ARIS_falseTIF_SEND_(@"MODEL_TABS_NEW_AVAILABLE",nil,deltas);
+		if(deltas.get("removed").size() > 0)
+			mGamePlayAct.mDispatch.model_tabs_less_available(deltas); //_ARIS_falseTIF_SEND_(@"MODEL_TABS_LESS_AVAILABLE",nil,deltas);
+		mGamePlayAct.mDispatch.model_game_player_piece_available(); //_ARIS_falseTIF_SEND_(@"MODEL_GAME_PLAYER_PIECE_AVAILABLE",nil,nil);
 	}
 
-	- (NSDictionary *) findDeltasInNew:(NSArray *)newTabs fromOld:(NSArray *)oldTabs
+	Map<String, List<Tab>> findDeltasInNew(List<Tab> newTabs, List<Tab> oldTabs)
 	{
-		NSDictionary *qDeltas = @{ @"added":[[NSMutableArray alloc] init], @"removed":[[NSMutableArray alloc] init] };
-
-		//placeholders for comparison
-		Tab *newTab;
-		Tab *oldTab;
+		Map<String, List<Tab>> qDeltas = new HashMap<>(); //@{ @"added":[[NSMutableArray alloc] init], @"removed":[[NSMutableArray alloc] init] };
+		qDeltas.put("added", new ArrayList<Tab>());
+		qDeltas.put("removed", new ArrayList<Tab>());
 
 		//find added
-		BOOL new;
-		for(long i = 0; i < newTabs.count; i++)
+		boolean isNew;
+		for (Tab newTab : newTabs)
 		{
-			new = YES;
-			newTab = newTabs[i];
-			for(long j = 0; j < oldTabs.count; j++)
+			isNew = true;
+			for (Tab oldTab : oldTabs)
 			{
-				oldTab = oldTabs[j];
-				if(newTab.tab_id == oldTab.tab_id) new = NO;
+				if(newTab.tab_id == oldTab.tab_id) isNew = false;
 			}
-			if(new) [qDeltas[@"added"] addObject:newTabs[i]];
+			if(isNew) qDeltas.get("added").add(newTab);
 		}
 
 		//find removed
-		BOOL removed;
-		for(long i = 0; i < oldTabs.count; i++)
+		boolean removed;
+		for (Tab oldTab : oldTabs)
 		{
-			removed = YES;
-			oldTab = oldTabs[i];
-			for(long j = 0; j < newTabs.count; j++)
+			removed = true;
+			for (Tab newTab : newTabs)
 			{
-				newTab = newTabs[j];
-				if(newTab.tab_id == oldTab.tab_id) removed = NO;
+				if(newTab.tab_id == oldTab.tab_id) removed = false;
 			}
-			if(removed) [qDeltas[@"removed"] addObject:oldTabs[i]];
+			if(removed) qDeltas.get("removed").add(oldTab);
 		}
 
 		return qDeltas;
 	}
 
-	- (Tab *) tabForType:(NSString *)t
+	public Tab tabForType(String t)
 	{
-		Tab *tab;
 
 		//first, search player tabs
-		for(long i = 0; i < playerTabs.count; i++)
+		for (Tab tab : playerTabs)
 		{
-			if([((Tab *)playerTabs[i]).type isEqualToString:t])
-			tab = playerTabs[i];
+			if(tab.type.contentEquals(t))
+				return tab;
 		}
-		if(tab) return tab;
 
 		//if not found, try to get any game tab
-		NSArray *gameTabs = [tabs allValues];
-		for(long i = 0; i < gameTabs.count; i++)
+		Collection<Tab> gameTabs = tabs.values();
+		for (Tab tab : gameTabs)
 		{
-			if([((Tab *)gameTabs[i]).type isEqualToString:t])
-			tab = gameTabs[i];
+			if(tab.type.contentEquals(t))
+				return tab;
 		}
-		return tab;
+
+		// default:
+		return new Tab();
 	}
 
-	- (Tab *) tabForId:(long)tab_id
+	public Tab tabForId(long tab_id)
 	{
-		if(!tab_id) return [[Tab alloc] init];
-		return [tabs objectForKey:[NSNumber numberWithLong:tab_id]];
+		if (tab_id == 0) return new Tab();
+		return tabs.get(tab_id);// objectForKey:[NSNumber numberWithLong:tab_id]];
 	}
 
-	- (NSArray *) playerTabs
+	public List<Tab> playerTabs()
 	{
 		return playerTabs;
 	}
