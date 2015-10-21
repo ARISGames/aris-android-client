@@ -278,7 +278,7 @@ public class TriggersModel extends ARISModel {
 
 
 		for (Trigger t : playerTriggers) {
-			if (t.type.equals("QR") && t.qr_code.equals(code)) {
+			if (t.type.contentEquals("QR") && t.qr_code.contentEquals(code)) {
 				return t;
 			}
 		}
