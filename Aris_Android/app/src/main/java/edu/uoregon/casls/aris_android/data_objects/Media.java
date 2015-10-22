@@ -1,8 +1,11 @@
 package edu.uoregon.casls.aris_android.data_objects;
 
+import android.content.res.AssetFileDescriptor;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -32,9 +35,19 @@ public class Media {
 	public URL url; // was: remoteURL; // are both url and thumb_url always the same?
 	public URL localThumbURL;
 	public URL thumb_url; // was: remoteThumbURL; // are both url and thumb_url always the same?
-	public Drawable data;
-	public Drawable thumb;
+//	public Drawable data; // these will not serialize with GSON and will cause a recursion-like stack overflow;
+//	public Drawable thumb;// todo: replace these with the raw image data somehow, or perhaps just the drawable resourceID.
+	public Bitmap data; // todo: need to flesh out how this would hold the data across serialization.
+	public Bitmap thumb;
 
+/*   Get the raw data from a resource and convert to a file:
+	Resources res = getResources();
+	Drawable drawable = res.getDrawable(R.drawable.my_pic);
+	Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+	ByteArrayOutputStream stream = new ByteArrayOutputStream();
+	bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+	byte[] bitMapData = stream.toByteArray();
+        */
 	public Media() {
 		this.mediaCD = new MediaCD();
 	}

@@ -2,6 +2,8 @@ package edu.uoregon.casls.aris_android.models;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -241,7 +243,10 @@ public class MediaModel extends ARISModel {
 			Media media = new Media(mediaCD);
 			// UIImagePNGRepresentation = Return the data for the specified image in PNG format
 			// get data from drawable image and lode into object field
-			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.plaque_icon_120);//UIImagePNGRepresentation([UIImage imageNamed:@"plaque_icon_120"]);
+//			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.plaque_icon_120);//UIImagePNGRepresentation([UIImage imageNamed:@"plaque_icon_120"]);
+//			media.thumb = media.data;
+			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.plaque_icon_120);
+			media.data = ((BitmapDrawable)drawable).getBitmap();;
 			media.thumb = media.data;
 			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
@@ -252,8 +257,8 @@ public class MediaModel extends ARISModel {
 			mediaCD.game_id = 0;
 			mediaCD.user_id = 0;
 			Media media = new Media(mediaCD);
-			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.item_icon_120);
-			media.thumb = media.data;
+//			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.item_icon_120);
+//			media.thumb = media.data;
 			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
@@ -263,8 +268,8 @@ public class MediaModel extends ARISModel {
 			mediaCD.game_id = 0;
 			mediaCD.user_id = 0;
 			Media media = new Media(mediaCD);
-			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.conversation_icon_120);
-			media.thumb = media.data;
+//			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.conversation_icon_120);
+//			media.thumb = media.data;
 			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
@@ -274,8 +279,8 @@ public class MediaModel extends ARISModel {
 			mediaCD.game_id = 0;
 			mediaCD.user_id = 0;
 			Media media = new Media(mediaCD);
-			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.webpage_icon_120);
-			media.thumb = media.data;
+//			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.webpage_icon_120);
+//			media.thumb = media.data;
 			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
@@ -285,8 +290,8 @@ public class MediaModel extends ARISModel {
 			mediaCD.game_id = 0;
 			mediaCD.user_id = 0;
 			Media media = new Media(mediaCD);
-			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.logo_icon);
-			media.thumb = media.data;
+//			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.logo_icon);
+//			media.thumb = media.data;
 			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
@@ -296,8 +301,8 @@ public class MediaModel extends ARISModel {
 			mediaCD.game_id = 0;
 			mediaCD.user_id = 0;
 			Media media = new Media(mediaCD);
-			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.note_icon);
-			media.thumb = media.data;
+//			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.note_icon);
+//			media.thumb = media.data;
 			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
@@ -309,7 +314,7 @@ public class MediaModel extends ARISModel {
 			Map<Integer, MediaCD> matchingCachedMediaArray = this.mediaForPredicate(where);
 
 			if (matchingCachedMediaArray.size() != 0) //if DOES exist in disk cache
-				media = new Media(matchingCachedMediaArray.get(0)); //[[Media alloc] initWithMediaCD:(MediaCD *)matchingCachedMediaArray[0]];
+				media = new Media(); //new Media(matchingCachedMediaArray.get(0)); //[[Media alloc] initWithMediaCD:(MediaCD *)matchingCachedMediaArray[0]];
 			else //if doesn't yet exist
 			{
 				MediaCD mediaCD = new MediaCD();
