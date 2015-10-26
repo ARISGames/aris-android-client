@@ -33,41 +33,30 @@ public class TriggersModel extends ARISModel {
 	}
 
 	public void clearGameData() {
+		this.clearPlayerData();
 		triggers.clear();
+		blacklist.clear();
 		n_game_data_received = 0;
 	}
 
-//	public void clearGameData() {
-//		this.clearPlayerData();
-//		triggers  = [[NSMutableDictionary alloc] init];
-//		blacklist = [[NSMutableDictionary alloc] init];
-//		n_game_data_received = 0;
-//	}
-
 	public void clearPlayerData() {
-
 		playerTriggers.clear();
 		n_player_data_received = 0;
 	}
 
 	public void requestPlayerData() {
-
 		this.requestPlayerTriggers();
 	}
 
 	public long nPlayerDataToReceive() {
-
 		return 1;
 	}
 
 	public void requestGameData() {
-
 		this.requestTriggers();
 	}
 
-
 	public long nGameDataToReceive() {
-
 		return 1;
 	}
 
@@ -84,7 +73,6 @@ public class TriggersModel extends ARISModel {
 	}
 
 	public void updateTriggers(List<Trigger> newTriggers) {
-
 		Long newTriggerId;
 		List<Trigger> invalidatedTriggers = new ArrayList<>();
 
@@ -111,10 +99,8 @@ public class TriggersModel extends ARISModel {
 	}
 
 	public List<Trigger> conformTriggersListToFlyweight(List<Trigger> newTriggers) {
-
 		List<Trigger> conformingTriggers = new ArrayList<>();
 		List<Trigger> invalidatedTriggers = new ArrayList<>();
-
 		int size = newTriggers.size();
 		for (Trigger newt : newTriggers) {
 
@@ -143,7 +129,6 @@ public class TriggersModel extends ARISModel {
 	}
 
 	public void updatePlayerTriggers(List<Trigger> newTriggers) {
-
 		List<Trigger> addedTriggers = new ArrayList<>();
 		List<Trigger> removedTriggers = new ArrayList<>();
 
@@ -201,9 +186,7 @@ public class TriggersModel extends ARISModel {
 	}
 
 	public void requestPlayerTriggers() {
-
 		if (this.playerDataReceived() && !mGame.network_level.equals("REMOTE")) {
-
 			List<Instance> rejected = new ArrayList<>();
 			List<Trigger> ptrigs = new ArrayList<>();
 			List<Trigger> ts = new ArrayList<>(triggers.values());
@@ -243,13 +226,10 @@ public class TriggersModel extends ARISModel {
 
 	// null trigger (id == 0) NOT flyweight!!! (to allow for temporary customization safety)
 	public Trigger triggerForId(long trigger_id) {
-
 		if (trigger_id != 0) {
 			return new Trigger();
 		}
-
 		Trigger t = triggers.get(trigger_id);
-
 		if (t == null) {
 			blacklist.put(trigger_id, "true");
 			this.requestTrigger(trigger_id);
@@ -259,14 +239,11 @@ public class TriggersModel extends ARISModel {
 	}
 
 	public List<Trigger> triggersForInstanceId(long instance_id) {
-
 		List<Trigger> a = new ArrayList<>();
 
 		int size = triggers.size();
 		for (long i = 0; i < size; i++) {
-
 			Trigger t = triggers.get(i);
-
 			if (t.instance_id == instance_id) {
 				a.add(t);
 			}
@@ -275,8 +252,6 @@ public class TriggersModel extends ARISModel {
 	}
 
 	public Trigger triggerForQRCode(String code) {
-
-
 		for (Trigger t : playerTriggers) {
 			if (t.type.contentEquals("QR") && t.qr_code.contentEquals(code)) {
 				return t;
@@ -290,9 +265,7 @@ public class TriggersModel extends ARISModel {
 	}
 
 	public void expireTriggersForInstanceId(long instance_id) {
-
 		List<Trigger> newTriggers = new ArrayList<>();
-
 		for (Trigger t : playerTriggers) {
 			if (t.instance_id != instance_id) {
 				newTriggers.add(t);
@@ -300,5 +273,4 @@ public class TriggersModel extends ARISModel {
 		}
 		this.updatePlayerTriggers(newTriggers);
 	}
-
 }

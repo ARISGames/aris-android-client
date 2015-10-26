@@ -39,7 +39,6 @@ public class EventsModel extends ARISModel {
 		return 1;
 	}
 
-
 	public void requestGameData() {
 		this.requestEvents();
 	}

@@ -97,7 +97,6 @@ public class NotesModel extends ARISModel {
 		long newNoteId;
 		for (Note newNote : newNotes) {
 			newNoteId = newNote.note_id;
-//			if(!notes[newNoteId]) [notes setObject:newNote forKey:newNoteId];
 			if (!notes.containsKey(newNoteId)) notes.put(newNoteId, newNote);
 		}
 		n_game_data_received++;
@@ -144,7 +143,6 @@ public class NotesModel extends ARISModel {
 
 	public List<Note> playerNotes() {
 		if (!playerNotes.isEmpty()) return playerNotes;
-//		playerNotes = new List<Note>;
 		Collection<Note> ns = notes.values();
 		for (Note n : ns)
 			if (n.user_id == Long.getLong(mGamePlayAct.mPlayer.user_id)) playerNotes.add(n);
@@ -153,12 +151,9 @@ public class NotesModel extends ARISModel {
 
 	public List<Note> listNotes() {
 		if (!listNotes.isEmpty()) return listNotes;
-//		listNotes = new List<Note>;
-
 		for (int i = 0; i < mGame.triggersModel.playerTriggers.size(); i++) {
 			Trigger trigger = mGame.triggersModel.playerTriggers.get(i);
 			Instance instance = mGame.instancesModel.instanceForId(trigger.instance_id);
-
 			if (instance.object_type.contentEquals("NOTE")) {
 				Note note = (Note) instance.object();
 				if (note != null) listNotes.add(note); //[listNotes addObject:note];

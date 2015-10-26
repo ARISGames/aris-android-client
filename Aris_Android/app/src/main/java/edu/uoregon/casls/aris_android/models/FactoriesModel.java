@@ -19,7 +19,6 @@ public class FactoriesModel extends ARISModel {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
 	}
 
-
 	public void clearGameData() {
 		factories.clear();
 		n_game_data_received = 0;
@@ -28,7 +27,6 @@ public class FactoriesModel extends ARISModel {
 	public long nGameDataToReceive () {
 		return 1;
 	}
-
 
 	public void requestGameData()
 	{

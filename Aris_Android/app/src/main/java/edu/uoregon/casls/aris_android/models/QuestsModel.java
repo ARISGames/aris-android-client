@@ -87,8 +87,10 @@ public class QuestsModel extends ARISModel {
 //				@"complete" : [[NSMutableArray alloc] init]
 //			};
 			Map<String, List<Quest>> pquests = new HashMap<>();
-			List<Quest> qListComplete = new LinkedList<>();	pquests.put("complete", qListComplete);
-			List<Quest> qListActive = new LinkedList<>(); 	pquests.put("active", qListActive);
+			List<Quest> qListComplete = new LinkedList<>();
+			pquests.put("complete", qListComplete);
+			List<Quest> qListActive = new LinkedList<>();
+			pquests.put("active", qListActive);
 			Collection<Quest> qs = quests.values();// allValues;
 			for (Quest q : qs) {
 				if (mGame.requirementsModel.evaluateRequirementRoot(q.active_requirement_root_package_id)) {
@@ -122,7 +124,6 @@ public class QuestsModel extends ARISModel {
 
 	//admittedly a bit silly, but a great way to rid any risk of deviation from flyweight by catching it at the beginning
 	public List<Quest> conformQuestListToFlyweight(List<Quest> newQuests) {
-//		NSMutableArray *conformingQuests = [[NSMutableArray alloc] init;
 		List<Quest> conformingQuests = new LinkedList<>();
 		for (Quest q : newQuests) {
 			if (this.questForId(q.quest_id) != null)
@@ -132,8 +133,7 @@ public class QuestsModel extends ARISModel {
 		return conformingQuests;
 	}
 
-	public void playerQuestsReceived(Map<String, List<Quest>> pquests) //todo: params needed???
-	{
+	public void playerQuestsReceived(Map<String, List<Quest>> pquests) { //todo: params needed???
 		this.updateCompleteQuests(this.conformQuestListToFlyweight(pquests.get("complete"))); //objectForKey:@"complete"]];
 		this.updateActiveQuests(this.conformQuestListToFlyweight(pquests.get("active"))); //.userInfo objectForKey:@"active"]];
 		n_player_data_received++;
@@ -142,7 +142,7 @@ public class QuestsModel extends ARISModel {
 
 	public void updateActiveQuests(List<Quest> newQuests) {
 		Map<String, List<Quest>> deltas = this.findDeltasInNew(newQuests, visibleActiveQuests);
-		;
+
 		visibleActiveQuests = newQuests; //assumes already conforms to flyweight
 
 		List<Quest> addedDeltas = deltas.get("added");
@@ -179,8 +179,10 @@ public class QuestsModel extends ARISModel {
 	public Map<String, List<Quest>> findDeltasInNew(List<Quest> newQuests, List<Quest> oldQuests) {
 //		NSDictionary *qDeltas = @{ @"added"([NSMutableArray alloc] init], @"removed"([NSMutableArray alloc] init] };
 		Map<String, List<Quest>> qDeltas = new HashMap<>();
-		List<Quest> qListAdded = new LinkedList<>(); 	qDeltas.put("added", qListAdded);
-		List<Quest> qListRemoved = new LinkedList<>(); 	qDeltas.put("removed", qListRemoved);
+		List<Quest> qListAdded = new LinkedList<>();
+		qDeltas.put("added", qListAdded);
+		List<Quest> qListRemoved = new LinkedList<>();
+		qDeltas.put("removed", qListRemoved);
 
 		//find added
 		boolean newq;

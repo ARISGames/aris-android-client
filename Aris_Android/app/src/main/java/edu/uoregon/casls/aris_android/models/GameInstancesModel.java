@@ -28,7 +28,6 @@ public class GameInstancesModel extends ARISModel {
 	public GameInstancesModel() {
 	}
 
-
 	public GameInstancesModel(GamePlayActivity gamePlayAct) {
 		this.initContext(gamePlayAct);
 	}
@@ -60,7 +59,6 @@ public class GameInstancesModel extends ARISModel {
 	public void requestGameData() {
 		this.touchGameInstances();
 	}
-
 
 	public void gameInstancesTouched(List<GameInstance> gameInstances) {
 		n_game_data_received++;

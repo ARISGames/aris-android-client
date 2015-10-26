@@ -29,8 +29,8 @@ public class ItemsModel extends ARISModel {
 
 	private void updateItems() {
 		n_game_data_received++;
-//		_ARIS_NOTIF_SEND_(@"MODEL_ITEMS_AVAILABLE",nil,nil);
-//		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_items_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_ITEMS_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void requestItems() {

@@ -170,6 +170,9 @@ public class Dispatcher {
 	}
 
 	//	MODEL_ITEMS_AVAILABLE",nil,nil);
+	public void model_items_available() {
+		// todo: listeners?
+	}
 //	MODEL_LOGGED_IN",nil,nil);
 //	MODEL_LOGGED_OUT",nil,nil);
 //	MODEL_LOGIN_FAILED",nil,nil); }
@@ -227,6 +230,9 @@ public class Dispatcher {
 
 	//	MODEL_PLAQUES_AVAILABLE",nil,nil);
 //	MODEL_PLAYER_INSTANCES_AVAILABLE",nil,nil);
+	public void model_player_instances_available() {
+		// todo: find listners
+	}
 //	MODEL_PLAYER_INSTANCES_TOUCHED",nil,nil);
 //	MODEL_PLAYER_PLAYED_GAME_AVAILABLE",nil,notif.userInfo);
 //	MODEL_PLAYER_SCRIPT_OPTIONS_AVAILABLE",nil,uInfo);
@@ -287,6 +293,9 @@ public class Dispatcher {
 
 	//	MODEL_SCENE_TOUCHED",nil,nil);
 //	MODEL_SCENES_AVAILABLE",nil,nil);
+	public void model_scenes_available() {
+		// todo: find listeners
+	}
 //	MODEL_SCENES_PLAYER_SCENE_AVAILABLE",nil,nil);
 //	MODEL_SEARCH_GAMES_AVAILABLE",nil,nil); }
 //	MODEL_TABS_AVAILABLE",nil,nil);
@@ -458,6 +467,9 @@ public class Dispatcher {
 	//	SERVICES_PLAYER_SCENE_RECEIVED", nil, @{@"scene":s});
 //	SERVICES_PLAYER_SCENE_RECEIVED",nil,@{@"scene":playerScene}); //just return current
 //	SERVICES_PLAYER_SCRIPT_OPTIONS_RECEIVED", nil, uInfo);
+	public void services_player_script_options_received(Map<String, Object> uInfo) {
+		// todo: find listeners for this
+	}
 //	SERVICES_PLAYER_TABS_RECEIVED",nil,@{@"tabs":ptabs});
 	public void services_player_tabs_received(List<Tab> tabs) {
 		mGame.tabsModel.playerTabsReceived(tabs);

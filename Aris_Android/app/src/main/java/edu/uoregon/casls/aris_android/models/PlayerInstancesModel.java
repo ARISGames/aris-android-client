@@ -66,7 +66,7 @@ public class PlayerInstancesModel extends ARISModel {
 	}
 
 	public void touchPlayerInstances() {
-		// call (via two messages) Game.gamePieceReceived()
+		// call (via two messages) Game.gamePieceReceived() // todo: check for completeness
 
 	}
 
@@ -96,7 +96,7 @@ public class PlayerInstancesModel extends ARISModel {
 			if(!newInstance.object_type.contentEquals("ITEM") || newInstance.owner_id != Long.getLong(mGamePlayAct.mPlayer.user_id)) continue;
 
 		}
-//		_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_INSTANCES_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_player_instances_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_INSTANCES_AVAILABLE",nil,nil);
 	}
 
 	public void calculateWeight() {

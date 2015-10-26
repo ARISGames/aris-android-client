@@ -15,7 +15,6 @@ import edu.uoregon.casls.aris_android.data_objects.Log;
 public class LogsModel extends ARISModel {
 
 	public Map<Long, Log> logs = new LinkedHashMap<>();
-	//	public Collection<Log> logs = new LinkedList<>();
 	public long local_log_id; //starts at 1, no way it will ever catch up to actual logs
 
 	public GamePlayActivity mGamePlayAct;
@@ -52,7 +51,6 @@ public class LogsModel extends ARISModel {
 		long newLogId;
 		for (Log newLog : newLogs) {
 			newLogId = newLog.log_id;
-//			if (logs.get(newLogId) == null)
 			if (!logs.containsKey(newLogId))
 				logs.put(newLogId, newLog); // setObject:newLog forKey:newLogId);
 		}

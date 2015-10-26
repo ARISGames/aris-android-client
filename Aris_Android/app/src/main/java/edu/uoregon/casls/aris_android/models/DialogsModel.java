@@ -12,7 +12,6 @@ import edu.uoregon.casls.aris_android.data_objects.Dialog;
 import edu.uoregon.casls.aris_android.data_objects.DialogCharacter;
 import edu.uoregon.casls.aris_android.data_objects.DialogOption;
 import edu.uoregon.casls.aris_android.data_objects.DialogScript;
-import edu.uoregon.casls.aris_android.data_objects.Item;
 
 /**
  * Created by smorison on 8/20/15.
@@ -98,7 +97,6 @@ public class DialogsModel extends ARISModel {
 
 	public void requestPlayerOptionsForDialogId(long dialog_id, long dialog_script_id) {
 		if(!mGamePlayAct.mGame.network_level.contentEquals("REMOTE")) {
-//			NSMutableArray *pops = [[NSMutableArray alloc] init];
 			List<DialogOption> pops = new LinkedList<>();
 //			NSDictionary *uInfo = @{@"options":pops,
 //			@"dialog_id":[NSNumber numberWithLong:dialog_id],
@@ -108,23 +106,17 @@ public class DialogsModel extends ARISModel {
 				uInfo.put("dialog_id", dialog_id);
 				uInfo.put("dialog_script_id", dialog_script_id);
 
-//			NSArray *os = [dialogOptions allValues];
 			Collection<DialogOption> os = dialogOptions.values();
-//			for(int i = 0; i < os.count; i++)
 			for (DialogOption o : os) {
 				if (o.dialog_id == dialog_id &&
 						o.parent_dialog_script_id == dialog_script_id &&
 					mGamePlayAct.mGame.requirementsModel.evaluateRequirementRoot(o.requirement_root_package_id));
 				pops.add(o); // addObject:o];
 			}
-//			_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_SCRIPT_OPTIONS_RECEIVED", nil, uInfo);
+			mGamePlayAct.mDispatch.services_player_script_options_received(uInfo); //_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_SCRIPT_OPTIONS_RECEIVED", nil, uInfo);
 		}
 		else  mGamePlayAct.mServices.fetchOptionsForPlayerForDialog(dialog_id, dialog_script_id); //_SERVICES_ fetchOptionsForPlayerForDialog:dialog_id script:dialog_script_id];
 	}
-
-//	public Dialog dialogForId(long object_id) {
-//		return dialogs.get(object_id);
-//	}
 
 // null dialog/character/script (id == 0) NOT flyweight!!! (to allow for temporary customization safety)
 	public Dialog dialogForId(long dialog_id)
@@ -132,19 +124,19 @@ public class DialogsModel extends ARISModel {
 		if (dialog_id == 0) return new Dialog();
 		return dialogs.get(dialog_id);
 	}
-//	- (DialogCharacter *) characterForId:(long)dialog_character_id
+
 	public DialogCharacter characterForId(long dialog_character_id)
 	{
 		if (dialog_character_id == 0) return new DialogCharacter();
 		return dialogCharacters.get(dialog_character_id);
 	}
-//	- (DialogScript *) scriptForId:(long)dialog_script_id
+
 	public DialogScript scriptForId(long dialog_script_id)
 	{
 		if (dialog_script_id == 0) return new DialogScript();
 		return dialogScripts.get(dialog_script_id);
 	}
-//	- (DialogOption *) optionForId:(long)dialog_option_id
+
 	public DialogOption optionForId(long dialog_option_id)
 	{
 		if (dialog_option_id == 0) return new DialogOption();
