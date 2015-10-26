@@ -243,10 +243,8 @@ public class MediaModel extends ARISModel {
 			Media media = new Media(mediaCD);
 			// UIImagePNGRepresentation = Return the data for the specified image in PNG format
 			// get data from drawable image and lode into object field
-//			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.plaque_icon_120);//UIImagePNGRepresentation([UIImage imageNamed:@"plaque_icon_120"]);
-//			media.thumb = media.data;
 			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.plaque_icon_120);
-			media.data = ((BitmapDrawable)drawable).getBitmap();;
+			media.data = ((BitmapDrawable)drawable).getBitmap();
 			media.thumb = media.data;
 			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
@@ -257,8 +255,9 @@ public class MediaModel extends ARISModel {
 			mediaCD.game_id = 0;
 			mediaCD.user_id = 0;
 			Media media = new Media(mediaCD);
-//			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.item_icon_120);
-//			media.thumb = media.data;
+			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.item_icon_120);
+			media.data = ((BitmapDrawable)drawable).getBitmap();
+			media.thumb = media.data;
 			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
@@ -268,8 +267,9 @@ public class MediaModel extends ARISModel {
 			mediaCD.game_id = 0;
 			mediaCD.user_id = 0;
 			Media media = new Media(mediaCD);
-//			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.conversation_icon_120);
-//			media.thumb = media.data;
+			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.conversation_icon_120);
+			media.data = ((BitmapDrawable)drawable).getBitmap();
+			media.thumb = media.data;
 			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
@@ -279,8 +279,9 @@ public class MediaModel extends ARISModel {
 			mediaCD.game_id = 0;
 			mediaCD.user_id = 0;
 			Media media = new Media(mediaCD);
-//			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.webpage_icon_120);
-//			media.thumb = media.data;
+			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.webpage_icon_120);
+			media.data = ((BitmapDrawable)drawable).getBitmap();
+			media.thumb = media.data;
 			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
@@ -290,8 +291,9 @@ public class MediaModel extends ARISModel {
 			mediaCD.game_id = 0;
 			mediaCD.user_id = 0;
 			Media media = new Media(mediaCD);
-//			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.logo_icon);
-//			media.thumb = media.data;
+			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.logo_icon);
+			media.data = ((BitmapDrawable)drawable).getBitmap();
+			media.thumb = media.data;
 			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
@@ -301,8 +303,9 @@ public class MediaModel extends ARISModel {
 			mediaCD.game_id = 0;
 			mediaCD.user_id = 0;
 			Media media = new Media(mediaCD);
-//			media.data = mGamePlayAct.getResources().getDrawable(R.drawable.note_icon);
-//			media.thumb = media.data;
+			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.note_icon);
+			media.data = ((BitmapDrawable)drawable).getBitmap();
+			media.thumb = media.data;
 			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
