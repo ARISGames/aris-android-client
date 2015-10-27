@@ -1,9 +1,11 @@
 package edu.uoregon.casls.aris_android.models;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
+import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Item;
 import edu.uoregon.casls.aris_android.data_objects.Scene;
 
@@ -13,7 +15,7 @@ import edu.uoregon.casls.aris_android.data_objects.Scene;
 public class ScenesModel extends ARISModel {
 
 	public Scene playerScene;
-	public GamePlayActivity mGamePlayAct;
+	public transient GamePlayActivity mGamePlayAct;
 
 	// array of scenes by scene_id (long)
 	public Map<Long, Scene> scenes = new LinkedHashMap<>();
@@ -35,37 +37,79 @@ public class ScenesModel extends ARISModel {
 
 	public void setPlayerScene(Scene s) {
 		playerScene = s;
-//		_ARIS_NOTIF_SEND_(@"MODEL_SCENES_PLAYER_SCENE_AVAILABLE",nil,nil); // for reference; iOS messages
+		mGamePlayAct.mDispatch.model_scenes_player_scene_available(); // _ARIS_NOTIF_SEND_(@"MODEL_SCENES_PLAYER_SCENE_AVAILABLE",nil,nil); // for reference; iOS messages
 	}
 
 	public void clearPlayerData() {
 	}
 
-	public void requestScenes() {
+
+	public void scenesReceived(List<Scene> newScenes) { // method here to conform with iOS version of this class
+		this.updateScenes(newScenes);
+	}
+
+	public void playerSceneReceived(Scene newScene)
+	{
+		//A bit of hack verification to ensure valid scene. Ideally shouldn't be needed...
+		boolean overridden = false;
+		Scene s = this.sceneForId(newScene.scene_id);
+		if (s.scene_id == 0)
+		{
+			overridden = true;
+			s = this.sceneForId(mGamePlayAct.mGame.intro_scene_id); //received scene not valid
+		}
+		if (s.scene_id == 0 && scenes.size() > 0) //received scene not valid, intro_scene not valid
+		{
+			overridden = true;
+			s = scenes.get(0); // allValues][0]; //choose arbitrary scene to ensure valid state
+		}
+
+		if (overridden) this.setPlayerScene(s);
+		this.updatePlayerScene(s);
+	}
+
+	private void updatePlayerScene(Scene newScene) {
+		playerScene = newScene;
+		n_player_data_received++;
+		mGamePlayAct.mDispatch.model_scenes_player_scene_available(); // _ARIS_NOTIF_SEND_(@"MODEL_SCENES_PLAYER_SCENE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_player_piece_available(); // _ARIS_NOTIF_SEND_(@"MODEL_GAME_PLAYER_PIECE_AVAILABLE",nil,nil);
 
 	}
 
-	public void scenesReceived() { // method here to conform with iOS version of this class
-		this.updateScenes();
-	}
-
-	private void updateScenes() {
+	private void updateScenes(List<Scene> newScenes) {
+		long newSceneId;
+		for (Scene newScene : newScenes) {
+			newSceneId = newScene.scene_id;
+			if(!scenes.containsKey(newSceneId)) scenes.put(newSceneId, newScene);
+		}
 		n_game_data_received++;
-//		_ARIS_NOTIF_SEND_(@"MODEL_SCENES_AVAILABLE",nil,nil);
-//		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_scenes_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_SCENES_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void sceneTouched() {
 		n_game_data_received++;
-//		_ARIS_NOTIF_SEND_(@"MODEL_SCENE_TOUCHED",nil,nil);
-//		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_scene_touched(); //		_ARIS_NOTIF_SEND_(@"MODEL_SCENE_TOUCHED",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+	}
+
+	public void requestScenes() {
+		mGamePlayAct.mServices.fetchScenes();
 	}
 
 	public void touchPlayerScene() {
-
+		mGamePlayAct.mServices.touchSceneForPlayer();
 	}
 
 	public void requestPlayerScene() {
+		Game lGame = mGamePlayAct.mGame;
+		if(this.playerDataReceived() && !lGame.network_level.contentEquals("REMOTE")) {
+			mGamePlayAct.mDispatch.services_player_scene_received(playerScene); //_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_SCENE_RECEIVED",nil,@{@"scene":playerScene}); //just return current
+		}
+		if(!this.playerDataReceived() ||
+				lGame.network_level.contentEquals("HYBRID") ||
+				lGame.network_level.contentEquals("REMOTE"))
+		mGamePlayAct.mServices.fetchSceneForPlayer();
 
 	}
 

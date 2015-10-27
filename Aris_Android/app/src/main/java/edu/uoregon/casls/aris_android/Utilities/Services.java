@@ -14,8 +14,8 @@ import edu.uoregon.casls.aris_android.data_objects.User;
  */
 public class Services {
 
-	public GamePlayActivity mGamePlayAct;
-	public Game mGame;
+	public transient GamePlayActivity mGamePlayAct;
+	public transient Game mGame;
 	public User mPlayer;
 
 	public Services(GamePlayActivity gamePlayActivity) {
@@ -234,5 +234,18 @@ public class Services {
 	}
 
 	public void fetchUserById(long t) {
+	}
+
+	public void fetchPlaques() {
+	}
+
+	public void fetchScenes() {
+	}
+
+	public void touchSceneForPlayer() {
+	}
+
+	public void fetchSceneForPlayer() {
+
 	}
 }

@@ -22,8 +22,8 @@ public class QuestsModel extends ARISModel {
 	public List<Quest> visibleCompleteQuests = new LinkedList<>();
 
 
-	public GamePlayActivity mGamePlayAct;
-	public Game mGame;
+	public transient GamePlayActivity mGamePlayAct;
+	public transient Game mGame;
 
 	public void initContext(GamePlayActivity gamePlayAct) {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.

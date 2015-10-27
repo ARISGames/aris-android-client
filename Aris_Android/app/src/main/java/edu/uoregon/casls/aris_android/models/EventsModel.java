@@ -18,8 +18,8 @@ import edu.uoregon.casls.aris_android.data_objects.Game;
 public class EventsModel extends ARISModel {
 
 	public Map<Long, Event> events = new HashMap<>();
-	public GamePlayActivity mGamePlayAct;
-	public Game mGame;
+	public transient GamePlayActivity mGamePlayAct;
+	public transient Game mGame;
 
 	// todo: Create Android equivalent functionality of this:
 //	ARISWebView *runner; //only running one at once

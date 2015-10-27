@@ -18,6 +18,7 @@ import edu.uoregon.casls.aris_android.data_objects.NoteComment;
 import edu.uoregon.casls.aris_android.data_objects.ObjectTag;
 import edu.uoregon.casls.aris_android.data_objects.Overlay;
 import edu.uoregon.casls.aris_android.data_objects.Quest;
+import edu.uoregon.casls.aris_android.data_objects.Scene;
 import edu.uoregon.casls.aris_android.data_objects.Tab;
 import edu.uoregon.casls.aris_android.data_objects.Tag;
 import edu.uoregon.casls.aris_android.data_objects.Trigger;
@@ -31,8 +32,8 @@ import edu.uoregon.casls.aris_android.models.MediaModel;
 public class Dispatcher {
 	// Cannot be instantiated outside of the context of GamePlayActivity
 
-	public GamePlayActivity mGamePlayAct;
-	public Game mGame;
+	public transient GamePlayActivity mGamePlayAct;
+	public transient Game mGame;
 	public User mPlayer;
 	public MediaModel mMediaModel;
 
@@ -50,11 +51,11 @@ public class Dispatcher {
 	//	CONNECTION_LAG",nil,@{@"laggers":laggers});
 //	DEFAULTS_CLEAR",nil,nil);
 //	DEFAULTS_UPDATED",nil,nil);
-//	DEVICE_MOVED", nil, @{@"location":lastKnownLocation});
-//	GAME_PLAY_DISPLAYED_INSTANCE",nil,@{@"instance":i});
-//	GAME_PLAY_DISPLAYED_TRIGGER",nil,@{@"trigger":t});
+//	DEVICE_MOVED", nil, @{@"location":lastKnownLocation}); // will be handled in GamePlayActivity.
+//	GAME_PLAY_DISPLAYED_INSTANCE",nil,@{@"instance":i}); // sent by GamePLayViewController; no listeners - sem
+//	GAME_PLAY_DISPLAYED_TRIGGER",nil,@{@"trigger":t}); // sent by GamePLayViewController; no listeners - sem
 //	LowMemoryWarning",nil,nil);
-//	MODEL_ANYWHERE_GAMES_AVAILABLE",nil,nil); }
+//	MODEL_ANYWHERE_GAMES_AVAILABLE",nil,nil); } // sent by GamesModel; listened for by GamePickerAnywhereViewController(); I think we're doing this already in Android GamesListActivity
 //	MODEL_DIALOG_CHARACTERS_AVAILABLE",nil,nil);
 	public void model_dialog_characters_available() {
 		// no one to field this one. Oh well. Die in space.
@@ -75,8 +76,8 @@ public class Dispatcher {
 		// no listeners in this version?
 	}
 
-	//	MODEL_DISPLAY_NEW_ENQUEUED", nil, nil);
-//	MODEL_DOWNLOADED_GAMES_AVAILABLE",nil,nil); }
+	//	MODEL_DISPLAY_NEW_ENQUEUED", nil, nil); // Will be handled in GamePlayActivity -sem
+//	MODEL_DOWNLOADED_GAMES_AVAILABLE",nil,nil); } // Handled in GamesListActivity - sem
 //	MODEL_EVENTS_AVAILABLE",nil,nil);
 	public void model_events_available() {
 		// no listners
@@ -87,9 +88,10 @@ public class Dispatcher {
 		// no listeners
 	}
 
-	//	MODEL_GAME_AVAILABLE",nil,@{@"game":[self gameForId:g.game_id]});
-//	MODEL_GAME_BEGAN",nil,nil);
-//	MODEL_GAME_CHOSEN",nil,nil);
+	//	MODEL_GAME_AVAILABLE",nil,@{@"game":[self gameForId:g.game_id]});// Will be handled in GamePlayActivity -sem
+//	MODEL_GAME_BEGAN",nil,nil); // Will be handled in GamePlayActivity -sem
+//	MODEL_GAME_CHOSEN",nil,nil); // Will be handled in GamePlayActivity -sem
+
 //	MODEL_GAME_DATA_LOADED", nil, nil);
 	public void model_game_data_loaded() {
 		// in iOS would call LoadingViewController.gameDataLoaded(), which then calls Game.requestPlayerData(); I'll call it directly.
@@ -106,17 +108,25 @@ public class Dispatcher {
 		// no action assigned to this yet.
 	}
 
-	//	MODEL_GAME_LEFT",nil,nil);
+	//	MODEL_GAME_LEFT",nil,nil); // Will be handled in GamePlayActivity -sem
 //	MODEL_GAME_PERCENT_LOADED", nil, @{@"percent":percentReceived});
-//	MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+	public void model_game_percent_loaded(float percentReceived) {
+		// todo: LoadingViewController.percentLoaded();
+	}
+
+	//	MODEL_GAME_PIECE_AVAILABLE",nil,nil);
 	public void model_game_piece_available() {
-		mGame.gamePieceReceived();
+		if (mGame.listen_model_game_piece_available) mGame.gamePieceReceived();
 	}
 
 	//	MODEL_GAME_PLAYER_DATA_LOADED", nil, nil);
-//	MODEL_GAME_PLAYER_PIECE_AVAILABLE",nil,nil);
+	public void model_game_player_data_loaded() {
+		// todo: LoadingViewController.playerDataLoaded();
+	}
+
+	//	MODEL_GAME_PLAYER_PIECE_AVAILABLE",nil,nil);
 	public void model_game_player_piece_available() {
-		mGame.gamePlayerPieceReceived();
+		if (mGame.listen_model_game_player_piece_available) mGame.gamePlayerPieceReceived();
 	}
 
 	//	MODEL_GROUP_INSTANCES_AVAILABLE",nil,nil);
@@ -173,9 +183,10 @@ public class Dispatcher {
 	public void model_items_available() {
 		// todo: listeners?
 	}
-//	MODEL_LOGGED_IN",nil,nil);
-//	MODEL_LOGGED_OUT",nil,nil);
-//	MODEL_LOGIN_FAILED",nil,nil); }
+
+	//	MODEL_LOGGED_IN",nil,nil); // Handled in LoginActivity -sem
+//	MODEL_LOGGED_OUT",nil,nil); // Handled in LoginActivity -sem
+//	MODEL_LOGIN_FAILED",nil,nil); } // Handled in LoginActivity -sem
 //	MODEL_LOGS_AVAILABLE",nil,nil);
 	public void model_logs_available() {
 //	broadcast only; no receivers
@@ -196,8 +207,8 @@ public class Dispatcher {
 		// todo: iOS Call = LoadingViewController.mediaDataLoaded()
 	}
 
-	//	MODEL_MINE_GAMES_AVAILABLE",nil,nil); }
-//	MODEL_NEARBY_GAMES_AVAILABLE",nil,nil); }
+	//	MODEL_MINE_GAMES_AVAILABLE",nil,nil); } // Handled in GamesListActivity - sem
+//	MODEL_NEARBY_GAMES_AVAILABLE",nil,nil); } // Handled in GamesListActivity - sem
 //	MODEL_NOTE_COMMENTS_AVAILABLE",nil,nil);
 	public void note_comments_available() {
 		// no listeners
@@ -228,14 +239,19 @@ public class Dispatcher {
 		// todo: MapViewController.refreshViewFromModel()
 	}
 
-	//	MODEL_PLAQUES_AVAILABLE",nil,nil);
+	//	MODEL_PLAQUES_AVAILABLE",nil,nil); // from plaquesModel; not listened to. -sem
+
 //	MODEL_PLAYER_INSTANCES_AVAILABLE",nil,nil);
 	public void model_player_instances_available() {
 		// todo: find listners
 	}
-//	MODEL_PLAYER_INSTANCES_TOUCHED",nil,nil);
-//	MODEL_PLAYER_PLAYED_GAME_AVAILABLE",nil,notif.userInfo);
-//	MODEL_PLAYER_SCRIPT_OPTIONS_AVAILABLE",nil,uInfo);
+
+	//	MODEL_PLAYER_INSTANCES_TOUCHED",nil,nil);
+	public void model_player_instances_touched() {
+		// no listeners
+	}
+//	MODEL_PLAYER_PLAYED_GAME_AVAILABLE",nil,notif.userInfo); // May be unnecessary in Android.
+//	MODEL_PLAYER_SCRIPT_OPTIONS_AVAILABLE",nil,uInfo); // handled as internal method redirect in DialogsModel - sem
 //	MODEL_PLAYER_TRIGGERS_AVAILABLE",nil,nil);
 	public void model_player_triggers_available() {
 		// todo: MapViewController.refreshViewFromModel()
@@ -243,7 +259,7 @@ public class Dispatcher {
 		mGame.notesModel.invalidateCaches();
 	}
 
-	//	MODEL_POPULAR_GAMES_AVAILABLE",nil,nil); }
+	//	MODEL_POPULAR_GAMES_AVAILABLE",nil,nil); } // Handled in GamesListActivity - sem
 //	MODEL_QUESTS_ACTIVE_LESS_AVAILABLE",nil,deltas);
 	public void model_quests_active_less_available(Map<String, List<Quest>> deltas) {
 		// todo: duplicate (UI) behaviour of IconQuestsViewController.refreshViewFromModel()
@@ -291,13 +307,20 @@ public class Dispatcher {
 		// nada.
 	}
 
-	//	MODEL_SCENE_TOUCHED",nil,nil);
+	//	MODEL_SCENE_TOUCHED",nil,nil); // sent from ScenesModel but not listened to -sem
+	public void model_scene_touched() {
+		// no listeners
+	}
 //	MODEL_SCENES_AVAILABLE",nil,nil);
 	public void model_scenes_available() {
 		// todo: find listeners
 	}
-//	MODEL_SCENES_PLAYER_SCENE_AVAILABLE",nil,nil);
-//	MODEL_SEARCH_GAMES_AVAILABLE",nil,nil); }
+
+	//	MODEL_SCENES_PLAYER_SCENE_AVAILABLE",nil,nil);
+	public void model_scenes_player_scene_available() {
+		// sent from ScenesModel (in two places) but not listened to by anyone.
+	}
+//	MODEL_SEARCH_GAMES_AVAILABLE",nil,nil); } // Handled in GamesListActivity - sem
 //	MODEL_TABS_AVAILABLE",nil,nil);
 	public void model_tabs_available() {
 		// no listeners
@@ -343,11 +366,13 @@ public class Dispatcher {
 	public void model_users_available() {
 		//no listeners
 	}
-//	MODEL_WEB_PAGES_AVAILABLE",nil,nil);
+
+	//	MODEL_WEB_PAGES_AVAILABLE",nil,nil);
 	public void model_web_pages_available() {
 		// no listeners
 	}
-//	PusherGameEventReceived",event,nil);
+
+	//	PusherGameEventReceived",event,nil);
 //	PusherGroupEventReceived",event,nil);
 //	PusherPlayerEventReceived",event,nil);
 //	PusherWebPageEventReceived",event,nil);
@@ -466,11 +491,15 @@ public class Dispatcher {
 
 	//	SERVICES_PLAYER_SCENE_RECEIVED", nil, @{@"scene":s});
 //	SERVICES_PLAYER_SCENE_RECEIVED",nil,@{@"scene":playerScene}); //just return current
+	public void services_player_scene_received(Scene playerScene) {
+		mGame.scenesModel.playerSceneReceived(playerScene);
+	}
 //	SERVICES_PLAYER_SCRIPT_OPTIONS_RECEIVED", nil, uInfo);
 	public void services_player_script_options_received(Map<String, Object> uInfo) {
 		// todo: find listeners for this
 	}
-//	SERVICES_PLAYER_TABS_RECEIVED",nil,@{@"tabs":ptabs});
+
+	//	SERVICES_PLAYER_TABS_RECEIVED",nil,@{@"tabs":ptabs});
 	public void services_player_tabs_received(List<Tab> tabs) {
 		mGame.tabsModel.playerTabsReceived(tabs);
 	}
@@ -526,7 +555,8 @@ public class Dispatcher {
 	public void services_users_received(Map<String, User> mGameUsers) {
 		mGamePlayAct.mUsersModel.usersReceived(mGameUsers);
 	}
-//	SERVICES_WEB_PAGE_RECEIVED", nil, @{@"web_page":webPage});
+
+	//	SERVICES_WEB_PAGE_RECEIVED", nil, @{@"web_page":webPage});
 //	SERVICES_WEB_PAGES_RECEIVED", nil, @{@"webPages":webPages});
 	public void services_web_pages_received(List<WebPage> webPages) {
 		mGame.webPagesModel.webPagesReceived(webPages);

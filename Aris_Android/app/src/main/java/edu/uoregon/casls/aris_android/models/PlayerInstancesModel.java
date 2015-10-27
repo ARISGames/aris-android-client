@@ -30,11 +30,11 @@ public class PlayerInstancesModel extends ARISModel {
 //	public User mPlayer;
 //	public ItemsModel mItemsModel;
 //	public InstancesModel mInstancesModel;
-//	public Game mGame;
+//	public transient Game mGame;
 //	private Context mContext;
 //	private GamePlayActivity mGamePlayActivity;
 //	private LogsModel mLogsModel;
-	public GamePlayActivity mGamePlayAct;
+	public transient GamePlayActivity mGamePlayAct;
 
 	// todo - reform the constructor into the initContext version.
 	public void PlayerInstancesModel(Context context, User player, ItemsModel items, Game game, InstancesModel instancesModel) { // todo: does player want to be of type playerModel instead of Player?
@@ -61,7 +61,7 @@ public class PlayerInstancesModel extends ARISModel {
 
 	public void playerInstancesTouched() {
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.services_player_instances_touched(); //		_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_INSTANCES_TOUCHED",nil,nil);
+		mGamePlayAct.mDispatch.model_player_instances_touched(); //		_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_INSTANCES_TOUCHED",nil,nil);
 		mGamePlayAct.mDispatch.model_game_piece_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
 	}
 

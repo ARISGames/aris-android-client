@@ -23,8 +23,8 @@ public class TriggersModel extends ARISModel {
 
 	public Map<Long, Trigger> triggers = new HashMap<>();
 	public List<Trigger> playerTriggers = new ArrayList<>();
-	public GamePlayActivity mGamePlayAct;
-	public Game mGame;
+	public transient GamePlayActivity mGamePlayAct;
+	public transient Game mGame;
 	public Map<Long, String> blacklist = new HashMap<>(); //list of ids attempting / attempted and failed to load
 
 	public void initContext(GamePlayActivity gamePlayAct) {

@@ -12,7 +12,7 @@ import edu.uoregon.casls.aris_android.data_objects.Item;
 public class ItemsModel extends ARISModel {
 
 	public Map<Long, Item> items = new LinkedHashMap<>();
-	public GamePlayActivity mGamePlayAct;
+	public transient GamePlayActivity mGamePlayAct;
 
 	public void initContext(GamePlayActivity gamePlayAct) {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.

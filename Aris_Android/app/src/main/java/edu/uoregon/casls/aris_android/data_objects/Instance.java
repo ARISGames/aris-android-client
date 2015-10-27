@@ -20,7 +20,7 @@ public class Instance {
 	public long factory_id;
 	public Date created;
 
-	public GamePlayActivity mGamePlayAct;
+	public transient GamePlayActivity mGamePlayAct;
 
 	public Instance() {
 

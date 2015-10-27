@@ -17,8 +17,8 @@ public class LogsModel extends ARISModel {
 	public Map<Long, Log> logs = new LinkedHashMap<>();
 	public long local_log_id; //starts at 1, no way it will ever catch up to actual logs
 
-	public GamePlayActivity mGamePlayAct;
-	public Game mGame;
+	public transient GamePlayActivity mGamePlayAct;
+	public transient Game mGame;
 
 	public void initContext(GamePlayActivity gamePlayAct) {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.

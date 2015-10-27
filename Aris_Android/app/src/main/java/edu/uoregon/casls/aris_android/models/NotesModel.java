@@ -27,8 +27,8 @@ public class NotesModel extends ARISModel {
 	public List<Note> playerNotes = new LinkedList<>();
 	public List<Note> listNotes = new LinkedList<>();
 	public List<Note> notesMatchingTag = new LinkedList<>();
-	public GamePlayActivity mGamePlayAct;
-	public Game mGame;
+	public transient GamePlayActivity mGamePlayAct;
+	public transient Game mGame;
 
 	public void initContext(GamePlayActivity gamePlayAct) {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.

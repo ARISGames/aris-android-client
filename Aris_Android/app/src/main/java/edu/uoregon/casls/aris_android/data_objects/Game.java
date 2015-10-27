@@ -42,13 +42,13 @@ import edu.uoregon.casls.aris_android.models.WebPagesModel;
  */
 public class Game {
 
-	long n_game_data_to_receive;
-	long n_game_data_received;
-	long n_player_data_to_receive;
-	long n_player_data_received;
+	public long n_game_data_to_receive;
+	public long n_game_data_received;
+	public long n_player_data_to_receive;
+	public long n_player_data_received;
 
-	boolean listen_model_game_player_piece_available;
-	boolean listen_model_game_piece_available;
+	public boolean listen_model_game_player_piece_available;
+	public boolean listen_model_game_piece_available;
 //	public NSTimer *poller; todo: android equivalent
 	// todo: this will not serialize (crashes gson.toJson()) so I need to locate it in the gameplay activity itself.
 
@@ -115,7 +115,8 @@ public class Game {
 //	public DisplayQueueModel 	displayQueueModel; // iOS only for now
 	// medias (in GamePlayAct 		// Game Piece
 
-	GamePlayActivity mGamePlayAct;
+	// FYI transient indicates "do not serialize"; gson will die a recursive death if it did.
+	public transient GamePlayActivity mGamePlayAct; // For reference to GamePlayActivity; do not instantiate (new) object or circular references will ensue.
 	// Empty Constructor
 	public Game() {
 	}
@@ -299,7 +300,7 @@ public class Game {
 		initModelContexts();
 	}
 
-	private void initModelContexts() { // pass on the context for upward visibility in object instantiation tree
+	public void initModelContexts() { // pass on the context for upward visibility in object instantiation tree
 		for (ARISModel model : models) {
 			model.initContext(mGamePlayAct);
 		}
@@ -377,7 +378,7 @@ public class Game {
 		n_game_data_received++;
 		if (this.allGameDataReceived()) {
 			n_game_data_received = n_game_data_to_receive; //should already be exactly this...
-			mGamePlayAct.mDispatch.model_game_data_loaded(); //			_ARIS_NOTIF_SEND_(@"MODEL_GAME_DATA_LOADED", nil, nil);
+			mGamePlayAct.mDispatch.model_game_data_loaded(); // _ARIS_NOTIF_SEND_(@"MODEL_GAME_DATA_LOADED", nil, nil);
 		}
 		percentLoadedChanged();
 	}
@@ -385,7 +386,7 @@ public class Game {
 	public void gamePlayerPieceReceived() {
 		n_player_data_received++;
 		if (n_player_data_received >= n_player_data_to_receive) {
-//			_ARIS_NOTIF_SEND_(@"MODEL_GAME_PLAYER_DATA_LOADED", null, null); // broadcast to any listeners that game data is ready
+		mGamePlayAct.mDispatch.model_game_player_data_loaded(); // _ARIS_NOTIF_SEND_(@"MODEL_GAME_PLAYER_DATA_LOADED", null, null); // broadcast to any listeners that game data is ready
 		}
 		percentLoadedChanged();
 	}
@@ -401,7 +402,7 @@ public class Game {
 
 	public void percentLoadedChanged() {
 		float percentReceived = (n_game_data_received + n_player_data_received)/(n_game_data_to_receive + n_player_data_to_receive);
-//		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PERCENT_LOADED", null, @{@"percent":percentReceived});
+		mGamePlayAct.mDispatch.model_game_percent_loaded(percentReceived); // _ARIS_NOTIF_SEND_(@"MODEL_GAME_PERCENT_LOADED", null, @{@"percent":percentReceived});
 	}
 
 	public void gameBegan() {

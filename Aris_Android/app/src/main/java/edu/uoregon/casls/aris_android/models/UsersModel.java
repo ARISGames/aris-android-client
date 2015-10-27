@@ -14,8 +14,8 @@ import edu.uoregon.casls.aris_android.data_objects.User;
  */
 public class UsersModel extends ARISModel {
 
-	public GamePlayActivity mGamePlayAct;
-	public Game mGame;
+	public transient GamePlayActivity mGamePlayAct;
+	public transient Game mGame;
 
 	Map<Long, User> users = new HashMap<>();
 	Map<Long, String> blacklist = new HashMap<>();

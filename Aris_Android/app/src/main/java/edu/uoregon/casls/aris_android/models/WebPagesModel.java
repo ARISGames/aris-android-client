@@ -14,7 +14,7 @@ import edu.uoregon.casls.aris_android.data_objects.WebPage;
 public class WebPagesModel extends ARISModel {
 
 	public Map<Long, WebPage> webpages = new LinkedHashMap<>();
-	public GamePlayActivity mGamePlayAct;
+	public transient GamePlayActivity mGamePlayAct;
 
 	public void initContext(GamePlayActivity gamePlayAct) {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.

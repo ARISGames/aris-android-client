@@ -13,7 +13,7 @@ import edu.uoregon.casls.aris_android.data_objects.Factory;
 public class FactoriesModel extends ARISModel {
 
 	public Map<Long, Factory> factories = new LinkedHashMap<>();
-	public GamePlayActivity mGamePlayAct;
+	public transient GamePlayActivity mGamePlayAct;
 
 	public void initContext(GamePlayActivity gamePlayAct) {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.

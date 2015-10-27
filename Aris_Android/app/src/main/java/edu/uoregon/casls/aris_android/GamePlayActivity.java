@@ -795,4 +795,27 @@ public class GamePlayActivity extends ActionBarActivity
 //	public void onNavigationDrawerItemSelected(int position) {
 //
 //	}
+
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+		// Save UI state changes to the savedInstanceState.
+		// This bundle will be passed to onCreate if the process is
+		// killed and restarted.
+		Gson gson = new Gson();
+		String jsonGame = gson.toJson(mGame);
+		savedInstanceState.putString("mGame", jsonGame);
+	}
+
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		// Restore UI state from the savedInstanceState.
+		// This bundle has also been passed to onCreate.
+		Gson gson = new Gson();
+
+		mGame = gson.fromJson(savedInstanceState.getString("mGame"), Game.class); // restore game from stored json in savedInstanceState
+		mGame.setContext(this); // reset context
+		mGame.initModelContexts(); // re-initialize all the embedded objects' references to the Activity context.
+	}
 }

@@ -22,7 +22,7 @@ public class DialogsModel extends ARISModel {
 	public Map<Long, DialogCharacter> dialogCharacters = new LinkedHashMap<>();
 	public Map<Long, DialogScript> dialogScripts = new LinkedHashMap<>();
 	public Map<Long, DialogOption> dialogOptions = new LinkedHashMap<>();
-	public GamePlayActivity mGamePlayAct;
+	public transient GamePlayActivity mGamePlayAct;
 
 	public void initContext(GamePlayActivity gamePlayAct) {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.

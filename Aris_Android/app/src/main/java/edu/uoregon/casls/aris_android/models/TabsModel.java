@@ -17,8 +17,8 @@ public class TabsModel extends ARISModel {
 
 	public Map<Long, Tab> tabs = new HashMap<>();
 	public List<Tab> playerTabs = new ArrayList<>();
-	public GamePlayActivity mGamePlayAct;
-	public Game mGame;
+	public transient GamePlayActivity mGamePlayAct;
+	public transient Game mGame;
 
 	public void initContext(GamePlayActivity gamePlayAct) {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.

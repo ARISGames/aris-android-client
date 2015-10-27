@@ -20,8 +20,8 @@ public class GroupInstancesModel extends ARISModel {
 	public List<Instance> groupOwnedInstances = new LinkedList<>();
 	public long currentWeight;
 
-	public GamePlayActivity mGamePlayAct;
-	public Game mGame;
+	public transient GamePlayActivity mGamePlayAct;
+	public transient Game mGame;
 
 	public void initContext(GamePlayActivity gamePlayAct) {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.

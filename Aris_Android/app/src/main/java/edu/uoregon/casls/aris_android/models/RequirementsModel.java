@@ -24,8 +24,8 @@ public class RequirementsModel extends ARISModel {
 	Map<Long, RequirementAndPackage> requirementAndPackages;
 	Map<Long, RequirementAtom> requirementAtoms;
 
-	public GamePlayActivity mGamePlayAct;
-	public Game mGame;
+	public transient GamePlayActivity mGamePlayAct;
+	public transient Game mGame;
 
 	public RequirementsModel() {
 	}

@@ -26,7 +26,7 @@ public class MediaModel extends ARISModel {
 
 	public Map<Long, Media> medias = new LinkedHashMap<>();//light cache on mediaCD wrappers ('Media' objects)
 	public List<Integer> mediaIDsToLoad = new LinkedList<>();
-	public GamePlayActivity mGamePlayAct;
+	public transient GamePlayActivity mGamePlayAct;
 	//	NSManagedObjectContext *context; // for CoreData reference // todo: Android relevant?
 //	NSMutableArray *mediaDataLoadDelegateHandles; // todo: Android relevant?
 //	NSMutableArray *mediaDataLoadMedia; // todo: Android relevant?

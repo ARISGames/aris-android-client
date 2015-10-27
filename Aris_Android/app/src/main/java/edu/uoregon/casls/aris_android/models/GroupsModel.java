@@ -13,7 +13,7 @@ import edu.uoregon.casls.aris_android.data_objects.Group;
 public class GroupsModel extends ARISModel {
 
 	public Map<Long, Group> groups = new LinkedHashMap<>();
-	public GamePlayActivity mGamePlayAct;
+	public transient GamePlayActivity mGamePlayAct;
 	public Group playerGroup;
 
 	public void initContext(GamePlayActivity gamePlayAct) {

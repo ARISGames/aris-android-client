@@ -22,8 +22,8 @@ public class GameInstancesModel extends ARISModel {
 	public long currentWeight;
 
 
-	public GamePlayActivity mGamePlayAct;
-	public Game mGame;
+	public transient GamePlayActivity mGamePlayAct;
+	public transient Game mGame;
 
 	public GameInstancesModel() {
 	}

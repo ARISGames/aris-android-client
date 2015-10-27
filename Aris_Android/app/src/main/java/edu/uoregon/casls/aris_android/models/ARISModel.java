@@ -39,7 +39,7 @@ public class ARISModel {
 	public long nGameDataToReceive() { return 0; }
 	public long nPlayerDataToReceive() { return 0; }
 
-	public GamePlayActivity mGamePlayAct;
+	public transient GamePlayActivity mGamePlayAct;
 
 	public void initContext(GamePlayActivity gamePlayAct) { // for visibility to game play activity elements
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
