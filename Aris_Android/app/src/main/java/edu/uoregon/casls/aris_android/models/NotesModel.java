@@ -145,7 +145,7 @@ public class NotesModel extends ARISModel {
 		if (!playerNotes.isEmpty()) return playerNotes;
 		Collection<Note> ns = notes.values();
 		for (Note n : ns)
-			if (n.user_id == Long.getLong(mGamePlayAct.mPlayer.user_id)) playerNotes.add(n);
+			if (n.user_id == Long.parseLong(mGamePlayAct.mPlayer.user_id)) playerNotes.add(n);
 		return playerNotes;
 	}
 

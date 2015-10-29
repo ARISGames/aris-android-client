@@ -38,7 +38,7 @@ public class InstancesModel extends ARISModel {
 	public void clearPlayerData() {
 		Collection<Instance> insts = instances.values();
 		for (Instance inst : insts) {
-			if (inst.owner_id == Long.getLong(mGamePlayAct.mPlayer.user_id))
+			if (inst.owner_id == Long.parseLong(mGamePlayAct.mPlayer.user_id))
 				instances.remove(inst.instance_id);
 		}
 		n_player_data_received = 0;
@@ -81,6 +81,7 @@ public class InstancesModel extends ARISModel {
 		Map<String, Map<String, Object>> gameDeltas = new HashMap<>();
 
 		for (Instance newInstance : newInstances) {
+			newInstance.initContext(mGamePlayAct);
 			newInstanceId = newInstance.instance_id;
 			if (!instances.containsKey(newInstanceId)) {
 				//No instance exists- give player instance with 0 qty and let it be updated like all the others
@@ -101,7 +102,7 @@ public class InstancesModel extends ARISModel {
 			d.put("instance", existingInstance);
 			d.put("delta", delta);
 
-			if (existingInstance.owner_id == Long.getLong(mGamePlayAct.mPlayer.user_id)) {
+			if (existingInstance.owner_id == Long.parseLong(mGamePlayAct.mPlayer.user_id)) {
 				if (!this.playerDataReceived() || mGamePlayAct.mGame.network_level.contentEquals("REMOTE")) { //only local should be making changes to player. fixes race cond (+1, -1, +1 notifs)
 					if (delta > 0) playerDeltas.put("added", d); //) addObject:d;
 					if (delta < 0) playerDeltas.put("lost", d);
@@ -118,18 +119,18 @@ public class InstancesModel extends ARISModel {
 	}
 
 	public void sendNotifsForGameDeltas(Map<String, Map<String, Object>> gameDeltas, Map<String, Map<String, Object>> playerDeltas) {
-		if (playerDeltas != null) {
-			if (playerDeltas.get("added").size() > 0)
+		if (playerDeltas != null && playerDeltas.size() > 0) {
+			if (playerDeltas.containsKey("added"))
 				mGamePlayAct.mDispatch.model_instances_player_gained(playerDeltas); // _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_GAINED",nil,playerDeltas);
-			if (playerDeltas.get("lost").size() > 0)
+			if (playerDeltas.containsKey("lost"))
 				mGamePlayAct.mDispatch.model_instances_player_lost(playerDeltas); // _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_LOST",  nil,playerDeltas);
 			mGamePlayAct.mDispatch.model_instances_player_available(playerDeltas); // _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_AVAILABLE",nil,playerDeltas);
 		}
 
-		if (gameDeltas != null) {
-			if (gameDeltas.get("added").size() > 0)
+		if (gameDeltas != null && gameDeltas.size() > 0) {
+			if (gameDeltas.containsKey("added"))
 				mGamePlayAct.mDispatch.model_instances_gained(gameDeltas); // _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_GAINED",nil,gameDeltas);
-			if (gameDeltas.get("lost").size() > 0)
+			if (gameDeltas.containsKey("lost"))
 				mGamePlayAct.mDispatch.model_instances_lost(gameDeltas); // _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_LOST",  nil,gameDeltas);
 			mGamePlayAct.mDispatch.model_instances_available(gameDeltas); // _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_AVAILABLE",nil,gameDeltas);
 		}
@@ -177,7 +178,7 @@ public class InstancesModel extends ARISModel {
 			}
 
 			if (!deltas.isEmpty()) {
-				if (i.owner_type.contentEquals("USER") && i.owner_id == Long.getLong(mGamePlayAct.mPlayer.user_id))
+				if (i.owner_type.contentEquals("USER") && i.owner_id == Long.parseLong(mGamePlayAct.mPlayer.user_id))
 					this.sendNotifsForGameDeltas(null, deltas);
 				else if (i.owner_type.contentEquals("GAME_CONTENT"))
 					this.sendNotifsForGameDeltas(deltas, null);
@@ -217,7 +218,7 @@ public class InstancesModel extends ARISModel {
 		Collection<Instance> allInstances = instances.values();
 		for (Instance inst : allInstances) {
 			if (inst.owner_type.contentEquals("USER") &&
-					inst.owner_id == Long.getLong(mGamePlayAct.mPlayer.user_id))
+					inst.owner_id == Long.parseLong(mGamePlayAct.mPlayer.user_id))
 				pInstances.add(inst);
 		}
 		return pInstances;

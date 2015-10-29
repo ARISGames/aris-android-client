@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -27,6 +29,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -64,7 +68,7 @@ import edu.uoregon.casls.aris_android.data_objects.WebPage;
 import edu.uoregon.casls.aris_android.models.MediaModel;
 import edu.uoregon.casls.aris_android.models.UsersModel;
 
-public class GamePlayActivity extends ActionBarActivity
+public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActivity
 		implements GamePlayNavDrawerFragment.NavigationDrawerCallbacks, GamePlayMapFragment.OnFragmentInteractionListener {
 
 // Todo 9.29.15: Need to see what happens now when the game tries to load, and then set about setting up the cyclic app status calls
@@ -77,7 +81,7 @@ public class GamePlayActivity extends ActionBarActivity
 	public Services mServices;
 	public MediaModel mMediaModel;
 	public UsersModel mUsersModel;
-//	public GamesModel mGamesModel; // todo: needed for Andoird?
+//	public GamesModel mGamesModel; // todo: needed for Android?
 	private View mProgressView; // todo: install a progress spinner for server delays
 	public JSONObject mJsonAuth;
 	public Map<Long, Media> mGameMedia = new LinkedHashMap<>();
@@ -122,10 +126,12 @@ public class GamePlayActivity extends ActionBarActivity
 		mTransitionAnimationBndl = ActivityOptions.makeCustomAnimation(getApplicationContext(),
 				R.animator.slide_in_from_right, R.animator.slide_out_to_left).toBundle();
 
-		mDispatch = new Dispatcher(this); // Centralized place for object to object messaging
-		mServices = new Services(this); // Centralized place for server calls.
+		mDispatch = new Dispatcher(); // Centralized place for object to object messaging
+		mServices = new Services(); // Centralized place for server calls.
 		mMediaModel = new MediaModel(this);
 		mUsersModel = new UsersModel(this);
+		mDispatch.initContext(this); // initialize contexts
+		mServices.initContext(this);
 		// initialize game object's inner classes and variables.
 		mGame.getReadyToPlay();
 		// Start barrage of game related server requests
@@ -216,12 +222,20 @@ public class GamePlayActivity extends ActionBarActivity
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		try {
+			entity = new StringEntity(jsonMain.toString());
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
 
 		// Post the request
 		// 	post data should look like this: {"auth":{"user_id":1,"key":"F7...yzX4"},"game_id":"6"}
 		if (AppUtils.isNetworkAvailable(getApplicationContext())) {
 			AsyncHttpClient client = new AsyncHttpClient();
 
+			Log.d(Config.LOGTAG,  getClass().getSimpleName() + "AsyncHttpClient Sending Req: " + request_url);
+			Log.d(Config.LOGTAG,  getClass().getSimpleName() + "AsyncHttpClient Params for Req: " + jsonMain.toString());
 			client.post(context, request_url, entity, "application/json", new JsonHttpResponseHandler() {
 				@Override
 				public void onSuccess(int statusCode, Header[] headers, JSONObject jsonReturn) {
@@ -266,17 +280,18 @@ public class GamePlayActivity extends ActionBarActivity
 					if (jsonReturn.has("data")) {
 						JSONArray jsonScenes = jsonReturn.getJSONArray("data");
 						Gson gson = new Gson();
+						List<Scene> scenes = new ArrayList<>();
 						for (int i = 0; i < jsonScenes.length(); i++) {
 							String jsonSceneStr = jsonScenes.getJSONObject(i).toString();
 							Scene scene = gson.fromJson(jsonSceneStr, Scene.class);
 							//populate hashmap as <scene_id, Scene Obj>
-
-							mGame.scenesModel.scenes.put(scene.scene_id, scene); // in iOS the object is added in the class itself
+//							mGame.scenesModel.scenes.put(scene.scene_id, scene); // in iOS the object is added in the class itself
+							scenes.add(scene);
 							// tell the game class that we got one of the 27 required pieces.
 							// serving the function that the iOS "MODEL_GAME_PLAYER_PIECE_AVAILABLE" message would have.
 //							if (!mGame.playerDataReceived) mGame.gamePlayerPieceReceived();
 						}
-						mGame.scenesModel.scenesReceived();
+						mGame.scenesModel.scenesReceived(scenes);
 					}
 				} catch (JSONException e) {
 					Log.e(Config.LOGTAG, getClass().getSimpleName() + "Failed while parsing returning JSON from request:" + callingReq + " Error reported was: " + e.getCause());
@@ -293,40 +308,45 @@ public class GamePlayActivity extends ActionBarActivity
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
+					List<Plaque> plaques = new ArrayList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						Plaque plaque = gson.fromJson(dataStr, Plaque.class);
 						//populate hashmap as <plaque_id, Plaque Obj>
+						plaques.add(plaque);
 						mGame.plaquesModel.plaques.put(plaque.plaque_id, plaque);
 					}
-					mGame.plaquesModel.plaquesReceived();
+					mGame.plaquesModel.plaquesReceived(plaques);
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_GROUPS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
+					List<Group> groups = new ArrayList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						Group group = gson.fromJson(dataStr, Group.class);
+						groups.add(group);
 						//populate hashmap as <plaque_id, Plaque Obj>
-						mGame.groupsModel.groups.put(group.group_id, group);
+//						mGame.groupsModel.groups.put(group.group_id, group);
 					}
-					mGame.plaquesModel.plaquesReceived();
+					mGame.groupsModel.groupsReceived(groups);
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_ITEMS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
+					List<Item> newItems = new ArrayList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						Item item = gson.fromJson(dataStr, Item.class);
+						newItems.add(item);
 						//populate hashmap as <plaque_id, Plaque Obj>
-						mGame.itemsModel.items.put(item.item_id, item);
-//						if (!mGame.gameDataReceived) mGame.gamePieceReceived();
+//						mGame.itemsModel.items.put(item.item_id, item);
 					}
-					mGame.itemsModel.itemsReceived();
+					mGame.itemsModel.itemsReceived(newItems);
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_TOUCH_ITEMS_4_PLAYER)) {
@@ -339,7 +359,7 @@ public class GamePlayActivity extends ActionBarActivity
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
-					List<Dialog> dialogs = new LinkedList<>();
+					List<Dialog> dialogs = new ArrayList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						Dialog dialog = gson.fromJson(dataStr, Dialog.class);
@@ -552,7 +572,8 @@ public class GamePlayActivity extends ActionBarActivity
 			else if (callingReq.equals(Calls.HTTP_GET_INSTANCES_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
-					Gson gson = new Gson();
+//					Gson gson = new Gson();
+					Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").create();
 					List<Instance> instances = new LinkedList<>();
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
@@ -607,6 +628,7 @@ public class GamePlayActivity extends ActionBarActivity
 					Gson gson = new Gson();
 //					List<Map<String, Object>> rawMediaArr = new LinkedList<>(); // orig.
 					List<Map<String, String>> rawMediaArr = new LinkedList<>();
+					Log.d(Config.LOGTAG, getClass().getSimpleName() + "Received data from Call, " + Calls.HTTP_GET_MEDIA_4_GAME + "; Return set size = " + rawMediaArr.size());
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						Map<String, String> aMediaRec = gson.fromJson(dataStr, new TypeToken<HashMap<String, Object>>() {}.getType());

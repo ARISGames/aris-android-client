@@ -103,9 +103,9 @@ public class TabsModel extends ARISModel {
 		Map<String, List<Tab>> deltas = this.findDeltasInNew(newTabs, playerTabs);
 		playerTabs = newTabs; //assumes already conforms to flyweight
 		n_player_data_received++;
-		if (deltas.get("added").size() > 0)
+		if (deltas.containsKey("added"))
 			mGamePlayAct.mDispatch.model_tabs_new_available(deltas); //_ARIS_falseTIF_SEND_(@"MODEL_TABS_NEW_AVAILABLE",nil,deltas);
-		if (deltas.get("removed").size() > 0)
+		if (deltas.containsKey("removed"))
 			mGamePlayAct.mDispatch.model_tabs_less_available(deltas); //_ARIS_falseTIF_SEND_(@"MODEL_TABS_LESS_AVAILABLE",nil,deltas);
 		mGamePlayAct.mDispatch.model_game_player_piece_available(); //_ARIS_falseTIF_SEND_(@"MODEL_GAME_PLAYER_PIECE_AVAILABLE",nil,nil);
 	}

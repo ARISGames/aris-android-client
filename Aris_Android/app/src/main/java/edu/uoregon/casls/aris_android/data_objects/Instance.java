@@ -1,5 +1,10 @@
 package edu.uoregon.casls.aris_android.data_objects;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
@@ -18,12 +23,13 @@ public class Instance {
 	public long qty;
 	public Boolean infinite_qty;
 	public long factory_id;
-	public Date created;
+//	public Date created;
+	private String created; // use setters and getters. storing as string 'cus gson hates Dates
 
 	public transient GamePlayActivity mGamePlayAct;
 
 	public Instance() {
-
+//		setCreated(new Date());
 	}
 
 	public void initContext(GamePlayActivity gamePlayAct) {
@@ -40,6 +46,26 @@ public class Instance {
 		this.qty = i.qty;
 		this.infinite_qty = i.infinite_qty;
 		this.factory_id = i.factory_id;
+		this.created = i.getCreated().toString();
+	}
+
+	public void setCreated(Date date) {
+		if (date.toString().contentEquals("")) date = new Date();
+		created = date.toString();
+
+		// gson hates dates with default formatting. This setter adds quotes that apeases gson
+//		Gson gson=  new GsonBuilder().setDateFormat("yyyy		-MM-dd'T'HH:mm:ssZ").create();
+//		String dateStr = "\"" + date.toString() + "\"";
+//		created = gson.fromJson(dateStr, Date.class);
+	}
+
+	public Date getCreated() {
+		try {
+			return new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(created);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null; // satisfy default return obligation.
 	}
 
 	public Object object() {

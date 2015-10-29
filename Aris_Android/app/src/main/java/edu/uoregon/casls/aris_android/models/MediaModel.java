@@ -152,11 +152,16 @@ public class MediaModel extends ARISModel {
 		// get the raw array of media map arrays from the device persistent DB
 		Map<Integer, MediaCD> currentlyCachedMediaMap = this.mediaForPredicate(where);// null; // todo: populate from local DB call above
 
+//		//Turn array to dict for quick check of existence in cache
+//		NSMutableDictionary *currentlyCachedMediaMap = [[NSMutableDictionary alloc] init];
+//		for(long i = 0; i < currentlyCachedMediaArray.count; i++)
+//		[currentlyCachedMediaMap setObject:currentlyCachedMediaArray[i] forKey:((MediaCD *)currentlyCachedMediaArray[i]).media_id];
+
 		MediaCD tmpMedia;
 		// iterate through the "dict" versions of the media data and do...?
 		for (Map<String, String> mediaDict : mediaToCacheDicts) {
 
-			int media_id = Integer.getInteger(mediaDict.get("media_id"));// [mediaDict validIntForKey:@"media_id"]; // get the id from k/v pair with key "media_id"
+			int media_id = Integer.parseInt(mediaDict.get("media_id"));// [mediaDict validIntForKey:@"media_id"]; // get the id from k/v pair with key "media_id"
 			mediaIDsToLoad.add(media_id); // setObject:[NSNumber numberWithLong:media_id] forKey:[NSNumber numberWithLong:media_id]];
 			tmpMedia = currentlyCachedMediaMap.get(media_id);
 			if (tmpMedia == null) // currentlyCachedMediaMap[[NSNumber numberWithLong:media_id]]))
@@ -167,12 +172,12 @@ public class MediaModel extends ARISModel {
 			}
 
 			String remoteURL = mediaDict.get("url"); // validObjectForKey:@"url"];
-			if (!remoteURL.contentEquals(tmpMedia.remoteURL)) //if remote URL changed, invalidate local URL
+			if (tmpMedia.remoteURL != null && !remoteURL.contentEquals(tmpMedia.remoteURL)) //if remote URL changed, invalidate local URL
 				tmpMedia.localURL = "";
 			tmpMedia.remoteURL = remoteURL;
 
-			tmpMedia.game_id = Integer.getInteger(mediaDict.get("game_id"));
-			tmpMedia.user_id = Integer.getInteger(mediaDict.get("user_id"));
+			if (mediaDict.containsKey("game_id")) tmpMedia.game_id = Integer.parseInt(mediaDict.get("game_id"));
+			if (mediaDict.containsKey("user_id")) tmpMedia.user_id = Integer.parseInt(mediaDict.get("user_id"));
 			if (dbDealer.insertMedia(tmpMedia))
 				Log.i(Config.LOGTAG, getClass().getSimpleName() + "Media cache   : Media id:" + media_id + " cached:" + tmpMedia.remoteURL);
 			else

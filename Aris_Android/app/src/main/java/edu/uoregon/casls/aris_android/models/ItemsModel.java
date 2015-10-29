@@ -1,6 +1,7 @@
 package edu.uoregon.casls.aris_android.models;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
@@ -23,18 +24,27 @@ public class ItemsModel extends ARISModel {
 		n_game_data_received = 0;
 	}
 
-	public void itemsReceived() { // method here to conform with iOS version of this class
-		this.updateItems();
+	public void itemsReceived(List<Item> newItems) { // method here to conform with iOS version of this class
+		this.updateItems(newItems);
 	}
 
-	private void updateItems() {
+	private void updateItems(List<Item> newItems) {
+		long newItemId;
+		for (Item newItem : newItems) {
+			newItemId = newItem.item_id;
+			if(!items.containsKey(newItemId)) items.put(newItemId, newItem);
+		}
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_items_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_ITEMS_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.model_game_piece_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
-	public void requestItems() {
+	public void requestGameData() {
+		this.requestItems();
+	}
 
+	public void requestItems() {
+		mGamePlayAct.mServices.fetchItems();
 	}
 
 	public Map<Long, Item> items() {
@@ -46,7 +56,6 @@ public class ItemsModel extends ARISModel {
 		if (item_id == 0) return new Item();
 		return items.get(item_id);
 	}
-
 
 	public long nGameDataToReceive ()
 	{

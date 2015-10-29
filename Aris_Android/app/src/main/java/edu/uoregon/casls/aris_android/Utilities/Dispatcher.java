@@ -38,6 +38,15 @@ public class Dispatcher {
 	public MediaModel mMediaModel;
 
 	public Dispatcher(GamePlayActivity gamePlayActivity) {
+		this.initContext(gamePlayActivity);
+	}
+
+	public Dispatcher() {
+
+	}
+
+	public void initContext(GamePlayActivity gamePlayActivity) {
+
 		// reference to GamePlayActivity
 		mGamePlayAct = gamePlayActivity;
 		//convenience references:
@@ -429,6 +438,7 @@ public class Dispatcher {
 
 	//	SERVICES_ITEM_RECEIVED", nil, @{@"item":item});
 //	SERVICES_ITEMS_RECEIVED", nil, @{@"items":items});
+
 //	SERVICES_LOGIN_FAILED",nil,nil); return; }
 //	SERVICES_LOGIN_RECEIVED",nil,@{@"user":user});
 //	SERVICES_MEDIA_RECEIVED", nil, @{@"media":mediaDict}); // fakes an entire list and does same as fetching all media

@@ -64,7 +64,7 @@ public class UsersModel extends ARISModel {
 	public void updateUsers(List<User> newUsers) {
 		long newUserId;
 		for (User newUser : newUsers) {
-			newUserId = Integer.getInteger(newUser.user_id);
+			newUserId = Integer.parseInt(newUser.user_id);
 			if (!users.containsKey(newUserId)) {
 				users.put(newUserId, newUser); // setObject:newUser forKey:newUserId];
 				blacklist.remove(newUserId); // removeObjectForKey:[NSNumber numberWithLong:newUserId]];
@@ -81,7 +81,7 @@ public class UsersModel extends ARISModel {
 		List<User> conformingUsers = new ArrayList<>();
 		User u;
 		for (User newUser : newUsers) {
-			if ((u = this.userForId(Long.getLong(newUser.user_id))) == null)
+			if ((u = this.userForId(Long.parseLong(newUser.user_id))) == null)
 				conformingUsers.add(u); // addObject:u];
 		}
 		return conformingUsers;

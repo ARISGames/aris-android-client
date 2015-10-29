@@ -19,6 +19,14 @@ public class Services {
 	public User mPlayer;
 
 	public Services(GamePlayActivity gamePlayActivity) {
+		initContext(gamePlayActivity);
+	}
+
+	public Services() {
+
+	}
+
+	public void initContext(GamePlayActivity gamePlayActivity) {
 		// reference to GamePlayActivity
 		mGamePlayAct = gamePlayActivity;
 		//convenience references:
@@ -55,6 +63,9 @@ public class Services {
 
 	public void touchItemsForGame() {
 
+	}
+
+	public void fetchItems() {
 	}
 
 	public void dropItem(long item_id, long qty) {

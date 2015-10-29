@@ -93,7 +93,7 @@ public class PlayerInstancesModel extends ARISModel {
 
 //		Instance newInstance;
 		for (Instance newInstance : newInstances) {
-			if(!newInstance.object_type.contentEquals("ITEM") || newInstance.owner_id != Long.getLong(mGamePlayAct.mPlayer.user_id)) continue;
+			if(!newInstance.object_type.contentEquals("ITEM") || newInstance.owner_id != Long.parseLong(mGamePlayAct.mPlayer.user_id)) continue;
 
 		}
 		mGamePlayAct.mDispatch.model_player_instances_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_INSTANCES_AVAILABLE",nil,nil);

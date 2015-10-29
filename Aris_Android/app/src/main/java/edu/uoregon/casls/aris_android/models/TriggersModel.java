@@ -206,7 +206,7 @@ public class TriggersModel extends ARISModel {
 						continue;
 					}
 					Date now = new Date(); // should be now.
-					int time = now.compareTo(i.created); //[[NSDate date] timeIntervalSinceDate:i.created];
+					int time = now.compareTo(i.getCreated()); //[[NSDate date] timeIntervalSinceDate:i.created];
 //					NSLog(@"%d",time);
 					if (time > f.produce_expiration_time) {
 						rejected.add(i);
