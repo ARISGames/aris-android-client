@@ -444,7 +444,6 @@ public class GamesListActivity extends ActionBarActivity {
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
-
 				}
 				@Override
 				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

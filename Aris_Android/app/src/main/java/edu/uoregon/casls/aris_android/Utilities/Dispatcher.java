@@ -49,7 +49,7 @@ public class Dispatcher {
 
 		// reference to GamePlayActivity
 		mGamePlayAct = gamePlayActivity;
-		//convenience references:
+		//convenience references: // these all get tagged as circular references, but I am uncertain if they pose an actual infinite spiral of references.
 //		mGame = mGamePlayAct.mGame;
 //		mPlayer = mGamePlayAct.mPlayer;
 //		mMediaModel = mGamePlayAct.mMediaModel; cyclic ref
@@ -224,7 +224,7 @@ public class Dispatcher {
 	}
 
 	//	MODEL_NOTES_AVAILABLE",nil,nil);
-	public void model_notes_avaialble() {
+	public void model_notes_available() {
 		// no Listeners
 	}
 

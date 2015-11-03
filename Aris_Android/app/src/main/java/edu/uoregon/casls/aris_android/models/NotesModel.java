@@ -100,7 +100,7 @@ public class NotesModel extends ARISModel {
 			if (!notes.containsKey(newNoteId)) notes.put(newNoteId, newNote);
 		}
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.model_notes_avaialble(); //_ARIS_NOTIF_SEND_(@"MODEL_NOTES_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_notes_available(); //_ARIS_NOTIF_SEND_(@"MODEL_NOTES_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
 	}
 

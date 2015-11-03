@@ -14,24 +14,24 @@ import edu.uoregon.casls.aris_android.data_objects.User;
  */
 public class Services {
 
+
 	public transient GamePlayActivity mGamePlayAct;
-	public transient Game mGame;
-	public User mPlayer;
+//	public transient Game mGame;
+//	public User mPlayer;
 
 	public Services(GamePlayActivity gamePlayActivity) {
 		initContext(gamePlayActivity);
 	}
 
 	public Services() {
-
 	}
 
 	public void initContext(GamePlayActivity gamePlayActivity) {
 		// reference to GamePlayActivity
 		mGamePlayAct = gamePlayActivity;
 		//convenience references:
-		mGame = mGamePlayAct.mGame;
-		mPlayer = mGamePlayAct.mPlayer;
+//		mGame = mGamePlayAct.mGame;
+//		mPlayer = mGamePlayAct.mPlayer;
 	}
 
 	public void fetchInstanceById(long i) {
@@ -259,4 +259,6 @@ public class Services {
 	public void fetchSceneForPlayer() {
 
 	}
+
+
 }
