@@ -338,10 +338,11 @@ public class Game {
 //		displayQueueModel    = null; // iOS
 	}
 
-	public void requestGameData() {  // Androis Aris departs from iOS here where we make all our requests from GamePlayActivity
+	public void requestGameData() {  // Android Aris departs from iOS here where we make all our requests from GamePlayActivity
 
+		// todo: put these calls in a loop line in the init blocks to match iOS
 		scenesModel.requestScenes();
-		scenesModel.touchPlayerScene();
+		scenesModel.touchPlayerScene(); // todo touch is originating from somewhere else; find it and make it work.
 		plaquesModel.requestPlaques();
 		itemsModel.requestItems();
 		playerInstancesModel.touchPlayerInstances();

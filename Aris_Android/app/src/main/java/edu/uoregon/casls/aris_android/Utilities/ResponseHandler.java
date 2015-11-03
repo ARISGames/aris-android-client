@@ -43,7 +43,7 @@ import edu.uoregon.casls.aris_android.data_objects.WebPage;
 /**
  * Created by smorison on 11/3/15.
  */
-public class ResponseHandler {
+public class ResponseHandler { // for now only handles responses with respect to GamePlayActivity.
 	
 	public transient GamePlayActivity mGamePlayAct;
 

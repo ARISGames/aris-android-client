@@ -29,6 +29,10 @@ public class WebPagesModel extends ARISModel {
 		return 1;
 	}
 
+	public void requestGameData() {
+		this.requestWebPages();
+	}
+
 	public void webPagesReceived(List<WebPage> webPages) {
 		this.updateWebPages(webPages);
 	}

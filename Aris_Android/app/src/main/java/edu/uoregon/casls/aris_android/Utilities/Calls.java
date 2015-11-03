@@ -10,6 +10,7 @@ public class Calls {
 	public static final String HTTP_GET_SCENES_4_GAME 		= "v2.scenes.getScenesForGame/";		// Game Piece Avail
 	public static final String HTTP_TOUCH_SCENE_4_PLAYER 	= "v2.client.touchSceneForPlayer/";		// Game Piece Avail
 	public static final String HTTP_GET_GROUPS_4_GAME 		= "v2.plaques.getGroupsForGame/";		// Game Piece Avail
+	public static final String HTTP_TOUCH_GROUP_4_PLAYER 	= "v2.client.touchGroupForPlayer/";		// Game Piece Avail
 	public static final String HTTP_GET_PLAQUES_4_GAME 		= "v2.plaques.getPlaquesForGame/";		// Game Piece Avail
 	public static final String HTTP_GET_ITEMS_4_GAME 		= "v2.items.getItemsForGame/";			// Game Piece Avail
 	public static final String HTTP_TOUCH_ITEMS_4_PLAYER 	= "v2.client.touchItemsForPlayer/";		// Game Piece Avail
@@ -31,6 +32,9 @@ public class Calls {
 	public static final String HTTP_GET_TABS_4_GAME 		= "v2.tabs.getTabsForGame/";			// Game Piece Avail
 	public static final String HTTP_GET_MEDIA_4_GAME 		= "v2.media.getMediaForGame/";			// Game Piece Avail
 	public static final String HTTP_GET_USERS_4_GAME 		= "v2.users.getUsersForGame/";			// Game Piece Avail
+	public static final String HTTP_GET_REQ_ROOT_PKGS_4_GAME 		= "v2.requirements.getRequirementRootPackagesForGame/";			// Game Piece Avail
+	public static final String HTTP_GET_REQ_AND_PKGS_4_GAME 		= "v2.requirements.getRequirementAndPackagesForGame/";			// Game Piece Avail
+	public static final String HTTP_GET_REQ_ATOMS_4_GAME 		= "v2.requirements.getRequirementAtomsForGame/";			// Game Piece Avail
 	// Game cyclical update calls
 	public static final String HTTP_GET_SCENE_4_PLAYER 		= "v2.client.getSceneForPlayer/";
 	public static final String HTTP_GET_INSTANCES_4_PLAYER 	= "v2.client.getInstancesForPlayer/"; // Needs game_id, owner_id

@@ -36,6 +36,10 @@ public class DialogsModel extends ARISModel {
 		n_game_data_received = 0;
 	}
 
+	public void requestGameData() {
+		this.requestDialogs(); //should be split up into multiple models...
+	}
+
 	// to be consistent with iOS these are here to do what the listener declarations did in iOS
 	public void dialogsReceived(List<Dialog> dialogs) { this.updateDialogs(dialogs); }
 	public void dialogOptionsReceived(List<DialogOption> dialogOptions) { this.updateDialogOptions(dialogOptions); }

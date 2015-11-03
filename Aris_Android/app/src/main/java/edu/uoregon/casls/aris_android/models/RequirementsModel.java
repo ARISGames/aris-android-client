@@ -39,6 +39,10 @@ public class RequirementsModel extends ARISModel {
 		mGame = mGamePlayAct.mGame; // convenience ref
 	}
 
+	public void requestGameData() {
+		this.requestRequirements(); //should be three different models
+	}
+
 	public void clearGameData() {
 
 		requirementRootPackages.clear();
