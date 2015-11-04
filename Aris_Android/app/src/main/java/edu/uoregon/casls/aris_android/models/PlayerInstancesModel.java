@@ -59,6 +59,10 @@ public class PlayerInstancesModel extends ARISModel {
 
 	}
 
+	public void requestMaintenanceData() {
+		this.touchPlayerInstances();
+	}
+
 	public void playerInstancesTouched() {
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_player_instances_touched(); //		_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_INSTANCES_TOUCHED",nil,nil);
@@ -66,6 +70,7 @@ public class PlayerInstancesModel extends ARISModel {
 	}
 
 	public void touchPlayerInstances() {
+		mGamePlayAct.mServices.touchItemsForPlayer();
 		// call (via two messages) Game.gamePieceReceived() // todo: check for completeness
 
 	}

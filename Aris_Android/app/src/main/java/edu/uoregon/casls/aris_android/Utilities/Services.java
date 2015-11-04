@@ -17,13 +17,11 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
-import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.data_objects.Note;
 import edu.uoregon.casls.aris_android.data_objects.NoteComment;
 import edu.uoregon.casls.aris_android.data_objects.Tag;
 import edu.uoregon.casls.aris_android.data_objects.Trigger;
-import edu.uoregon.casls.aris_android.data_objects.User;
 
 /**
  * Created by smorison on 10/6/15.
@@ -48,6 +46,10 @@ public class Services {
 		//convenience references:
 //		mGame = mGamePlayAct.mGame;
 //		mPlayer = mGamePlayAct.mPlayer;
+	}
+
+	public void fetchInstances() {
+		pollServer(Calls.HTTP_GET_INSTANCES_4_GAME, getJsonGameId()); //could leave out ownerId and get same result, but would rather be explicit -iOS comment
 	}
 
 	public void fetchInstanceById(long i) {
@@ -80,7 +82,15 @@ public class Services {
 	}
 
 	public void touchItemsForGame() {
+		pollServer(Calls.HTTP_TOUCH_ITEMS_4_GAME, getJsonGameId());
+	}
 
+	public void touchItemsForPlayer() {
+		pollServer(Calls.HTTP_TOUCH_ITEMS_4_PLAYER, getJsonGameId());
+	}
+
+	public void touchItemsForGroups() {
+		pollServer(Calls.HTTP_TOUCH_ITEMS_4_GROUPS, getJsonGameId());
 	}
 
 	public void fetchItems() {
@@ -92,7 +102,7 @@ public class Services {
 	}
 
 	public void fetchLogsForPlayer() {
-
+		pollServer(Calls.HTTP_GET_LOGS_4_PLAYER, getJsonGameId());
 	}
 
 	public void logPlayerEnteredGame() {
@@ -178,12 +188,11 @@ public class Services {
 	}
 
 	public void fetchQuestsForPlayer() {
+		pollServer(Calls.HTTP_GET_QUESTS_4_PLAYER, getJsonGameId());
 	}
 
 	public void fetchQuests() {
-	}
-
-	public void touchItemsForGroups() {
+		pollServer(Calls.HTTP_GET_QUESTS_4_GAME, getJsonGameId());
 	}
 
 	public void fetchTags() {
@@ -254,6 +263,7 @@ public class Services {
 	}
 
 	public void fetchTriggersForPlayer() {
+		pollServer(Calls.HTTP_GET_TRIGGERS_4_PLAYER, getJsonGameId());
 	}
 
 	public void fetchOverlays() {
@@ -266,10 +276,11 @@ public class Services {
 	}
 
 	public void fetchTabs() {
-		
+		pollServer(Calls.HTTP_GET_TABS_4_GAME, getJsonGameId());
 	}
 
 	public void fetchTabsForPlayer() {
+		pollServer(Calls.HTTP_GET_TABS_4_PLAYER, getJsonGameId());
 	}
 
 	public void fetchWebPages() {
@@ -294,7 +305,7 @@ public class Services {
 	}
 
 	public void fetchSceneForPlayer() {
-
+		pollServer(Calls.HTTP_GET_SCENE_4_PLAYER, getJsonGameId());
 	}
 
 
@@ -408,5 +419,4 @@ public class Services {
 		}
 
 	}
-
 }

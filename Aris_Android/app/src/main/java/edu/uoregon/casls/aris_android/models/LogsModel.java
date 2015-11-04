@@ -33,7 +33,7 @@ public class LogsModel extends ARISModel {
 		return 1;
 	}
 
-	public void requestGameData() {
+	public void requestPlayerData() {
 		this.requestPlayerLogs();
 	}
 

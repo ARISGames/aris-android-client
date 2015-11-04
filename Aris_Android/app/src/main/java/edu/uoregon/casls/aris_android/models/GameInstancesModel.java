@@ -56,7 +56,7 @@ public class GameInstancesModel extends ARISModel {
 		gameOwnedInstances.clear();
 	}
 
-	public void requestGameData() {
+	public void requestMaintenanceData() {
 		this.touchGameInstances();
 	}
 

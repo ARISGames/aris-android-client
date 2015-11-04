@@ -112,8 +112,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		// initialize game object's inner classes and variables.
 		mGame.getReadyToPlay();
 		// Start barrage of game related server requests
-		getGameDataFromServer(); // perhaps move this to Game
-//		mGame.requestGameData(); // ... like this. It'd be more like the iOS version
+//		getGameDataFromServer(); // perhaps move this older version of the game data loading to Game
+		mGame.requestGameData(); // ... like this. To align with the iOS version
 		// Set up the drawer. todo: move this to processServerResponse() for call getTabsForPlayer
 		mNavigationDrawerFragment.setUp(
 				R.id.navigation_drawer,

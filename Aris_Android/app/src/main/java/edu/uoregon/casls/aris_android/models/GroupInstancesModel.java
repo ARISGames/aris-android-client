@@ -42,7 +42,7 @@ public class GroupInstancesModel extends ARISModel {
 		groupOwnedInstances.clear();
 	}
 
-	public void requestGameData() {
+	public void requestMaintenanceData() {
 		this.touchGroupInstances();
 	}
 

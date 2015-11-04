@@ -136,8 +136,13 @@ public class InstancesModel extends ARISModel {
 		}
 	}
 
+	public void requestGameData() {
+		this.requestInstances();
+	}
+
 	public void requestInstances() {
-	} // todo: _SERVICES_ fetchInstances90; <-- could not find in iOS -sem
+		mGamePlayAct.mServices.fetchInstances();
+	}
 
 	public void requestInstance(long i) {
 		mGamePlayAct.mServices.fetchInstanceById(i);
