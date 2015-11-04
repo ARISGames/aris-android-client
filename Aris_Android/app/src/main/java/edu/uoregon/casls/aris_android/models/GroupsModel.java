@@ -43,12 +43,28 @@ public class GroupsModel extends ARISModel {
 		n_player_data_received = 0;
 	}
 
+	public void clearMaintenanceData() {
+		n_maintenance_data_received = 0;
+	}
+
+	public long nMaintenanceDataToReceive() {
+		return 1;
+	}
+
+	public void requestMaintenanceData() {
+		this.touchGroupInstances();
+	}
+
 	public long nPlayerDataToReceive() {
 		return 1;
 	}
 
 	public void groupsReceived(List<Group> newGroups) {
 		this.updateGroups(newGroups);
+	}
+
+	public void touchGroupInstances() {
+		mGamePlayAct.mServices.touchItemsForGroups();
 	}
 
 	public void playerGroupReceived(Group newGroup) {

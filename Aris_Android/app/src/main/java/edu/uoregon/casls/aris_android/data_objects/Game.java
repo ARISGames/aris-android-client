@@ -40,15 +40,19 @@ import edu.uoregon.casls.aris_android.models.WebPagesModel;
  */
 public class Game {
 
-	public long n_game_data_to_receive;
-	public long n_game_data_received;
-	public long n_player_data_to_receive;
-	public long n_player_data_received;
+	public long n_game_data_to_receive = 0;
+	public long n_game_data_received = 0;
+	public long n_maintenance_data_to_receive = 0;
+	public long n_maintenance_data_received = 0;
+	public long n_player_data_to_receive = 0;
+	public long n_player_data_received = 0;
+	public long n_media_data_to_receive = 0;
+	public long n_media_data_received = 0;
 
-	public boolean listen_player_piece_available;
-	public boolean listen_game_piece_available;
-	public boolean listen_maintenance_piece_available;
-	public boolean listen_media_piece_available;
+	public boolean listen_player_piece_available = true;
+	public boolean listen_game_piece_available = true;
+	public boolean listen_maintenance_piece_available = true;
+	public boolean listen_media_piece_available = true;
 //	public NSTimer *poller; todo: android equivalent
 	// todo: this will not serialize (crashes gson.toJson()) so I need to locate it in the gameplay activity itself.
 
@@ -114,9 +118,9 @@ public class Game {
 	// medias (in GamePlayAct 		// Game Piece
 
 	//local stuff
-	long downloadedVersion;
-	public boolean know_if_begin_fresh;
-	public boolean begin_fresh;
+	long downloadedVersion = 0;
+	public boolean know_if_begin_fresh = false;
+	public boolean begin_fresh = false;
 
 	// FYI transient indicates "do not serialize"; gson will die a recursive death if it did.
 	public transient GamePlayActivity mGamePlayAct; // For reference to GamePlayActivity; do not instantiate (new) object or circular references will ensue.
@@ -282,10 +286,10 @@ public class Game {
 	}
 
 	public void getReadyToPlay() {
-		listen_player_piece_available = true; //_ARIS_NOTIF_LISTEN_(@"PLAYER_PIECE_AVAILABLE",self,@selector(gamePlayerPieceReceived),null);
-		listen_maintenance_piece_available = true; // _ARIS_NOTIF_LISTEN_(@"MAINTENANCE_PIECE_AVAILABLE",self,@selector(maintenancePieceReceived),nil);
-		listen_game_piece_available = true; // _ARIS_NOTIF_LISTEN_(@"GAME_PIECE_AVAILABLE",self,@selector(gamePieceReceived),null);
-		listen_media_piece_available = true; // _ARIS_NOTIF_LISTEN_(@"MEDIA_PIECE_AVAILABLE",self,@selector(mediaPieceReceived),nil);
+		listen_player_piece_available = true; 		//_ARIS_NOTIF_LISTEN_(@"PLAYER_PIECE_AVAILABLE",self,@selector(gamePlayerPieceReceived),null);
+		listen_maintenance_piece_available = true; 	// _ARIS_NOTIF_LISTEN_(@"MAINTENANCE_PIECE_AVAILABLE",self,@selector(maintenancePieceReceived),nil);
+		listen_game_piece_available = true; 		// _ARIS_NOTIF_LISTEN_(@"GAME_PIECE_AVAILABLE",self,@selector(gamePieceReceived),null);
+		listen_media_piece_available = true; 		// _ARIS_NOTIF_LISTEN_(@"MEDIA_PIECE_AVAILABLE",self,@selector(mediaPieceReceived),nil);
 
 		scenesModel          = new ScenesModel(); 			models.add(scenesModel         );
 		plaquesModel         = new PlaquesModel(); 			models.add(plaquesModel        );
@@ -307,13 +311,21 @@ public class Game {
 		logsModel            = new LogsModel(); 			models.add(logsModel           );
 		questsModel          = new QuestsModel(); 			models.add(questsModel         );
 //		displayQueueModel    = new DisplayQueueModel();	 	models.add(displayQueueModel   ); // iOS only for now
+		// todo: user Model and media model added??
+//		[models addObject:_MODEL_USERS_];
+//		[models addObject:_MODEL_MEDIA_];
 
 		n_game_data_to_receive = 0;
+		n_maintenance_data_to_receive = 0;
 		n_player_data_to_receive = 0;
+		n_media_data_to_receive = 0;
 		for (ARISModel model : models) {
 			n_game_data_to_receive   += model.nGameDataToReceive();
+			n_maintenance_data_to_receive += model.nMaintenanceDataToReceive();
 			n_player_data_to_receive += model.nPlayerDataToReceive();
 		}
+		// todo: waiting for previous todo to solve this
+//		n_media_data_to_receive = mediaModel.numMediaTryingToLoad(); //must be recalculated once game info gotten
 
 		initModelContexts();
 	}
@@ -357,7 +369,7 @@ public class Game {
 	}
 
 	public void requestGameData() {
-
+		n_game_data_received = 0;
 		// loop through all models and call requestGameData()
 		for (ARISModel model : models) {
 			model.requestGameData();
@@ -388,10 +400,13 @@ public class Game {
 //		_MODEL_USERS_ requestUsers();
 	}
 
+	/**
+	 *
+	 */
 	public void requestPlayerData() {
-
+		n_player_data_received = 0;
 		for (ARISModel model : models) {
-			model.requestGameData();
+			model.requestPlayerData();
 		}
 
 //		scenesModel.requestPlayerScene();
@@ -403,11 +418,18 @@ public class Game {
 //		logsModel.requestPlayerLogs();
 	}
 
+	public void requestMaintenanceData() {
+		n_player_data_received = 0;
+		for (ARISModel model : models) {
+			model.requestPlayerData();
+		}
+	}
+
 	public void gamePieceReceived() {
 		n_game_data_received++;
 		if (this.allGameDataReceived()) {
 			n_game_data_received = n_game_data_to_receive; //should already be exactly this...
-			mGamePlayAct.mDispatch.model_game_data_loaded(); // _ARIS_NOTIF_SEND_(@"MODEL_GAME_DATA_LOADED", nil, nil);
+			mGamePlayAct.mDispatch.model_game_data_loaded(); // _ARIS_NOTIF_SEND_(@"DATA_LOADED", nil, nil);
 		}
 		percentLoadedChanged();
 	}
@@ -415,14 +437,14 @@ public class Game {
 	public void gamePlayerPieceReceived() {
 		n_player_data_received++;
 		if (n_player_data_received >= n_player_data_to_receive) {
-		mGamePlayAct.mDispatch.model_game_player_data_loaded(); // _ARIS_NOTIF_SEND_(@"MODEL_GAME_PLAYER_DATA_LOADED", null, null); // broadcast to any listeners that game data is ready
+		mGamePlayAct.mDispatch.model_game_player_data_loaded(); // _ARIS_NOTIF_SEND_(@"PLAYER_DATA_LOADED", null, null); // broadcast to any listeners that game data is ready
 		}
 		percentLoadedChanged();
 	}
 
 	public boolean allGameDataReceived() {
 
-		for (ARISModel model : models) // iterate through all models
+		for (ARISModel model : models) 		// iterate through all models
 			if(!model.gameDataReceived()) { // stop if one reports it's not received all its data.
 				return false;
 			}
@@ -435,7 +457,7 @@ public class Game {
 
 	public void percentLoadedChanged() {
 		float percentReceived = (n_game_data_received + n_player_data_received)/(n_game_data_to_receive + n_player_data_to_receive);
-		mGamePlayAct.mDispatch.model_game_percent_loaded(percentReceived); // _ARIS_NOTIF_SEND_(@"MODEL_GAME_PERCENT_LOADED", null, @{@"percent":percentReceived});
+		mGamePlayAct.mDispatch.model_game_percent_loaded(percentReceived); // _ARIS_NOTIF_SEND_(@"PERCENT_LOADED", null, @{@"percent":percentReceived});
 	}
 
 	public void gameBegan() { // todo: bring up to date with iOS

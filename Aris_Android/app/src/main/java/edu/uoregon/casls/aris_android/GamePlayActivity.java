@@ -104,31 +104,34 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mResposeHandler = new ResponseHandler(); // Where calls to server return for landing.
 		mMediaModel = new MediaModel(this);
 		mUsersModel = new UsersModel(this);
-		// Set up the drawer. todo: move this to processServerResponse() for call getTabsForPlayer
+
 		mNavigationDrawerFragment.setUp(
 				R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
+
+		// Having arrived here in this activity is tantamount to the
+		//   "LoadingViewController.gameChosen->RootViewController.startLoading" call hierarchy as in iOS
+		//   the game has implicitly been "Chosen" so we can "startLoading" straight away
+		mGame.getReadyToPlay();
+		// Start barrage of game related server requests
+		if (!mGame.hasLatestDownload())
+			mGame.requestGameData(); // ... like this. To align with the iOS version
+		else { // todo: code in the "restoreGameData" process. See LoadingViewController.startLoading.
+		// todo:   Basically we'll sub in Android life cycle state save and restore
+			 //			[_MODEL_ restoreGameData];
+			mGame.requestMaintenanceData(); //			[self gameDataLoaded];
+		}
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		// todo: restore saved Game object if it was stashed for app sleep.
+		// reinit contexts to be safe after a resume.
 		mDispatch.initContext(this); // initialize contexts
 		mServices.initContext(this);
-		mServices.mJsonAuth = this.mJsonAuth; // pass it on
 		mGame.initContext(this);
 		mResposeHandler.initContext(this);
-		// initialize game object's inner classes and variables.
-		// Having arrived here in this activity is tantamount to the
-		//   "LoadingViewController.gameChosen->RootViewController.startLoading" call hierarchy as in iOS
-		mGame.getReadyToPlay();
-		// Start barrage of game related server requests
-		if (!mGame.hasLatestDownload())
-			mGame.requestGameData(); // ... like this. To align with the iOS version
-		else { // todo: code in the "restoreGameData" process. See LoadingViewController.startLoading
-//			[_MODEL_ restoreGameData];
-//			[self gameDataLoaded];
-		}
 	}
 
 	public void dropItem(long item_id, long qty) {

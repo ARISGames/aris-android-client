@@ -46,6 +46,14 @@ public class GroupInstancesModel extends ARISModel {
 		this.touchGroupInstances();
 	}
 
+	public void clearMaintenanceData() {
+		n_maintenance_data_received = 0;
+	}
+
+	public long nMaintenanceDataToReceive() {
+		return 1;
+	}
+
 	public void clearGameData() {
 		this.clearPlayerData();
 		n_game_data_received = 0;

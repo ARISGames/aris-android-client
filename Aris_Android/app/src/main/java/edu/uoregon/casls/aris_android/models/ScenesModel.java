@@ -51,6 +51,17 @@ public class ScenesModel extends ARISModel {
 		this.requestPlayerScene();
 	}
 
+	public void clearMaintenanceData() {
+		n_maintenance_data_received = 0;
+	}
+
+	public long nMaintenanceDataToReceive() {
+		return 1;
+	}
+
+	public void requestMaintenanceData() {
+		this.touchPlayerScene();
+	}
 
 	public void scenesReceived(List<Scene> newScenes) { // method here to conform with iOS version of this class
 		this.updateScenes(newScenes);

@@ -60,9 +60,17 @@ public class GameInstancesModel extends ARISModel {
 		this.touchGameInstances();
 	}
 
+	public void clearMaintenanceData() {
+		n_maintenance_data_received = 0;
+	}
+
+	public long nMaintenanceDataToReceive() {
+		return 1;
+	}
+
 	public void gameInstancesTouched(List<GameInstance> gameInstances) {
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.model_game_instance_touched(); //_ARIS_NOTIF_SEND_(@"MODEL_GAME_INSTANCES_TOUCHED",nil,nil);
+		mGamePlayAct.mDispatch.model_game_instance_touched(); //_ARIS_NOTIF_SEND_(@"INSTANCES_TOUCHED",nil,nil);
 		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
@@ -79,7 +87,7 @@ public class GameInstancesModel extends ARISModel {
 				continue;
 			instances.put(newInstance.object_id, newInstance); //[[NSNumber numberWithLong:newInstance.object_id]] = newInstance;
 		}
-		mGamePlayAct.mDispatch.model_game_instances_available(); // _ARIS_NOTIF_SEND_(@"MODEL_GAME_INSTANCES_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_instances_available(); // _ARIS_NOTIF_SEND_(@"INSTANCES_AVAILABLE",nil,nil);
 	}
 
 	public long dropItemFromGame(long item_id, long qty) {

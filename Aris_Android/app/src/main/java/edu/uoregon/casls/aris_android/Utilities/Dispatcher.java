@@ -95,36 +95,36 @@ public class Dispatcher {
 		// no listeners
 	}
 
-	//	MODEL_GAME_AVAILABLE",nil,@{@"game":[self gameForId:g.game_id]});// Will be handled in GamePlayActivity -sem
-//	MODEL_GAME_BEGAN",nil,nil); // Will be handled in GamePlayActivity -sem
+	//	AVAILABLE",nil,@{@"game":[self gameForId:g.game_id]});// Will be handled in GamePlayActivity -sem
+//	BEGAN",nil,nil); // Will be handled in GamePlayActivity -sem
 	public void	model_game_began() {
 		mGamePlayAct.mGame.gameBegan();
 		mGamePlayAct.gameBegan(); // possibly not needed.
 	}
 
-//	MODEL_GAME_CHOSEN",nil,nil); // Will be handled in GamePlayActivity -sem
+//	CHOSEN",nil,nil); // Will be handled in GamePlayActivity -sem
 	public void	model_game_chosen() {
 		mGamePlayAct.gameChosen(); // possibly not needed.
 	}
 
-//	MODEL_GAME_DATA_LOADED", nil, nil);
+//	DATA_LOADED", nil, nil);
 	public void model_game_data_loaded() {
 		// in iOS would call LoadingViewController.gameDataLoaded(), which then calls Game.requestPlayerData(); I'll call it directly.
 		mGamePlayAct.mGame.requestPlayerData();
 	}
 
-	//	MODEL_GAME_INSTANCES_AVAILABLE",nil,nil);
+	//	INSTANCES_AVAILABLE",nil,nil);
 	public void model_game_instances_available() {
 		// not listened for;
 	}
 
-	//	MODEL_GAME_INSTANCES_TOUCHED",nil,nil);
+	//	INSTANCES_TOUCHED",nil,nil);
 	public void model_game_instance_touched() {
 		// no action assigned to this yet.
 	}
 
-	//	MODEL_GAME_LEFT",nil,nil); // Will be handled in GamePlayActivity -sem
-//	MODEL_GAME_PERCENT_LOADED", nil, @{@"percent":percentReceived});
+	//	LEFT",nil,nil); // Will be handled in GamePlayActivity -sem
+//	PERCENT_LOADED", nil, @{@"percent":percentReceived});
 	public void model_game_percent_loaded(float percentReceived) {
 		// todo: LoadingViewController.percentLoaded();
 	}
@@ -134,7 +134,7 @@ public class Dispatcher {
 		if (mGamePlayAct.mGame.listen_game_piece_available) mGamePlayAct.mGame.gamePieceReceived();
 	}
 
-	//	MODEL_GAME_PLAYER_DATA_LOADED", nil, nil);
+	//	PLAYER_DATA_LOADED", nil, nil);
 	public void model_game_player_data_loaded() {
 		// todo: LoadingViewController.playerDataLoaded();
 	}
