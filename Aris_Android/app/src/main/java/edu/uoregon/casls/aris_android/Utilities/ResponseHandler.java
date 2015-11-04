@@ -72,7 +72,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 //							mGamePlayAct.mGame.scenesModel.scenes.put(scene.scene_id, scene); // in iOS the object is added in the class itself
 							scenes.add(scene);
 							// tell the game class that we got one of the 27 required pieces.
-							// serving the function that the iOS "MODEL_GAME_PLAYER_PIECE_AVAILABLE" message would have.
+							// serving the function that the iOS "PLAYER_PIECE_AVAILABLE" message would have.
 //							if (!mGamePlayAct.mGame.playerDataReceived) mGamePlayAct.mGame.gamePlayerPieceReceived();
 						}
 						mGamePlayAct.mGame.scenesModel.scenesReceived(scenes);

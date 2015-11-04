@@ -11,7 +11,6 @@ import edu.uoregon.casls.aris_android.data_objects.DialogOption;
 import edu.uoregon.casls.aris_android.data_objects.DialogScript;
 import edu.uoregon.casls.aris_android.data_objects.Event;
 import edu.uoregon.casls.aris_android.data_objects.Factory;
-import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Group;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
 import edu.uoregon.casls.aris_android.data_objects.NoteComment;
@@ -24,7 +23,6 @@ import edu.uoregon.casls.aris_android.data_objects.Tag;
 import edu.uoregon.casls.aris_android.data_objects.Trigger;
 import edu.uoregon.casls.aris_android.data_objects.User;
 import edu.uoregon.casls.aris_android.data_objects.WebPage;
-import edu.uoregon.casls.aris_android.models.MediaModel;
 
 /**
  * Created by smorison on 10/6/15.
@@ -99,7 +97,15 @@ public class Dispatcher {
 
 	//	MODEL_GAME_AVAILABLE",nil,@{@"game":[self gameForId:g.game_id]});// Will be handled in GamePlayActivity -sem
 //	MODEL_GAME_BEGAN",nil,nil); // Will be handled in GamePlayActivity -sem
+	public void	model_game_began() {
+		mGamePlayAct.mGame.gameBegan();
+		mGamePlayAct.gameBegan(); // possibly not needed.
+	}
+
 //	MODEL_GAME_CHOSEN",nil,nil); // Will be handled in GamePlayActivity -sem
+	public void	model_game_chosen() {
+		mGamePlayAct.gameChosen(); // possibly not needed.
+	}
 
 //	MODEL_GAME_DATA_LOADED", nil, nil);
 	public void model_game_data_loaded() {
@@ -123,9 +129,9 @@ public class Dispatcher {
 		// todo: LoadingViewController.percentLoaded();
 	}
 
-	//	MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+	//	GAME_PIECE_AVAILABLE",nil,nil);
 	public void model_game_piece_available() {
-		if (mGamePlayAct.mGame.listen_model_game_piece_available) mGamePlayAct.mGame.gamePieceReceived();
+		if (mGamePlayAct.mGame.listen_game_piece_available) mGamePlayAct.mGame.gamePieceReceived();
 	}
 
 	//	MODEL_GAME_PLAYER_DATA_LOADED", nil, nil);
@@ -133,9 +139,9 @@ public class Dispatcher {
 		// todo: LoadingViewController.playerDataLoaded();
 	}
 
-	//	MODEL_GAME_PLAYER_PIECE_AVAILABLE",nil,nil);
+	//	PLAYER_PIECE_AVAILABLE",nil,nil);
 	public void model_game_player_piece_available() {
-		if (mGamePlayAct.mGame.listen_model_game_player_piece_available) mGamePlayAct.mGame.gamePlayerPieceReceived();
+		if (mGamePlayAct.mGame.listen_player_piece_available) mGamePlayAct.mGame.gamePlayerPieceReceived();
 	}
 
 	//	MODEL_GROUP_INSTANCES_AVAILABLE",nil,nil);

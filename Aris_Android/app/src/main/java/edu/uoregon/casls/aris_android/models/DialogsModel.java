@@ -54,8 +54,8 @@ public class DialogsModel extends ARISModel {
 				dialogs.put(newDialogId, newDialog); // setObject:newDialog forKey:newDialogId];
 		}
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.model_dialogs_available(); // a call to no one.		_ARIS_NOTIF_SEND_(@"MODEL_DIALOGS_AVAILABLE",nil,nil);
-		mGamePlayAct.mDispatch.model_game_piece_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_dialogs_available(); 		// a call to no one._ARIS_NOTIF_SEND_(@"MODEL_DIALOGS_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); 	// _ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void updateDialogCharacters(List<DialogCharacter> newDialogCharacters) {
@@ -66,7 +66,7 @@ public class DialogsModel extends ARISModel {
 		}
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_dialog_characters_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_DIALOG_CHARACTERS_AVAILABLE",nil,nil);
-		mGamePlayAct.mDispatch.model_game_piece_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //		_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void updateDialogScripts(List<DialogScript> newDialogScripts) {
@@ -77,7 +77,7 @@ public class DialogsModel extends ARISModel {
 		}
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_dialog_scripts_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_DIALOG_SCRIPTS_AVAILABLE",nil,nil);
-		mGamePlayAct.mDispatch.model_game_piece_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //		_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void updateDialogOptions(List<DialogOption> newDialogOptions) {
@@ -89,7 +89,7 @@ public class DialogsModel extends ARISModel {
 		}
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_dialog_options_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_DIALOG_OPTIONS_AVAILABLE",nil,nil);
-		mGamePlayAct.mDispatch.model_game_piece_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //		_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void requestDialogs() {

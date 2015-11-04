@@ -62,7 +62,7 @@ public class OverlaysModel extends ARISModel {
 		}
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_overlays_available(overlays); //_ARIS_NOTIF_SEND_(@"MODEL_OVERLAYS_AVAILABLE",nil,nil);
-		mGamePlayAct.mDispatch.model_game_piece_available();//_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available();//_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public List<Overlay> conformOverlaysListToFlyweight(List<Overlay> newOverlays) {
@@ -110,7 +110,7 @@ public class OverlaysModel extends ARISModel {
 			mGamePlayAct.mDispatch.model_overlays_new_available(addedOverlays); //@"MODEL_OVERLAYS_NEW_AVAILABLE",nil,@{@"added":addedOverlays});
 		if (removedOverlays.size() > 0)
 			mGamePlayAct.mDispatch.model_overlays_less_available(removedOverlays); //_ARIS_NOTIF_SEND_(@"MODEL_OVERLAYS_LESS_AVAILABLE",nil,@{@"removed":removedOverlays});
-		mGamePlayAct.mDispatch.model_game_player_piece_available();  //_ARIS_NOTIF_SEND_(@"MODEL_GAME_PLAYER_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_player_piece_available();  //_ARIS_NOTIF_SEND_(@"PLAYER_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void requestOverlays() {

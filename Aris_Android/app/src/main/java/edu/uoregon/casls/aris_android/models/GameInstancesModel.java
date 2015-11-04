@@ -63,7 +63,7 @@ public class GameInstancesModel extends ARISModel {
 	public void gameInstancesTouched(List<GameInstance> gameInstances) {
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_game_instance_touched(); //_ARIS_NOTIF_SEND_(@"MODEL_GAME_INSTANCES_TOUCHED",nil,nil);
-		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void touchGameInstances() {

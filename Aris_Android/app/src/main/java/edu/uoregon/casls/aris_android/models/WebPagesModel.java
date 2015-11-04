@@ -46,7 +46,7 @@ public class WebPagesModel extends ARISModel {
 				webpages.put(newWebPageId, newWebPage); // setObject:newWebPage forKey:newWebPageId];
 		}
 		mGamePlayAct.mDispatch.model_web_pages_available(); //;_ARIS_NOTIF_SEND_(@"MODEL_WEB_PAGES_AVAILABLE",nil,nil);
-		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 		n_game_data_received++;
 	}
 

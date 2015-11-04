@@ -66,7 +66,7 @@ public class PlayerInstancesModel extends ARISModel {
 	public void playerInstancesTouched() {
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_player_instances_touched(); //		_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_INSTANCES_TOUCHED",nil,nil);
-		mGamePlayAct.mDispatch.model_game_piece_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //		_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void touchPlayerInstances() {

@@ -43,7 +43,10 @@ public class MediaModel extends ARISModel {
 
 	public void initContext(GamePlayActivity gamePlayAct) {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
-		dbDealer = new DBDealer(gamePlayAct);
+		if (dbDealer == null)
+			dbDealer = new DBDealer(gamePlayAct); // only instantiate once
+		else
+			dbDealer.initContext(mGamePlayAct);
 	}
 
 	public void clearGameData() {
@@ -186,7 +189,7 @@ public class MediaModel extends ARISModel {
 //		this.commitContext(); // as best I can tell the intention is to insert each of these incoming "medicCDs" but why/how are they being set up for individual insertion in the loop above?
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_media_available(); //_ARIS_NOTIF_SEND_(@"MODEL_MEDIA_AVAILABLE",nil,nil);
-		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 

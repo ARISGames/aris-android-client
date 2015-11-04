@@ -60,7 +60,7 @@ public class GroupsModel extends ARISModel {
 	public void groupTouched(long groupId) {
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_group_touched(); //_ARIS_NOTIF_SEND_("MODEL_GROUP_TOUCHED", null, null);
-		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_("MODEL_GAME_PIECE_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_("GAME_PIECE_AVAILABLE", null, null);
 	}
 
 	public void updateGroups(List<Group> newGroups) {
@@ -74,14 +74,14 @@ public class GroupsModel extends ARISModel {
 		}
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_groups_available(); //_ARIS_NOTIF_SEND_("MODEL_GROUPS_AVAILABLE", null, null);
-		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_("MODEL_GAME_PIECE_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_("GAME_PIECE_AVAILABLE", null, null);
 	}
 
 	public void updatePlayerGroup(Group newGroup) {
 		playerGroup = newGroup;
 		n_player_data_received++;
 		mGamePlayAct.mDispatch.model_groups_player_group_available(); //_ARIS_NOTIF_SEND_("MODEL_GROUPS_PLAYER_GROUP_AVAILABLE", null, null);
-		mGamePlayAct.mDispatch.model_game_player_piece_available(); //_ARIS_NOTIF_SEND_("MODEL_GAME_PLAYER_PIECE_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.model_game_player_piece_available(); //_ARIS_NOTIF_SEND_("PLAYER_PIECE_AVAILABLE", null, null);
 	}
 
 	public void requestGroups() {

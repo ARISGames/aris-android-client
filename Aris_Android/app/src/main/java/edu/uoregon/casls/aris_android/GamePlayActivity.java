@@ -30,7 +30,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
-import edu.uoregon.casls.aris_android.Utilities.Calls;
 import edu.uoregon.casls.aris_android.Utilities.Config;
 import edu.uoregon.casls.aris_android.Utilities.Dispatcher;
 import edu.uoregon.casls.aris_android.Utilities.ResponseHandler;
@@ -87,7 +86,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			mPlayer = new User(extras.getString("user")); // we're now a "Player", BTW.
 			//GSON (Slow in debug mode. Ok in regular run mode)
 			mGame = gson.fromJson(extras.getString("game"), Game.class);
-			mGame.setContext(this); // to allow upward visibility to activities various game/player objects
+			mGame.initContext(this); // to allow upward visibility to activities various game/player objects
 
 			try {
 				mJsonAuth = new JSONObject(extras.getString("json_auth"));
@@ -105,58 +104,31 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mResposeHandler = new ResponseHandler(); // Where calls to server return for landing.
 		mMediaModel = new MediaModel(this);
 		mUsersModel = new UsersModel(this);
-		mDispatch.initContext(this); // initialize contexts
-		mServices.initContext(this);
-		mServices.mJsonAuth = this.mJsonAuth; // pass it on
-		mResposeHandler.initContext(this);
-		// initialize game object's inner classes and variables.
-		mGame.getReadyToPlay();
-		// Start barrage of game related server requests
-//		getGameDataFromServer(); // perhaps move this older version of the game data loading to Game
-		mGame.requestGameData(); // ... like this. To align with the iOS version
 		// Set up the drawer. todo: move this to processServerResponse() for call getTabsForPlayer
 		mNavigationDrawerFragment.setUp(
 				R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
 	}
 
-	private void getGameDataFromServer() { // iOS Game.requestGameData (same functionally as Game.requestPlayerData)
-		// here are all the calls made from iOS on starting or resuming a game:
-		JSONObject jsonGameID = new JSONObject();
-		JSONObject jsonAddlData = new JSONObject();
-		try {
-			jsonGameID.put("game_id", mGame.game_id);
-			jsonAddlData.put("game_id", mGame.game_id);
-			jsonAddlData.put("owner_id", 0); // todo: is this always zero for getInstanceForGame?
-		} catch (JSONException e) {
-			e.printStackTrace();
+	@Override
+	public void onResume() {
+		super.onResume();
+		mDispatch.initContext(this); // initialize contexts
+		mServices.initContext(this);
+		mServices.mJsonAuth = this.mJsonAuth; // pass it on
+		mGame.initContext(this);
+		mResposeHandler.initContext(this);
+		// initialize game object's inner classes and variables.
+		// Having arrived here in this activity is tantamount to the
+		//   "LoadingViewController.gameChosen->RootViewController.startLoading" call hierarchy as in iOS
+		mGame.getReadyToPlay();
+		// Start barrage of game related server requests
+		if (!mGame.hasLatestDownload())
+			mGame.requestGameData(); // ... like this. To align with the iOS version
+		else { // todo: code in the "restoreGameData" process. See LoadingViewController.startLoading
+//			[_MODEL_ restoreGameData];
+//			[self gameDataLoaded];
 		}
-		 // todo: set n_game_data_recieved = 0 to indicate start of dta loading sequence
-
-//		mServices.pollServer(Calls.HTTP_GET_SCENES_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_TOUCH_SCENE_4_PLAYER, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_PLAQUES_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_GROUPS_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_ITEMS_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_TOUCH_ITEMS_4_PLAYER, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_DIALOGS_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_DIALOG_CHARS_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_DIALOG_SCRIPTS_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_DIALOG_OPTNS_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_WEB_PAGES_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_NOTES_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_NOTE_COMMNTS_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_TAGS_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_OBJ_TAGS_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_EVENTS_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_QUESTS_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_TRIGGERS_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_FACTORIES_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_OVERLAYS_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_INSTANCES_4_GAME, jsonAddlData);
-//		mServices.pollServer(Calls.HTTP_GET_TABS_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_MEDIA_4_GAME, jsonGameID);
-//		mServices.pollServer(Calls.HTTP_GET_USERS_4_GAME, jsonGameID);
 	}
 
 	public void dropItem(long item_id, long qty) {
@@ -411,7 +383,19 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		Gson gson = new Gson();
 
 		mGame = gson.fromJson(savedInstanceState.getString("mGame"), Game.class); // restore game from stored json in savedInstanceState
-		mGame.setContext(this); // reset context
+		mGame.initContext(this); // reset context
 		mGame.initModelContexts(); // re-initialize all the embedded objects' references to the Activity context.
+	}
+
+	// Stubs from iOS RootViewController. May be unnecessary in Android vers. but included while developing App just in case they become useful.
+	public void gameBegan() { // stub for potential use later to duplicate RootViewController behaviours as exist in iOS vs.
+		// in iOS, initializes View Controller. Not much else.
+	}
+	public void gameChosen() { // stub for potential use later to duplicate RootViewController behaviours as exist in iOS vs.
+		// in iOS, starts the game loading sequence.
+	}
+	public void gameLeft() {
+		// in iOS RootViewController, nulls all values kills current gameplayview and returns view to GamesList.
+		// pretty much default behaviour in Android Activity stack "back" action. Not needed here;
 	}
 }

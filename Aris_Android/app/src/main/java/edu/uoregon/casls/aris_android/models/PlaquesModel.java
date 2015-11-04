@@ -25,6 +25,10 @@ public class PlaquesModel extends ARISModel {
 		n_game_data_received = 0;
 	}
 
+	public void requestGameData() {
+		this.requestPlaques();
+	}
+
 	public void plaquesReceived(List<Plaque> newPlaques) { // method here to conform with iOS version of this class
 		this.updatePlaques(newPlaques);
 	}
@@ -38,7 +42,7 @@ public class PlaquesModel extends ARISModel {
 
 		n_game_data_received++;
 //		mGamePlayAct.mDispatch.model_plaques_available(); // (Not listened to)		_ARIS_NOTIF_SEND_(@"MODEL_PLAQUES_AVAILABLE",nil,nil);
-		mGamePlayAct.mDispatch.model_game_piece_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); //		_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void requestPlaques() {

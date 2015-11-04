@@ -74,7 +74,7 @@ public class UsersModel extends ARISModel {
 		}
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_users_available(); //_ARIS_NOTIF_SEND_(@"MODEL_USERS_AVAILABLE",nil,nil);
-		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil); //weird... not "game" piece. whatever.
+		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil); //weird... not "game" piece. whatever.
 	}
 
 	public List<User> conformUsersListToFlyweight(List<User> newUsers) {

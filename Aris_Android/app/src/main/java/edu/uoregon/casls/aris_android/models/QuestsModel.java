@@ -71,7 +71,7 @@ public class QuestsModel extends ARISModel {
 		}
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_quests_available(); // _ARIS_NOTIF_SEND_(@"MODEL_QUESTS_AVAILABLE",nil,nil);
-		mGamePlayAct.mDispatch.model_game_piece_available(); // _ARIS_NOTIF_SEND_(@"MODEL_GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_piece_available(); // _ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void requestQuests() {
@@ -137,7 +137,7 @@ public class QuestsModel extends ARISModel {
 		this.updateCompleteQuests(this.conformQuestListToFlyweight(pquests.get("complete"))); //objectForKey:@"complete"]];
 		this.updateActiveQuests(this.conformQuestListToFlyweight(pquests.get("active"))); //.userInfo objectForKey:@"active"]];
 		n_player_data_received++;
-		mGamePlayAct.mDispatch.model_game_player_piece_available(); // _ARIS_NOTIF_SEND_(@"MODEL_GAME_PLAYER_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_player_piece_available(); // _ARIS_NOTIF_SEND_(@"PLAYER_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void updateActiveQuests(List<Quest> newQuests) {

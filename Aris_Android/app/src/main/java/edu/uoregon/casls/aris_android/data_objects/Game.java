@@ -10,13 +10,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.models.ARISModel;
 import edu.uoregon.casls.aris_android.models.DialogsModel;
-import edu.uoregon.casls.aris_android.models.DisplayQueueModel;
 import edu.uoregon.casls.aris_android.models.EventsModel;
 import edu.uoregon.casls.aris_android.models.FactoriesModel;
 import edu.uoregon.casls.aris_android.models.GameInstancesModel;
@@ -47,8 +45,10 @@ public class Game {
 	public long n_player_data_to_receive;
 	public long n_player_data_received;
 
-	public boolean listen_model_game_player_piece_available;
-	public boolean listen_model_game_piece_available;
+	public boolean listen_player_piece_available;
+	public boolean listen_game_piece_available;
+	public boolean listen_maintenance_piece_available;
+	public boolean listen_media_piece_available;
 //	public NSTimer *poller; todo: android equivalent
 	// todo: this will not serialize (crashes gson.toJson()) so I need to locate it in the gameplay activity itself.
 
@@ -56,17 +56,12 @@ public class Game {
 	public long game_id;
 	public String name;
 	public String desc;
-	public String tick_script;
-	public long tick_delay;
 	public boolean published;
 	public String type;
 	public Location location = new Location("0"); // from iOS; not used?
-	public Location map_location = new Location("0");
 	public long player_count;
 
-	public Media icon_media;
 	public long icon_media_id;
-	public Media media;
 	public long media_id;
 
 	public long intro_scene_id;
@@ -75,6 +70,8 @@ public class Game {
 	public List<GameComment> comments = new ArrayList<GameComment>();
 
 	public String map_type;
+	public String map_focus;
+	public Location map_location = new Location("0");
 	public double map_zoom_level;
 	public boolean map_show_player;
 	public boolean map_show_players;
@@ -88,6 +85,7 @@ public class Game {
 	public String network_level;
 	public boolean allow_download;
 	public boolean preload_media;
+	long version;
 
 	public List<ARISModel> models = new ArrayList<>(); // List of all the models below for iteration convenience
 
@@ -115,19 +113,38 @@ public class Game {
 //	public DisplayQueueModel 	displayQueueModel; // iOS only for now
 	// medias (in GamePlayAct 		// Game Piece
 
+	//local stuff
+	long downloadedVersion;
+	public boolean know_if_begin_fresh;
+	public boolean begin_fresh;
+
 	// FYI transient indicates "do not serialize"; gson will die a recursive death if it did.
 	public transient GamePlayActivity mGamePlayAct; // For reference to GamePlayActivity; do not instantiate (new) object or circular references will ensue.
 	// Empty Constructor
 	public Game() {
-	}
-
-	public void setContext(GamePlayActivity gamePlayActivity) {
-		mGamePlayAct = gamePlayActivity;
+		this.initialize();
 	}
 
 	// Basic Constructor with json game block
 	public Game(JSONObject jsonGame) throws JSONException {
+		this.initialize();
 		initWithJson(jsonGame);
+	}
+
+	private void initialize() {
+		n_game_data_received = 0;
+		n_player_data_received = 0;
+
+		authors.clear(); // redundant at this point, but left in to keep in sync with iOS code
+		comments.clear();
+
+		downloadedVersion = 0;
+		know_if_begin_fresh = false;
+		begin_fresh = false;
+	}
+
+	public void initContext(GamePlayActivity gamePlayActivity) {
+		mGamePlayAct = gamePlayActivity;
 	}
 
 	private void initWithJson(JSONObject jsonGame) throws JSONException {
@@ -137,10 +154,10 @@ public class Game {
 			name = jsonGame.getString("name");
 		if (jsonGame.has("description"))
 			desc = jsonGame.getString("description");
-		if (jsonGame.has("tick_script"))
-			tick_script = jsonGame.getString("tick_script");
-		if (jsonGame.has("tick_delay") && !jsonGame.getString("tick_delay").equals("null"))
-			tick_delay = Long.parseLong(jsonGame.getString("tick_delay"));
+//		if (jsonGame.has("tick_script"))
+//			tick_script = jsonGame.getString("tick_script");
+//		if (jsonGame.has("tick_delay") && !jsonGame.getString("tick_delay").equals("null"))
+//			tick_delay = Long.parseLong(jsonGame.getString("tick_delay"));
 		if (jsonGame.has("icon_media_id") && !jsonGame.getString("icon_media_id").equals("null"))
 			icon_media_id = Long.parseLong(jsonGame.getString("icon_media_id"));
 		if (jsonGame.has("media_id") && !jsonGame.getString("media_id").equals("null"))
@@ -224,18 +241,18 @@ public class Game {
 				authors.add(new User(jsonAuthor));
 			}
 		}
-		if (jsonGameData.has("media")) {
-			// get media block
-			JSONObject jsonMedia = jsonGameData.getJSONObject("media");
-			media = gson.fromJson(jsonMedia.toString(), Media.class);
-//			android.util.Log.d(Config.LOGTAG, getClass().getSimpleName() + "Debug break to examine object media");
-
-		}
-		if (jsonGameData.has("icon_media")) {
-			// get icon_media block
-			JSONObject jsonMedia = jsonGameData.getJSONObject("icon_media");
-			icon_media = gson.fromJson(jsonMedia.toString(), Media.class);
-		}
+//		if (jsonGameData.has("media")) {
+//			// get media block
+//			JSONObject jsonMedia = jsonGameData.getJSONObject("media");
+//			media = gson.fromJson(jsonMedia.toString(), Media.class);
+////			android.util.Log.d(Config.LOGTAG, getClass().getSimpleName() + "Debug break to examine object media");
+//
+//		}
+//		if (jsonGameData.has("icon_media")) {
+//			// get icon_media block
+//			JSONObject jsonMedia = jsonGameData.getJSONObject("icon_media");
+//			icon_media = gson.fromJson(jsonMedia.toString(), Media.class);
+//		}
 
 		// none of these are utilized, or even mentioned in, in the iOS code leaving in for future potential
 //		jsonFullGame.getString("is_siftr");
@@ -265,9 +282,10 @@ public class Game {
 	}
 
 	public void getReadyToPlay() {
-		listen_model_game_player_piece_available = true; //_ARIS_NOTIF_LISTEN_(@"MODEL_GAME_PLAYER_PIECE_AVAILABLE",self,@selector(gamePlayerPieceReceived),null);
-		listen_model_game_piece_available = true; // _ARIS_NOTIF_LISTEN_(@"MODEL_GAME_PIECE_AVAILABLE",self,@selector(gamePieceReceived),null);
-
+		listen_player_piece_available = true; //_ARIS_NOTIF_LISTEN_(@"PLAYER_PIECE_AVAILABLE",self,@selector(gamePlayerPieceReceived),null);
+		listen_maintenance_piece_available = true; // _ARIS_NOTIF_LISTEN_(@"MAINTENANCE_PIECE_AVAILABLE",self,@selector(maintenancePieceReceived),nil);
+		listen_game_piece_available = true; // _ARIS_NOTIF_LISTEN_(@"GAME_PIECE_AVAILABLE",self,@selector(gamePieceReceived),null);
+		listen_media_piece_available = true; // _ARIS_NOTIF_LISTEN_(@"MEDIA_PIECE_AVAILABLE",self,@selector(mediaPieceReceived),nil);
 
 		scenesModel          = new ScenesModel(); 			models.add(scenesModel         );
 		plaquesModel         = new PlaquesModel(); 			models.add(plaquesModel        );
@@ -340,30 +358,29 @@ public class Game {
 
 	public void requestGameData() {
 
-		// todo: put these calls in a loop line in the init blocks to match iOS
+		// loop through all models and call requestGameData()
 		for (ARISModel model : models) {
 			model.requestGameData();
 		}
 
-/* // original game data loading sequence
-		scenesModel.requestScenes();
-		scenesModel.touchPlayerScene(); //  touch is originating from somewhere else; find it and make it work.
-		plaquesModel.requestPlaques();
-		itemsModel.requestItems();
-		playerInstancesModel.touchPlayerInstances();
-		dialogsModel.requestDialogs(); //makes 4 "game data received" notifs (dialogs, characters, scripts, options)
-		webPagesModel.requestWebPages();
-		notesModel.requestNotes();
-		notesModel.requestNoteComments();
-		tagsModel.requestTags();
-		eventsModel.requestEvents();
-		questsModel.requestQuests();
-		triggersModel.requestTriggers();
-		factoriesModel.requestFactories();
-		overlaysModel.requestOverlays();
-		instancesModel.requestInstances();
-		tabsModel.requestTabs();
-*/
+// // original game data loading sequence
+//		scenesModel.requestScenes();
+//		scenesModel.touchPlayerScene(); //  touch is originating from somewhere else; find it and make it work.
+//		plaquesModel.requestPlaques();
+//		itemsModel.requestItems();
+//		playerInstancesModel.touchPlayerInstances();
+//		dialogsModel.requestDialogs(); //makes 4 "game data received" notifs (dialogs, characters, scripts, options)
+//		webPagesModel.requestWebPages();
+//		notesModel.requestNotes();
+//		notesModel.requestNoteComments();
+//		tagsModel.requestTags();
+//		eventsModel.requestEvents();
+//		questsModel.requestQuests();
+//		triggersModel.requestTriggers();
+//		factoriesModel.requestFactories();
+//		overlaysModel.requestOverlays();
+//		instancesModel.requestInstances();
+//		tabsModel.requestTabs();
 
 //		//the requests not 'owned' by Game. Also, not 100% necessary
 //		//(has ability to load on an individual basis)
@@ -371,14 +388,19 @@ public class Game {
 //		_MODEL_USERS_ requestUsers();
 	}
 
-	public void requestPlayerData() { // This is all done in GamePlayActivity in Android
-		scenesModel.requestPlayerScene();
-		instancesModel.requestPlayerInstances();
-		triggersModel.requestPlayerTriggers();
-		overlaysModel.requestPlayerOverlays();
-		questsModel.requestPlayerQuests();
-		tabsModel.requestPlayerTabs();
-		logsModel.requestPlayerLogs();
+	public void requestPlayerData() {
+
+		for (ARISModel model : models) {
+			model.requestGameData();
+		}
+
+//		scenesModel.requestPlayerScene();
+//		instancesModel.requestPlayerInstances();
+//		triggersModel.requestPlayerTriggers();
+//		overlaysModel.requestPlayerOverlays();
+//		questsModel.requestPlayerQuests();
+//		tabsModel.requestPlayerTabs();
+//		logsModel.requestPlayerLogs();
 	}
 
 	public void gamePieceReceived() {
@@ -407,14 +429,22 @@ public class Game {
 		return true;
 	}
 
+	public boolean  hasLatestDownload() {
+		return (this.downloadedVersion != 0 && this.version == this.downloadedVersion);
+	}
+
 	public void percentLoadedChanged() {
 		float percentReceived = (n_game_data_received + n_player_data_received)/(n_game_data_to_receive + n_player_data_to_receive);
 		mGamePlayAct.mDispatch.model_game_percent_loaded(percentReceived); // _ARIS_NOTIF_SEND_(@"MODEL_GAME_PERCENT_LOADED", null, @{@"percent":percentReceived});
 	}
 
-	public void gameBegan() {
-		listen_model_game_piece_available = false; // _ARIS_NOTIF_IGNORE_(@"MODEL_GAME_PIECE_AVAILABLE", self, null);
-		listen_model_game_player_piece_available = false; // _ARIS_NOTIF_IGNORE_(@"MODEL_GAME_PLAYER_PIECE_AVAILABLE", self, null);
+	public void gameBegan() { // todo: bring up to date with iOS
+
+		listen_game_piece_available = false; 		// _ARIS_NOTIF_IGNORE_(@"GAME_PIECE_AVAILABLE", self, null);
+		listen_player_piece_available = false; 		// _ARIS_NOTIF_IGNORE_(@"PLAYER_PIECE_AVAILABLE", self, null);
+		listen_maintenance_piece_available = false;	// _ARIS_NOTIF_IGNORE_(@"MAINTENANCE_PIECE_AVAILABLE", self, nil);
+		listen_media_piece_available = false; 		// _ARIS_NOTIF_IGNORE_(@"MEDIA_PIECE_AVAILABLE", self, nil);
+//		todo: build poller!
 //		poller = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(requestPlayerData) userInfo:null repeats:YES];
 	}
 

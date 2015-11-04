@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.data_objects.cd_data_objects.MediaCD;
 
 /**
@@ -69,13 +70,13 @@ public class DBDealer extends SQLiteOpenHelper {
 		Map<Integer, MediaCD> listOfMedia = new HashMap<>();
 //		Cursor cursor =  db.rawQuery( "select * from contacts where id="+id+"", null );
 		// execute query against the DB
-		Cursor cursor =  db.query(DBDealer.MEDIA, 	// db name
-				DBDealer.MEDIA_ALL_COLS, 			// columns to return
-				whereClause,						// e.g. "name = 'Bob' AND (this = 1 OR that >= 33)"
-				null, 								// selection Args
-				null, 								// group by
-				null, 								// having
-				null ); 							// order by
+		Cursor cursor =  db.query(DBDealer.MEDIA,    // db name
+				DBDealer.MEDIA_ALL_COLS,            // columns to return
+				whereClause,                        // e.g. "name = 'Bob' AND (this = 1 OR that >= 33)"
+				null,                                // selection Args
+				null,                                // group by
+				null,                                // having
+				null); 							// order by
 
 		return cursor;
 	}
@@ -92,4 +93,5 @@ public class DBDealer extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		return db.delete(MEDIA, null, null);
 	}
+
 }
