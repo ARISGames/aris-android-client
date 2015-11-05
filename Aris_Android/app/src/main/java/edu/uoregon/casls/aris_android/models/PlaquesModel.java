@@ -50,7 +50,7 @@ public class PlaquesModel extends ARISModel {
 
 	}
 
-	public long nGameDataToReceive () {
+	public long nGameDataToReceive() {
 		return 1;
 	}
 

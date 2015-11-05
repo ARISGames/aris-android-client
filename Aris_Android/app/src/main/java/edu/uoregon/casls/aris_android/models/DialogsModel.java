@@ -147,4 +147,8 @@ public class DialogsModel extends ARISModel {
 		return dialogOptions.get(dialog_option_id);// objectForKey:[NSNumber numberWithLong:dialog_option_id]];
 	}
 
+	public long nGameDataToReceive() {
+		return 4;
+	}
+
 }

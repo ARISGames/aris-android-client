@@ -31,7 +31,7 @@ public class GroupsModel extends ARISModel {
 	}
 
 	public long nGameDataToReceive() {
-		return 2;
+		return 1;
 	}
 
 	public void requestPlayerData() {

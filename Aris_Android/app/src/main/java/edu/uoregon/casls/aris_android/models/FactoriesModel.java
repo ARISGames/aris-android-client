@@ -24,7 +24,7 @@ public class FactoriesModel extends ARISModel {
 		n_game_data_received = 0;
 	}
 
-	public long nGameDataToReceive () {
+	public long nGameDataToReceive() {
 		return 1;
 	}
 

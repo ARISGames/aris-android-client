@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
-import edu.uoregon.casls.aris_android.Utilities.Config;
+import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Requirement;
 import edu.uoregon.casls.aris_android.data_objects.RequirementAndPackage;
@@ -45,7 +45,6 @@ public class RequirementsModel extends ARISModel {
 	}
 
 	public void clearGameData() {
-
 		requirementRootPackages.clear();
 		requirementAndPackages.clear();
 		requirementAtoms.clear();
@@ -251,26 +250,26 @@ public class RequirementsModel extends ARISModel {
 	}
 
 	public void logRequirementTree(long requirement_root_package_id) {
-		Log.i(Config.LOGTAG, getClass().getSimpleName() + "Root: " + requirement_root_package_id);
+		Log.i(AppConfig.LOGTAG, getClass().getSimpleName() + "Root: " + requirement_root_package_id);
 		List<RequirementAndPackage> ands = this.andPackagesForRootPackageId(requirement_root_package_id);
 		for (RequirementAndPackage and : ands)
 			this.logRequirementAnd(and.requirement_and_package_id);
 	}
 
 	public void logRequirementAnd(long requirement_and_package_id) {
-		Log.i(Config.LOGTAG, getClass().getSimpleName() + "  And: " + requirement_and_package_id);
+		Log.i(AppConfig.LOGTAG, getClass().getSimpleName() + "  And: " + requirement_and_package_id);
 		List<RequirementAtom> atoms = this.atomsForAndPackageId(requirement_and_package_id);
 		for (RequirementAtom atom : atoms)
 			this.logRequirementAtom(atom.requirement_atom_id);
 	}
 
 	public void logRequirementAtom(long requirement_atom_id) {
-		Log.i(Config.LOGTAG, getClass().getSimpleName() + "    Atom: " + requirement_atom_id);
+		Log.i(AppConfig.LOGTAG, getClass().getSimpleName() + "    Atom: " + requirement_atom_id);
 		RequirementAtom a = this.requirementAtomForId(requirement_atom_id);
 		if (a.bool_operator)
-			Log.i(Config.LOGTAG, getClass().getSimpleName() + "      Req: " + a.requirement + " " + a.content_id);//_ARIS_LOG_(@"      Req: %@ %ld",a.requirement,a.content_id);
+			Log.i(AppConfig.LOGTAG, getClass().getSimpleName() + "      Req: " + a.requirement + " " + a.content_id);//_ARIS_LOG_(@"      Req: %@ %ld",a.requirement,a.content_id);
 		else
-			Log.i(Config.LOGTAG, getClass().getSimpleName() + "      Req: Not " + a.requirement + " " + a.content_id);//_ARIS_LOG_(@"      Req: Not %@ %ld",a.requirement,a.content_id);
+			Log.i(AppConfig.LOGTAG, getClass().getSimpleName() + "      Req: Not " + a.requirement + " " + a.content_id);//_ARIS_LOG_(@"      Req: Not %@ %ld",a.requirement,a.content_id);
 	}
 
 }

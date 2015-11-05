@@ -78,6 +78,8 @@
             android:label="@string/title_activity_game_play"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
         </activity>
+        <service android:name=".Utilities.PollTimerService">
+        </service>
     </application>
 
 </manifest>

@@ -28,10 +28,6 @@ public class GroupInstancesModel extends ARISModel {
 		mGame = mGamePlayAct.mGame;
 	}
 
-	public long nGameDataToReceive() {
-		return 1;
-	}
-
 	public void clearPlayerData() {
 		instances.clear();
 		this.invalidateCaches();

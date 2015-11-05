@@ -30,7 +30,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
-import edu.uoregon.casls.aris_android.Utilities.Config;
+import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.Utilities.Dispatcher;
 import edu.uoregon.casls.aris_android.Utilities.ResponseHandler;
 import edu.uoregon.casls.aris_android.Utilities.Services;
@@ -133,94 +133,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			//			[_MODEL_ restoreGameData];
 			mGame.requestMaintenanceData(); //			[self gameDataLoaded];
 		}
+
 	}
 
 	public void dropItem(long item_id, long qty) {
-
-	}
-
-	private void pollServer(final String requestApi, JSONObject jsonMain) {
-//		showProgress(true);
-		RequestParams rqParams = new RequestParams();
-
-		final Context context = this;
-		String request_url = Config.SERVER_URL_MOBILE + requestApi;
-
-		mPlayer.location = AppUtils.getGeoLocation(context);
-
-		rqParams.put("request", requestApi);
-		StringEntity entity;
-		entity = null;
-		JSONObject jsonAuth = new JSONObject();
-
-		try {
-			// place the auth block.
-			jsonMain.put("auth", mJsonAuth);
-			//place additional required params
-//			switch (requestApi) {
-//				case (HTTP_GET_NEARBY_GAMES_REQ_API):
-//					break;
-//				case (HTTP_GET_POPULAR_GAMES_REQ_API):
-//					//sample: {"interval":"WEEK","longitude":"-89.409260","user_id":"1","latitude":"43.073128","page":0,"auth":{"user_id":1,"key":"F7...X4"}}
-//					break;
-//				case (HTTP_GET_PLAYER_GAMES_REQ_API):
-//				case (HTTP_GET_RECENT_GAMES_REQ_API): // get player and get recent use the same Req param set.
-//					break;
-//				case (HTTP_GET_SEARCH_GAMES_REQ_API):
-//					break;
-//				case (HTTP_GET_FULL_GAME_REQ_API):
-//					break;
-//				default:
-//					break;
-//			}
-
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		try {
-			entity = new StringEntity(jsonMain.toString());
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-
-
-		// Post the request
-		// 	post data should look like this: {"auth":{"user_id":1,"key":"F7...yzX4"},"game_id":"6"}
-		if (AppUtils.isNetworkAvailable(getApplicationContext())) {
-			AsyncHttpClient client = new AsyncHttpClient();
-
-			Log.d(Config.LOGTAG,  getClass().getSimpleName() + "AsyncHttpClient Sending Req: " + request_url);
-			Log.d(Config.LOGTAG,  getClass().getSimpleName() + "AsyncHttpClient Params for Req: " + jsonMain.toString());
-			client.post(context, request_url, entity, "application/json", new JsonHttpResponseHandler() {
-				@Override
-				public void onSuccess(int statusCode, Header[] headers, JSONObject jsonReturn) {
-//					showProgress(false);
-					try {
-//						processJsonHttpResponse(requestApi, TAG_SERVER_SUCCESS, jsonReturn);
-						mResposeHandler.processJsonHttpResponse(requestApi, TAG_SERVER_SUCCESS, jsonReturn);
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-
-				}
-				@Override
-				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-					Log.w(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient failed server call. ", throwable);
-//					showProgress(false);
-					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
-							Toast.LENGTH_SHORT);
-					t.setGravity(Gravity.CENTER, 0, 0);
-					t.show();
-					super.onFailure(statusCode, headers, responseString, throwable);
-				}
-			});
-		}
-		else {
-			Toast t = Toast.makeText(getApplicationContext(), "You are not connected to the internet currently. Please try again later.",
-					Toast.LENGTH_SHORT);
-			t.setGravity(Gravity.CENTER, 0, 0);
-			t.show();
-		}
 
 	}
 
@@ -401,5 +317,24 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	public void gameLeft() {
 		// in iOS RootViewController, nulls all values kills current gameplayview and returns view to GamesList.
 		// pretty much default behaviour in Android Activity stack "back" action. Not needed here;
+	}
+
+	public void playerDataLoaded() {
+		if (!mGame.hasLatestDownload())
+		{
+			if (mGame.preload_media) this.requestMediaData();
+			else this.beginGame();
+		}
+		else
+			this.beginGame();
+
+	}
+
+	private void beginGame() {
+		mGame.gameBegan(); // start game data rolling
+	}
+
+	private void requestMediaData() {
+		//todo: make me work
 	}
 }

@@ -7,14 +7,13 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 /**
- * Created by smorison on 8/20/15.
+ * Created by smorison on 11/5/15.
  */
-public class PollTimer extends IntentService {
+public class PollTimerService extends IntentService {
 	private boolean runTimer = true;
-	// might want to set this up with its own llisteners for things like Pause and other behavioural changes. -sem
 
-	public PollTimer() {
-		super("PollTimer");
+	public PollTimerService() {
+		super("PollTimerService");
 	}
 
 	@Override
@@ -26,30 +25,30 @@ public class PollTimer extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 //		customHandler.postDelayed(updateTimerThread, 0);
 		int i = 1;
-		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "OnHandleIntent Called. ");
+		Log.d("SEM", "OnHandleIntent Called. ");
 		while (runTimer) {
 			sendUpdateMessage(i++);
 			try
 			{
-				Thread.sleep(10000);
+				Thread.sleep(1000);
 			}
 			catch(Exception e)
 			{
-				Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "SendError: " + e.getMessage());
+				Log.d("KBR", "SendError: " + e.getMessage());
 			}
 		}
 	}
 
 	private void sendUpdateMessage(int pct) {
-		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Broadcasting update message: " + pct);
+		Log.d("SEM", "Broadcasting update message: " + pct);
 		Intent intent = new Intent(AppConfig.POLLTIMER_SVC_ACTION);
 		intent.putExtra(AppConfig.COMMAND, AppConfig.POLLTIMER_CYCLE_PASS);
-//		intent.putExtra(AppConfig.DATA, pct);
+		intent.putExtra(AppConfig.DATA, pct);
 		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 	}
 
 	private void sendResultMessage(String data) {
-		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Broadcasting result message: " + data);
+		Log.d("SEM", "Broadcasting result message: " + data);
 		Intent intent = new Intent(AppConfig.POLLTIMER_SVC_ACTION);
 		intent.putExtra(AppConfig.COMMAND, AppConfig.POLLTIMER_RESULT);
 		intent.putExtra(AppConfig.DATA, data);

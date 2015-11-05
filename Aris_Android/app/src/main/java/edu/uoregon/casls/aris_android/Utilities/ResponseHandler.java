@@ -1,8 +1,6 @@
 package edu.uoregon.casls.aris_android.Utilities;
 
 import android.util.Log;
-import android.view.Gravity;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -57,7 +55,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 	}
 	
 	public void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) throws JSONException {
-		Log.d(Config.LOGTAG, getClass().getSimpleName() + " Server response to Req: " + callingReq + "; data: " + jsonReturn.toString());
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Server response to Req: " + callingReq + "; data: " + jsonReturn.toString());
 		if (jsonReturn.has("returnCode") && jsonReturn.getLong("returnCode") == 0) {
 			if (callingReq.equals(Calls.HTTP_GET_DIALOG_CHARS_4_GAME)) {
 				if (jsonReturn.has("data")) {
@@ -342,7 +340,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 						mGamePlayAct.mGame.scenesModel.scenesReceived(scenes);
 					}
 				} catch (JSONException e) {
-					Log.e(Config.LOGTAG, getClass().getSimpleName() + "Failed while parsing returning JSON from request:" + callingReq + " Error reported was: " + e.getCause());
+					Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "Failed while parsing returning JSON from request:" + callingReq + " Error reported was: " + e.getCause());
 					e.printStackTrace();
 				}
 			}
@@ -433,7 +431,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 				}
 			}
 			else { // unknown callinRequest
-				Log.e(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient returned successfully but with unhandled server callingReq: " + callingReq);
+				Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient returned successfully but with unhandled server callingReq: " + callingReq);
 //				Toast t = Toast.makeText(mGamePlayAct.getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 //						Toast.LENGTH_SHORT);
 //				t.setGravity(Gravity.CENTER, 0, 0);
@@ -442,7 +440,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 			}
 		}
 		else { // server denial. Probably need to alert user (?)
-			Log.e(Config.LOGTAG, getClass().getSimpleName() + "Server request " + callingReq + " failed; server returned code: " + jsonReturn.getLong("returnCode")
+			Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "Server request " + callingReq + " failed; server returned code: " + jsonReturn.getLong("returnCode")
 					+ "\nPlayer Id: " + mGamePlayAct.mPlayer.user_id
 					+ "\nGame Id: " + mGamePlayAct.mGame.game_id);
 		}

@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
@@ -29,7 +27,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import edu.uoregon.casls.aris_android.Utilities.Config;
+import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 
 
 public class GamePlayNavDrawerFragment extends Fragment {
@@ -120,7 +118,7 @@ public class GamePlayNavDrawerFragment extends Fragment {
 
 		for (int i=0; i < mDrawerListItems.length; i++) {
 			iconURL = "http://dummy.fillinlater.com/media.png";
-			mNavItems.add(new NavItem(mDrawerListItems[i], "Nosubtitle", Config.gameDrawerItemIconByName.get(mDrawerListItems[i]), iconURL));
+			mNavItems.add(new NavItem(mDrawerListItems[i], "Nosubtitle", AppConfig.gameDrawerItemIconByName.get(mDrawerListItems[i]), iconURL));
 
 		}
 		// todo: this default action bar is white on black, the opposite of the previous pages with the custom actionbar. Find a way to match the custom style.

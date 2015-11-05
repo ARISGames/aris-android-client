@@ -117,19 +117,21 @@ public class ScenesModel extends ARISModel {
 	}
 
 	public void requestPlayerScene() {
-		Game lGame = mGamePlayAct.mGame;
-		if (this.playerDataReceived() && !lGame.network_level.contentEquals("REMOTE")) {
+//		Game lGame = mGamePlayAct.mGame;
+		boolean pdr = this.playerDataReceived();
+		String nl = mGamePlayAct.mGame.network_level;
+		if (this.playerDataReceived() && !mGamePlayAct.mGame.network_level.contentEquals("REMOTE")) {
 			mGamePlayAct.mDispatch.services_player_scene_received(playerScene); //_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_SCENE_RECEIVED",nil,@{@"scene":playerScene}); //just return current
 		}
 		if (!this.playerDataReceived() ||
-				lGame.network_level.contentEquals("HYBRID") ||
-				lGame.network_level.contentEquals("REMOTE"))
+				mGamePlayAct.mGame.network_level.contentEquals("HYBRID") ||
+				mGamePlayAct.mGame.network_level.contentEquals("REMOTE"))
 			mGamePlayAct.mServices.fetchSceneForPlayer();
 
 	}
 
 	public long nGameDataToReceive() {
-		return 2;
+		return 1;
 	}
 
 

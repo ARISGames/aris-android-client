@@ -57,8 +57,7 @@ public class ItemsModel extends ARISModel {
 		return items.get(item_id);
 	}
 
-	public long nGameDataToReceive ()
-	{
+	public long nGameDataToReceive() {
 		return 1;
 	}
 }

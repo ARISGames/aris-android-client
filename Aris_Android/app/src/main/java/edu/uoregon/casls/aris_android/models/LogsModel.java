@@ -29,10 +29,6 @@ public class LogsModel extends ARISModel {
 		logs.clear();
 	}
 
-	public long nGameDataToReceive() {
-		return 1;
-	}
-
 	public void requestPlayerData() {
 		this.requestPlayerLogs();
 	}

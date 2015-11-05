@@ -42,10 +42,6 @@ public class GameInstancesModel extends ARISModel {
 		n_game_data_received = 0;
 	}
 
-	public long nGameDataToReceive() {
-		return 1;
-	}
-
 	public void clearPlayerData() {
 		instances.clear();
 		this.invalidateCaches();

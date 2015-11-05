@@ -45,7 +45,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
-import edu.uoregon.casls.aris_android.Utilities.Config;
+import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 
 
 /**
@@ -147,7 +147,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (Config.DEBUG_ON) { // preset the input fields to save time during testing.
+		if (AppConfig.DEBUG_ON) { // preset the input fields to save time during testing.
 			mEtUsername.setText("scotta"); // arisgames.org
 //			mEtUsername.setText("scott"); // localhost
 			mEtPassword.setText("123123");
@@ -189,7 +189,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 //		if (mAuthTask != null) {
 //			return;
 //		}
-		if (Config.FAKE_GOOD_LOGIN) {
+		if (AppConfig.FAKE_GOOD_LOGIN) {
 			fakeLogin();
 			finish();
 		}
@@ -266,7 +266,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 //		JSONObject jsonParams = new JSONObject();
 
 		final Context context = this;
-		String request_url = Config.SERVER_URL_MOBILE + HTTP_CLIENT_LOGIN_REQ_API;
+		String request_url = AppConfig.SERVER_URL_MOBILE + HTTP_CLIENT_LOGIN_REQ_API;
 
 		rqParams.put("request", HTTP_CLIENT_LOGIN_REQ_API);
 
@@ -282,7 +282,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		Log.d(Config.LOGTAG, getClass().getSimpleName() + "Json string Req to server: " + jsonParams);
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Json string Req to server: " + jsonParams);
 
 		try {
 			entity = new StringEntity(jsonParams.toString());
@@ -307,7 +307,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 				}
 				@Override
 				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-					Log.e(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient failed server call. ", throwable);
+					Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient failed server call. ", throwable);
 					showProgress(false);
 					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 							Toast.LENGTH_SHORT);
@@ -326,12 +326,12 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 	}
 
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) {
-		Log.d(Config.LOGTAG, getClass().getSimpleName() + "Return status to server Req: " + jsonReturn.toString());
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Return status to server Req: " + jsonReturn.toString());
  		if (callingReq.equals(HTTP_CLIENT_LOGIN_REQ_API)) {
-			Log.d(Config.LOGTAG, getClass().getSimpleName() + "Landed successfully in colling Req: " + HTTP_CLIENT_LOGIN_REQ_API);
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Landed successfully in colling Req: " + HTTP_CLIENT_LOGIN_REQ_API);
 			try {
 				// check for login denial response from server
-				if (jsonReturn.has("returnCode") && jsonReturn.getInt(Config.SVR_RETURN_CODE) > 0) {
+				if (jsonReturn.has("returnCode") && jsonReturn.getInt(AppConfig.SVR_RETURN_CODE) > 0) {
 					Toast t = Toast.makeText(getApplicationContext(), "This username and/or password were not recognized by the server. Please try again.",
 							Toast.LENGTH_LONG);
 					t.setGravity(Gravity.CENTER, 0, 0);
@@ -371,12 +371,12 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 				}
 			}
 			catch(JSONException e) {
-				Log.e(Config.LOGTAG, getClass().getSimpleName() + "Failed while parsing returning JSON from request:" + HTTP_CLIENT_LOGIN_REQ_API + " Error reported was: " + e.getCause());
+				Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "Failed while parsing returning JSON from request:" + HTTP_CLIENT_LOGIN_REQ_API + " Error reported was: " + e.getCause());
 				e.printStackTrace();
 			}
 		}
 		else { // unknown callinRequest
-			Log.e(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient returned unknown server callingReq: " + callingReq);
+			Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient returned unknown server callingReq: " + callingReq);
 			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 					Toast.LENGTH_SHORT);
 			t.setGravity(Gravity.CENTER, 0, 0);
@@ -540,7 +540,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
 	public void loginButtonClick(View v) {
 		// user has clicked the login button
-		if (Config.FAKE_GOOD_LOGIN)
+		if (AppConfig.FAKE_GOOD_LOGIN)
 			fakeLogin();
 		else
 			attemptLogin();

@@ -10,7 +10,7 @@ import edu.uoregon.casls.aris_android.R;
 /**
  * Created by smorison on 8/27/15.
  */
-public class Config {
+public class AppConfig {
 
 //	public static final String SERVER_URL_BASE = "http://10.223.178.105"; //localhost
 	public static final String SERVER_URL_BASE = "http://arisgames.org"; //aris server
@@ -20,10 +20,11 @@ public class Config {
 	public final static Boolean DEBUG_ON = true; //todo: Make sure to turn this off for release version
 	public final static Boolean FAKE_GOOD_LOGIN = false; //todo: Make sure to turn this off for release version
 
-	public static final int UPDATE_PROGRESS = 1;
+	// PollTimer Consts
+	public static final int POLLTIMER_CYCLE_PASS = 1;
 	public static final int POLLTIMER_RESULT = 2;
-	public static final String POLLTIMER_FILTER =
-			"edu.uoregon.casls.aris_android.REQUEST_PROCESSED";
+	public static final String POLLTIMER_SVC_ACTION =
+			"edu.uoregon.casls.aris_android.ACTION_POLLTIMER_SVC";
 	public static final String COMMAND = "command";
 	public static final String DATA = "data";
 

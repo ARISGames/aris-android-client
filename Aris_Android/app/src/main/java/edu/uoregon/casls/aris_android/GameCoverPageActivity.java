@@ -35,7 +35,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
-import edu.uoregon.casls.aris_android.Utilities.Config;
+import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.User;
 
@@ -105,7 +105,7 @@ public class GameCoverPageActivity extends ActionBarActivity {
 		RequestParams rqParams = new RequestParams();
 
 		final Context context = this;
-		String request_url = Config.SERVER_URL_MOBILE + request_api;
+		String request_url = AppConfig.SERVER_URL_MOBILE + request_api;
 
 		rqParams.put("request", request_api);
 		StringEntity entity;
@@ -118,7 +118,7 @@ public class GameCoverPageActivity extends ActionBarActivity {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		Log.d(Config.LOGTAG, getClass().getSimpleName() + "Json string Req to server: " + jsonMain);
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Json string Req to server: " + jsonMain);
 
 		try {
 			entity = new StringEntity(jsonMain.toString());
@@ -143,7 +143,7 @@ public class GameCoverPageActivity extends ActionBarActivity {
 				}
 				@Override
 				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-					Log.w(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient failed server call. ", throwable);
+					Log.w(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient failed server call. ", throwable);
 					showProgress(false);
 					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 							Toast.LENGTH_SHORT);
@@ -162,10 +162,10 @@ public class GameCoverPageActivity extends ActionBarActivity {
 	}
 
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) throws JSONException {
-		Log.d(Config.LOGTAG, getClass().getSimpleName() + "Return status to server Req: " + jsonReturn.toString());
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Return status to server Req: " + jsonReturn.toString());
 		if (callingReq.contentEquals(HTTP_GET_PLAYER_PLAYED_GAME_REQ_API) ) { //
 			// Response looks like this: {"data":{"game_id":"1","has_played":false},"returnCode":0,"returnCodeDescription":null}
-			Log.d(Config.LOGTAG, getClass().getSimpleName() + "Landed successfully in colling Req: " + callingReq);
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Landed successfully in colling Req: " + callingReq);
 			try {
 				// process incoming json data
 				if (jsonReturn.has("data")) {
@@ -177,7 +177,7 @@ public class GameCoverPageActivity extends ActionBarActivity {
 
 				}
 			} catch (JSONException e) {
-				Log.e(Config.LOGTAG, getClass().getSimpleName() + "Failed while parsing returning JSON from request:" + HTTP_GET_PLAYER_PLAYED_GAME_REQ_API + " Error reported was: " + e.getCause());
+				Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "Failed while parsing returning JSON from request:" + HTTP_GET_PLAYER_PLAYED_GAME_REQ_API + " Error reported was: " + e.getCause());
 				e.printStackTrace();
 			}
 		}
@@ -188,11 +188,11 @@ public class GameCoverPageActivity extends ActionBarActivity {
 				updateAllViews();
 			}
 			else {
-				Log.e(Config.LOGTAG, getClass().getSimpleName() + "Attempt to reset game from GameCoverPageActivity failed; server returned code: "  + jsonReturn.getLong("returnCode"));
+				Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "Attempt to reset game from GameCoverPageActivity failed; server returned code: "  + jsonReturn.getLong("returnCode"));
 			}
 		}
 		else { // unknown callinRequest
-			Log.e(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient returned successfully but with unhandled server callingReq: " + callingReq);
+			Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient returned successfully but with unhandled server callingReq: " + callingReq);
 			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 					Toast.LENGTH_SHORT);
 			t.setGravity(Gravity.CENTER, 0, 0);

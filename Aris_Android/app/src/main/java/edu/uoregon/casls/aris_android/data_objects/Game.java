@@ -1,6 +1,13 @@
 package edu.uoregon.casls.aris_android.data_objects;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
+import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -13,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
+import edu.uoregon.casls.aris_android.Utilities.AppConfig;
+import edu.uoregon.casls.aris_android.Utilities.PollTimerService;
 import edu.uoregon.casls.aris_android.models.ARISModel;
 import edu.uoregon.casls.aris_android.models.DialogsModel;
 import edu.uoregon.casls.aris_android.models.EventsModel;
@@ -58,10 +67,10 @@ public class Game {
 
 	private static final String HTTP_GET_FULL_GAME_REQ_API = "v2.games.getFullGame/";
 	public long game_id;
-	public String name;
-	public String desc;
+	public String name = "";
+	public String desc = "";
 	public boolean published;
-	public String type;
+	public String type = "";
 	public Location location = new Location("0"); // from iOS; not used?
 	public long player_count;
 
@@ -75,8 +84,8 @@ public class Game {
 	public List<User> authors = new ArrayList<>();
 	public List<GameComment> comments = new ArrayList<GameComment>();
 
-	public String map_type;
-	public String map_focus;
+	public String map_type = "";
+	public String map_focus = "";
 	public Location map_location = new Location("0");
 	public double map_zoom_level;
 	public boolean map_show_player;
@@ -88,10 +97,10 @@ public class Game {
 	public boolean notebook_allow_player_tags;
 
 	public long inventory_weight_cap;
-	public String network_level;
+	public String network_level = "";
 	public boolean allow_download;
 	public boolean preload_media;
-	long version;
+	public long version;
 
 	public List<ARISModel> models = new ArrayList<>(); // List of all the models below for iteration convenience
 
@@ -124,6 +133,11 @@ public class Game {
 	public boolean know_if_begin_fresh = false;
 	public boolean begin_fresh = false;
 
+//	PollTimer vars
+	public Boolean isPollTImerRunning = false;
+	private Intent pollTimerSvcIntent = null;
+
+
 	// FYI transient indicates "do not serialize"; gson will die a recursive death if it did.
 	public transient GamePlayActivity mGamePlayAct; // For reference to GamePlayActivity; do not instantiate (new) object or circular references will ensue.
 	// Empty Constructor
@@ -147,6 +161,7 @@ public class Game {
 		downloadedVersion = 0;
 		know_if_begin_fresh = false;
 		begin_fresh = false;
+
 	}
 
 	public void initContext(GamePlayActivity gamePlayActivity) {
@@ -158,12 +173,16 @@ public class Game {
 			game_id = Long.parseLong(jsonGame.getString("game_id"));
 		if (jsonGame.has("name"))
 			name = jsonGame.getString("name");
+		if (jsonGame.has("allow_download"))
+			allow_download = Boolean.parseBoolean(jsonGame.getString("allow_download"));
 		if (jsonGame.has("description"))
 			desc = jsonGame.getString("description");
 //		if (jsonGame.has("tick_script"))
 //			tick_script = jsonGame.getString("tick_script");
 //		if (jsonGame.has("tick_delay") && !jsonGame.getString("tick_delay").equals("null"))
 //			tick_delay = Long.parseLong(jsonGame.getString("tick_delay"));
+		if (jsonGame.has("intro_scene_id") && !jsonGame.getString("intro_scene_id").equals("null"))
+			icon_media_id = Long.parseLong(jsonGame.getString("intro_scene_id"));
 		if (jsonGame.has("icon_media_id") && !jsonGame.getString("icon_media_id").equals("null"))
 			icon_media_id = Long.parseLong(jsonGame.getString("icon_media_id"));
 		if (jsonGame.has("media_id") && !jsonGame.getString("media_id").equals("null"))
@@ -172,6 +191,8 @@ public class Game {
 			location.setLatitude(Double.parseDouble(jsonGame.getString("latitude")));
 		if (jsonGame.has("longitude") && !jsonGame.getString("longitude").equals("null"))
 			location.setLongitude(Double.parseDouble(jsonGame.getString("longitude")));
+		if (jsonGame.has("map_focus"))
+			map_type = jsonGame.getString("map_focus");
 		if (jsonGame.has("map_type"))
 			map_type = jsonGame.getString("map_type");
 		if (jsonGame.has("map_latitude") && !jsonGame.getString("map_latitude").equals("null"))
@@ -186,6 +207,8 @@ public class Game {
 			map_show_players = Boolean.parseBoolean(jsonGame.getString("map_show_players"));
 		if (jsonGame.has("map_offsite_mode") && !jsonGame.getString("map_offsite_mode").equals("null"))
 			map_offsite_mode = Boolean.parseBoolean(jsonGame.getString("map_offsite_mode"));
+		if (jsonGame.has("network_level") && !jsonGame.getString("network_level").equals("null"))
+			notebook_allow_comments = Boolean.parseBoolean(jsonGame.getString("network_level"));
 		if (jsonGame.has("notebook_allow_comments") && !jsonGame.getString("notebook_allow_comments").equals("null"))
 			notebook_allow_comments = Boolean.parseBoolean(jsonGame.getString("notebook_allow_comments"));
 		if (jsonGame.has("notebook_allow_likes") && !jsonGame.getString("notebook_allow_likes").equals("null"))
@@ -194,12 +217,18 @@ public class Game {
 			notebook_allow_player_tags = Boolean.parseBoolean(jsonGame.getString("notebook_allow_player_tags"));
 		if (jsonGame.has("published") && !jsonGame.getString("published").equals("null"))
 			published = Boolean.parseBoolean(jsonGame.getString("published"));
+		if (jsonGame.has("preload_media") && !jsonGame.getString("preload_media").equals("null"))
+			published = Boolean.parseBoolean(jsonGame.getString("preload_media"));
 		if (jsonGame.has("type"))
 			type = jsonGame.getString("type");
 		if (jsonGame.has("intro_scene_id") && !jsonGame.getString("intro_scene_id").equals("null"))
 			intro_scene_id = Long.parseLong(jsonGame.getString("intro_scene_id"));
 		if (jsonGame.has("player_count") && !jsonGame.getString("player_count").equals("null"))
 			player_count = Long.parseLong(jsonGame.getString("player_count"));
+		if (jsonGame.has("inventory_weight_cap") && !jsonGame.getString("inventory_weight_cap").equals("null"))
+			player_count = Long.parseLong(jsonGame.getString("inventory_weight_cap"));
+		if (jsonGame.has("version") && !jsonGame.getString("version").equals("null"))
+			player_count = Long.parseLong(jsonGame.getString("version"));
 
 		//not found in basic game data apparently, at least not here in Game() see full game init
 //		jsonGame.getString("inventory_weight_cap");
@@ -432,7 +461,7 @@ public class Game {
 		n_game_data_received++;
 		if (this.allGameDataReceived()) {
 			n_game_data_received = n_game_data_to_receive; //should already be exactly this...
-			mGamePlayAct.mDispatch.model_game_data_loaded(); // _ARIS_NOTIF_SEND_(@"DATA_LOADED", nil, nil);
+			mGamePlayAct.mDispatch.model_game_data_loaded(); // _ARIS_NOTIF_SEND_(@"DATA_LOADED", nil, nil); // will call requestPlayerData()
 		}
 		percentLoadedChanged();
 	}
@@ -440,17 +469,21 @@ public class Game {
 	public void gamePlayerPieceReceived() {
 		n_player_data_received++;
 		if (n_player_data_received >= n_player_data_to_receive) {
-		mGamePlayAct.mDispatch.model_game_player_data_loaded(); // _ARIS_NOTIF_SEND_(@"PLAYER_DATA_LOADED", null, null); // broadcast to any listeners that game data is ready
+			mGamePlayAct.mDispatch.model_game_player_data_loaded(); // _ARIS_NOTIF_SEND_(@"PLAYER_DATA_LOADED", null, null); // broadcast to any listeners that game data is ready
 		}
 		percentLoadedChanged();
 	}
 
 	public boolean allGameDataReceived() {
 
-		for (ARISModel model : models) 		// iterate through all models
-			if(!model.gameDataReceived()) { // stop if one reports it's not received all its data.
+		for (int i = 0; i < models.size(); i++) {
+//		for (ARISModel model : models) {    // iterate through all models
+			ARISModel model = models.get(i);
+			boolean gdr = model.gameDataReceived();
+			if (!gdr) { // stop if one reports it's not received all its data.
 				return false;
 			}
+		}
 		return true;
 	}
 
@@ -471,11 +504,50 @@ public class Game {
 		listen_media_piece_available = false; 		// _ARIS_NOTIF_IGNORE_(@"MEDIA_PIECE_AVAILABLE", self, nil);
 //		todo: build poller!
 //		poller = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(requestPlayerData) userInfo:null repeats:YES];
+		this.startPollTimer();
+	}
+
+	private void startPollTimer() {
+		// register receiver
+		LocalBroadcastManager.getInstance(mGamePlayAct).registerReceiver(mMessageReceiver, new IntentFilter(AppConfig.POLLTIMER_SVC_ACTION));
+
+		if (!isPollTImerRunning) {
+			pollTimerSvcIntent = new Intent(mGamePlayAct, PollTimerService.class);
+			mGamePlayAct.startService(pollTimerSvcIntent);
+			isPollTImerRunning = true;
+		}
+
 	}
 
 	public void gameLeft() {
 //		poller invalidate();
 	}
+
+	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " PollTimer has Cycled  - - - - - - - - DING!");
+			handleMessage(intent);
+		}
+	};
+
+	private void handleMessage(Intent msg)
+	{
+		Bundle data = msg.getExtras();
+		switch (data.getInt(AppConfig.COMMAND, 0))
+		{
+			case AppConfig.POLLTIMER_CYCLE_PASS:
+//				int progress = data.getInt(AppConfig.DATA, 0); // not used.
+				this.requestPlayerData();
+				break;
+			case AppConfig.POLLTIMER_RESULT: // sent when finished cycling stub. not used.
+//				String res = data.getString(AppConfig.DATA);
+				break;
+			default:
+				break;
+		}
+	}
+
 
 //	private Runnable runnable = new Runnable() {
 //		@Override

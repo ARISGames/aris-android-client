@@ -340,7 +340,7 @@ public class Services {
 		RequestParams rqParams = new RequestParams();
 
 		final Context context = mGamePlayAct;
-		String request_url = Config.SERVER_URL_MOBILE + requestApi;
+		String request_url = AppConfig.SERVER_URL_MOBILE + requestApi;
 
 		mGamePlayAct.mPlayer.location = AppUtils.getGeoLocation(context);
 
@@ -384,7 +384,7 @@ public class Services {
 		if (AppUtils.isNetworkAvailable(mGamePlayAct.getApplicationContext())) {
 			AsyncHttpClient client = new AsyncHttpClient();
 
-			Log.d(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient Sending Req: " + request_url + "Params: " + jsonMain.toString());
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient Sending Req: " + request_url + "Params: " + jsonMain.toString());
 			client.post(context, request_url, entity, "application/json", new JsonHttpResponseHandler() {
 				@Override
 				public void onSuccess(int statusCode, Header[] headers, JSONObject jsonReturn) {
@@ -397,7 +397,7 @@ public class Services {
 				}
 				@Override
 				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-					Log.w(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient failed server call. ", throwable);
+					Log.w(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient failed server call. ", throwable);
 //					showProgress(false);
 					Toast t = Toast.makeText(mGamePlayAct.getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 							Toast.LENGTH_SHORT);

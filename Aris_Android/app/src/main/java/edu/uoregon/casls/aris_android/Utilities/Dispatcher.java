@@ -141,6 +141,7 @@ public class Dispatcher {
 	//	PLAYER_DATA_LOADED", nil, nil);
 	public void model_game_player_data_loaded() {
 		// todo: LoadingViewController.playerDataLoaded();
+		mGamePlayAct.playerDataLoaded();
 	}
 
 	//	PLAYER_PIECE_AVAILABLE",nil,nil);

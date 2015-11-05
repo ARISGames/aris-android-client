@@ -32,7 +32,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
-import edu.uoregon.casls.aris_android.Utilities.Config;
+import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 
 
 public class CreateAccountActivity extends ActionBarActivity {
@@ -181,7 +181,7 @@ public class CreateAccountActivity extends ActionBarActivity {
 		RequestParams rqParams = new RequestParams();
 
 		final Context context = this;
-		String request_url = Config.SERVER_URL_MOBILE + request_api;
+		String request_url = AppConfig.SERVER_URL_MOBILE + request_api;
 
 		rqParams.put("request", request_api);
 		StringEntity entity;
@@ -196,7 +196,7 @@ public class CreateAccountActivity extends ActionBarActivity {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		Log.d(Config.LOGTAG, getClass().getSimpleName() + "Json string Req to server: " + jsonMain);
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Json string Req to server: " + jsonMain);
 
 		try {
 			entity = new StringEntity(jsonMain.toString());
@@ -221,7 +221,7 @@ public class CreateAccountActivity extends ActionBarActivity {
 				}
 				@Override
 				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-					Log.e(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient failed server call. ", throwable);
+					Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient failed server call. ", throwable);
 					showProgress(false);
 					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 							Toast.LENGTH_SHORT);
@@ -240,10 +240,10 @@ public class CreateAccountActivity extends ActionBarActivity {
 	}
 
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) throws JSONException {
-		Log.d(Config.LOGTAG, getClass().getSimpleName() + "Return status to server Req: " + jsonReturn.toString());
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Return status to server Req: " + jsonReturn.toString());
 		if (callingReq.contentEquals(HTTP_CLIENT_CREATE_USER_REQ_API) ) { //todo: create user call returns nulls on localhost. Need to fix.
 			// Response looks like this: {"data":{"media_id":"0","display_name":"","user_name":"scotta","user_id":"10269","read_write_key":"WQ52...gQN"},"returnCode":0,"returnCodeDescription":null}
-			Log.d(Config.LOGTAG, getClass().getSimpleName() + "Landed successfully in colling Req: " + callingReq);
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Landed successfully in colling Req: " + callingReq);
 			try {
 				// process incoming json data
 				if (jsonReturn.has("data")) {
@@ -268,7 +268,7 @@ public class CreateAccountActivity extends ActionBarActivity {
 
 					}
 					else {
-						Log.d(Config.LOGTAG, getClass().getSimpleName() + "Server sent error in return code: " + jsonDataBlock.getString("returnCodeDescription"));
+						Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Server sent error in return code: " + jsonDataBlock.getString("returnCodeDescription"));
 						Toast t = Toast.makeText(getApplicationContext(), "There was a problem creating your account. Please try again later.",
 								Toast.LENGTH_SHORT);
 						t.setGravity(Gravity.CENTER, 0, 0);
@@ -277,12 +277,12 @@ public class CreateAccountActivity extends ActionBarActivity {
 
 				}
 			} catch (JSONException e) {
-				Log.e(Config.LOGTAG, getClass().getSimpleName() + "Failed while parsing returning JSON from request:" + HTTP_CLIENT_CREATE_USER_REQ_API + " Error reported was: " + e.getCause());
+				Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "Failed while parsing returning JSON from request:" + HTTP_CLIENT_CREATE_USER_REQ_API + " Error reported was: " + e.getCause());
 				e.printStackTrace();
 			}
 		}
 		else { // unknown callinRequest
-			Log.e(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient returned successfully but with unhandled server callingReq: " + callingReq);
+			Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient returned successfully but with unhandled server callingReq: " + callingReq);
 			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 					Toast.LENGTH_SHORT);
 			t.setGravity(Gravity.CENTER, 0, 0);
