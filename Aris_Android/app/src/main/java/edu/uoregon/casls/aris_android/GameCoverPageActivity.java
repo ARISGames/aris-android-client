@@ -51,6 +51,10 @@ public class GameCoverPageActivity extends ActionBarActivity {
 	private FrameLayout mFlReset, mFlResume, mFlNewGame;
 	public JSONObject mJsonAuth;
 	private boolean mHasPlayed;
+	private ImageView ivGameLogo;
+	private TextView tvGameName;
+	private TextView tvGameDesc;
+	private WebView wvGamePic;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,35 +79,15 @@ public class GameCoverPageActivity extends ActionBarActivity {
 				R.animator.slide_in_from_right, R.animator.slide_out_to_left).toBundle();
 
 //		ImageView ivGameIcon = (ImageView) findViewById(R.id.iv_game_icon);
-		ImageView ivGameLogo = (ImageView) findViewById(R.id.iv_game_designer_logo);
-		TextView tvGameName = (TextView) findViewById(R.id.tv_game_cover_name);
-		TextView tvGameDesc = (TextView) findViewById(R.id.tv_game_desc);
+		ivGameLogo = (ImageView) findViewById(R.id.iv_game_designer_logo);
+		tvGameName = (TextView) findViewById(R.id.tv_game_cover_name);
+		tvGameDesc = (TextView) findViewById(R.id.tv_game_desc);
 		mProgressView = findViewById(R.id.network_req_progress);
 		mLlFooter = (LinearLayout) findViewById(R.id.ll_game_cover_pg_footer);
 		mFlNewGame = (FrameLayout) findViewById(R.id.fl_newgame_btnbox);
 		mFlResume = (FrameLayout) findViewById(R.id.fl_resume_btnbox);
 		mFlReset = (FrameLayout) findViewById(R.id.fl_reset_btnbox);
 
-		tvGameName.setText(mGame.name);
-		tvGameDesc.setText(mGame.desc);
-
-		WebView wvGamePic = (WebView) findViewById(R.id.wv_game_pic);
-		if (mGame.media.media_id == 0) { // 0 = no custom icon
-			wvGamePic.setBackgroundColor(0x00000000);
-			wvGamePic.setBackgroundResource(R.drawable.logo_icon); // set to static aris icon
-			ViewGroup.LayoutParams layoutParams = wvGamePic.getLayoutParams(); // force the webview to have a size since it cannot adjust w/o actual content.
-			layoutParams.height = 400;
-			layoutParams.width = 400;
-			wvGamePic.setLayoutParams(layoutParams);
-			ivGameLogo.setImageResource(R.drawable.logo_text_nav);
-		}
-		else {
-			wvGamePic.getSettings().setJavaScriptEnabled(true);
-			wvGamePic.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
-			wvGamePic.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
-			wvGamePic.getSettings().setUseWideViewPort(false); // constrain the image horizontally
-			wvGamePic.loadUrl(mGame.media.url.toString());
-		}
 
 		// stub in graphics todo: replace with custom icon/logo from game settings
 //		ivGameIcon.setImageResource(R.drawable.logo_full_tiny);
@@ -218,6 +202,26 @@ public class GameCoverPageActivity extends ActionBarActivity {
 	}
 
 	private void updateAllViews() {
+		tvGameName.setText(mGame.name);
+		tvGameDesc.setText(mGame.desc);
+		wvGamePic = (WebView) findViewById(R.id.wv_game_pic);
+		if (mGame.media.media_id == 0) { // 0 = no custom icon
+			wvGamePic.setBackgroundColor(0x00000000);
+			wvGamePic.setBackgroundResource(R.drawable.logo_icon); // set to static aris icon
+			ViewGroup.LayoutParams layoutParams = wvGamePic.getLayoutParams(); // force the webview to have a size since it cannot adjust w/o actual content.
+			layoutParams.height = 400;
+			layoutParams.width = 400;
+			wvGamePic.setLayoutParams(layoutParams);
+			ivGameLogo.setImageResource(R.drawable.logo_text_nav);
+		}
+		else {
+			wvGamePic.getSettings().setJavaScriptEnabled(true);
+			wvGamePic.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
+			wvGamePic.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
+			wvGamePic.getSettings().setUseWideViewPort(false); // constrain the image horizontally
+			wvGamePic.loadUrl(mGame.media.url.toString());
+		}
+
 		if (mHasPlayed) {
 			mFlReset.setVisibility(View.VISIBLE);
 			mFlResume.setVisibility(View.VISIBLE);

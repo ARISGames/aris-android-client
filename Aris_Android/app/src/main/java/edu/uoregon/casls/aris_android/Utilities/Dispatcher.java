@@ -13,10 +13,14 @@ import edu.uoregon.casls.aris_android.data_objects.Event;
 import edu.uoregon.casls.aris_android.data_objects.Factory;
 import edu.uoregon.casls.aris_android.data_objects.Group;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
+import edu.uoregon.casls.aris_android.data_objects.Note;
 import edu.uoregon.casls.aris_android.data_objects.NoteComment;
 import edu.uoregon.casls.aris_android.data_objects.ObjectTag;
 import edu.uoregon.casls.aris_android.data_objects.Overlay;
 import edu.uoregon.casls.aris_android.data_objects.Quest;
+import edu.uoregon.casls.aris_android.data_objects.RequirementAndPackage;
+import edu.uoregon.casls.aris_android.data_objects.RequirementAtom;
+import edu.uoregon.casls.aris_android.data_objects.RequirementRootPackage;
 import edu.uoregon.casls.aris_android.data_objects.Scene;
 import edu.uoregon.casls.aris_android.data_objects.Tab;
 import edu.uoregon.casls.aris_android.data_objects.Tag;
@@ -97,17 +101,17 @@ public class Dispatcher {
 
 	//	AVAILABLE",nil,@{@"game":[self gameForId:g.game_id]});// Will be handled in GamePlayActivity -sem
 //	BEGAN",nil,nil); // Will be handled in GamePlayActivity -sem
-	public void	model_game_began() {
+	public void model_game_began() {
 		mGamePlayAct.mGame.gameBegan();
 		mGamePlayAct.gameBegan(); // possibly not needed.
 	}
 
-//	CHOSEN",nil,nil); // Will be handled in GamePlayActivity -sem
-	public void	model_game_chosen() {
+	//	CHOSEN",nil,nil); // Will be handled in GamePlayActivity -sem
+	public void model_game_chosen() {
 		mGamePlayAct.gameChosen(); // possibly not needed.
 	}
 
-//	DATA_LOADED", nil, nil);
+	//	DATA_LOADED", nil, nil);
 	public void model_game_data_loaded() {
 		// in iOS would call LoadingViewController.gameDataLoaded(), which then calls Game.requestPlayerData(); I'll call it directly.
 		mGamePlayAct.mGame.requestPlayerData();
@@ -141,7 +145,8 @@ public class Dispatcher {
 
 	//	PLAYER_PIECE_AVAILABLE",nil,nil);
 	public void model_game_player_piece_available() {
-		if (mGamePlayAct.mGame.listen_player_piece_available) mGamePlayAct.mGame.gamePlayerPieceReceived();
+		if (mGamePlayAct.mGame.listen_player_piece_available)
+			mGamePlayAct.mGame.gamePlayerPieceReceived();
 	}
 
 	//	MODEL_GROUP_INSTANCES_AVAILABLE",nil,nil);
@@ -256,7 +261,7 @@ public class Dispatcher {
 
 	//	MODEL_PLAQUES_AVAILABLE",nil,nil); // from plaquesModel; not listened to. -sem
 
-//	MODEL_PLAYER_INSTANCES_AVAILABLE",nil,nil);
+	//	MODEL_PLAYER_INSTANCES_AVAILABLE",nil,nil);
 	public void model_player_instances_available() {
 		// todo: find listners
 	}
@@ -265,7 +270,8 @@ public class Dispatcher {
 	public void model_player_instances_touched() {
 		// no listeners
 	}
-//	MODEL_PLAYER_PLAYED_GAME_AVAILABLE",nil,notif.userInfo); // May be unnecessary in Android.
+
+	//	MODEL_PLAYER_PLAYED_GAME_AVAILABLE",nil,notif.userInfo); // May be unnecessary in Android.
 //	MODEL_PLAYER_SCRIPT_OPTIONS_AVAILABLE",nil,uInfo); // handled as internal method redirect in DialogsModel - sem
 //	MODEL_PLAYER_TRIGGERS_AVAILABLE",nil,nil);
 	public void model_player_triggers_available() {
@@ -326,7 +332,8 @@ public class Dispatcher {
 	public void model_scene_touched() {
 		// no listeners
 	}
-//	MODEL_SCENES_AVAILABLE",nil,nil);
+
+	//	MODEL_SCENES_AVAILABLE",nil,nil);
 	public void model_scenes_available() {
 		// todo: find listeners
 	}
@@ -335,7 +342,8 @@ public class Dispatcher {
 	public void model_scenes_player_scene_available() {
 		// sent from ScenesModel (in two places) but not listened to by anyone.
 	}
-//	MODEL_SEARCH_GAMES_AVAILABLE",nil,nil); } // Handled in GamesListActivity - sem
+
+	//	MODEL_SEARCH_GAMES_AVAILABLE",nil,nil); } // Handled in GamesListActivity - sem
 //	MODEL_TABS_AVAILABLE",nil,nil);
 	public void model_tabs_available() {
 		// no listeners
@@ -445,7 +453,7 @@ public class Dispatcher {
 	//	SERVICES_ITEM_RECEIVED", nil, @{@"item":item});
 //	SERVICES_ITEMS_RECEIVED", nil, @{@"items":items});
 
-//	SERVICES_LOGIN_FAILED",nil,nil); return; }
+	//	SERVICES_LOGIN_FAILED",nil,nil); return; }
 //	SERVICES_LOGIN_RECEIVED",nil,@{@"user":user});
 //	SERVICES_MEDIA_RECEIVED", nil, @{@"media":mediaDict}); // fakes an entire list and does same as fetching all media
 //	SERVICES_MEDIAS_RECEIVED", nil, @{@"medias":mediaDicts});
@@ -464,7 +472,11 @@ public class Dispatcher {
 
 	//	SERVICES_NOTE_RECEIVED", nil, @{@"note":note});
 //	SERVICES_NOTES_RECEIVED", nil, @{@"notes":notes});
-//	SERVICES_OBJECT_TAGS_RECEIVED", nil, @{@"object_tags":objectTags});
+	public void services_notes_received(List<Note> notes) {
+		mGamePlayAct.mGame.notesModel.notesReceived(notes);
+	}
+
+	//	SERVICES_OBJECT_TAGS_RECEIVED", nil, @{@"object_tags":objectTags});
 	public void services_object_tags_received(List<ObjectTag> objectTags) {
 		mGamePlayAct.mGame.tagsModel.objectTagsReceived(objectTags);
 	}
@@ -510,7 +522,8 @@ public class Dispatcher {
 	public void services_player_scene_received(Scene playerScene) {
 		mGamePlayAct.mGame.scenesModel.playerSceneReceived(playerScene);
 	}
-//	SERVICES_PLAYER_SCRIPT_OPTIONS_RECEIVED", nil, uInfo);
+
+	//	SERVICES_PLAYER_SCRIPT_OPTIONS_RECEIVED", nil, uInfo);
 	public void services_player_script_options_received(Map<String, Object> uInfo) {
 		// todo: find listeners for this
 	}
@@ -536,9 +549,21 @@ public class Dispatcher {
 
 	//	SERVICES_RECENT_GAMES_RECEIVED", nil, @{@"games":[self parseGames:(NSArray *)result.resultData]});
 //	SERVICES_REQUIREMENT_AND_PACKAGES_RECEIVED", nil, @{@"requirement_and_packages":raps});
-//	SERVICES_REQUIREMENT_ATOMS_RECEIVED", nil, @{@"requirement_atoms":as});
-//	SERVICES_REQUIREMENT_ROOT_PACKAGES_RECEIVED", nil, @{@"requirement_root_packages":rrps});
-//	SERVICES_SCENE_RECEIVED", nil, @{@"scene":scene});
+	public void services_requirement_and_packages_received(List<RequirementAndPackage> reqAnds) {
+		mGamePlayAct.mGame.requirementsModel.requirementAndPackagesReceived(reqAnds);
+	}
+
+	//	SERVICES_REQUIREMENT_ATOMS_RECEIVED", nil, @{@"requirement_atoms":as});
+	public void services_requirement_atoms_received(List<RequirementAtom> reqAtoms) {
+		mGamePlayAct.mGame.requirementsModel.requirementAtomsReceived(reqAtoms);
+	}
+
+	//	SERVICES_REQUIREMENT_ROOT_PACKAGES_RECEIVED", nil, @{@"requirement_root_packages":rrps});
+	public void services_requirement_root_packages_received(List<RequirementRootPackage> reqRoots) {
+		mGamePlayAct.mGame.requirementsModel.requirementRootPackagesReceived(reqRoots);
+	}
+
+	//	SERVICES_SCENE_RECEIVED", nil, @{@"scene":scene});
 //	SERVICES_SCENE_TOUCHED", nil, nil);
 	public void services_scene_touched() {
 		mGamePlayAct.mGame.scenesModel.sceneTouched();
@@ -584,7 +609,6 @@ public class Dispatcher {
 		// todo: also MapViewController.playerMoved()
 
 	}
-
 
 
 //	WIFI_CONNECTED",self,nil); break;

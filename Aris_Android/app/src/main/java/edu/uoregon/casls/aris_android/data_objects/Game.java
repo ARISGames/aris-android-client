@@ -65,7 +65,9 @@ public class Game {
 	public Location location = new Location("0"); // from iOS; not used?
 	public long player_count;
 
+	public Media icon_media;
 	public long icon_media_id;
+	public Media media;
 	public long media_id;
 
 	public long intro_scene_id;
@@ -245,18 +247,19 @@ public class Game {
 				authors.add(new User(jsonAuthor));
 			}
 		}
-//		if (jsonGameData.has("media")) {
-//			// get media block
-//			JSONObject jsonMedia = jsonGameData.getJSONObject("media");
-//			media = gson.fromJson(jsonMedia.toString(), Media.class);
-////			android.util.Log.d(Config.LOGTAG, getClass().getSimpleName() + "Debug break to examine object media");
-//
-//		}
-//		if (jsonGameData.has("icon_media")) {
-//			// get icon_media block
-//			JSONObject jsonMedia = jsonGameData.getJSONObject("icon_media");
-//			icon_media = gson.fromJson(jsonMedia.toString(), Media.class);
-//		}
+		//todo: update this media loading process to conform to the newer iOS form.
+		if (jsonGameData.has("media")) {
+			// get media block
+			JSONObject jsonMedia = jsonGameData.getJSONObject("media");
+			media = gson.fromJson(jsonMedia.toString(), Media.class);
+//			android.util.Log.d(Config.LOGTAG, getClass().getSimpleName() + "Debug break to examine object media");
+
+		}
+		if (jsonGameData.has("icon_media")) {
+			// get icon_media block
+			JSONObject jsonMedia = jsonGameData.getJSONObject("icon_media");
+			icon_media = gson.fromJson(jsonMedia.toString(), Media.class);
+		}
 
 		// none of these are utilized, or even mentioned in, in the iOS code leaving in for future potential
 //		jsonFullGame.getString("is_siftr");

@@ -42,6 +42,10 @@ public class DBDealer extends SQLiteOpenHelper {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
+//	public void initContext(GamePlayActivity mGamePlayAct) {
+//	}
+
+
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(DATABASE_CREATE);
@@ -93,5 +97,4 @@ public class DBDealer extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		return db.delete(MEDIA, null, null);
 	}
-
 }

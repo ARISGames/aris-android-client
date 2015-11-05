@@ -3,6 +3,7 @@ package edu.uoregon.casls.aris_android.models;
 import android.util.Log;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -20,9 +21,9 @@ import edu.uoregon.casls.aris_android.data_objects.RequirementRootPackage;
  */
 public class RequirementsModel extends ARISModel {
 
-	Map<Long, RequirementRootPackage> requirementRootPackages;
-	Map<Long, RequirementAndPackage> requirementAndPackages;
-	Map<Long, RequirementAtom> requirementAtoms;
+	Map<Long, RequirementRootPackage> requirementRootPackages = new LinkedHashMap<>();
+	Map<Long, RequirementAndPackage> requirementAndPackages = new LinkedHashMap<>();
+	Map<Long, RequirementAtom> requirementAtoms = new LinkedHashMap<>();
 
 	public transient GamePlayActivity mGamePlayAct;
 	public transient Game mGame;
@@ -112,7 +113,7 @@ public class RequirementsModel extends ARISModel {
 		for (RequirementAndPackage rap : allAnds) {
 //			rap = allAndsi; // wha?? index from outerspace
 			if (rap.requirement_root_package_id == requirement_root_package_id)
-				and_packages.add(rap);// addObject:rap;
+				and_packages.add(rap);
 		}
 		return and_packages;
 	}
@@ -122,7 +123,7 @@ public class RequirementsModel extends ARISModel {
 		Collection<RequirementAtom> allAtoms = requirementAtoms.values(); // allValues;
 		for (RequirementAtom a : allAtoms) {
 			if (a.requirement_and_package_id == requirement_and_package_id)
-				atoms.add(a); // addObject:a;
+				atoms.add(a);
 		}
 		return atoms;
 	}

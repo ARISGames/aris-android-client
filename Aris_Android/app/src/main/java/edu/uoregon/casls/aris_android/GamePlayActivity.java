@@ -114,24 +114,25 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		//   the game has implicitly been "Chosen" so we can "startLoading" straight away
 		mGame.getReadyToPlay();
 		// Start barrage of game related server requests
-		if (!mGame.hasLatestDownload())
-			mGame.requestGameData(); // ... like this. To align with the iOS version
-		else { // todo: code in the "restoreGameData" process. See LoadingViewController.startLoading.
-		// todo:   Basically we'll sub in Android life cycle state save and restore
-			 //			[_MODEL_ restoreGameData];
-			mGame.requestMaintenanceData(); //			[self gameDataLoaded];
-		}
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
+	public void onStart() {
+		super.onStart();
 		// todo: restore saved Game object if it was stashed for app sleep.
 		// reinit contexts to be safe after a resume.
 		mDispatch.initContext(this); // initialize contexts
 		mServices.initContext(this);
 		mGame.initContext(this);
 		mResposeHandler.initContext(this);
+
+		if (!mGame.hasLatestDownload())
+			mGame.requestGameData(); // load all game data
+		else { // todo: code in the "restoreGameData" process. See LoadingViewController.startLoading.
+			// todo:   Basically we'll sub in Android life cycle state save and restore (which means this needs to go in the onResume or onStart method
+			//			[_MODEL_ restoreGameData];
+			mGame.requestMaintenanceData(); //			[self gameDataLoaded];
+		}
 	}
 
 	public void dropItem(long item_id, long qty) {

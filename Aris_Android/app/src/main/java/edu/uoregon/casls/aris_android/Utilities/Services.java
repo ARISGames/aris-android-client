@@ -347,11 +347,10 @@ public class Services {
 		rqParams.put("request", requestApi);
 		StringEntity entity;
 		entity = null;
-		JSONObject jsonAuth = new JSONObject();
 
 		try {
 			// place the auth block.
-			jsonMain.put("auth", mJsonAuth);
+			jsonMain.put("auth", mGamePlayAct.mJsonAuth);
 			//place additional required params
 //			switch (requestApi) {
 //				case (HTTP_GET_NEARBY_GAMES_REQ_API):
@@ -385,19 +384,16 @@ public class Services {
 		if (AppUtils.isNetworkAvailable(mGamePlayAct.getApplicationContext())) {
 			AsyncHttpClient client = new AsyncHttpClient();
 
-			Log.d(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient Sending Req: " + request_url);
-			Log.d(Config.LOGTAG,  getClass().getSimpleName() + "AsyncHttpClient Params for Req: " + jsonMain.toString());
+			Log.d(Config.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient Sending Req: " + request_url + "Params: " + jsonMain.toString());
 			client.post(context, request_url, entity, "application/json", new JsonHttpResponseHandler() {
 				@Override
 				public void onSuccess(int statusCode, Header[] headers, JSONObject jsonReturn) {
 //					showProgress(false);
 					try {
-//						processJsonHttpResponse(requestApi, TAG_SERVER_SUCCESS, jsonReturn);
 						mGamePlayAct.mResposeHandler.processJsonHttpResponse(requestApi, TAG_SERVER_SUCCESS, jsonReturn);
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
-
 				}
 				@Override
 				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

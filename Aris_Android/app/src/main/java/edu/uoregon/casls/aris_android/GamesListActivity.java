@@ -468,7 +468,7 @@ public class GamesListActivity extends ActionBarActivity {
 
 
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) throws JSONException {
-		Log.d(Config.LOGTAG, getClass().getSimpleName() + "Return status to server Req: " + jsonReturn.toString());
+		Log.d(Config.LOGTAG, getClass().getSimpleName() + "Return status to server Req: " + callingReq + " = " + jsonReturn.toString());
 		int returnCode = (jsonReturn.has("returnCode")) ? jsonReturn.getInt("returnCode") : null; // what do I do?
 		String returnCodeDescription = (jsonReturn.has("returnCode")) ? jsonReturn.getString("returnCodeDescription") : ""; // For what?
 		if (returnCode == 0) { // return code 0 is good; all other values bad.

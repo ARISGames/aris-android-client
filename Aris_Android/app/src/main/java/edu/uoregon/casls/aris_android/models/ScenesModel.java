@@ -6,7 +6,6 @@ import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.data_objects.Game;
-import edu.uoregon.casls.aris_android.data_objects.Item;
 import edu.uoregon.casls.aris_android.data_objects.Scene;
 
 /**
@@ -67,18 +66,15 @@ public class ScenesModel extends ARISModel {
 		this.updateScenes(newScenes);
 	}
 
-	public void playerSceneReceived(Scene newScene)
-	{
+	public void playerSceneReceived(Scene newScene) {
 		//A bit of hack verification to ensure valid scene. Ideally shouldn't be needed...
 		boolean overridden = false;
 		Scene s = this.sceneForId(newScene.scene_id);
-		if (s.scene_id == 0)
-		{
+		if (s.scene_id == 0) {
 			overridden = true;
 			s = this.sceneForId(mGamePlayAct.mGame.intro_scene_id); //received scene not valid
 		}
-		if (s.scene_id == 0 && scenes.size() > 0) //received scene not valid, intro_scene not valid
-		{
+		if (s.scene_id == 0 && scenes.size() > 0) { //received scene not valid, intro_scene not valid
 			overridden = true;
 			s = scenes.get(0); // allValues][0]; //choose arbitrary scene to ensure valid state
 		}
@@ -99,7 +95,7 @@ public class ScenesModel extends ARISModel {
 		long newSceneId;
 		for (Scene newScene : newScenes) {
 			newSceneId = newScene.scene_id;
-			if(!scenes.containsKey(newSceneId)) scenes.put(newSceneId, newScene);
+			if (!scenes.containsKey(newSceneId)) scenes.put(newSceneId, newScene);
 		}
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_scenes_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_SCENES_AVAILABLE",nil,nil);
@@ -122,18 +118,17 @@ public class ScenesModel extends ARISModel {
 
 	public void requestPlayerScene() {
 		Game lGame = mGamePlayAct.mGame;
-		if(this.playerDataReceived() && !lGame.network_level.contentEquals("REMOTE")) {
+		if (this.playerDataReceived() && !lGame.network_level.contentEquals("REMOTE")) {
 			mGamePlayAct.mDispatch.services_player_scene_received(playerScene); //_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_SCENE_RECEIVED",nil,@{@"scene":playerScene}); //just return current
 		}
-		if(!this.playerDataReceived() ||
+		if (!this.playerDataReceived() ||
 				lGame.network_level.contentEquals("HYBRID") ||
 				lGame.network_level.contentEquals("REMOTE"))
-		mGamePlayAct.mServices.fetchSceneForPlayer();
+			mGamePlayAct.mServices.fetchSceneForPlayer();
 
 	}
 
-	public long nGameDataToReceive ()
-	{
+	public long nGameDataToReceive() {
 		return 2;
 	}
 

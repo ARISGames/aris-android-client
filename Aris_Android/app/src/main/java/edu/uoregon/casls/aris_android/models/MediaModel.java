@@ -45,8 +45,8 @@ public class MediaModel extends ARISModel {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
 		if (dbDealer == null)
 			dbDealer = new DBDealer(gamePlayAct); // only instantiate once
-		else
-			dbDealer.initContext(mGamePlayAct);
+//		else
+//			dbDealer.initContext(mGamePlayAct); // todo: maybe invalidate and recreate with updated context. Or do nothing?
 	}
 
 	public void clearGameData() {
