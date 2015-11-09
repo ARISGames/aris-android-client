@@ -357,3 +357,32 @@ public class MediaModel extends ARISModel {
 
 
 }
+/*
+
+- (void) requestPlayerScene
+		{
+		if([self playerDataReceived] &&
+		![_MODEL_GAME_.network_level isEqualToString:@"REMOTE"])
+		{
+		_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_SCENE_RECEIVED",nil,@{@"scene":playerScene}); //just return current
+		}
+		if(![self playerDataReceived] ||
+		[_MODEL_GAME_.network_level isEqualToString:@"HYBRID"] ||
+		[_MODEL_GAME_.network_level isEqualToString:@"REMOTE"])
+		[_SERVICES_ fetchSceneForPlayer];
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		*/
