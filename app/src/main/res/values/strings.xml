@@ -1,0 +1,50 @@
+<resources>
+    <string name="app_name">Aris Android</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="username">ARIS ID</string>
+    <string name="password">Password</string>
+    <string name="password_again">Password (again)</string>
+    <string name="Login">Login</string>
+    <string name="Sign_Me_Up">Sign Up</string>
+    <string name="sign_in_button">Sign In Button</string>
+    <string name="create_account">Create Account</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="title_activity_create_account">CreateAccountActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
+    <string name="username_prompt">ARIS_ID</string>
+    <string name="error_field_too_short">Must be at least 5 characters long</string>
+    <string name="error_password_required">Please enter a password</string>
+    <string name="error_password_again_required">Please re-enter your password</string>
+    <string name="error_passwords_must_match">The passwords must match</string>
+    <string name="error_username_required">Please enter a username</string>
+    <string name="prompt_email_to_reset">Email to Reset</string>
+    <string name="password_reset_message">An email will be sent to the above address with instructions on how to reset your password.</string>
+    <string name="title_activity_games_list_nearby">GamesListNearby</string>
+
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_game_cover_page">GameCoverPageActivity</string>
+    <string name="title_activity_game_play">GamePlayActivity</string>
+
+    <!-- any changes to this array must also be reflected in Config.gameDrawerItemIconByName[] array. -->
+    <string-array name="game_drawer_list_items">
+        <item>Quests</item>
+        <item>Map</item>
+        <item>Inventory</item>
+        <item>Scanner</item>
+        <item>Decoder</item>
+        <item>Player</item>
+        <item>Notebook</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,153 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                tools:context="edu.uoregon.casls.aris_android.GameCoverPageActivity"
+                >
+
+
+    <ProgressBar
+        android:id="@+id/network_req_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        android:layout_centerInParent="true"/>
+
+    <!--title bar-->
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        layout="@layout/titlebar_w_back_arrow_no_logo"
+        android:layout_centerHorizontal="true"
+        android:scaleType="fitCenter"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/incl_titlebar"/>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/incl_titlebar"
+        android:layout_marginBottom="60dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--<WebView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/webView"/>-->
+
+            <WebView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/wv_game_pic"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/logo_icon"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/iv_game_designer_logo"
+                android:layout_below="@+id/wv_game_pic"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Medium Text"
+                android:id="@+id/tv_game_desc"
+                android:layout_below="@+id/iv_game_designer_logo"
+                android:layout_centerHorizontal="true"/>
+        </RelativeLayout>
+    </ScrollView>
+
+
+    <!--footer-->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/ll_game_cover_pg_footer"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/fl_reset_btnbox"
+            android:background="@android:color/holo_red_light"
+            android:clickable="true"
+            android:onClick="onClickResetGame"
+            android:nestedScrollingEnabled="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Reset"
+                android:id="@+id/tv_reset"
+                android:clickable="true"
+                android:onClick="onClickResetGame"
+                android:layout_gravity="center"
+                android:textColor="@android:color/white"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:onClick="onClickResumeGame"
+            android:id="@+id/fl_resume_btnbox"
+            android:background="@android:color/darker_gray">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Resume"
+                android:id="@+id/tv_resume"
+                android:layout_gravity="center"
+                android:textColor="@android:color/white"
+                android:clickable="true"
+                android:onClick="onClickResumeGame"
+                android:nestedScrollingEnabled="true"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:onClick="onClickNewGame"
+            android:id="@+id/fl_newgame_btnbox"
+            android:background="@android:color/darker_gray"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="New Game"
+                android:id="@+id/tv_resume"
+                android:layout_gravity="center"
+                android:textColor="@android:color/white"
+                android:clickable="true"
+                android:onClick="onClickNewGame"
+                android:nestedScrollingEnabled="true"
+                />
+        </FrameLayout>
+    </LinearLayout>
+
+</RelativeLayout>
