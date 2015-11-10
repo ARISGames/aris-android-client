@@ -25,22 +25,22 @@ public class PollTimerService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 //		customHandler.postDelayed(updateTimerThread, 0);
 		int i = 1;
-		Log.d("SEM", "OnHandleIntent Called. ");
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "OnHandleIntent Called. ");
 		while (runTimer) {
 			sendUpdateMessage(i++);
 			try
 			{
-				Thread.sleep(1000);
+				Thread.sleep(10000);
 			}
 			catch(Exception e)
 			{
-				Log.d("KBR", "SendError: " + e.getMessage());
+				Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "SendError: " + e.getMessage());
 			}
 		}
 	}
 
 	private void sendUpdateMessage(int pct) {
-		Log.d("SEM", "Broadcasting update message: " + pct);
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Broadcasting update message: " + pct);
 		Intent intent = new Intent(AppConfig.POLLTIMER_SVC_ACTION);
 		intent.putExtra(AppConfig.COMMAND, AppConfig.POLLTIMER_CYCLE_PASS);
 		intent.putExtra(AppConfig.DATA, pct);
@@ -48,7 +48,7 @@ public class PollTimerService extends IntentService {
 	}
 
 	private void sendResultMessage(String data) {
-		Log.d("SEM", "Broadcasting result message: " + data);
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Broadcasting result message: " + data);
 		Intent intent = new Intent(AppConfig.POLLTIMER_SVC_ACTION);
 		intent.putExtra(AppConfig.COMMAND, AppConfig.POLLTIMER_RESULT);
 		intent.putExtra(AppConfig.DATA, data);

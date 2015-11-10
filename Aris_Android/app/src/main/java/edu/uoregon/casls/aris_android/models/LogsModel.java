@@ -7,14 +7,14 @@ import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.data_objects.Game;
-import edu.uoregon.casls.aris_android.data_objects.Log;
+import edu.uoregon.casls.aris_android.data_objects.ArisLog;
 
 /**
  * Created by smorison on 8/20/15.
  */
 public class LogsModel extends ARISModel {
 
-	public Map<Long, Log> logs = new LinkedHashMap<>();
+	public Map<Long, ArisLog> logs = new LinkedHashMap<>();
 	public long local_log_id; //starts at 1, no way it will ever catch up to actual logs
 
 	public transient GamePlayActivity mGamePlayAct;
@@ -39,13 +39,13 @@ public class LogsModel extends ARISModel {
 		n_game_data_received = 0;
 	}
 
-	public void logsReceived(List<Log> logs) {
+	public void logsReceived(List<ArisLog> logs) {
 		this.updateLogs(logs);
 	}
 
-	public void updateLogs(List<Log> newLogs) {
+	public void updateLogs(List<ArisLog> newLogs) {
 		long newLogId;
-		for (Log newLog : newLogs) {
+		for (ArisLog newLog : newLogs) {
 			newLogId = newLog.log_id;
 			if (!logs.containsKey(newLogId))
 				logs.put(newLogId, newLog); // setObject:newLog forKey:newLogId);
@@ -56,7 +56,7 @@ public class LogsModel extends ARISModel {
 	}
 
 	public void addLogType(String type, long content_id, long qty) {
-		Log l = new Log();
+		ArisLog l = new ArisLog();
 		l.log_id = local_log_id++;
 		l.event_type = type;
 		l.content_id = content_id;
@@ -68,7 +68,7 @@ public class LogsModel extends ARISModel {
 		mGamePlayAct.mServices.fetchLogsForPlayer();
 	}
 
-	public Log logForId(long log_id) {
+	public ArisLog logForId(long log_id) {
 		return logs.get(log_id); // objectForKey:[NSNumber numberWithLong:log_id]);
 	}
 
@@ -202,8 +202,8 @@ public class LogsModel extends ARISModel {
 	}
 
 	public boolean hasLogType(String type) {
-		Collection<Log> alllogs = logs.values();
-		for (Log l : alllogs) {
+		Collection<ArisLog> alllogs = logs.values();
+		for (ArisLog l : alllogs) {
 			if (l.event_type.contentEquals(type))
 				return true;
 		}
@@ -211,8 +211,8 @@ public class LogsModel extends ARISModel {
 	}
 
 	public boolean hasLogType(String type, long content_id) {
-		Collection<Log> alllogs = logs.values();
-		for (Log l : alllogs) {
+		Collection<ArisLog> alllogs = logs.values();
+		for (ArisLog l : alllogs) {
 			if (l.event_type.contentEquals(type) &&
 					l.content_id == content_id)
 				return true;
@@ -221,8 +221,8 @@ public class LogsModel extends ARISModel {
 	}
 
 	public boolean hasLogType(String type, long content_id, long qty) {
-		Collection<Log> alllogs = logs.values();
-		for (Log l : alllogs) {
+		Collection<ArisLog> alllogs = logs.values();
+		for (ArisLog l : alllogs) {
 			if (l.event_type.contentEquals(type) &&
 					l.content_id == content_id &&
 					l.qty == qty)

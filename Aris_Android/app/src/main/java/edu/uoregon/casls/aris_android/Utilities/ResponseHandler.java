@@ -12,11 +12,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
+import edu.uoregon.casls.aris_android.data_objects.ArisLog;
 import edu.uoregon.casls.aris_android.data_objects.Dialog;
 import edu.uoregon.casls.aris_android.data_objects.DialogCharacter;
 import edu.uoregon.casls.aris_android.data_objects.DialogOption;
@@ -181,6 +183,19 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mGame.itemsModel.itemsReceived(newItems);
 				}
 			}
+			else if (callingReq.equals(Calls.HTTP_GET_LOGS_4_PLAYER)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					List<ArisLog> newLogs = new ArrayList<>();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						ArisLog log = gson.fromJson(dataStr, ArisLog.class);
+						newLogs.add(log);
+					}
+					mGamePlayAct.mDispatch.services_player_logs_received(newLogs); //_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_LOGS_RECEIVED", nil, @{@"logs":logs});
+				}
+			}
 			else if (callingReq.equals(Calls.HTTP_GET_MEDIA_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -232,7 +247,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						ObjectTag objTag = gson.fromJson(dataStr, ObjectTag.class);
-						//populate hashmap as object_tag_id, ObjectTag Obj>
+						//populate list
 						objectTags.add(objTag);
 					}
 					mGamePlayAct.mDispatch.services_object_tags_received(objectTags);
@@ -246,10 +261,24 @@ public class ResponseHandler { // for now only handles responses with respect to
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						Overlay overlay = gson.fromJson(dataStr, Overlay.class);
-						//populate hashmap as overlayr_id, Overlay Obj>
+						//populate list>
 						overlays.add(overlay);
 					}
 					mGamePlayAct.mDispatch.services_overlays_received(overlays);
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_OVERLAYS_4_PLAYER)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					List<Overlay> overlays = new LinkedList<>();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						Overlay overlay = gson.fromJson(dataStr, Overlay.class);
+						//populate list
+						overlays.add(overlay);
+					}
+					mGamePlayAct.mDispatch.services_player_overlays_received(overlays); //_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_OVERLAYS_RECEIVED", nil, @{@"overlays":overlays});
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_PLAQUES_4_GAME)) {
@@ -260,7 +289,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						Plaque plaque = gson.fromJson(dataStr, Plaque.class);
-						//populate hashmap as <plaque_id, Plaque Obj>
+						//populate list
 						plaques.add(plaque);
 						mGamePlayAct.mGame.plaquesModel.plaques.put(plaque.plaque_id, plaque);
 					}
@@ -279,6 +308,33 @@ public class ResponseHandler { // for now only handles responses with respect to
 						quests.add(quest);
 					}
 					mGamePlayAct.mDispatch.services_quests_received(quests);
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_QUESTS_4_PLAYER)) {
+				if (jsonReturn.has("data")) {
+					JSONObject jsonData = jsonReturn.getJSONObject("data");
+					Map<String, List<Quest>> playerQuests = new LinkedHashMap<>();
+					List<Quest> activeQuests = new ArrayList<>();
+					playerQuests.put("active", activeQuests);
+					List<Quest> completeQuests = new ArrayList<>();
+					playerQuests.put("complete", completeQuests);
+					Gson gson = new Gson();
+
+					JSONArray jsonActive = jsonData.getJSONArray("active");
+					for (int i = 0; i < jsonActive.length(); i++) {
+						String dataStr = jsonActive.getJSONObject(i).toString();
+						Quest quest = gson.fromJson(dataStr, Quest.class);
+						//populate hashmap as "active", Quest Obj>
+						playerQuests.get("active").add(quest);
+					}
+					JSONArray jsonComplete = jsonData.getJSONArray("complete");
+					for (int i = 0; i < jsonComplete.length(); i++) {
+						String dataStr = jsonComplete.getJSONObject(i).toString();
+						Quest quest = gson.fromJson(dataStr, Quest.class);
+						//populate hashmap as "active", Quest Obj>
+						playerQuests.get("complete").add(quest);
+					}
+					mGamePlayAct.mDispatch.services_player_quests_received(playerQuests);
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_REQ_AND_PKGS_4_GAME)) {
@@ -323,6 +379,18 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_requirement_root_packages_received(reqRoots);
 				}
 			}
+			else if (callingReq.equals(Calls.HTTP_GET_SCENE_4_PLAYER)) {
+				if (jsonReturn.has("data")) {
+					JSONObject jsonData = jsonReturn.getJSONObject("data");
+					Gson gson = new Gson();
+					Scene s;
+					if (jsonData != null)
+						s = gson.fromJson(jsonData.toString(), Scene.class);
+					else
+						s = new Scene(); //[[Scene alloc] init];
+					mGamePlayAct.mDispatch.services_player_scene_received(s);  //_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_SCENE_RECEIVED", nil, @{@"scene":s});
+				}
+			}
 			else if (callingReq.contentEquals(Calls.HTTP_GET_SCENES_4_GAME)) { // parse array of returns scenes
 				// Response looks like this:
 				// {"data":[{"scene_id":"98","game_id":"78","name":"James J Hill","description":"","editor_x":"0","editor_y":"0"}],"returnCode":0,"returnCodeDescription":null}
@@ -358,6 +426,20 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_tabs_received(tabs);
 				}
 			}
+			else if (callingReq.equals(Calls.HTTP_GET_TABS_4_PLAYER)) { // returns array of teh items for the game mode drawer
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					List<Tab> tabs = new LinkedList<>();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						Tab tab = gson.fromJson(dataStr, Tab.class);
+						//populate hashmap as tab_id, Tab Obj>
+						tabs.add(tab);
+					}
+					mGamePlayAct.mDispatch.services_player_tabs_received(tabs); // SERVICES_PLAYER_TABS_RECEIVED
+				}
+			}
 			else if (callingReq.equals(Calls.HTTP_GET_TAGS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -384,6 +466,20 @@ public class ResponseHandler { // for now only handles responses with respect to
 						triggers.add(trigger);
 					}
 					mGamePlayAct.mDispatch.services_triggers_received(triggers);
+				}
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_TRIGGERS_4_PLAYER)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					List<Trigger> triggers = new LinkedList<>();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						Trigger trigger = gson.fromJson(dataStr, Trigger.class);
+						//populate hashmap as trigger_id, Quest Obj>
+						triggers.add(trigger);
+					}
+					mGamePlayAct.mDispatch.services_player_triggers_received(triggers);
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_USERS_4_GAME)) {

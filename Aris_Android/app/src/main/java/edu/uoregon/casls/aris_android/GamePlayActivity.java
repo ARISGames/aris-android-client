@@ -136,6 +136,18 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	}
 
+	@Override
+	public void onStop() {
+//		mGame.pauseGame(); // not sure if this might be needed for android lifecycle control of game.
+		super.onStop();
+	}
+
+	@Override
+	public void onDestroy() {
+		mGame.gameLeft();
+		super.onDestroy();
+	}
+
 	public void dropItem(long item_id, long qty) {
 
 	}

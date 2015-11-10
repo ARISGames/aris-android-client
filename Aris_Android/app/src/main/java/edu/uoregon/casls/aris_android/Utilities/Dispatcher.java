@@ -1,10 +1,13 @@
 package edu.uoregon.casls.aris_android.Utilities;
 
+import android.util.Log;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
+import edu.uoregon.casls.aris_android.data_objects.ArisLog;
 import edu.uoregon.casls.aris_android.data_objects.Dialog;
 import edu.uoregon.casls.aris_android.data_objects.DialogCharacter;
 import edu.uoregon.casls.aris_android.data_objects.DialogOption;
@@ -506,6 +509,9 @@ public class Dispatcher {
 	}
 
 	//	SERVICES_PLAYER_LOGS_RECEIVED", nil, @{@"logs":logs});
+	public void services_player_logs_received(List<ArisLog> newLogs) {
+		mGamePlayAct.mGame.logsModel.logsReceived(newLogs);
+	}
 //	SERVICES_PLAYER_OVERLAYS_RECEIVED", nil, @{@"overlays":overlays});
 //	SERVICES_PLAYER_OVERLAYS_RECEIVED",nil,@{@"triggers":ptrigs});
 	public void services_player_overlays_received(List<Overlay> overlays) {
@@ -535,7 +541,7 @@ public class Dispatcher {
 	}
 
 	//	SERVICES_PLAYER_TRIGGERS_RECEIVED",nil,@{@"triggers":ptrigs});
-	public void services_player_trigger_received(List<Trigger> ptrigs) {
+	public void services_player_triggers_received(List<Trigger> ptrigs) {
 		// todo: MapViewController.refreshViewFromModel(ptrigs)
 		// todo: NotebookNotesViewController.newNoteListAvailable()
 		mGamePlayAct.mGame.notesModel.invalidateCaches();
@@ -610,6 +616,7 @@ public class Dispatcher {
 		// todo: also MapViewController.playerMoved()
 
 	}
+
 
 
 //	WIFI_CONNECTED",self,nil); break;

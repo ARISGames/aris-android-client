@@ -97,7 +97,8 @@ public class Game {
 	public boolean notebook_allow_player_tags;
 
 	public long inventory_weight_cap;
-	public String network_level = "";
+//	public String network_level = "";
+	public String network_level;
 	public boolean allow_download;
 	public boolean preload_media;
 	public long version;
@@ -182,7 +183,7 @@ public class Game {
 //		if (jsonGame.has("tick_delay") && !jsonGame.getString("tick_delay").equals("null"))
 //			tick_delay = Long.parseLong(jsonGame.getString("tick_delay"));
 		if (jsonGame.has("intro_scene_id") && !jsonGame.getString("intro_scene_id").equals("null"))
-			icon_media_id = Long.parseLong(jsonGame.getString("intro_scene_id"));
+			intro_scene_id = Long.parseLong(jsonGame.getString("intro_scene_id"));
 		if (jsonGame.has("icon_media_id") && !jsonGame.getString("icon_media_id").equals("null"))
 			icon_media_id = Long.parseLong(jsonGame.getString("icon_media_id"));
 		if (jsonGame.has("media_id") && !jsonGame.getString("media_id").equals("null"))
@@ -191,9 +192,9 @@ public class Game {
 			location.setLatitude(Double.parseDouble(jsonGame.getString("latitude")));
 		if (jsonGame.has("longitude") && !jsonGame.getString("longitude").equals("null"))
 			location.setLongitude(Double.parseDouble(jsonGame.getString("longitude")));
-		if (jsonGame.has("map_focus"))
-			map_type = jsonGame.getString("map_focus");
-		if (jsonGame.has("map_type"))
+		if (jsonGame.has("map_focus") && !jsonGame.getString("map_focus").equals("null"))
+			map_focus = jsonGame.getString("map_focus");
+		if (jsonGame.has("map_type") && !jsonGame.getString("map_type").equals("null"))
 			map_type = jsonGame.getString("map_type");
 		if (jsonGame.has("map_latitude") && !jsonGame.getString("map_latitude").equals("null"))
 			map_location.setLatitude(Double.parseDouble(jsonGame.getString("map_latitude")));
@@ -208,7 +209,7 @@ public class Game {
 		if (jsonGame.has("map_offsite_mode") && !jsonGame.getString("map_offsite_mode").equals("null"))
 			map_offsite_mode = Boolean.parseBoolean(jsonGame.getString("map_offsite_mode"));
 		if (jsonGame.has("network_level") && !jsonGame.getString("network_level").equals("null"))
-			notebook_allow_comments = Boolean.parseBoolean(jsonGame.getString("network_level"));
+			network_level = jsonGame.getString("network_level");
 		if (jsonGame.has("notebook_allow_comments") && !jsonGame.getString("notebook_allow_comments").equals("null"))
 			notebook_allow_comments = Boolean.parseBoolean(jsonGame.getString("notebook_allow_comments"));
 		if (jsonGame.has("notebook_allow_likes") && !jsonGame.getString("notebook_allow_likes").equals("null"))
@@ -218,17 +219,17 @@ public class Game {
 		if (jsonGame.has("published") && !jsonGame.getString("published").equals("null"))
 			published = Boolean.parseBoolean(jsonGame.getString("published"));
 		if (jsonGame.has("preload_media") && !jsonGame.getString("preload_media").equals("null"))
-			published = Boolean.parseBoolean(jsonGame.getString("preload_media"));
-		if (jsonGame.has("type"))
+			preload_media = Boolean.parseBoolean(jsonGame.getString("preload_media"));
+		if (jsonGame.has("type") && !jsonGame.getString("type").equals("null"))
 			type = jsonGame.getString("type");
 		if (jsonGame.has("intro_scene_id") && !jsonGame.getString("intro_scene_id").equals("null"))
 			intro_scene_id = Long.parseLong(jsonGame.getString("intro_scene_id"));
 		if (jsonGame.has("player_count") && !jsonGame.getString("player_count").equals("null"))
 			player_count = Long.parseLong(jsonGame.getString("player_count"));
 		if (jsonGame.has("inventory_weight_cap") && !jsonGame.getString("inventory_weight_cap").equals("null"))
-			player_count = Long.parseLong(jsonGame.getString("inventory_weight_cap"));
+			inventory_weight_cap = Long.parseLong(jsonGame.getString("inventory_weight_cap"));
 		if (jsonGame.has("version") && !jsonGame.getString("version").equals("null"))
-			player_count = Long.parseLong(jsonGame.getString("version"));
+			version = Long.parseLong(jsonGame.getString("version"));
 
 		//not found in basic game data apparently, at least not here in Game() see full game init
 //		jsonGame.getString("inventory_weight_cap");
@@ -520,7 +521,10 @@ public class Game {
 	}
 
 	public void gameLeft() {
-//		poller invalidate();
+		if (isPollTImerRunning) {
+			mGamePlayAct.stopService(pollTimerSvcIntent);
+			isPollTImerRunning = false;
+		}
 	}
 
 	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
