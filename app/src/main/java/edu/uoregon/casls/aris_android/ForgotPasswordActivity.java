@@ -13,6 +13,7 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ForgotPasswordActivity extends ActionBarActivity implements LoaderCallbacks<Cursor> {
+public class ForgotPasswordActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
 	/**
 	 * A dummy authentication store containing known user names and passwords.

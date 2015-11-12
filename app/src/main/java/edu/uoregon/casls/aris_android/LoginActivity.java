@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -51,7 +52,7 @@ import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
 	private static final String HTTP_CLIENT_LOGIN_REQ_API = "v2.users.logIn/";
 	private final static String TAG_SERVER_ERROR = "server_error";

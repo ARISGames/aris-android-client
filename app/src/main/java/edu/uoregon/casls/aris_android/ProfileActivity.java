@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.support.annotation.IntegerRes;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +25,7 @@ import org.json.JSONObject;
 
 import edu.uoregon.casls.aris_android.data_objects.User;
 
-public class ProfileActivity extends ActionBarActivity {
+public class ProfileActivity extends AppCompatActivity {
 
 	private User user;
 

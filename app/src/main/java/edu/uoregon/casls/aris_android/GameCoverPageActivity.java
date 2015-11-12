@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -39,7 +40,7 @@ import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.User;
 
-public class GameCoverPageActivity extends ActionBarActivity {
+public class GameCoverPageActivity extends AppCompatActivity {
 	private static final String HTTP_GET_PLAYER_PLAYED_GAME_REQ_API = "v2.client.getPlayerPlayedGame/";
 	private static final String HTTP_LOG_PLAYER_RESET_GAME = "v2.client.logPlayerResetGame/";
 	private final static String TAG_SERVER_SUCCESS = "success";

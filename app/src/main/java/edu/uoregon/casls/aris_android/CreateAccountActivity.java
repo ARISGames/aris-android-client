@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -35,7 +36,7 @@ import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 
 
-public class CreateAccountActivity extends ActionBarActivity {
+public class CreateAccountActivity extends AppCompatActivity {
 	private static final String HTTP_CLIENT_CREATE_USER_REQ_API = "v2.users.createUser/";
 	private final static String TAG_SERVER_SUCCESS = "success";
 	private AutoCompleteTextView mAcTvEmail;
