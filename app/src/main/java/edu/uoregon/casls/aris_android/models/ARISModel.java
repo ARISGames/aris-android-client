@@ -10,7 +10,7 @@ public class ARISModel {
 	public long n_maintenance_data_received;
 	public long n_player_data_received;
 
-	public void requestGameData() { }
+	public void requestGameData() { } // test comment for git push
 	public void requestMaintenanceData() { }
 	public void requestPlayerData() { }
 	public void clearGameData() { this.clearPlayerData(); }
@@ -25,7 +25,6 @@ public class ARISModel {
 	public void initContext(GamePlayActivity gamePlayAct) { // for visibility to game play activity elements
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
 	}
-
 
 	public long nGameDataReceived() {
 		if(n_game_data_received > this.nGameDataToReceive()) return this.nGameDataToReceive();
