@@ -149,9 +149,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 	public void onResume() {
 		super.onResume();
 		if (AppConfig.DEBUG_ON) { // preset the input fields to save time during testing.
-			mEtUsername.setText("testUser"); // arisgames.org
+			mEtUsername.setText("scotta"); // arisgames.org
 //			mEtUsername.setText("scott"); // localhost
-			mEtPassword.setText("password");
+			mEtPassword.setText("123123");
 		}
 		else {
 			mEtUsername.setText("");
