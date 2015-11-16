@@ -167,6 +167,31 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 						.replace(R.id.container, GamePlayMapFragment.newInstance(position + 1))
 						.commit();
 				break;
+			case 2:
+				fragmentManager.beginTransaction()
+						.replace(R.id.container, GamePlayInventoryFragment.newInstance(position + 1))
+						.commit();
+				break;
+			case 3:
+				fragmentManager.beginTransaction()
+						.replace(R.id.container, GamePlayScannerFragment.newInstance(position + 1))
+						.commit();
+				break;
+			case 4:
+				fragmentManager.beginTransaction()
+						.replace(R.id.container, GamePlayDecoderFragment.newInstance(position + 1))
+						.commit();
+				break;
+			case 5:
+				fragmentManager.beginTransaction()
+						.replace(R.id.container, GamePlayPlayerFragment.newInstance(position + 1))
+						.commit();
+				break;
+			case 6:
+				fragmentManager.beginTransaction()
+						.replace(R.id.container, GamePlayNotebookFragment.newInstance(position + 1))
+						.commit();
+				break;
 		}
 	}
 
@@ -183,6 +208,31 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		else if (itemName.equals("Map")) {
 				fragmentManager.beginTransaction()
 						.replace(R.id.container, GamePlayMapFragment.newInstance(itemName))
+						.commit();
+		}
+		else if (itemName.equals("Inventory")) {
+				fragmentManager.beginTransaction()
+						.replace(R.id.container, GamePlayInventoryFragment.newInstance(itemName))
+						.commit();
+		}
+		else if (itemName.equals("Scanner")) {
+				fragmentManager.beginTransaction()
+						.replace(R.id.container, GamePlayScannerFragment.newInstance(itemName))
+						.commit();
+		}
+		else if (itemName.equals("Decoder")) {
+				fragmentManager.beginTransaction()
+						.replace(R.id.container, GamePlayDecoderFragment.newInstance(itemName))
+						.commit();
+		}
+		else if (itemName.equals("Player")) {
+				fragmentManager.beginTransaction()
+						.replace(R.id.container, GamePlayPlayerFragment.newInstance(itemName))
+						.commit();
+		}
+		else if (itemName.equals("Notebook")) {
+				fragmentManager.beginTransaction()
+						.replace(R.id.container, GamePlayNotebookFragment.newInstance(itemName))
 						.commit();
 		}
 	}
