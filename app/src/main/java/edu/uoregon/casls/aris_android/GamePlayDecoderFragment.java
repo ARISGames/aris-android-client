@@ -54,7 +54,7 @@ public class GamePlayDecoderFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		View rootView = inflater.inflate(R.layout.fragment_game_play_scanner, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_game_play_decoder, container, false);
 		return rootView;
 	}
 
