@@ -3,27 +3,44 @@ package edu.uoregon.casls.aris_android;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
+import android.content.CursorLoader;
+import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.provider.ContactsContract;
-import android.support.v7.app.ActionBarActivity;
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.app.LoaderManager.LoaderCallbacks;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.Header;
+import org.apache.http.entity.StringEntity;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.uoregon.casls.aris_android.Utilities.AppConfig;
+import edu.uoregon.casls.aris_android.Utilities.AppUtils;
+import edu.uoregon.casls.aris_android.Utilities.Calls;
 
 
 public class ForgotPasswordActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
@@ -49,7 +66,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements LoaderC
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_forgot_password);
 
-		mAcTvEmail = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
+		mAcTvEmail = (AutoCompleteTextView) findViewById(R.id.actv_email_address);
 		populateAutoComplete();
 
 		mAcTvEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -64,11 +81,108 @@ public class ForgotPasswordActivity extends AppCompatActivity implements LoaderC
 		});
 
 		mResetPasswordFormView = findViewById(R.id.scrollvw_for_pw_reset_form);
-		mProgressView = findViewById(R.id.login_progress);
+		mProgressView = findViewById(R.id.network_req_progress);
 	}
 
 	private void populateAutoComplete() {
 		getLoaderManager().initLoader(0, null, this);
+	}
+
+
+	private void pollServer() {
+		RequestParams rqParams = new RequestParams();
+//		JSONObject jsonParams = new JSONObject();
+
+		final Context context = this;
+		String request_url = AppConfig.SERVER_URL_MOBILE + Calls.HTTP_USER_REQ_FORGOT_PASSWD;
+
+		rqParams.put("request", Calls.HTTP_USER_REQ_FORGOT_PASSWD);
+
+		JSONObject jsonParams;
+		jsonParams = new JSONObject();
+		StringEntity entity;
+		entity = null;
+
+		try {
+			jsonParams.put("email", mAcTvEmail.getText().toString());
+			jsonParams.put("permission", "read_write");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Json string Req to server: " + jsonParams);
+
+		try {
+			entity = new StringEntity(jsonParams.toString());
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		/*
+		client.post(context, restApiUrl, entity, "application/json",
+                responseHandler);
+		 */
+		// post data should look like this: {"password":"123123","permission":"read_write","user_name":"scott"}
+		if (AppUtils.isNetworkAvailable(getApplicationContext())) {
+			AsyncHttpClient client = new AsyncHttpClient();
+
+			client.post(context, request_url, entity, "application/json", new JsonHttpResponseHandler() {
+				@Override
+				public void onSuccess(int statusCode, Header[] headers, JSONObject jsonReturn) {
+					showProgress(false);
+					processJsonHttpResponse(Calls.HTTP_USER_REQ_FORGOT_PASSWD, AppConfig.TAG_SERVER_SUCCESS, jsonReturn);
+
+				}
+
+				@Override
+				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+					Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient failed server call. ", throwable);
+					showProgress(false);
+					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
+							Toast.LENGTH_SHORT);
+					t.setGravity(Gravity.CENTER, 0, 0);
+					t.show();
+					super.onFailure(statusCode, headers, responseString, throwable);
+				}
+			});
+		}
+		else {
+			Toast t = Toast.makeText(getApplicationContext(), "You are not connected to the internet currently. Please try again later.",
+					Toast.LENGTH_SHORT);
+			t.setGravity(Gravity.CENTER, 0, 0);
+			t.show();
+		}
+	}
+
+	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) {
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Return status to server Req: " + jsonReturn.toString());
+		if (callingReq.equals(Calls.HTTP_USER_REQ_FORGOT_PASSWD)) {
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Landed successfully in colling Req: " + Calls.HTTP_USER_REQ_FORGOT_PASSWD);
+			try {
+				// check for login denial response from server
+				if (jsonReturn.has(AppConfig.SVR_RETURN_CODE) && jsonReturn.getInt(AppConfig.SVR_RETURN_CODE) > 0) {
+					// note: this is just here in case someday the server side validates the email address. Right now it doesn't.
+					// This is probably a good thing since it's a potential data exploit if it did.
+					Toast t = Toast.makeText(getApplicationContext(), "This email address was not recognized by the server. Please try again.",
+							Toast.LENGTH_LONG);
+					t.setGravity(Gravity.CENTER, 0, 0);
+					t.show();
+				}
+				else { // Call was successful. Rest email should have been sent. Return to login screen.
+					finish();
+				}
+			} catch (JSONException e) {
+				Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "Failed while parsing returning JSON from request:" + Calls.HTTP_USER_REQ_FORGOT_PASSWD + " Error reported was: " + e.getCause());
+				e.printStackTrace();
+			}
+		}
+		else { // unknown callinRequest
+			Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient returned unknown server callingReq: " + callingReq);
+			Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
+					Toast.LENGTH_SHORT);
+			t.setGravity(Gravity.CENTER, 0, 0);
+			t.show();
+
+		}
 	}
 
 	@Override
@@ -202,8 +316,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements LoaderC
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
 			showProgress(true);
-			mAuthTask = new ServerReqestTask(email);
-			mAuthTask.execute((Void) null);
+			pollServer();
+//			mAuthTask = new ServerReqestTask(email);
+//			mAuthTask.execute((Void) null);
 		}
 	}
 

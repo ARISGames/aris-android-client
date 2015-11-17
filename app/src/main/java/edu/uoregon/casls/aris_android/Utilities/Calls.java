@@ -51,6 +51,11 @@ public class Calls {
 	public static final String HTTP_LOG_PLAYER_BEGAN_GAME 	= "v2.client.logPlayerBeganGame/"; // "game_id","scene_id"
 	public static final String HTTP_LOG_PLAYER_MOVED 		= "v2.client.logPlayerMoved/"; // "game_id","scene_id"
 
+	// Client utility calls
+	public static final String HTTP_USER_LOGIN_REQ_API = "v2.users.logIn/";
+	public static final String HTTP_USER_REQ_FORGOT_PASSWD = "v2.users.requestForgotPasswordEmail/";
+
+
 
 	public static final String HTTP_GET_NOTE = "v2.notes.getNote/"; // todo check this call syntax and server prefix paths
 }

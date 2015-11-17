@@ -1,7 +1,5 @@
 package edu.uoregon.casls.aris_android.Utilities;
 
-import android.graphics.drawable.Drawable;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -12,13 +10,13 @@ import edu.uoregon.casls.aris_android.R;
  */
 public class AppConfig {
 
-//	public static final String SERVER_URL_BASE = "http://10.223.178.105"; //localhost
+	//	public static final String SERVER_URL_BASE = "http://10.223.178.105"; //localhost
 	public static final String SERVER_URL_BASE = "http://arisgames.org"; //aris server
 	public static final String SERVER_URL_MOBILE = SERVER_URL_BASE + "/server/json.php/";
 	public static final String LOGTAG = "ARIS_ANDROID";
 
-	public final static Boolean DEBUG_ON = true; //todo: Make sure to turn this off for release version
-	public final static Boolean FAKE_GOOD_LOGIN = false; //todo: Make sure to turn this off for release version
+	public static final Boolean DEBUG_ON = true; //todo: Make sure to turn this off for release version
+	public static final Boolean FAKE_GOOD_LOGIN = false; //todo: Make sure to turn this off for release version
 
 	// PollTimer Consts
 	public static final int POLLTIMER_CYCLE_PASS = 1;
@@ -33,7 +31,7 @@ public class AppConfig {
 
 
 	public static final String[] gameDrawerList = {
-		// moved to strings.xml for proper internationalization potential
+			// moved to strings.xml for proper internationalization potential
 	};
 
 
