@@ -45,18 +45,6 @@ import edu.uoregon.casls.aris_android.Utilities.Calls;
 
 public class ForgotPasswordActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
-	/**
-	 * A dummy authentication store containing known user names and passwords.
-	 * TODO: remove after connecting to a real authentication system.
-	 */
-	private static final String[] DUMMY_CREDENTIALS = new String[]{
-			"foo@example.com:hello", "bar@example.com:world"
-	};
-	/**
-	 * Keep track of the login task to ensure we can cancel it if requested.
-	 */
-	private ServerReqestTask mAuthTask = null;
-
 	private AutoCompleteTextView mAcTvEmail;
 	private View mProgressView;
 	private View mResetPasswordFormView;
@@ -91,7 +79,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements LoaderC
 
 	private void pollServer() {
 		RequestParams rqParams = new RequestParams();
-//		JSONObject jsonParams = new JSONObject();
 
 		final Context context = this;
 		String request_url = AppConfig.SERVER_URL_MOBILE + Calls.HTTP_USER_REQ_FORGOT_PASSWD;
@@ -117,11 +104,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements LoaderC
 			e.printStackTrace();
 		}
 
-		/*
-		client.post(context, restApiUrl, entity, "application/json",
-                responseHandler);
-		 */
-		// post data should look like this: {"password":"123123","permission":"read_write","user_name":"scott"}
 		if (AppUtils.isNetworkAvailable(getApplicationContext())) {
 			AsyncHttpClient client = new AsyncHttpClient();
 
@@ -167,7 +149,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements LoaderC
 					t.setGravity(Gravity.CENTER, 0, 0);
 					t.show();
 				}
-				else { // Call was successful. Rest email should have been sent. Return to login screen.
+				else { // Call was successful. Reset email should have been sent. Return to login screen.
 					finish();
 				}
 			} catch (JSONException e) {
@@ -277,14 +259,11 @@ public class ForgotPasswordActivity extends AppCompatActivity implements LoaderC
 	}
 
 	/**
-	 * Attempts to sign in or register the account specified by the login form.
-	 * If there are form errors (invalid email, missing fields, etc.), the
-	 * errors are presented and no actual login attempt is made.
+	 * Checks the Email field for a valid entry.
+	 * If there are form errors, the
+	 * errors are presented and no actual server call is made.
 	 */
 	public void attemptToSubmitForm() {
-		if (mAuthTask != null) {
-			return;
-		}
 
 		// Reset errors.
 		mAcTvEmail.setError(null);
@@ -317,11 +296,8 @@ public class ForgotPasswordActivity extends AppCompatActivity implements LoaderC
 			// perform the user login attempt.
 			showProgress(true);
 			pollServer();
-//			mAuthTask = new ServerReqestTask(email);
-//			mAuthTask.execute((Void) null);
 		}
 	}
-
 
 	private boolean isEmailValid(String email) {
 		if (email == null) {
@@ -342,62 +318,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements LoaderC
 		super.finish();
 		// tell transitioning activities how to slide. eg: overridePendingTransition(howThisMovesOut, howNewMovesIn) -sem
 		overridePendingTransition(R.animator.slide_out_to_right, R.animator.slide_in_from_left);
-	}
-
-	/**
-	 * Represents an asynchronous login/registration task used to authenticate
-	 * the user.
-	 */
-	public class ServerReqestTask extends AsyncTask<Void, Void, Boolean> {
-
-		private final String mEmail;
-
-		ServerReqestTask(String email) {
-			mEmail = email;
-		}
-
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
-
-			try {
-				// Simulate network access.
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				return false;
-			}
-
-			for (String credential : DUMMY_CREDENTIALS) {
-				String[] pieces = credential.split(":");
-				if (pieces[0].equals(mEmail)) {
-					// Account exists, return true if the password matches.
-					return pieces[1].equals(mEmail);
-				}
-			}
-
-			// TODO: register the new account here.
-			return true;
-		}
-
-		@Override
-		protected void onPostExecute(final Boolean success) {
-			mAuthTask = null;
-			showProgress(false);
-
-			if (success) {
-				finish();
-			}
-			else {
-				// something not happ'nin' Perhaps show an error now.
-
-			}
-		}
-
-		@Override
-		protected void onCancelled() {
-			mAuthTask = null;
-			showProgress(false);
-		}
 	}
 
 }
