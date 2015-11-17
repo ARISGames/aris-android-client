@@ -15,7 +15,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -47,6 +46,7 @@ import com.loopj.android.http.RequestParams;
 
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.Utilities.AppConfig;
+import edu.uoregon.casls.aris_android.Utilities.Calls;
 
 
 /**
@@ -54,9 +54,7 @@ import edu.uoregon.casls.aris_android.Utilities.AppConfig;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
-	private static final String HTTP_CLIENT_LOGIN_REQ_API = "v2.users.logIn/";
 	private final static String TAG_SERVER_ERROR = "server_error";
-	private final static String TAG_SERVER_SUCCESS = "success";
 	private final static String TAG_ERROR = "error";
 	private static final int CREATE_ACCOUNT_REQ_CODE = 222;
 
@@ -151,7 +149,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 		if (AppConfig.DEBUG_ON) { // preset the input fields to save time during testing.
 			mEtUsername.setText("scotta"); // arisgames.org
 //			mEtUsername.setText("scott"); // localhost
-			mEtPassword.setText("123123");
+			mEtPassword.setText("112233");
 		}
 		else {
 			mEtUsername.setText("");
@@ -267,9 +265,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //		JSONObject jsonParams = new JSONObject();
 
 		final Context context = this;
-		String request_url = AppConfig.SERVER_URL_MOBILE + HTTP_CLIENT_LOGIN_REQ_API;
+		String request_url = AppConfig.SERVER_URL_MOBILE + Calls.HTTP_USER_LOGIN_REQ_API;
 
-		rqParams.put("request", HTTP_CLIENT_LOGIN_REQ_API);
+		rqParams.put("request", Calls.HTTP_USER_LOGIN_REQ_API);
 
 		JSONObject jsonParams;
 		jsonParams = new JSONObject();
@@ -303,7 +301,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 				@Override
 				public void onSuccess(int statusCode, Header[] headers, JSONObject jsonReturn) {
 					showProgress(false);
-					processJsonHttpResponse(HTTP_CLIENT_LOGIN_REQ_API, TAG_SERVER_SUCCESS, jsonReturn);
+					processJsonHttpResponse(Calls.HTTP_USER_LOGIN_REQ_API, AppConfig.TAG_SERVER_SUCCESS, jsonReturn);
 
 				}
 				@Override
@@ -328,8 +326,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) {
 		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Return status to server Req: " + jsonReturn.toString());
- 		if (callingReq.equals(HTTP_CLIENT_LOGIN_REQ_API)) {
-			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Landed successfully in colling Req: " + HTTP_CLIENT_LOGIN_REQ_API);
+ 		if (callingReq.equals(Calls.HTTP_USER_LOGIN_REQ_API)) {
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Landed successfully in colling Req: " + Calls.HTTP_USER_LOGIN_REQ_API);
 			try {
 				// check for login denial response from server
 				if (jsonReturn.has("returnCode") && jsonReturn.getInt(AppConfig.SVR_RETURN_CODE) > 0) {
@@ -372,7 +370,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 				}
 			}
 			catch(JSONException e) {
-				Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "Failed while parsing returning JSON from request:" + HTTP_CLIENT_LOGIN_REQ_API + " Error reported was: " + e.getCause());
+				Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "Failed while parsing returning JSON from request:" + Calls.HTTP_USER_LOGIN_REQ_API + " Error reported was: " + e.getCause());
 				e.printStackTrace();
 			}
 		}
