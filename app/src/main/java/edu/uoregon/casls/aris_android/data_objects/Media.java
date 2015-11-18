@@ -32,9 +32,9 @@ public class Media {
 	public String file_name;
 
 	public URL localURL; // local file URL?
-	public URL url; // was: remoteURL; // are both url and thumb_url always the same?
+	public URL remoteURL; // was: url; // are both url and thumb_url always the same?
 	public URL localThumbURL;
-	public URL thumb_url; // was: remoteThumbURL; // are both url and thumb_url always the same?
+//	public URL thumb_url; // was: remoteThumbURL; // are both url and thumb_url always the same?
 //	public Drawable data; // these will not serialize with GSON and will cause a recursion-like stack overflow;
 //	public Drawable thumb;// todo: replace these with the raw image data somehow, or perhaps just the drawable resourceID.
 	public Bitmap data; // todo: need to flesh out how this would hold the data across serialization.

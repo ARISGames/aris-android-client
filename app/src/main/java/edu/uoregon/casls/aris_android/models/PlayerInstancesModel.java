@@ -73,8 +73,8 @@ public class PlayerInstancesModel extends ARISModel {
 
 	public void playerInstancesTouched() {
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.model_player_instances_touched(); //		_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_INSTANCES_TOUCHED",nil,nil);
-		mGamePlayAct.mDispatch.model_game_piece_available(); //		_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.player_instances_touched(); //		_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_INSTANCES_TOUCHED",nil,nil);
+		mGamePlayAct.mDispatch.game_piece_available(); //		_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void touchPlayerInstances() {
@@ -109,7 +109,7 @@ public class PlayerInstancesModel extends ARISModel {
 			if(!newInstance.object_type.contentEquals("ITEM") || newInstance.owner_id != Long.parseLong(mGamePlayAct.mPlayer.user_id)) continue;
 
 		}
-		mGamePlayAct.mDispatch.model_player_instances_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_INSTANCES_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.player_instances_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_INSTANCES_AVAILABLE",nil,nil);
 	}
 
 	public void calculateWeight() {

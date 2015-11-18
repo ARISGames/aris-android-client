@@ -66,8 +66,8 @@ public class GameInstancesModel extends ARISModel {
 
 	public void gameInstancesTouched(List<GameInstance> gameInstances) {
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.model_game_instance_touched(); //_ARIS_NOTIF_SEND_(@"INSTANCES_TOUCHED",nil,nil);
-		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.game_instance_touched(); //_ARIS_NOTIF_SEND_(@"INSTANCES_TOUCHED",nil,nil);
+		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void touchGameInstances() {
@@ -83,7 +83,7 @@ public class GameInstancesModel extends ARISModel {
 				continue;
 			instances.put(newInstance.object_id, newInstance); //[[NSNumber numberWithLong:newInstance.object_id]] = newInstance;
 		}
-		mGamePlayAct.mDispatch.model_game_instances_available(); // _ARIS_NOTIF_SEND_(@"INSTANCES_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.game_instances_available(); // _ARIS_NOTIF_SEND_(@"INSTANCES_AVAILABLE",nil,nil);
 	}
 
 	public long dropItemFromGame(long item_id, long qty) {

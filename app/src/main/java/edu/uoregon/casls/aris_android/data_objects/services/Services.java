@@ -1,4 +1,4 @@
-package edu.uoregon.casls.aris_android.Utilities;
+package edu.uoregon.casls.aris_android.data_objects.services;
 
 import android.content.Context;
 import android.util.Log;
@@ -17,6 +17,9 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
+import edu.uoregon.casls.aris_android.Utilities.AppConfig;
+import edu.uoregon.casls.aris_android.Utilities.AppUtils;
+import edu.uoregon.casls.aris_android.Utilities.Calls;
 import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.data_objects.Note;
 import edu.uoregon.casls.aris_android.data_objects.NoteComment;

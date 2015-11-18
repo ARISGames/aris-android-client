@@ -60,8 +60,8 @@ public class TabsModel extends ARISModel {
 				tabs.put(newTabId, newTab); // setObject:newTab forKey:newTabId];
 		}
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.model_tabs_available(); //_ARIS_falseTIF_SEND_(@"MODEL_TABS_AVAILABLE",nil,nil);
-		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_falseTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.tabs_available(); //_ARIS_falseTIF_SEND_(@"MODEL_TABS_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_falseTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void requestTabs() {
@@ -104,10 +104,10 @@ public class TabsModel extends ARISModel {
 		playerTabs = newTabs; //assumes already conforms to flyweight
 		n_player_data_received++;
 		if (deltas.containsKey("added"))
-			mGamePlayAct.mDispatch.model_tabs_new_available(deltas); //_ARIS_falseTIF_SEND_(@"MODEL_TABS_NEW_AVAILABLE",nil,deltas);
+			mGamePlayAct.mDispatch.tabs_new_available(deltas); //_ARIS_falseTIF_SEND_(@"MODEL_TABS_NEW_AVAILABLE",nil,deltas);
 		if (deltas.containsKey("removed"))
-			mGamePlayAct.mDispatch.model_tabs_less_available(deltas); //_ARIS_falseTIF_SEND_(@"MODEL_TABS_LESS_AVAILABLE",nil,deltas);
-		mGamePlayAct.mDispatch.model_game_player_piece_available(); //_ARIS_falseTIF_SEND_(@"PLAYER_PIECE_AVAILABLE",nil,nil);
+			mGamePlayAct.mDispatch.tabs_less_available(deltas); //_ARIS_falseTIF_SEND_(@"MODEL_TABS_LESS_AVAILABLE",nil,deltas);
+		mGamePlayAct.mDispatch.game_player_piece_available(); //_ARIS_falseTIF_SEND_(@"PLAYER_PIECE_AVAILABLE",nil,nil);
 	}
 
 	Map<String, List<Tab>> findDeltasInNew(List<Tab> newTabs, List<Tab> oldTabs) {

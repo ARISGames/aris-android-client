@@ -1,39 +1,27 @@
 package edu.uoregon.casls.aris_android;
 
 import android.app.ActivityOptions;
-import android.content.Context;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
-import org.apache.http.Header;
-import org.apache.http.entity.StringEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import edu.uoregon.casls.aris_android.Utilities.AppUtils;
-import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.Utilities.Dispatcher;
 import edu.uoregon.casls.aris_android.Utilities.ResponseHandler;
-import edu.uoregon.casls.aris_android.Utilities.Services;
+import edu.uoregon.casls.aris_android.data_objects.services.Services;
 import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.data_objects.User;
@@ -126,15 +114,131 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mGame.initContext(this);
 		mResposeHandler.initContext(this);
 
-		if (!mGame.hasLatestDownload())
-			mGame.requestGameData(); // load all game data
-		else { // todo: code in the "restoreGameData" process. See LoadingViewController.startLoading.
+		if (!mGame.hasLatestDownload()) // loadingViewController.startLoading equivalent in iOS
+			this.requestGameData(); // load all game data
+		else {
 			// todo:   Basically we'll sub in Android life cycle state save and restore (which means this needs to go in the onResume or onStart method
-			//			[_MODEL_ restoreGameData];
-			mGame.requestMaintenanceData(); //			[self gameDataLoaded];
+			//[_MODEL_ restoreGameData]; // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restoreGameData
+			this.gameDataLoaded(); //			this.gameDataLoaded];
 		}
 
 	}
+
+	public void requestGameData() {
+		// todo: progress bar
+		mGame.requestGameData(); // load all game data
+	}
+
+	public void gameDataLoaded() {
+		// decide if game needs to be loaded from server or if it is already stored on device from previous load. // todo: perform the device save of game
+		if (!mGame.hasLatestDownload() || !mGame.begin_fresh || !mGame.network_level.contentEquals("LOCAL")) //if !local, need to perform maintenance on server so it doesn't keep conflicting with local data
+			this.requestMaintenanceData();
+		else {
+			//skip maintenance step
+			//_MODEL_ restorePlayerData]; // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restorePlayerData
+			this.playerDataLoaded();
+		}
+
+	}
+
+	// todo: implement Android version of these iOS methods:
+/*
+	public void gameFetchFailed { [self.view addSubview:gameRetryLoadButton]; }
+	public void retryGameFetch
+	{
+		[gameRetryLoadButton removeFromSuperview];
+		this.requestGameData];
+	}
+*/
+
+	public void requestMaintenanceData() {
+		// todo: show progress bar.
+		mGame.requestMaintenanceData();
+	}
+
+	public void maintenanceDataLoaded() {
+		if (!mGame.hasLatestDownload() || !mGame.begin_fresh)
+			this.requestPlayerData();
+		else {
+			//_MODEL_ restorePlayerData]; // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restorePlayerData
+			this.playerDataLoaded();
+		}
+	}
+
+	// todo: implement Android version of these iOS methods:
+/*
+	public void maintenancePercentLoaded:(NSNotification *)notif { maintenanceProgressBar.progress = [notif.userInfo[@"percent"] floatValue]; }
+	public void maintenanceFetchFailed { [self.view addSubview:maintenanceRetryLoadButton]; }
+	public void retryMaintenanceFetch
+	{
+		[maintenanceRetryLoadButton removeFromSuperview];
+		this.requestMaintenanceData];
+	}
+*/
+
+
+//Player Data
+	public void requestPlayerData() {
+//		[self.view addSubview:playerProgressLabel]; [self.view addSubview:playerProgressBar]; // todo progress bar
+		mGame.requestPlayerData();
+	}
+
+	public void playerDataLoaded() {
+		if (!mGame.hasLatestDownload()) {
+			if (mGame.preload_media)
+				this.requestMediaData();
+			else
+				this.beginGame(); //[_MODEL_ beginGame];
+		}
+		else
+			this.beginGame();	//[_MODEL_ beginGame];
+	}
+
+	// todo: implement Android version of these iOS methods:
+/*
+	public void playerPercentLoaded:(NSNotification *)notif { playerProgressBar.progress = [notif.userInfo[@"percent"] floatValue]; }
+	public void playerFetchFailed { [self.view addSubview:playerRetryLoadButton]; }
+	public void retryPlayerFetch
+	{
+		[playerRetryLoadButton removeFromSuperview];
+		this.requestPlayerData];
+	}
+*/
+
+//Media Data
+	public void requestMediaData() {
+		//[self.view addSubview:mediaProgressLabel]; [self.view addSubview:mediaProgressBar]; // todo progress bar
+		mGame.requestMediaData();
+	}
+
+	public void mediaDataLoaded() { this.beginGame(); }
+
+	// todo: implement Android version of these iOS methods:
+/*
+	public void mediaPercentLoaded:(NSNotification *)notif { mediaProgressBar.progress = [notif.userInfo[@"percent"] floatValue]; }
+	public void mediaFetchFailed { [self.view addSubview:mediaRetryLoadButton]; }
+	public void retryMediaFetch {
+		[mediaRetryLoadButton removeFromSuperview];
+		this.requestMediaData];
+	}
+*/
+
+	// Stubs from iOS RootViewController. May be unnecessary in Android vers. but included while developing App just in case they become useful.
+	public void gameBegan() { // stub for potential use later to duplicate RootViewController behaviours as exist in iOS vs.
+		// in iOS, initializes View Controller. Not much else.
+	}
+	public void gameChosen() { // stub for potential use later to duplicate RootViewController behaviours as exist in iOS vs.
+		// in iOS, starts the game loading sequence.
+	}
+	public void gameLeft() {
+		// in iOS RootViewController, nulls all values kills current gameplayview and returns view to GamesList.
+		// pretty much default behaviour in Android Activity stack "back" action. Not needed here;
+	}
+
+	private void beginGame() {
+		mGame.gameBegan(); // start game data rolling
+	}
+
 
 	@Override
 	public void onStop() {
@@ -369,34 +473,4 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mGame.initModelContexts(); // re-initialize all the embedded objects' references to the Activity context.
 	}
 
-	// Stubs from iOS RootViewController. May be unnecessary in Android vers. but included while developing App just in case they become useful.
-	public void gameBegan() { // stub for potential use later to duplicate RootViewController behaviours as exist in iOS vs.
-		// in iOS, initializes View Controller. Not much else.
-	}
-	public void gameChosen() { // stub for potential use later to duplicate RootViewController behaviours as exist in iOS vs.
-		// in iOS, starts the game loading sequence.
-	}
-	public void gameLeft() {
-		// in iOS RootViewController, nulls all values kills current gameplayview and returns view to GamesList.
-		// pretty much default behaviour in Android Activity stack "back" action. Not needed here;
-	}
-
-	public void playerDataLoaded() {
-		if (!mGame.hasLatestDownload())
-		{
-			if (mGame.preload_media) this.requestMediaData();
-			else this.beginGame();
-		}
-		else
-			this.beginGame();
-
-	}
-
-	private void beginGame() {
-		mGame.gameBegan(); // start game data rolling
-	}
-
-	private void requestMediaData() {
-		//todo: make me work
-	}
 }

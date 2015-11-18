@@ -70,8 +70,8 @@ public class QuestsModel extends ARISModel {
 				quests.put(newQuestId, newQuest); // setObject:newQuest forKey:newQuestId;
 		}
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.model_quests_available(); // _ARIS_NOTIF_SEND_(@"MODEL_QUESTS_AVAILABLE",nil,nil);
-		mGamePlayAct.mDispatch.model_game_piece_available(); // _ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.quests_available(); // _ARIS_NOTIF_SEND_(@"MODEL_QUESTS_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.game_piece_available(); // _ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void requestQuests() {
@@ -137,7 +137,7 @@ public class QuestsModel extends ARISModel {
 		this.updateCompleteQuests(this.conformQuestListToFlyweight(pquests.get("complete"))); //objectForKey:@"complete"]];
 		this.updateActiveQuests(this.conformQuestListToFlyweight(pquests.get("active"))); //.userInfo objectForKey:@"active"]];
 		n_player_data_received++;
-		mGamePlayAct.mDispatch.model_game_player_piece_available(); // _ARIS_NOTIF_SEND_(@"PLAYER_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.game_player_piece_available(); // _ARIS_NOTIF_SEND_(@"PLAYER_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void updateActiveQuests(List<Quest> newQuests) {
@@ -147,7 +147,7 @@ public class QuestsModel extends ARISModel {
 
 		List<Quest> addedDeltas = deltas.get("added");
 		if (addedDeltas.size() > 0)
-			mGamePlayAct.mDispatch.model_quests_active_new_available(deltas); // _ARIS_NOTIF_SEND_(@"MODEL_QUESTS_ACTIVE_NEW_AVAILABLE",nil,deltas);
+			mGamePlayAct.mDispatch.quests_active_new_available(deltas); // _ARIS_NOTIF_SEND_(@"MODEL_QUESTS_ACTIVE_NEW_AVAILABLE",nil,deltas);
 		if (this.playerDataReceived()) {
 			for (Quest addedDelta : addedDeltas)
 				mGame.eventsModel.runEventPackageId(addedDelta.active_event_package_id);
@@ -155,7 +155,7 @@ public class QuestsModel extends ARISModel {
 
 		List<Quest> removedDeltas = deltas.get("removed");
 		if (removedDeltas.size() > 0)
-			mGamePlayAct.mDispatch.model_quests_active_less_available(deltas); // _ARIS_NOTIF_SEND_(@"MODEL_QUESTS_ACTIVE_LESS_AVAILABLE",nil,deltas);
+			mGamePlayAct.mDispatch.quests_active_less_available(deltas); // _ARIS_NOTIF_SEND_(@"MODEL_QUESTS_ACTIVE_LESS_AVAILABLE",nil,deltas);
 	}
 
 	public void updateCompleteQuests(List<Quest> newQuests) {
@@ -164,7 +164,7 @@ public class QuestsModel extends ARISModel {
 
 		List<Quest> addedDeltas = deltas.get("added");
 		if (addedDeltas.size() > 0)
-			mGamePlayAct.mDispatch.model_quests_complete_new_available(deltas); // _ARIS_NOTIF_SEND_(@"MODEL_QUESTS_COMPLETE_NEW_AVAILABLE",nil,deltas);
+			mGamePlayAct.mDispatch.quests_complete_new_available(deltas); // _ARIS_NOTIF_SEND_(@"MODEL_QUESTS_COMPLETE_NEW_AVAILABLE",nil,deltas);
 		if (this.playerDataReceived()) {
 			for (Quest addedDelta : addedDeltas)
 				mGame.eventsModel.runEventPackageId(addedDelta.complete_event_package_id);
@@ -172,7 +172,7 @@ public class QuestsModel extends ARISModel {
 
 		List<Quest> removedDeltas = deltas.get("removed");
 		if (removedDeltas.size() > 0)
-			mGamePlayAct.mDispatch.model_quests_complete_less_available(deltas); // _ARIS_NOTIF_SEND_(@"MODEL_QUESTS_COMPLETE_LESS_AVAILABLE",nil,deltas);
+			mGamePlayAct.mDispatch.quests_complete_less_available(deltas); // _ARIS_NOTIF_SEND_(@"MODEL_QUESTS_COMPLETE_LESS_AVAILABLE",nil,deltas);
 	}
 
 	//finds deltas in quest lists generally, so I can just use same code for complete/active

@@ -150,7 +150,7 @@ public class Dispatcher {
 	//	PLAYER_PIECE_AVAILABLE",nil,nil);
 	public void game_player_piece_available() {
 		if (mGamePlayAct.mGame.listen_player_piece_available)
-			mGamePlayAct.mGame.gamePlayerPieceReceived();
+			mGamePlayAct.mGame.playerPieceReceived();
 	}
 
 	//	MODEL_GROUP_INSTANCES_AVAILABLE",nil,nil);
@@ -629,6 +629,10 @@ public class Dispatcher {
 	}
 
 	public void player_data_loaded() {
+	}
+
+	public void media_piece_available() {
+		mGamePlayAct.mGame.mediaPieceReceived();
 	}
 
 

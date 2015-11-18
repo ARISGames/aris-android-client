@@ -73,8 +73,8 @@ public class UsersModel extends ARISModel {
 				users.get(newUserId).mergeDataFromUser(newUser); // objectForKey:newUserId] mergeDataFromUser:newUser];
 		}
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.model_users_available(); //_ARIS_NOTIF_SEND_(@"MODEL_USERS_AVAILABLE",nil,nil);
-		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil); //weird... not "game" piece. whatever.
+		mGamePlayAct.mDispatch.users_available(); //_ARIS_NOTIF_SEND_(@"MODEL_USERS_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil); //weird... not "game" piece. whatever.
 	}
 
 	public List<User> conformUsersListToFlyweight(List<User> newUsers) {

@@ -75,8 +75,8 @@ public class GroupsModel extends ARISModel {
 
 	public void groupTouched(long groupId) {
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.model_group_touched(); //_ARIS_NOTIF_SEND_("MODEL_GROUP_TOUCHED", null, null);
-		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_("GAME_PIECE_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.group_touched(); //_ARIS_NOTIF_SEND_("MODEL_GROUP_TOUCHED", null, null);
+		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_("GAME_PIECE_AVAILABLE", null, null);
 	}
 
 	public void updateGroups(List<Group> newGroups) {
@@ -89,15 +89,15 @@ public class GroupsModel extends ARISModel {
 			}
 		}
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.model_groups_available(); //_ARIS_NOTIF_SEND_("MODEL_GROUPS_AVAILABLE", null, null);
-		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_("GAME_PIECE_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.groups_available(); //_ARIS_NOTIF_SEND_("MODEL_GROUPS_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_("GAME_PIECE_AVAILABLE", null, null);
 	}
 
 	public void updatePlayerGroup(Group newGroup) {
 		playerGroup = newGroup;
 		n_player_data_received++;
-		mGamePlayAct.mDispatch.model_groups_player_group_available(); //_ARIS_NOTIF_SEND_("MODEL_GROUPS_PLAYER_GROUP_AVAILABLE", null, null);
-		mGamePlayAct.mDispatch.model_game_player_piece_available(); //_ARIS_NOTIF_SEND_("PLAYER_PIECE_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.groups_player_group_available(); //_ARIS_NOTIF_SEND_("MODEL_GROUPS_PLAYER_GROUP_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.game_player_piece_available(); //_ARIS_NOTIF_SEND_("PLAYER_PIECE_AVAILABLE", null, null);
 	}
 
 	public void requestGroups() {
@@ -127,7 +127,7 @@ public class GroupsModel extends ARISModel {
 		if (!mGamePlayAct.mGame.network_level.equals("LOCAL")) {
 			mGamePlayAct.mServices.setPlayerGroupId(g.group_id);
 		}
-		mGamePlayAct.mDispatch.model_groups_player_group_available(); //_ARIS_NOTIF_SEND_("MODEL_GROUPS_PLAYER_GROUP_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.groups_player_group_available(); //_ARIS_NOTIF_SEND_("MODEL_GROUPS_PLAYER_GROUP_AVAILABLE", null, null);
 	}
 
 	//null group (id == 0) NOT flyweight!!! (to allow for temporary customization safety)

@@ -90,12 +90,12 @@ public class TriggersModel extends ARISModel {
 			}
 		}
 		if (!invalidatedTriggers.isEmpty()) {
-			mGamePlayAct.mDispatch.model_triggers_available(); //("MODEL_TRIGGERS_INVALIDATED", null, @{@"invalidated_triggers":invalidatedTriggers});
+			mGamePlayAct.mDispatch.triggers_available(); //("MODEL_TRIGGERS_INVALIDATED", null, @{@"invalidated_triggers":invalidatedTriggers});
 		}
 
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.model_triggers_available(); //_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_AVAILABLE", null, null);
-		mGamePlayAct.mDispatch.model_game_piece_available();//_ARIS_NOTIF_SEND_("GAME_PIECE_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.triggers_available(); //_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.game_piece_available();//_ARIS_NOTIF_SEND_("GAME_PIECE_AVAILABLE", null, null);
 	}
 
 	public List<Trigger> conformTriggersListToFlyweight(List<Trigger> newTriggers) {
@@ -118,7 +118,7 @@ public class TriggersModel extends ARISModel {
 			}
 		}
 		if (!invalidatedTriggers.isEmpty()) {
-			mGamePlayAct.mDispatch.model_triggers_invalidated(invalidatedTriggers); //_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_INVALIDATED", null, @{@"invalidated_triggers":invalidatedTriggers});
+			mGamePlayAct.mDispatch.triggers_invalidated(invalidatedTriggers); //_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_INVALIDATED", null, @{@"invalidated_triggers":invalidatedTriggers});
 		}
 		return conformingTriggers;
 	}
@@ -169,13 +169,13 @@ public class TriggersModel extends ARISModel {
 		n_player_data_received++;
 
 		if (!addedTriggers.isEmpty()) {
-			mGamePlayAct.mDispatch.model_triggers_new_available(addedTriggers);//_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_NEW_AVAILABLE", null, @{@"added":addedTriggers});
+			mGamePlayAct.mDispatch.triggers_new_available(addedTriggers);//_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_NEW_AVAILABLE", null, @{@"added":addedTriggers});
 		}
 		if (!removedTriggers.isEmpty()) {
-			mGamePlayAct.mDispatch.model_triggers_less_available(removedTriggers);//_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_LESS_AVAILABLE", null, @{@"removed":removedTriggers});
+			mGamePlayAct.mDispatch.triggers_less_available(removedTriggers);//_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_LESS_AVAILABLE", null, @{@"removed":removedTriggers});
 		}
-		mGamePlayAct.mDispatch.model_player_triggers_available(); //_ARIS_NOTIF_SEND_("MODEL_PLAYER_TRIGGERS_AVAILABLE", null, null);
-		mGamePlayAct.mDispatch.model_game_player_piece_available();//_ARIS_NOTIF_SEND_("PLAYER_PIECE_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.player_triggers_available(); //_ARIS_NOTIF_SEND_("MODEL_PLAYER_TRIGGERS_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.game_player_piece_available();//_ARIS_NOTIF_SEND_("PLAYER_PIECE_AVAILABLE", null, null);
 	}
 
 	public void requestTriggers() {

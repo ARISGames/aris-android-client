@@ -50,9 +50,9 @@ public class LogsModel extends ARISModel {
 			if (!logs.containsKey(newLogId))
 				logs.put(newLogId, newLog); // setObject:newLog forKey:newLogId);
 		}
-		mGamePlayAct.mDispatch.model_logs_available(); //_ARIS_NOTIF_SEND_(@"MODEL_LOGS_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.logs_available(); //_ARIS_NOTIF_SEND_(@"MODEL_LOGS_AVAILABLE",nil,nil);
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.model_game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void addLogType(String type, long content_id, long qty) {
