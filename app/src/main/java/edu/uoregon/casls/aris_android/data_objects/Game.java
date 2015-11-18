@@ -97,7 +97,7 @@ public class Game {
 	public boolean notebook_allow_player_tags;
 
 	public long inventory_weight_cap;
-//	public String network_level = "";
+	//	public String network_level = "";
 	public String network_level;
 	public boolean allow_download;
 	public boolean preload_media;
@@ -106,26 +106,26 @@ public class Game {
 	public List<ARISModel> models = new ArrayList<>(); // List of all the models below for iteration convenience
 
 	// Game subcomponent classes
-	public ScenesModel 			scenesModel;		// Game Piece
-	public GroupsModel 			groupsModel;		// Game Piece
-	public PlaquesModel 		plaquesModel;		// Game Piece
-	public ItemsModel 			itemsModel;		// Game Piece
-	public DialogsModel 		dialogsModel;		// Game Piece
-	public WebPagesModel 		webPagesModel;
-	public NotesModel 			notesModel;		// Game Piece
-	public TagsModel 			tagsModel;
-	public EventsModel 			eventsModel;			// Game Piece
-	public RequirementsModel 	requirementsModel;			// Game Piece
-	public TriggersModel 		triggersModel;
-	public FactoriesModel 		factoriesModel;		// Game Piece
-	public OverlaysModel 		overlaysModel;		// Game Piece
-	public InstancesModel 		instancesModel;		// Game Piece
-	public PlayerInstancesModel playerInstancesModel;		// Game Piece todo: is this where gameUsers go? Players == Users??
-	public GameInstancesModel 	gameInstancesModel;
-	public GroupInstancesModel 	groupInstancesModel;
-	public TabsModel 			tabsModel;
-	public LogsModel 			logsModel;
-	public QuestsModel			questsModel;		// Game Piece
+	public ScenesModel scenesModel;        // Game Piece
+	public GroupsModel groupsModel;        // Game Piece
+	public PlaquesModel plaquesModel;        // Game Piece
+	public ItemsModel itemsModel;        // Game Piece
+	public DialogsModel dialogsModel;        // Game Piece
+	public WebPagesModel webPagesModel;
+	public NotesModel notesModel;        // Game Piece
+	public TagsModel tagsModel;
+	public EventsModel eventsModel;            // Game Piece
+	public RequirementsModel requirementsModel;            // Game Piece
+	public TriggersModel triggersModel;
+	public FactoriesModel factoriesModel;        // Game Piece
+	public OverlaysModel overlaysModel;        // Game Piece
+	public InstancesModel instancesModel;        // Game Piece
+	public PlayerInstancesModel playerInstancesModel;        // Game Piece todo: is this where gameUsers go? Players == Users??
+	public GameInstancesModel gameInstancesModel;
+	public GroupInstancesModel groupInstancesModel;
+	public TabsModel tabsModel;
+	public LogsModel logsModel;
+	public QuestsModel questsModel;        // Game Piece
 //	public DisplayQueueModel 	displayQueueModel; // iOS only for now
 	// medias (in GamePlayAct 		// Game Piece
 
@@ -134,13 +134,14 @@ public class Game {
 	public boolean know_if_begin_fresh = false;
 	public boolean begin_fresh = false;
 
-//	PollTimer vars
+	//	PollTimer vars
 	public Boolean isPollTImerRunning = false;
 	private Intent pollTimerSvcIntent = null;
 
 
 	// FYI transient indicates "do not serialize"; gson will die a recursive death if it did.
 	public transient GamePlayActivity mGamePlayAct; // For reference to GamePlayActivity; do not instantiate (new) object or circular references will ensue.
+
 	// Empty Constructor
 	public Game() {
 		this.initialize();
@@ -271,7 +272,7 @@ public class Game {
 		// get authors from full game block
 		if (jsonGameData.has("authors")) {
 			JSONArray jsonAuthorsList = jsonGameData.getJSONArray("authors");
-			for (int i=0; i < jsonAuthorsList.length(); i++) {
+			for (int i = 0; i < jsonAuthorsList.length(); i++) {
 				// Ex Author Json: "authors":[{"user_id":"1","user_name":"scott","display_name":"scott","media_id":"0"}]
 				JSONObject jsonAuthor = jsonAuthorsList.getJSONObject(i);
 				authors.add(new User(jsonAuthor));
@@ -319,30 +320,49 @@ public class Game {
 	}
 
 	public void getReadyToPlay() {
-		listen_player_piece_available = true; 		//_ARIS_NOTIF_LISTEN_(@"PLAYER_PIECE_AVAILABLE",self,@selector(gamePlayerPieceReceived),null);
-		listen_maintenance_piece_available = true; 	// _ARIS_NOTIF_LISTEN_(@"MAINTENANCE_PIECE_AVAILABLE",self,@selector(maintenancePieceReceived),nil);
-		listen_game_piece_available = true; 		// _ARIS_NOTIF_LISTEN_(@"GAME_PIECE_AVAILABLE",self,@selector(gamePieceReceived),null);
-		listen_media_piece_available = true; 		// _ARIS_NOTIF_LISTEN_(@"MEDIA_PIECE_AVAILABLE",self,@selector(mediaPieceReceived),nil);
+		listen_player_piece_available = true;        //_ARIS_NOTIF_LISTEN_(@"PLAYER_PIECE_AVAILABLE",self,@selector(gamePlayerPieceReceived),null);
+		listen_maintenance_piece_available = true;    // _ARIS_NOTIF_LISTEN_(@"MAINTENANCE_PIECE_AVAILABLE",self,@selector(maintenancePieceReceived),nil);
+		listen_game_piece_available = true;        // _ARIS_NOTIF_LISTEN_(@"GAME_PIECE_AVAILABLE",self,@selector(gamePieceReceived),null);
+		listen_media_piece_available = true;        // _ARIS_NOTIF_LISTEN_(@"MEDIA_PIECE_AVAILABLE",self,@selector(mediaPieceReceived),nil);
 
-		scenesModel          = new ScenesModel(); 			models.add(scenesModel         );
-		plaquesModel         = new PlaquesModel(); 			models.add(plaquesModel        );
-		itemsModel           = new ItemsModel(); 			models.add(itemsModel          );
-		dialogsModel         = new DialogsModel(); 			models.add(dialogsModel        );
-		webPagesModel        = new WebPagesModel(); 		models.add(webPagesModel       );
-		notesModel           = new NotesModel(); 			models.add(notesModel          );
-		tagsModel            = new TagsModel(); 			models.add(tagsModel           );
-		eventsModel          = new EventsModel(); 			models.add(eventsModel         );
-		requirementsModel    = new RequirementsModel(); 	models.add(requirementsModel   );
-		triggersModel        = new TriggersModel(); 		models.add(triggersModel       );
-		factoriesModel       = new FactoriesModel(); 		models.add(factoriesModel      );
-		overlaysModel        = new OverlaysModel(); 		models.add(overlaysModel       );
-		instancesModel       = new InstancesModel(); 		models.add(instancesModel      );
-		playerInstancesModel = new PlayerInstancesModel();	models.add(playerInstancesModel);
-		gameInstancesModel   = new GameInstancesModel();	models.add(gameInstancesModel  );
-		groupInstancesModel  = new GroupInstancesModel();	models.add(groupInstancesModel );
-		tabsModel            = new TabsModel(); 			models.add(tabsModel           );
-		logsModel            = new LogsModel(); 			models.add(logsModel           );
-		questsModel          = new QuestsModel(); 			models.add(questsModel         );
+		scenesModel = new ScenesModel();
+		models.add(scenesModel);
+		plaquesModel = new PlaquesModel();
+		models.add(plaquesModel);
+		itemsModel = new ItemsModel();
+		models.add(itemsModel);
+		dialogsModel = new DialogsModel();
+		models.add(dialogsModel);
+		webPagesModel = new WebPagesModel();
+		models.add(webPagesModel);
+		notesModel = new NotesModel();
+		models.add(notesModel);
+		tagsModel = new TagsModel();
+		models.add(tagsModel);
+		eventsModel = new EventsModel();
+		models.add(eventsModel);
+		requirementsModel = new RequirementsModel();
+		models.add(requirementsModel);
+		triggersModel = new TriggersModel();
+		models.add(triggersModel);
+		factoriesModel = new FactoriesModel();
+		models.add(factoriesModel);
+		overlaysModel = new OverlaysModel();
+		models.add(overlaysModel);
+		instancesModel = new InstancesModel();
+		models.add(instancesModel);
+		playerInstancesModel = new PlayerInstancesModel();
+		models.add(playerInstancesModel);
+		gameInstancesModel = new GameInstancesModel();
+		models.add(gameInstancesModel);
+		groupInstancesModel = new GroupInstancesModel();
+		models.add(groupInstancesModel);
+		tabsModel = new TabsModel();
+		models.add(tabsModel);
+		logsModel = new LogsModel();
+		models.add(logsModel);
+		questsModel = new QuestsModel();
+		models.add(questsModel);
 //		displayQueueModel    = new DisplayQueueModel();	 	models.add(displayQueueModel   ); // iOS only for now
 		// todo: user Model and media model added??
 //		[models addObject:_MODEL_USERS_];
@@ -353,7 +373,7 @@ public class Game {
 		n_player_data_to_receive = 0;
 		n_media_data_to_receive = 0;
 		for (ARISModel model : models) {
-			n_game_data_to_receive   += model.nGameDataToReceive();
+			n_game_data_to_receive += model.nGameDataToReceive();
 			n_maintenance_data_to_receive += model.nMaintenanceDataToReceive();
 			n_player_data_to_receive += model.nPlayerDataToReceive();
 		}
@@ -378,26 +398,26 @@ public class Game {
 
 		models = null;
 
-		scenesModel          = null;
-		groupsModel          = null;
-		plaquesModel         = null;
-		itemsModel           = null;
-		dialogsModel         = null;
-		webPagesModel        = null;
-		notesModel           = null;
-		tagsModel            = null;
-		eventsModel          = null;
-		requirementsModel    = null;
-		triggersModel        = null;
-		factoriesModel       = null;
-		overlaysModel        = null;
-		instancesModel       = null;
+		scenesModel = null;
+		groupsModel = null;
+		plaquesModel = null;
+		itemsModel = null;
+		dialogsModel = null;
+		webPagesModel = null;
+		notesModel = null;
+		tagsModel = null;
+		eventsModel = null;
+		requirementsModel = null;
+		triggersModel = null;
+		factoriesModel = null;
+		overlaysModel = null;
+		instancesModel = null;
 		playerInstancesModel = null;
-		gameInstancesModel   = null;
-		groupInstancesModel  = null;
-		tabsModel            = null;
-		questsModel          = null;
-		logsModel            = null;
+		gameInstancesModel = null;
+		groupInstancesModel = null;
+		tabsModel = null;
+		questsModel = null;
+		logsModel = null;
 //		displayQueueModel    = null; // iOS
 	}
 
@@ -407,105 +427,151 @@ public class Game {
 		for (ARISModel model : models) {
 			model.requestGameData();
 		}
-
-// // original game data loading sequence
-//		scenesModel.requestScenes();
-//		scenesModel.touchPlayerScene(); //  touch is originating from somewhere else; find it and make it work.
-//		plaquesModel.requestPlaques();
-//		itemsModel.requestItems();
-//		playerInstancesModel.touchPlayerInstances();
-//		dialogsModel.requestDialogs(); //makes 4 "game data received" notifs (dialogs, characters, scripts, options)
-//		webPagesModel.requestWebPages();
-//		notesModel.requestNotes();
-//		notesModel.requestNoteComments();
-//		tagsModel.requestTags();
-//		eventsModel.requestEvents();
-//		questsModel.requestQuests();
-//		triggersModel.requestTriggers();
-//		factoriesModel.requestFactories();
-//		overlaysModel.requestOverlays();
-//		instancesModel.requestInstances();
-//		tabsModel.requestTabs();
-
-//		//the requests not 'owned' by Game. Also, not 100% necessary
-//		//(has ability to load on an individual basis)
-//		_MODEL_MEDIA_ requestMedia();
-//		_MODEL_USERS_ requestUsers();
-	}
-
-	/**
-	 *
-	 */
-	public void requestPlayerData() {
-		n_player_data_received = 0;
-		for (ARISModel model : models) {
-			model.requestPlayerData();
-		}
-
-//		scenesModel.requestPlayerScene();
-//		instancesModel.requestPlayerInstances();
-//		triggersModel.requestPlayerTriggers();
-//		overlaysModel.requestPlayerOverlays();
-//		questsModel.requestPlayerQuests();
-//		tabsModel.requestPlayerTabs();
-//		logsModel.requestPlayerLogs();
 	}
 
 	public void requestMaintenanceData() {
 		n_player_data_received = 0;
 		for (ARISModel model : models) {
+			model.requestMaintenanceData();
+		}
+	}
+
+
+	public void requestPlayerData() {
+		n_player_data_received = 0;
+		for (ARISModel model : models) {
 			model.requestPlayerData();
+		}
+	}
+
+	public void requestMediaData() {
+		n_media_data_received = 0;
+		n_media_data_to_receive = mGamePlayAct.mMediaModel.requestMediaData(); //[_MODEL_MEDIA_ requestMediaData];
+
+		if (n_media_data_to_receive == 0) {
+			//hack to quickly check if already done
+			n_media_data_received--;
+			this.mediaPieceReceived();
 		}
 	}
 
 	public void gamePieceReceived() {
 		n_game_data_received++;
+		mGamePlayAct.mDispatch.game_percent_loaded((float) n_game_data_received / (float) n_game_data_to_receive);
 		if (this.allGameDataReceived()) {
 			n_game_data_received = n_game_data_to_receive; //should already be exactly this...
-			mGamePlayAct.mDispatch.model_game_data_loaded(); // _ARIS_NOTIF_SEND_(@"DATA_LOADED", nil, nil); // will call requestPlayerData()
+			mGamePlayAct.mDispatch.game_data_loaded(); // _ARIS_NOTIF_SEND_(@"DATA_LOADED", nil, nil); // will call requestPlayerData()
 		}
 		percentLoadedChanged();
 	}
 
-	public void gamePlayerPieceReceived() {
+	public void maintenancePieceReceived() {
+		n_maintenance_data_received++;
+		mGamePlayAct.mDispatch.maintenance_percent_loaded((float) n_maintenance_data_received / (float) n_maintenance_data_to_receive); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_PERCENT_LOADED", nil,
+		// @{@"percent":[NSNumber numberWithFloat:(float)n_maintenance_data_received/(float)n_maintenance_data_to_receive]});
+		if (this.allMaintenanceDataReceived()) {
+			n_maintenance_data_received = n_maintenance_data_to_receive; //should already be exactly this...
+			mGamePlayAct.mDispatch.maintenance_data_loaded(); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_DATA_LOADED", nil, nil);
+		}
+	}
+
+	public void playerPieceReceived() {
 		n_player_data_received++;
-		if (n_player_data_received >= n_player_data_to_receive) {
-			mGamePlayAct.mDispatch.model_game_player_data_loaded(); // _ARIS_NOTIF_SEND_(@"PLAYER_DATA_LOADED", null, null); // broadcast to any listeners that game data is ready
+		mGamePlayAct.mDispatch.player_percent_loaded((float) n_player_data_received / (float) n_player_data_to_receive); //_ARIS_NOTIF_SEND_(@"PLAYER_PERCENT_LOADED", nil,
+		// @{@"percent":[NSNumber numberWithFloat:(float)n_player_data_received/(float)n_player_data_to_receive]});
+		if (this.allPlayerDataReceived()) {
+			n_player_data_received = n_player_data_to_receive; //should already be exactly this...
+			mGamePlayAct.mDispatch.player_data_loaded(); //_ARIS_NOTIF_SEND_(@"PLAYER_DATA_LOADED", nil, nil);
 		}
-		percentLoadedChanged();
 	}
 
-	public boolean allGameDataReceived() {
-
-		for (int i = 0; i < models.size(); i++) {
-//		for (ARISModel model : models) {    // iterate through all models
-			ARISModel model = models.get(i);
-			boolean gdr = model.gameDataReceived();
-			if (!gdr) { // stop if one reports it's not received all its data.
-				return false;
-			}
+	public void mediaPieceReceived() {
+		n_media_data_received++;
+		mGamePlayAct.mDispatch.media_percent_loaded((float) n_media_data_received / (float) n_media_data_to_receive); //_ARIS_NOTIF_SEND_(@"MEDIA_PERCENT_LOADED", nil,
+		// @{@"percent":[NSNumber numberWithFloat:(float)n_media_data_received/(float)n_media_data_to_receive]});
+		if (this.allMediaDataReceived()) {
+			n_media_data_received = n_media_data_to_receive; //should already be exactly this...
+			mGamePlayAct.mDispatch.media_data_loaded(); //_ARIS_NOTIF_SEND_(@"MEDIA_DATA_LOADED", nil, nil);
 		}
-		return true;
 	}
 
-	public boolean  hasLatestDownload() {
-		return (this.downloadedVersion != 0 && this.version == this.downloadedVersion);
-	}
+	//old method just for reference. delete when you get tired of seeing it here.
+//	public void gamePlayerPieceReceived() {
+//		n_player_data_received++;
+//		if (n_player_data_received >= n_player_data_to_receive) {
+//			mGamePlayAct.mDispatch.game_player_data_loaded(); // _ARIS_NOTIF_SEND_(@"PLAYER_DATA_LOADED", null, null); // broadcast to any listeners that game data is ready
+//		}
+//		percentLoadedChanged();
+//	}
+//
+//	public boolean allGameDataReceived() {
+//
+//		for (int i = 0; i < models.size(); i++) {
+////		for (ARISModel model : models) {    // iterate through all models
+//			ARISModel model = models.get(i);
+//			boolean gdr = model.gameDataReceived();
+//			if (!gdr) { // stop if one reports it's not received all its data.
+//				return false;
+//			}
+//		}
+//		return true;
+//	}
 
 	public void percentLoadedChanged() {
-		float percentReceived = (n_game_data_received + n_player_data_received)/(n_game_data_to_receive + n_player_data_to_receive);
-		mGamePlayAct.mDispatch.model_game_percent_loaded(percentReceived); // _ARIS_NOTIF_SEND_(@"PERCENT_LOADED", null, @{@"percent":percentReceived});
+		float percentReceived = (n_game_data_received + n_player_data_received) / (n_game_data_to_receive + n_player_data_to_receive);
+		mGamePlayAct.mDispatch.game_percent_loaded(percentReceived); // _ARIS_NOTIF_SEND_(@"PERCENT_LOADED", null, @{@"percent":percentReceived});
 	}
 
 	public void gameBegan() { // todo: bring up to date with iOS
 
-		listen_game_piece_available = false; 		// _ARIS_NOTIF_IGNORE_(@"GAME_PIECE_AVAILABLE", self, null);
-		listen_player_piece_available = false; 		// _ARIS_NOTIF_IGNORE_(@"PLAYER_PIECE_AVAILABLE", self, null);
-		listen_maintenance_piece_available = false;	// _ARIS_NOTIF_IGNORE_(@"MAINTENANCE_PIECE_AVAILABLE", self, nil);
-		listen_media_piece_available = false; 		// _ARIS_NOTIF_IGNORE_(@"MEDIA_PIECE_AVAILABLE", self, nil);
+		listen_game_piece_available = false;        // _ARIS_NOTIF_IGNORE_(@"GAME_PIECE_AVAILABLE", self, null);
+		listen_player_piece_available = false;        // _ARIS_NOTIF_IGNORE_(@"PLAYER_PIECE_AVAILABLE", self, null);
+		listen_maintenance_piece_available = false;    // _ARIS_NOTIF_IGNORE_(@"MAINTENANCE_PIECE_AVAILABLE", self, nil);
+		listen_media_piece_available = false;        // _ARIS_NOTIF_IGNORE_(@"MEDIA_PIECE_AVAILABLE", self, nil);
 //		todo: build poller!
-//		poller = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(requestPlayerData) userInfo:null repeats:YES];
+//		poller = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(requestPlayerData) userInfo:null repeats:true];
 		this.startPollTimer();
+	}
+
+	public void gameLeft() {
+		if (isPollTImerRunning) {
+			mGamePlayAct.stopService(pollTimerSvcIntent);
+			isPollTImerRunning = false;
+		}
+	}
+
+	public boolean allGameDataReceived() {
+		for (ARISModel model : models)
+			if (!model.gameDataReceived()) return false;
+		return true;
+	}
+
+	public boolean allMaintenanceDataReceived() {
+		for (ARISModel model : models)
+			if (!model.maintenanceDataReceived()) return false;
+		return true;
+	}
+
+	public boolean allPlayerDataReceived() {
+		for (ARISModel model : models)
+			if (!model.playerDataReceived()) return false;
+		return true;
+	}
+
+	public boolean allMediaDataReceived() {
+		return n_media_data_received >= n_media_data_to_receive; //a bit more fragile than others'...
+	}
+
+	public boolean hasLatestDownload() {
+		return (this.downloadedVersion != 0 && this.version == this.downloadedVersion);
+	}
+
+	public long rating() {
+		if (comments.isEmpty()) return 0;
+		long rating = 0;
+		for (GameComment comment : comments)
+			rating += comment.rating;
+		return rating / comments.size();
 	}
 
 	private void startPollTimer() {
@@ -520,13 +586,6 @@ public class Game {
 
 	}
 
-	public void gameLeft() {
-		if (isPollTImerRunning) {
-			mGamePlayAct.stopService(pollTimerSvcIntent);
-			isPollTImerRunning = false;
-		}
-	}
-
 	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -535,11 +594,9 @@ public class Game {
 		}
 	};
 
-	private void handleMessage(Intent msg)
-	{
+	private void handleMessage(Intent msg) {
 		Bundle data = msg.getExtras();
-		switch (data.getInt(AppConfig.COMMAND, 0))
-		{
+		switch (data.getInt(AppConfig.COMMAND, 0)) {
 			case AppConfig.POLLTIMER_CYCLE_PASS:
 //				int progress = data.getInt(AppConfig.DATA, 0); // not used.
 				this.requestPlayerData();
@@ -579,16 +636,7 @@ public class Game {
 //		displayQueueModel.clear();
 	}
 
-	public long rating() {
-		if(comments.isEmpty()) return 0;
-		long rating = 0;
-		for(GameComment comment : comments)
-			rating += comment.rating;
-		return rating/comments.size();
-	}
-
-	public String description()
-	{
+	public String description() {
 		return (String) "Game- Id:" + game_id + "\tName:" + name;
 	}
 
