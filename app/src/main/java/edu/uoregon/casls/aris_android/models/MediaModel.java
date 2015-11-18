@@ -253,6 +253,10 @@ public class MediaModel extends ARISModel {
 		}
 	}
 
+	public Media mediaForId(long media_id) {
+		return mediaForId((int) media_id);
+	}
+
 	public Media mediaForId(int media_id) {
 		if (media_id == 0) return null;
 
