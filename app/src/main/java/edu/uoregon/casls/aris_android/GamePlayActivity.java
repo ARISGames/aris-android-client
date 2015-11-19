@@ -2,6 +2,7 @@ package edu.uoregon.casls.aris_android;
 
 import android.app.ActivityOptions;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -48,6 +49,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	public Map<Long, Media> mGameMedia = new LinkedHashMap<>();
 	public Map<String, User> mGameUsers = new LinkedHashMap<>();
 
+	public Handler performSelector = new Handler(); // used for time deferred method invocation similar to iOS "performSelector"
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
 	 */
@@ -119,7 +121,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		else {
 			// todo:   Basically we'll sub in Android life cycle state save and restore (which means this needs to go in the onResume or onStart method
 			//[_MODEL_ restoreGameData]; // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restoreGameData
-			this.gameDataLoaded(); //			this.gameDataLoaded];
+			this.gameDataLoaded(); //
 		}
 
 	}
