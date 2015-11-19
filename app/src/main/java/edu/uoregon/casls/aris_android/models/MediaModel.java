@@ -214,31 +214,39 @@ public class MediaModel extends ARISModel {
 		for(int i = 0; i < media_ids.size(); i++) {
 			m = this.mediaForId(media_ids.get(i));
 			if (m.data == null) {
-				d = new ARISDelegateHandle(this); // d = [[ARISDelegateHandle alloc] initWithDelegate:self];
-				mediaDataLoadDelegateHandles.add(d); // [mediaDataLoadDelegateHandles addObject:d];
+				// not going to use the delegateHandle layer at this point in Android dev. 11/19/2015
+//				d = new ARISDelegateHandle(this); // d = [[ARISDelegateHandle alloc] initWithDelegate:self];
+//				mediaDataLoadDelegateHandles.add(d); // [mediaDataLoadDelegateHandles addObject:d];
 				mediaDataLoadMedia.add(m); // [mediaDataLoadMedia addObject:m];
 			}
 		}
-		if (mediaDataLoadDelegateHandles.size() == 0)
+//		if (mediaDataLoadDelegateHandles.size() == 0)
+		if (mediaDataLoadMedia.size() == 0) // use actual media array until/unless the delegateHandle layer gets implemented
 			this.mediaLoaded(null);
 
 		// Explanation of performSelector in iOS: http://stackoverflow.com/a/11539658
 		// In short "[it] lets you call a method that you do not know at compile time.
 		//   You need to know only the name of a method as a string in order to call it."
 		// Java rough equivalent of runtime method invocation: http://stackoverflow.com/a/161005
-//todo		this.performSelector:@selector(deferedLoadMedia) withObject:nil afterDelay:1.];
+//		this.performSelector:@selector(deferedLoadMedia) withObject:nil afterDelay:1.];
+		mGamePlayAct.performSelector.postDelayed(new Runnable() {
+			@Override
+			public void run() { deferedLoadMedia(); }
+		},1000); // delay 1000ms = 1sec
+
 		return mediaDataLoadDelegateHandles.size();
 	}
 
 	public void deferedLoadMedia() {
-		for (Media media : mediaDataLoadMedia)
-			 //[_SERVICES_MEDIA_ loadMedia:mediaDataLoadMedia[i] delegateHandle:mediaDataLoadDelegateHandles[i]]; //calls 'mediaLoaded' upon complete
+		for (Media media : mediaDataLoadMedia) {
+			//[_SERVICES_MEDIA_ loadMedia:mediaDataLoadMedia[i] delegateHandle:mediaDataLoadDelegateHandles[i]]; //calls 'mediaLoaded' upon complete
+		}
 	}
 
 	public long numMediaTryingToLoad()
 	{
-		if(!mediaDataLoadDelegateHandles) return 9999;
-		return mediaDataLoadDelegateHandles.count;
+		if (mediaDataLoadDelegateHandles.isEmpty()) return 9999;
+		return mediaDataLoadDelegateHandles.size();
 	}
 
 	public void mediaLoaded(Media m) {
