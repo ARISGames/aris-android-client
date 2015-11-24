@@ -22,12 +22,12 @@ import java.util.Map;
 
 import edu.uoregon.casls.aris_android.Utilities.Dispatcher;
 import edu.uoregon.casls.aris_android.Utilities.ResponseHandler;
-import edu.uoregon.casls.aris_android.data_objects.services.Services;
 import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.data_objects.User;
 import edu.uoregon.casls.aris_android.models.MediaModel;
 import edu.uoregon.casls.aris_android.models.UsersModel;
+import edu.uoregon.casls.aris_android.services.Services;
 
 public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActivity
 		implements GamePlayNavDrawerFragment.NavigationDrawerCallbacks, GamePlayMapFragment.OnFragmentInteractionListener {
@@ -35,18 +35,18 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 // Todo 9.29.15: Need to see what happens now when the game tries to load, and then set about setting up the cyclic app status calls
 
 	private final static String TAG_SERVER_SUCCESS = "success";
-	public Bundle mTransitionAnimationBndl;
-	public User mPlayer; // Sanity note: Now that the game is "playing" we will refer to the logged in User as "Player"
-	public Game mGame;
-	public Dispatcher mDispatch;
-	public Services mServices;
-	public ResponseHandler mResposeHandler;
-	public MediaModel mMediaModel;
-	public UsersModel mUsersModel;
-//	public GamesModel mGamesModel; // todo: needed for Android?
-	private View mProgressView; // todo: install a progress spinner for server delays
-	public JSONObject mJsonAuth;
-	public Map<Long, Media> mGameMedia = new LinkedHashMap<>();
+	public  Bundle          mTransitionAnimationBndl;
+	public  User            mPlayer; // Sanity note: Now that the game is "playing" we will refer to the logged in User as "Player"
+	public  Game            mGame;
+	public  Dispatcher      mDispatch;
+	public  Services        mServices;
+	public  ResponseHandler mResposeHandler;
+	public  MediaModel      mMediaModel;
+	public  UsersModel      mUsersModel;
+	//	public GamesModel mGamesModel; // todo: needed for Android?
+	private View            mProgressView; // todo: install a progress spinner for server delays
+	public  JSONObject      mJsonAuth;
+	public Map<Long, Media>  mGameMedia = new LinkedHashMap<>();
 	public Map<String, User> mGameUsers = new LinkedHashMap<>();
 
 	public Handler performSelector = new Handler(); // used for time deferred method invocation similar to iOS "performSelector"

@@ -1,4 +1,4 @@
-package edu.uoregon.casls.aris_android.data_objects.services;
+package edu.uoregon.casls.aris_android.services;
 
 import android.content.Context;
 import android.util.Log;
@@ -207,6 +207,11 @@ public class Services {
 	}
 
 	public void fetchMedias() {
+		pollServer(Calls.HTTP_GET_MEDIA_4_GAME, getJsonGameId());
+	}
+
+	public void fetchMediaById(long media_id) {
+		pollServer(Calls.HTTP_GET_MEDIA, longToJSONReqParam("media_id", media_id));
 	}
 
 	public void createNote(Note n, Tag t, Media m, Trigger tr) {
@@ -418,4 +423,16 @@ public class Services {
 		}
 
 	}
+
+	public JSONObject longToJSONReqParam(String key, long l) {
+		JSONObject jsonReqParam = new JSONObject();
+		try {
+			jsonReqParam.put(key, l);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return jsonReqParam;
+	}
+
+
 }

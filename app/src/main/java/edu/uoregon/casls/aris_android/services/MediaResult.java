@@ -1,10 +1,9 @@
-package edu.uoregon.casls.aris_android.data_objects.services;
+package edu.uoregon.casls.aris_android.services;
 
 import android.graphics.Bitmap;
 
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.ByteBuffer;
 import java.util.Date;
 import java.util.List;
 

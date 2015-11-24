@@ -460,6 +460,9 @@ public class Dispatcher {
 	//	SERVICES_LOGIN_FAILED",nil,nil); return; }
 //	SERVICES_LOGIN_RECEIVED",nil,@{@"user":user});
 //	SERVICES_MEDIA_RECEIVED", nil, @{@"media":mediaDict}); // fakes an entire list and does same as fetching all media
+	public void services_media_received(List<Map<String, String>> rawMediaArr) {
+		mGamePlayAct.mMediaModel.mediaReceived(rawMediaArr);
+	}
 //	SERVICES_MEDIAS_RECEIVED", nil, @{@"medias":mediaDicts});
 	public void services_medias_received(List<Map<String, String>> rawMediaArr) {
 
@@ -634,6 +637,7 @@ public class Dispatcher {
 	public void media_piece_available() {
 		mGamePlayAct.mGame.mediaPieceReceived();
 	}
+
 
 
 //	WIFI_CONNECTED",self,nil); break;

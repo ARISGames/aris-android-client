@@ -579,7 +579,7 @@ public class GamesListActivity extends AppCompatActivity {
 					wvGameIcon.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
 					wvGameIcon.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
 					wvGameIcon.getSettings().setUseWideViewPort(true);
-					wvGameIcon.loadUrl(gameItem.icon_media.thumb_url.toString());
+					wvGameIcon.loadUrl(gameItem.icon_media.remoteURL.toString());
 				}
 
 				gameItemView.setId(Integer.parseInt(game_id_key));

@@ -196,6 +196,17 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_player_logs_received(newLogs); //_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_LOGS_RECEIVED", nil, @{@"logs":logs});
 				}
 			}
+			else if (callingReq.equals(Calls.HTTP_GET_MEDIA)) {
+				if (jsonReturn.has("data")) {
+					JSONObject jsonData = jsonReturn.getJSONObject("data");
+					Gson gson = new Gson();
+					List<Map<String, String>> rawMediaArr = new LinkedList<>(); // List will hold only one element, but facilitates downstream handling of data
+					String dataStr = jsonData.toString();
+					Map<String, String> aMediaRec = gson.fromJson(dataStr, new TypeToken<HashMap<String, Object>>() {}.getType());
+					rawMediaArr.add(aMediaRec);
+					mGamePlayAct.mDispatch.services_media_received(rawMediaArr); //_ARIS_NOTIF_SEND_(@"SERVICES_MEDIA_RECEIVED", nil, @{@"media":mediaDict}); // fakes an entire list and does same as fetching all media
+				}
+			}
 			else if (callingReq.equals(Calls.HTTP_GET_MEDIA_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");

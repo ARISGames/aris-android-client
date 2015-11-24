@@ -1,11 +1,8 @@
 package edu.uoregon.casls.aris_android.data_objects;
 
-import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 
 import java.io.File;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -17,30 +14,30 @@ import edu.uoregon.casls.aris_android.data_objects.cd_data_objects.MediaCD;
  */
 public class Media {
 
-	public static final int DEFAULT_PLAQUE_ICON_MEDIA_ID = -1;
-	public static final int DEFAULT_ITEM_ICON_MEDIA_ID = -2;
-	public static final int DEFAULT_DIALOG_ICON_MEDIA_ID = -3;
+	// Phil's hack for default icon images.
+	public static final int DEFAULT_PLAQUE_ICON_MEDIA_ID   = -1;
+	public static final int DEFAULT_ITEM_ICON_MEDIA_ID     = -2;
+	public static final int DEFAULT_DIALOG_ICON_MEDIA_ID   = -3;
 	public static final int DEFAULT_WEB_PAGE_ICON_MEDIA_ID = -4;
-	public static final int LOGO_ICON_MEDIA_ID = -5;
-	public static final int DEFAULT_NOTE_ICON_MEDIA_ID = -6;
+	public static final int LOGO_ICON_MEDIA_ID             = -5;
+	public static final int DEFAULT_NOTE_ICON_MEDIA_ID     = -6;
 
 	public MediaCD mediaCD;
-	public long media_id;
-	public long game_id;
-	public long user_id; //??
-	public String name;
-	public String file_name;
 
-	public URL localURL; // local file URL?
-	public URL remoteURL; // was: url; // are both url and thumb_url always the same?
-	public URL localThumbURL;
-//	public URL thumb_url; // was: remoteThumbURL; // are both url and thumb_url always the same?
-//	public Drawable data; // these will not serialize with GSON and will cause a recursion-like stack overflow;
-//	public Drawable thumb;// todo: replace these with the raw image data somehow, or perhaps just the drawable resourceID.
+	public long   media_id;
+	public long   game_id;
+	public long   user_id; //??
+	public String name; // omitted in iOS, but a valid field in server return data from getMediaForGame (fetchMedias)
+	public String file_name; // omitted in iOS, but a valid field in server return data as stated above
+
+	public URL    localURL; // local file URL?
+	public URL    remoteURL; // was: url; // are both url and thumb_url always the same?
+	public URL    localThumbURL;
 	public Bitmap data; // todo: need to flesh out how this would hold the data across serialization.
 	public Bitmap thumb;
 
-/*   Get the raw data from a resource and convert to a file:
+	// Not sure if we need this ability. Delete block later if clearly unneeded. -sem
+	/*   Get the raw data from a resource and convert to a file:
 	Resources res = getResources();
 	Drawable drawable = res.getDrawable(R.drawable.my_pic);
 	Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
@@ -48,6 +45,7 @@ public class Media {
 	bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 	byte[] bitMapData = stream.toByteArray();
         */
+
 	public Media() {
 		this.mediaCD = new MediaCD();
 	}
