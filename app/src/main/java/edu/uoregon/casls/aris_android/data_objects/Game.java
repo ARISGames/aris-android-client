@@ -567,7 +567,7 @@ public class Game {
 	}
 
 	public long rating() {
-		if (comments.isEmpty()) return 0;
+		if (comments == null || comments.isEmpty()) return 0;
 		long rating = 0;
 		for (GameComment comment : comments)
 			rating += comment.rating;

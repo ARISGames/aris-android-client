@@ -182,7 +182,7 @@ public class InstancesModel extends ARISModel {
 				deltas.put("lost", d);  //deltas = @{@"added":@,@"lost":@@{@"instance":i,@"delta":NSNumber numberWithLong:qty-oldQty}};
 			}
 
-			if (!deltas.isEmpty()) {
+			if (deltas != null && !deltas.isEmpty()) {
 				if (i.owner_type.contentEquals("USER") && i.owner_id == Long.parseLong(mGamePlayAct.mPlayer.user_id))
 					this.sendNotifsForGameDeltas(null, deltas);
 				else if (i.owner_type.contentEquals("GAME_CONTENT"))

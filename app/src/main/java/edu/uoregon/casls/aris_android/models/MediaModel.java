@@ -245,7 +245,7 @@ public class MediaModel extends ARISModel {
 
 	public long numMediaTryingToLoad()
 	{
-		if (mediaDataLoadDelegateHandles.isEmpty()) return 9999;
+		if (mediaDataLoadDelegateHandles == null || mediaDataLoadDelegateHandles.isEmpty()) return 9999;
 		return mediaDataLoadDelegateHandles.size();
 	}
 
