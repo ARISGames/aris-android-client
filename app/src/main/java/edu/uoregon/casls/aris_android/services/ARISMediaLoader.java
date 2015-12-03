@@ -50,12 +50,12 @@ public class ARISMediaLoader {
 
 	public void loadMediaFromMR(MediaResult mr) {
 		if (mr.media.thumb != null)      { this.mediaLoadedForMR(mr); }
-		else if(mr.media.data != null)       { this.deriveThumbForMR(mr); }
-		else if(mr.media.localURL != null)   {
+		else if (mr.media.data != null)       { this.deriveThumbForMR(mr); }
+		else if (mr.media.localURL != null)   {
 //			mr.media.data = dataWithContentsOfURL:mr.media.localURL;
 			mr.media.data = BitmapFactory.decodeFile(mr.media.localURL.getPath());//.decodeStream(mr.media.localURL.openConnection().getInputStream());
 		}
-		else if(mr.media.remoteURL != null) { // todo: call a pollServer type method to get media data, but one that can handle load failure and schedule to reload.
+		else if (mr.media.remoteURL != null) { // todo: call a pollServer type method to get media data, but one that can handle load failure and schedule to reload.
 			// set upa a server request for the call to get Media data
 //			NSURLRequest request = NSURLRequest requestWithURL:mr.media.remoteURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0;
 //			if (mr.connection) mr.connection cancel; // if it's already defined, bail.
@@ -71,7 +71,7 @@ public class ARISMediaLoader {
 			}
 			this.loadMediaFromMR(mr);
 		}
-		else if(mr.media.remoteURL == null) { this.loadMetaDataForMR(mr); }
+		else if (mr.media.remoteURL == null) { this.loadMetaDataForMR(mr); }
 	}
 
 	public void loadMetaDataForMR(MediaResult mr)

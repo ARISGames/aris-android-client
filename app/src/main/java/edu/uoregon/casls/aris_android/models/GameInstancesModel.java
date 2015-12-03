@@ -64,10 +64,10 @@ public class GameInstancesModel extends ARISModel {
 		return 1;
 	}
 
-	public void gameInstancesTouched(List<GameInstance> gameInstances) {
+	public void gameInstancesTouched() { // No one ever really calls this. coded for potential future use and for code consistency
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.game_instance_touched(); //_ARIS_NOTIF_SEND_(@"INSTANCES_TOUCHED",nil,nil);
-		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_instances_touched(); //_ARIS_NOTIF_SEND_(@"MODEL_GAME_INSTANCES_TOUCHED",nil,nil);
+		mGamePlayAct.mDispatch.maintenance_piece_available(); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void touchGameInstances() {

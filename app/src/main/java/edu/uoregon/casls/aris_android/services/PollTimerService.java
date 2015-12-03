@@ -1,10 +1,12 @@
-package edu.uoregon.casls.aris_android.Utilities;
+package edu.uoregon.casls.aris_android.services;
 
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+
+import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 
 /**
  * Created by smorison on 11/5/15.

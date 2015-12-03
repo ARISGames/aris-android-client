@@ -31,6 +31,7 @@ public class Media {
 	public String file_name; // omitted in iOS, but a valid field in server return data as stated above
 
 	public URL    localURL; // local file URL?
+	public URL    url; // this is the field that comes in on the json form server\
 	public URL    remoteURL; // was: url; // are both url and thumb_url always the same?
 	public URL    localThumbURL;
 	public Bitmap data; // todo: need to flesh out how this would hold the data across serialization.
@@ -57,6 +58,15 @@ public class Media {
 	public Media initWithMediaCD(MediaCD mcd) {
 		this.mediaCD = mcd;
 		return this;
+	}
+
+	/**
+	 * since some of the member vars are not consistent with the json media data from the server
+	 * call this to patch the discrepancy
+	 */
+	public void initUrlDuctTape() {
+		if (url != null && !url.toString().contentEquals(""))
+			this.remoteURL = this.url;
 	}
 
 	public long game_id() {

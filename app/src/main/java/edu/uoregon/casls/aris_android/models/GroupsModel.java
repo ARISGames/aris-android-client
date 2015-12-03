@@ -73,10 +73,10 @@ public class GroupsModel extends ARISModel {
 		this.updatePlayerGroup(newGroup);
 	}
 
-	public void groupTouched(long groupId) {
+	public void groupTouched() {
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.group_touched(); //_ARIS_NOTIF_SEND_("MODEL_GROUP_TOUCHED", null, null);
-		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_("GAME_PIECE_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.model_group_touched(); //_ARIS_NOTIF_SEND_("MODEL_GROUP_TOUCHED", null, null);
+		mGamePlayAct.mDispatch.maintenance_piece_available(); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void updateGroups(List<Group> newGroups) {

@@ -46,6 +46,9 @@ import edu.uoregon.casls.aris_android.data_objects.WebPage;
 
 /**
  * Created by smorison on 11/3/15.
+ *
+ * Centralized hub for most game play model HTTP call server responses
+ * Called asynchronously as server responses are received.
  */
 public class ResponseHandler { // for now only handles responses with respect to GamePlayActivity.
 	
@@ -528,6 +531,9 @@ public class ResponseHandler { // for now only handles responses with respect to
 			else if (callingReq.equals(Calls.HTTP_TOUCH_ITEMS_4_PLAYER)) {
 				// call PlayerInstancesModel.playerInstancesTouched()?
 				mGamePlayAct.mDispatch.services_player_instances_touched(); //_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_INSTANCES_TOUCHED", nil, nil);
+			}
+			else if (callingReq.equals(Calls.HTTP_TOUCH_GROUP_4_PLAYER)) {
+				mGamePlayAct.mDispatch.services_group_touched(); //_ARIS_NOTIF_SEND_(@"SERVICES_GROUP_TOUCHED", nil, nil);
 			}
 			else if (callingReq.equals(Calls.HTTP_TOUCH_SCENE_4_PLAYER)) {
 				mGamePlayAct.mDispatch.services_scene_touched(); //_ARIS_NOTIF_SEND_(@"SERVICES_SCENE_TOUCHED", nil, nil);

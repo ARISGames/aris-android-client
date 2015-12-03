@@ -201,6 +201,7 @@ public class GamesListActivity extends AppCompatActivity {
 			mJsonGamesList = jsonObject.getJSONArray("data");
 			mListedGamesMap = parseGamesToMap(mJsonGamesList);
 		} catch (JSONException e) {
+			// todo: a catch here means that the games list json was hosed. Reload from scratch. (restart activity?)
 			e.printStackTrace();
 		}
 		mTotalGamesCount = 		savedInstanceState.getInt("total_games_count");
@@ -575,11 +576,14 @@ public class GamesListActivity extends AppCompatActivity {
 					wvGameIcon.setBackgroundResource(R.drawable.logo_icon); // set to static aris icon
 				}
 				else {
+					LinearLayout llIconViewParent = (LinearLayout) gameItemView.findViewById(R.id.ll_game_icon);
 					wvGameIcon.getSettings().setJavaScriptEnabled(true);
 					wvGameIcon.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
 					wvGameIcon.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
-					wvGameIcon.getSettings().setUseWideViewPort(true);
-					wvGameIcon.loadUrl(gameItem.icon_media.remoteURL.toString());
+					wvGameIcon.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+					String iconAsHtmlImg = "<html><body style=\"margin: 0; padding: 0\"><img src=\"" + gameItem.icon_media.remoteURL.toString() + "\" width=\"100%\" height=\"100%\"/></body></html>";
+					wvGameIcon.loadData(iconAsHtmlImg, "text/html", null);
+//					wvGameIcon.loadUrl(gameItem.icon_media.remoteURL.toString());
 				}
 
 				gameItemView.setId(Integer.parseInt(game_id_key));

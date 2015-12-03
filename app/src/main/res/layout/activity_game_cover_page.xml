@@ -57,7 +57,7 @@
                 android:layout_below="@+id/wv_game_pic"
                 android:layout_centerHorizontal="true"/>
 
-            <TextView
+            <WebView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"

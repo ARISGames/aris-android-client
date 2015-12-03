@@ -28,6 +28,10 @@ import edu.uoregon.casls.aris_android.data_objects.Trigger;
 
 /**
  * Created by smorison on 10/6/15.
+ *
+ * Centralized location for all game model HTTP server calls. Sends requests to server
+ * asynchronously. Responses are fielded by ResponseHandler which must be instantiated
+ * in GamePlayActivity and referenced herein.
  */
 public class Services {
 
@@ -52,7 +56,7 @@ public class Services {
 	}
 
 	public void fetchInstances() {
-		pollServer(Calls.HTTP_GET_INSTANCES_4_GAME, getJsonGameId()); //could leave out ownerId and get same result, but would rather be explicit -iOS comment
+		pollServer(Calls.HTTP_GET_INSTANCES_4_GAME, jsonGameId()); //could leave out ownerId and get same result, but would rather be explicit -iOS comment
 	}
 
 	public void fetchInstanceById(long i) {
@@ -73,31 +77,31 @@ public class Services {
 	}
 
 	public void fetchRequirementAtoms() {
-		pollServer(Calls.HTTP_GET_REQ_ATOMS_4_GAME, getJsonGameId()); // todo needs Response condition
+		pollServer(Calls.HTTP_GET_REQ_ATOMS_4_GAME, jsonGameId()); // todo needs Response condition
 	}
 
 	public void fetchRequirementAnds() {
-		pollServer(Calls.HTTP_GET_REQ_AND_PKGS_4_GAME, getJsonGameId()); // todo needs Response condition
+		pollServer(Calls.HTTP_GET_REQ_AND_PKGS_4_GAME, jsonGameId()); // todo needs Response condition
 	}
 
 	public void fetchRequirementRoots() {
-		pollServer(Calls.HTTP_GET_REQ_ROOT_PKGS_4_GAME, getJsonGameId()); // todo needs Response condition
+		pollServer(Calls.HTTP_GET_REQ_ROOT_PKGS_4_GAME, jsonGameId()); // todo needs Response condition
 	}
 
 	public void touchItemsForGame() {
-		pollServer(Calls.HTTP_TOUCH_ITEMS_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_TOUCH_ITEMS_4_GAME, jsonGameId());
 	}
 
 	public void touchItemsForPlayer() {
-		pollServer(Calls.HTTP_TOUCH_ITEMS_4_PLAYER, getJsonGameId());
+		pollServer(Calls.HTTP_TOUCH_ITEMS_4_PLAYER, jsonGameId());
 	}
 
 	public void touchItemsForGroups() {
-		pollServer(Calls.HTTP_TOUCH_ITEMS_4_GROUPS, getJsonGameId());
+		pollServer(Calls.HTTP_TOUCH_ITEMS_4_GROUPS, jsonGameId());
 	}
 
 	public void fetchItems() {
-		pollServer(Calls.HTTP_GET_ITEMS_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_ITEMS_4_GAME, jsonGameId());
 	}
 
 	public void dropItem(long item_id, long qty) {
@@ -105,7 +109,7 @@ public class Services {
 	}
 
 	public void fetchLogsForPlayer() {
-		pollServer(Calls.HTTP_GET_LOGS_4_PLAYER, getJsonGameId());
+		pollServer(Calls.HTTP_GET_LOGS_4_PLAYER, jsonGameId());
 	}
 
 	public void logPlayerEnteredGame() {
@@ -175,39 +179,39 @@ public class Services {
 	}
 
 	public void fetchDialogs() {
-		pollServer(Calls.HTTP_GET_DIALOGS_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_DIALOGS_4_GAME, jsonGameId());
 	}
 
 	public void fetchDialogCharacters() {
-		pollServer(Calls.HTTP_GET_DIALOG_CHARS_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_DIALOG_CHARS_4_GAME, jsonGameId());
 	}
 
 	public void fetchDialogScripts() {
-		pollServer(Calls.HTTP_GET_DIALOG_SCRIPTS_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_DIALOG_SCRIPTS_4_GAME, jsonGameId());
 	}
 
 	public void fetchDialogOptions() {
-		pollServer(Calls.HTTP_GET_DIALOG_OPTNS_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_DIALOG_OPTNS_4_GAME, jsonGameId());
 	}
 
 	public void fetchQuestsForPlayer() {
-		pollServer(Calls.HTTP_GET_QUESTS_4_PLAYER, getJsonGameId());
+		pollServer(Calls.HTTP_GET_QUESTS_4_PLAYER, jsonGameId());
 	}
 
 	public void fetchQuests() {
-		pollServer(Calls.HTTP_GET_QUESTS_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_QUESTS_4_GAME, jsonGameId());
 	}
 
 	public void fetchTags() {
-		pollServer(Calls.HTTP_GET_TAGS_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_TAGS_4_GAME, jsonGameId());
 	}
 
 	public void fetchObjectTags() {
-		pollServer(Calls.HTTP_GET_OBJ_TAGS_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_OBJ_TAGS_4_GAME, jsonGameId());
 	}
 
 	public void fetchMedias() {
-		pollServer(Calls.HTTP_GET_MEDIA_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_MEDIA_4_GAME, jsonGameId());
 	}
 
 	public void fetchMediaById(long media_id) {
@@ -224,11 +228,11 @@ public class Services {
 	}
 
 	public void fetchNotes() {
-		pollServer(Calls.HTTP_GET_NOTES_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_NOTES_4_GAME, jsonGameId());
 	}
 
 	public void fetchNoteComments() {
-		pollServer(Calls.HTTP_GET_NOTE_COMMNTS_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_NOTE_COMMNTS_4_GAME, jsonGameId());
 	}
 
 	public void createNoteComment(NoteComment n) {
@@ -241,19 +245,19 @@ public class Services {
 	}
 
 	public void fetchEvents() {
-		pollServer(Calls.HTTP_GET_EVENTS_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_EVENTS_4_GAME, jsonGameId());
 	}
 
 	public void fetchFactories() {
-		pollServer(Calls.HTTP_GET_FACTORIES_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_FACTORIES_4_GAME, jsonGameId());
 	}
 
 	public void fetchGroups() {
-		pollServer(Calls.HTTP_GET_GROUPS_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_GROUPS_4_GAME, jsonGameId());
 	}
 
 	public void touchGroupForPlayer() {
-		pollServer(Calls.HTTP_TOUCH_GROUP_4_PLAYER, getJsonGameId());
+		pollServer(Calls.HTTP_TOUCH_GROUP_4_PLAYER, jsonGameId());
 	}
 
 	public void fetchGroupForPlayer() {
@@ -264,35 +268,35 @@ public class Services {
 	}
 
 	public void fetchTriggers() {
-		pollServer(Calls.HTTP_GET_TRIGGERS_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_TRIGGERS_4_GAME, jsonGameId());
 	}
 
 	public void fetchTriggerById(long t) {
 	}
 
 	public void fetchTriggersForPlayer() {
-		pollServer(Calls.HTTP_GET_TRIGGERS_4_PLAYER, getJsonGameId());
+		pollServer(Calls.HTTP_GET_TRIGGERS_4_PLAYER, jsonGameId());
 	}
 
 	public void fetchOverlays() {
-		pollServer(Calls.HTTP_GET_OVERLAYS_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_OVERLAYS_4_GAME, jsonGameId());
 
 	}
 
 	public void fetchOverlaysForPlayer() {
-		pollServer(Calls.HTTP_GET_OVERLAYS_4_PLAYER, getJsonGameId());
+		pollServer(Calls.HTTP_GET_OVERLAYS_4_PLAYER, jsonGameId());
 	}
 
 	public void fetchTabs() {
-		pollServer(Calls.HTTP_GET_TABS_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_TABS_4_GAME, jsonGameId());
 	}
 
 	public void fetchTabsForPlayer() {
-		pollServer(Calls.HTTP_GET_TABS_4_PLAYER, getJsonGameId());
+		pollServer(Calls.HTTP_GET_TABS_4_PLAYER, jsonGameId());
 	}
 
 	public void fetchWebPages() {
-		pollServer(Calls.HTTP_GET_WEB_PAGES_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_WEB_PAGES_4_GAME, jsonGameId());
 	}
 
 	public void fetchUsers() {
@@ -302,25 +306,25 @@ public class Services {
 	}
 
 	public void fetchPlaques() {
-		pollServer(Calls.HTTP_GET_PLAQUES_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_PLAQUES_4_GAME, jsonGameId());
 	}
 
 	public void fetchScenes() {
-		pollServer(Calls.HTTP_GET_SCENES_4_GAME, getJsonGameId());
+		pollServer(Calls.HTTP_GET_SCENES_4_GAME, jsonGameId());
 	}
 
 	public void touchSceneForPlayer() {
 	}
 
 	public void fetchSceneForPlayer() {
-		pollServer(Calls.HTTP_GET_SCENE_4_PLAYER, getJsonGameId());
+		pollServer(Calls.HTTP_GET_SCENE_4_PLAYER, jsonGameId());
 	}
 
 
 	private final static String TAG_SERVER_SUCCESS = "success";
 	public JSONObject mJsonAuth;
 
-	public JSONObject getJsonGameId() {
+	public JSONObject jsonGameId() {
 		JSONObject jsonGameID = new JSONObject();
 		try {
 			jsonGameID.put("game_id", mGamePlayAct.mGame.game_id);
@@ -391,7 +395,7 @@ public class Services {
 		// 	post data should look like this: {"auth":{"user_id":1,"key":"F7...yzX4"},"game_id":"6"}
 		if (AppUtils.isNetworkAvailable(mGamePlayAct.getApplicationContext())) {
 			AsyncHttpClient client = new AsyncHttpClient();
-
+//			static String reqCall
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient Sending Req: " + request_url + "Params: " + jsonMain.toString());
 			client.post(context, request_url, entity, "application/json", new JsonHttpResponseHandler() {
 				@Override
@@ -412,6 +416,11 @@ public class Services {
 					t.setGravity(Gravity.CENTER, 0, 0);
 					t.show();
 					super.onFailure(statusCode, headers, responseString, throwable);
+				}
+				@Override
+				public void onProgress(int remaining, int total) {
+					Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient Progress for Req: " + requestApi + ". Progress: " + remaining + "/" + total);
+					// todo: set up progress bars of some sort for each request.
 				}
 			});
 		}

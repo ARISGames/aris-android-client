@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
-import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Scene;
 
 /**
@@ -104,8 +103,8 @@ public class ScenesModel extends ARISModel {
 
 	public void sceneTouched() {
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.scene_touched(); //		_ARIS_NOTIF_SEND_(@"MODEL_SCENE_TOUCHED",nil,nil);
-		mGamePlayAct.mDispatch.game_piece_available(); //		_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_scene_touched(); //		_ARIS_NOTIF_SEND_(@"MODEL_SCENE_TOUCHED",nil,nil);
+		mGamePlayAct.mDispatch.maintenance_piece_available(); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void requestScenes() {

@@ -11,15 +11,16 @@
     <!-- Left side game icon -->
     <LinearLayout
         android:id="@+id/ll_game_icon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="5dp"
-        android:padding="3dp" >
+        android:layout_marginTop="4dp"
+        android:padding="1dp" >
         <WebView
             android:id="@+id/wv_game_icon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:src="@drawable/logo_icon" />
     </LinearLayout>
 

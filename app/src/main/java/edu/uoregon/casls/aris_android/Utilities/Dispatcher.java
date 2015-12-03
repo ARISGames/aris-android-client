@@ -33,6 +33,14 @@ import edu.uoregon.casls.aris_android.data_objects.WebPage;
 
 /**
  * Created by smorison on 10/6/15.
+ *
+ * Serves the function of centralizing all messaging between various classes.
+ * In ARIS iOS this is done with NSNotification observers and posts aliased as
+ * _ARIS_NOTIF_SEND_ and ..._LISTEN_ (and ..._IGNORE_)
+ * This is a rather crude but effective substitute for the more elegant iOS
+ * messaging mechanism.
+ * ToDo (possibly) rewrite this with asynchronous messaging using Android's LocalBroadcastManager's
+ * ToDo sendBroadcast() and registerReceiver(), to behave more like NSNotification in Obj C.
  */
 public class Dispatcher {
 	// Cannot be instantiated outside of the context of GamePlayActivity
@@ -117,7 +125,8 @@ public class Dispatcher {
 	//	DATA_LOADED", nil, nil);
 	public void game_data_loaded() {
 		// in iOS would call LoadingViewController.gameDataLoaded(), which then calls Game.requestPlayerData(); I'll call it directly.
-		mGamePlayAct.mGame.requestPlayerData();
+//		mGamePlayAct.mGame.requestPlayerData(); // looks wrong. Is wrong. Bug. Causes infinite loop.
+		mGamePlayAct.gameDataLoaded();
 	}
 
 	//	INSTANCES_AVAILABLE",nil,nil);
@@ -125,8 +134,8 @@ public class Dispatcher {
 		// not listened for;
 	}
 
-	//	INSTANCES_TOUCHED",nil,nil);
-	public void game_instance_touched() {
+	//	MODEL_GAME_INSTANCES_TOUCHED",nil,nil);
+	public void model_game_instances_touched() {
 		// no action assigned to this yet.
 	}
 
@@ -152,6 +161,10 @@ public class Dispatcher {
 		if (mGamePlayAct.mGame.listen_player_piece_available)
 			mGamePlayAct.mGame.playerPieceReceived();
 	}
+	// MAINTENANCE_PIECE_AVAILABLE",nil,nil);
+	public void maintenance_piece_available() {
+		if (mGamePlayAct.mGame.listen_maintenance_piece_available) mGamePlayAct.mGame.maintenancePieceReceived();
+	}
 
 	//	MODEL_GROUP_INSTANCES_AVAILABLE",nil,nil);
 	public void group_instances_available() {
@@ -159,12 +172,12 @@ public class Dispatcher {
 	}
 
 	//	MODEL_GROUP_INSTANCES_TOUCHED",nil,nil);
-	public void group_instances_touched() {
+	public void model_group_instances_touched() {
 		// no listeners currently
 	}
 
 	//	MODEL_GROUP_TOUCHED",nil,nil);
-	public void group_touched() {
+	public void model_group_touched() {
 		// no listeners
 	}
 
@@ -271,7 +284,7 @@ public class Dispatcher {
 	}
 
 	//	MODEL_PLAYER_INSTANCES_TOUCHED",nil,nil);
-	public void player_instances_touched() {
+	public void model_player_instances_touched() {
 		// no listeners
 	}
 
@@ -333,7 +346,7 @@ public class Dispatcher {
 	}
 
 	//	MODEL_SCENE_TOUCHED",nil,nil); // sent from ScenesModel but not listened to -sem
-	public void scene_touched() {
+	public void model_scene_touched() {
 		// no listeners
 	}
 
@@ -443,10 +456,21 @@ public class Dispatcher {
 	//	SERVICES_FACTORY_RECEIVED", nil, @{@"factory":factory});
 //	SERVICES_GAME_FETCH_FAILED", nil, nil); }
 //	SERVICES_GAME_INSTANCES_TOUCHED", nil, nil);
+	public void services_game_instances_touched() {
+		// no senders to this as of 12/3/15
+		mGamePlayAct.mGame.gameInstancesModel.gameInstancesTouched();
+	}
 //	SERVICES_GAME_RECEIVED", nil, @{@"game":[[Game alloc] initWithDictionary:(NSDictionary *)result.resultData]});
 //	SERVICES_GROUP_INSTANCES_TOUCHED", nil, nil);
+	public void services_group_instances_touched() {
+		// no senders to this as of 12/3/15
+		mGamePlayAct.mGame.groupInstancesModel.groupInstancesTouched();
+	}
 //	SERVICES_GROUP_RECEIVED", nil, @{@"group":group});
 //	SERVICES_GROUP_TOUCHED", nil, nil);
+	public void services_group_touched() {
+		mGamePlayAct.mGame.groupsModel.groupTouched();
+	}
 //	SERVICES_GROUPS_RECEIVED", nil, @{@"groups":groups});
 //	SERVICES_INSTANCE_RECEIVED", nil, @{@"instance":instance});
 //	SERVICES_INSTANCES_RECEIVED", nil, @{@"instances":instances});

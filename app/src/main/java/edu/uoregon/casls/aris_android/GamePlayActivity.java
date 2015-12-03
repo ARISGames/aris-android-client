@@ -238,7 +238,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	}
 
 	private void beginGame() {
-		mGame.gameBegan(); // start game data rolling
+		mGame.gameBegan(); // Main game data loaded start cyclic game data rolling
 	}
 
 

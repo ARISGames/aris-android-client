@@ -55,10 +55,10 @@ public class GroupInstancesModel extends ARISModel {
 		n_game_data_received = 0;
 	}
 
-	public void groupInstancesTouched(List<Instance> instances) {
+	public void groupInstancesTouched() { // called as listener to Dispatcher.services_group_instances_touched(). Not called as of 12/3/15
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.group_instances_touched(); //mGamePlayAct.mDispatch. //_ARIS_NOTIF_SEND_(@"MODEL_GROUP_INSTANCES_TOUCHED",nil,nil);
-		mGamePlayAct.mDispatch.game_piece_available(); //mGamePlayAct.mDispatch. //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_group_instances_touched();  //_ARIS_NOTIF_SEND_(@"MODEL_GROUP_INSTANCES_TOUCHED",nil,nil);
+		mGamePlayAct.mDispatch.maintenance_piece_available();  //_ARIS_NOTIF_SEND_(@"MAINTENANCE_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void touchGroupInstances() {

@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -54,7 +55,8 @@ public class GameCoverPageActivity extends AppCompatActivity {
 	private boolean mHasPlayed;
 	private ImageView ivGameLogo;
 	private TextView tvGameName;
-	private TextView tvGameDesc;
+	private WebView wvGameDesc;
+//	private TextView tvGameDesc;
 	private WebView wvGamePic;
 
 	@Override
@@ -82,7 +84,8 @@ public class GameCoverPageActivity extends AppCompatActivity {
 //		ImageView ivGameIcon = (ImageView) findViewById(R.id.iv_game_icon);
 		ivGameLogo = (ImageView) findViewById(R.id.iv_game_designer_logo);
 		tvGameName = (TextView) findViewById(R.id.tv_game_cover_name);
-		tvGameDesc = (TextView) findViewById(R.id.tv_game_desc);
+		wvGameDesc = (WebView) findViewById(R.id.tv_game_desc);
+//		tvGameDesc = (TextView) findViewById(R.id.tv_game_desc);
 		mProgressView = findViewById(R.id.network_req_progress);
 		mLlFooter = (LinearLayout) findViewById(R.id.ll_game_cover_pg_footer);
 		mFlNewGame = (FrameLayout) findViewById(R.id.fl_newgame_btnbox);
@@ -204,7 +207,12 @@ public class GameCoverPageActivity extends AppCompatActivity {
 
 	private void updateAllViews() {
 		tvGameName.setText(mGame.name);
-		tvGameDesc.setText(mGame.desc);
+		wvGameDesc.getSettings().setJavaScriptEnabled(true);
+		wvGameDesc.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
+		wvGameDesc.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
+		wvGameDesc.getSettings().setUseWideViewPort(true); // constrain the image horizontally
+		wvGameDesc.loadData(mGame.desc, "text/html", null); // was a text view and would not handle html
+//		tvGameDesc.setText(mGame.desc);
 		wvGamePic = (WebView) findViewById(R.id.wv_game_pic);
 		if (mGame.media.media_id == 0) { // 0 = no custom icon
 			wvGamePic.setBackgroundColor(0x00000000);
@@ -218,9 +226,11 @@ public class GameCoverPageActivity extends AppCompatActivity {
 		else {
 			wvGamePic.getSettings().setJavaScriptEnabled(true);
 			wvGamePic.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
+//			wvGamePic.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
 			wvGamePic.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
-			wvGamePic.getSettings().setUseWideViewPort(false); // constrain the image horizontally
-			wvGamePic.loadUrl(mGame.media.url.toString());
+			wvGamePic.getSettings().setUseWideViewPort(true); // constrain the image horizontally
+//			wvGamePic
+			wvGamePic.loadUrl(mGame.media.remoteURL.toString());
 		}
 
 		if (mHasPlayed) {

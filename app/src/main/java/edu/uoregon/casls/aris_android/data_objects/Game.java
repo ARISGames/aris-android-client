@@ -21,7 +21,7 @@ import java.util.List;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.Utilities.AppConfig;
-import edu.uoregon.casls.aris_android.Utilities.PollTimerService;
+import edu.uoregon.casls.aris_android.services.PollTimerService;
 import edu.uoregon.casls.aris_android.models.ARISModel;
 import edu.uoregon.casls.aris_android.models.DialogsModel;
 import edu.uoregon.casls.aris_android.models.EventsModel;
@@ -284,12 +284,13 @@ public class Game {
 			JSONObject jsonMedia = jsonGameData.getJSONObject("media");
 			media = gson.fromJson(jsonMedia.toString(), Media.class);
 //			android.util.Log.d(Config.LOGTAG, getClass().getSimpleName() + "Debug break to examine object media");
-
+			media.initUrlDuctTape(); // tie server media data into new class var names
 		}
 		if (jsonGameData.has("icon_media")) {
 			// get icon_media block
 			JSONObject jsonMedia = jsonGameData.getJSONObject("icon_media");
 			icon_media = gson.fromJson(jsonMedia.toString(), Media.class);
+			icon_media.initUrlDuctTape();// tie server media data into new class var names
 		}
 
 		// none of these are utilized, or even mentioned in, in the iOS code leaving in for future potential
@@ -430,7 +431,7 @@ public class Game {
 	}
 
 	public void requestMaintenanceData() {
-		n_player_data_received = 0;
+		n_player_data_received = 0; //
 		for (ARISModel model : models) {
 			model.requestMaintenanceData();
 		}
@@ -455,17 +456,16 @@ public class Game {
 		}
 	}
 
-	public void gamePieceReceived() {
+	public void gamePieceReceived() { // called as listener to todo: GAME_PIECE_AVAILABLE?
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.game_percent_loaded((float) n_game_data_received / (float) n_game_data_to_receive);
 		if (this.allGameDataReceived()) {
 			n_game_data_received = n_game_data_to_receive; //should already be exactly this...
 			mGamePlayAct.mDispatch.game_data_loaded(); // _ARIS_NOTIF_SEND_(@"DATA_LOADED", nil, nil); // will call requestPlayerData()
 		}
-		percentLoadedChanged();
 	}
 
-	public void maintenancePieceReceived() {
+	public void maintenancePieceReceived() { // called as listener to [GameInstances|GroupInstance|Groups|PlayerInstance|Scenes]Touched() via Dispater.maintenance_piece_available()
 		n_maintenance_data_received++;
 		mGamePlayAct.mDispatch.maintenance_percent_loaded((float) n_maintenance_data_received / (float) n_maintenance_data_to_receive); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_PERCENT_LOADED", nil,
 		// @{@"percent":[NSNumber numberWithFloat:(float)n_maintenance_data_received/(float)n_maintenance_data_to_receive]});
@@ -530,7 +530,7 @@ public class Game {
 		listen_media_piece_available = false;        // _ARIS_NOTIF_IGNORE_(@"MEDIA_PIECE_AVAILABLE", self, nil);
 //		todo: build poller!
 //		poller = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(requestPlayerData) userInfo:null repeats:true];
-		this.startPollTimer();
+//		this.startPollTimer();
 	}
 
 	public void gameLeft() {
@@ -595,6 +595,7 @@ public class Game {
 	};
 
 	private void handleMessage(Intent msg) {
+		if (!isPollTImerRunning) return; // ignore any calls after timer was killed
 		Bundle data = msg.getExtras();
 		switch (data.getInt(AppConfig.COMMAND, 0)) {
 			case AppConfig.POLLTIMER_CYCLE_PASS:

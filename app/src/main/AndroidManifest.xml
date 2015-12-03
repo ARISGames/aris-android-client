@@ -67,18 +67,21 @@
         </activity>
         <activity
             android:name=".ProfileActivity"
-            android:label="@string/title_activity_profile" >
+            android:label="@string/title_activity_profile"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".GameCoverPageActivity"
-            android:label="@string/title_activity_game_cover_page" >
+            android:label="@string/title_activity_game_cover_page"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".GamePlayActivity"
             android:label="@string/title_activity_game_play"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
         </activity>
-        <service android:name=".Utilities.PollTimerService">
+        <service android:name=".services.PollTimerService">
         </service>
     </application>
 
