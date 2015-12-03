@@ -100,7 +100,7 @@ public class NotesModel extends ARISModel {
 			if (!notes.containsKey(newNoteId)) notes.put(newNoteId, newNote);
 		}
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.notes_available(); //_ARIS_NOTIF_SEND_(@"MODEL_NOTES_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_notes_available(); //_ARIS_NOTIF_SEND_(@"MODEL_NOTES_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
@@ -123,7 +123,7 @@ public class NotesModel extends ARISModel {
 			if (!noteComments.containsKey(newCommentId)) noteComments.put(newCommentId, newComment);
 		}
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.note_comments_available(); //_ARIS_NOTIF_SEND_(@"MODEL_NOTE_COMMENTS_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_note_comments_available(); //_ARIS_NOTIF_SEND_(@"MODEL_NOTE_COMMENTS_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 

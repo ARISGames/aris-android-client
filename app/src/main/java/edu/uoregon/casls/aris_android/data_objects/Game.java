@@ -481,7 +481,7 @@ public class Game {
 		// @{@"percent":[NSNumber numberWithFloat:(float)n_player_data_received/(float)n_player_data_to_receive]});
 		if (this.allPlayerDataReceived()) {
 			n_player_data_received = n_player_data_to_receive; //should already be exactly this...
-			mGamePlayAct.mDispatch.player_data_loaded(); //_ARIS_NOTIF_SEND_(@"PLAYER_DATA_LOADED", nil, nil);
+			mGamePlayAct.mDispatch.model_player_data_loaded(); //_ARIS_NOTIF_SEND_(@"PLAYER_DATA_LOADED", nil, nil);
 		}
 	}
 
@@ -491,7 +491,7 @@ public class Game {
 		// @{@"percent":[NSNumber numberWithFloat:(float)n_media_data_received/(float)n_media_data_to_receive]});
 		if (this.allMediaDataReceived()) {
 			n_media_data_received = n_media_data_to_receive; //should already be exactly this...
-			mGamePlayAct.mDispatch.media_data_loaded(); //_ARIS_NOTIF_SEND_(@"MEDIA_DATA_LOADED", nil, nil);
+			mGamePlayAct.mDispatch.model_media_data_loaded(); //_ARIS_NOTIF_SEND_(@"MEDIA_DATA_LOADED", nil, nil);
 		}
 	}
 
@@ -522,7 +522,7 @@ public class Game {
 		mGamePlayAct.mDispatch.game_percent_loaded(percentReceived); // _ARIS_NOTIF_SEND_(@"PERCENT_LOADED", null, @{@"percent":percentReceived});
 	}
 
-	public void gameBegan() { // todo: bring up to date with iOS
+	public void gameBegan() {
 
 		listen_game_piece_available = false;        // _ARIS_NOTIF_IGNORE_(@"GAME_PIECE_AVAILABLE", self, null);
 		listen_player_piece_available = false;        // _ARIS_NOTIF_IGNORE_(@"PLAYER_PIECE_AVAILABLE", self, null);
@@ -530,7 +530,7 @@ public class Game {
 		listen_media_piece_available = false;        // _ARIS_NOTIF_IGNORE_(@"MEDIA_PIECE_AVAILABLE", self, nil);
 //		todo: build poller!
 //		poller = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(requestPlayerData) userInfo:null repeats:true];
-//		this.startPollTimer();
+		this.startPollTimer();
 	}
 
 	public void gameLeft() {

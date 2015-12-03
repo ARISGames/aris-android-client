@@ -72,7 +72,7 @@ public class RequirementsModel extends ARISModel {
 				requirementRootPackages.put(newRRP.requirement_root_package_id, newRRP); // setObject:newRRP forKey:newRRPId;
 		}
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.requirement_root_packages_available(); //_ARIS_falseTIF_SEND_(@"MODEL_REQUIREMENT_ROOT_PACKAGES_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_requirement_root_packages_available(); //_ARIS_falseTIF_SEND_(@"MODEL_REQUIREMENT_ROOT_PACKAGES_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_falseTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
@@ -87,7 +87,7 @@ public class RequirementsModel extends ARISModel {
 				requirementAndPackages.put(newRAP.requirement_and_package_id, newRAP);
 		}
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.requirement_and_packages_available(); //_ARIS_NOTIF_SEND_(@"MODEL_REQUIREMENT_AND_PACKAGES_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_requirement_and_packages_available(); //_ARIS_NOTIF_SEND_(@"MODEL_REQUIREMENT_AND_PACKAGES_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
@@ -102,7 +102,7 @@ public class RequirementsModel extends ARISModel {
 				requirementAtoms.put(newRA.requirement_atom_id, newRA); //objectForKey:newRAId) requirementAtoms setObject:newRA forKey:newRAId;
 		}
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.requirement_atoms_packages_available(); //_ARIS_NOTIF_SEND_(@"MODEL_REQUIREMENT_ATOMS_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_requirement_atoms_packages_available(); //_ARIS_NOTIF_SEND_(@"MODEL_REQUIREMENT_ATOMS_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 

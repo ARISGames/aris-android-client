@@ -75,7 +75,7 @@ public class GroupInstancesModel extends ARISModel {
 
 			instances.put(newInstance.object_id, newInstance);
 		}
-		mGamePlayAct.mDispatch.group_instances_available(); //_ARIS_NOTIF_SEND_(@"MODEL_GROUP_INSTANCES_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_group_instances_available(); //_ARIS_NOTIF_SEND_(@"MODEL_GROUP_INSTANCES_AVAILABLE",nil,nil);
 	}
 
 	public long dropItemFromGroup(long item_id, long qty) {

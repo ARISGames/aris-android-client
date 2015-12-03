@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
-import edu.uoregon.casls.aris_android.data_objects.Item;
 import edu.uoregon.casls.aris_android.data_objects.WebPage;
 
 /**
@@ -45,7 +44,7 @@ public class WebPagesModel extends ARISModel {
 			if (!webpages.containsKey(newWebPageId))
 				webpages.put(newWebPageId, newWebPage); // setObject:newWebPage forKey:newWebPageId];
 		}
-		mGamePlayAct.mDispatch.web_pages_available(); //;_ARIS_NOTIF_SEND_(@"MODEL_WEB_PAGES_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_web_pages_available(); //;_ARIS_NOTIF_SEND_(@"MODEL_WEB_PAGES_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 		n_game_data_received++;
 	}

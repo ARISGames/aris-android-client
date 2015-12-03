@@ -121,18 +121,18 @@ public class InstancesModel extends ARISModel {
 	public void sendNotifsForGameDeltas(Map<String, Map<String, Object>> gameDeltas, Map<String, Map<String, Object>> playerDeltas) {
 		if (playerDeltas != null && playerDeltas.size() > 0) {
 			if (playerDeltas.containsKey("added"))
-				mGamePlayAct.mDispatch.instances_player_gained(playerDeltas); // _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_GAINED",nil,playerDeltas);
+				mGamePlayAct.mDispatch.model_instances_player_gained(playerDeltas); // _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_GAINED",nil,playerDeltas);
 			if (playerDeltas.containsKey("lost"))
-				mGamePlayAct.mDispatch.instances_player_lost(playerDeltas); // _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_LOST",  nil,playerDeltas);
-			mGamePlayAct.mDispatch.instances_player_available(playerDeltas); // _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_AVAILABLE",nil,playerDeltas);
+				mGamePlayAct.mDispatch.model_instances_player_lost(playerDeltas); // _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_LOST",  nil,playerDeltas);
+			mGamePlayAct.mDispatch.model_instances_player_available(playerDeltas); // _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_AVAILABLE",nil,playerDeltas);
 		}
 
 		if (gameDeltas != null && gameDeltas.size() > 0) {
 			if (gameDeltas.containsKey("added"))
-				mGamePlayAct.mDispatch.instances_gained(gameDeltas); // _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_GAINED",nil,gameDeltas);
+				mGamePlayAct.mDispatch.model_instances_gained(gameDeltas); // _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_GAINED",nil,gameDeltas);
 			if (gameDeltas.containsKey("lost"))
-				mGamePlayAct.mDispatch.instances_lost(gameDeltas); // _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_LOST",  nil,gameDeltas);
-			mGamePlayAct.mDispatch.instances_available(gameDeltas); // _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_AVAILABLE",nil,gameDeltas);
+				mGamePlayAct.mDispatch.model_instances_lost(gameDeltas); // _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_LOST",  nil,gameDeltas);
+			mGamePlayAct.mDispatch.model_instances_available(gameDeltas); // _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_AVAILABLE",nil,gameDeltas);
 		}
 	}
 

@@ -117,13 +117,6 @@ public class MediaModel extends ARISModel {
 
 	}
 
-	public void requestTabs() {
-	}
-
-	public void requestPlayerTabs() {
-
-	}
-
 	private MediaCD parseMedia(Cursor cursor) {
 		MediaCD mediaCD = new MediaCD();
 		mediaCD.media_id = cursor.getInt(cursor.getColumnIndexOrThrow(DBDealer.MEDIA_ID));
@@ -191,7 +184,7 @@ public class MediaModel extends ARISModel {
 		}
 //		this.commitContext(); // as best I can tell the intention is to insert each of these incoming "medicCDs" but why/how are they being set up for individual insertion in the loop above?
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.media_available(); //_ARIS_NOTIF_SEND_(@"MODEL_MEDIA_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_media_available(); //_ARIS_NOTIF_SEND_(@"MODEL_MEDIA_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
@@ -252,10 +245,7 @@ public class MediaModel extends ARISModel {
 	public void mediaLoaded(Media m) {
 		mediaDataLoaded++;
 		mGamePlayAct.mDispatch.media_piece_available(); //_ARIS_NOTIF_SEND_(@"MEDIA_PIECE_AVAILABLE",nil,nil);
-		if(mediaDataLoaded >= mediaDataLoadDelegateHandles.size())
-		{
-			// ultimately calls beginGame:
-			mGamePlayAct.mDispatch.media_data_complete(); //_ARIS_NOTIF_SEND_(@"MODEL_MEDIA_DATA_COMPLETE",nil,nil);
+		if(mediaDataLoaded >= mediaDataLoadDelegateHandles.size()) {
 			mediaDataLoadMedia.clear();
 			mediaDataLoadDelegateHandles.clear();
 		}

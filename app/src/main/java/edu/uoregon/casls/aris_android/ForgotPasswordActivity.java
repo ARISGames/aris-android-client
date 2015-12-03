@@ -138,7 +138,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements LoaderC
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) {
 		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Return status to server Req: " + jsonReturn.toString());
 		if (callingReq.equals(Calls.HTTP_USER_REQ_FORGOT_PASSWD)) {
-			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Landed successfully in colling Req: " + Calls.HTTP_USER_REQ_FORGOT_PASSWD);
 			try {
 				// check for login denial response from server
 				if (jsonReturn.has(AppConfig.SVR_RETURN_CODE) && jsonReturn.getInt(AppConfig.SVR_RETURN_CODE) > 0) {

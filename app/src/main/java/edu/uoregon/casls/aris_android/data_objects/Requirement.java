@@ -3,7 +3,7 @@ package edu.uoregon.casls.aris_android.data_objects;
 /**
  * Created by smorison on 10/6/15.
  */
-public class Requirement { // moved all these to separate class files - sem
+public class Requirement { // moved all these to separate class files; Java disallows multiple class definitions in a single source file - sem
 //
 //// ROOT
 //	public class RequirementRootPackage {

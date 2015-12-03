@@ -479,7 +479,6 @@ public class GamesListActivity extends AppCompatActivity {
 					+ "|" + HTTP_GET_RECENT_GAMES_REQ_API
 					+ "|" + HTTP_GET_SEARCH_GAMES_REQ_API
 					+ "|" + HTTP_GET_PLAYER_GAMES_REQ_API)) { // true = debug temp hall pass for all
-				Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Landed successfully in colling Req: " + callingReq);
 				mFullGamesUpdated = 0; // reset found game count
 				try {
 					// process incoming json data

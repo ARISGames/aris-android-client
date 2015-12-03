@@ -53,7 +53,7 @@ public class TagsModel extends ARISModel {
 				tags.put(newTagId, newTag);// setObject:newTag forKey:newTagId];
 		}
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.tags_available(); //_ARIS_NOTIF_SEND_(@"MODEL_TAGS_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_tags_available(); //_ARIS_NOTIF_SEND_(@"MODEL_TAGS_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
@@ -65,7 +65,7 @@ public class TagsModel extends ARISModel {
 				objectTags.put(newObjectTagId, newObjectTag);// setObject:newObjectTag forKey:newObjectTagId];
 		}
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.object_tags_available(); //_ARIS_NOTIF_SEND_(@"MODEL_OBJECT_TAGS_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_object_tags_available(); //_ARIS_NOTIF_SEND_(@"MODEL_OBJECT_TAGS_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 

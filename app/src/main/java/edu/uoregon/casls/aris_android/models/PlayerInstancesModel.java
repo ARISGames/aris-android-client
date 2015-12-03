@@ -109,7 +109,7 @@ public class PlayerInstancesModel extends ARISModel {
 			if(!newInstance.object_type.contentEquals("ITEM") || newInstance.owner_id != Long.parseLong(mGamePlayAct.mPlayer.user_id)) continue;
 
 		}
-		mGamePlayAct.mDispatch.player_instances_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_INSTANCES_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_player_instances_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_INSTANCES_AVAILABLE",nil,nil);
 	}
 
 	public void calculateWeight() {

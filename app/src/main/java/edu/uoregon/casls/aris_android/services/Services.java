@@ -419,7 +419,7 @@ public class Services {
 				}
 				@Override
 				public void onProgress(int remaining, int total) {
-					Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient Progress for Req: " + requestApi + ". Progress: " + remaining + "/" + total);
+//					Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient Progress for Req: " + requestApi + ". Progress: " + remaining + "/" + total);
 					// todo: set up progress bars of some sort for each request.
 				}
 			});

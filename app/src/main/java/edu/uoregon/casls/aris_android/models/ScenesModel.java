@@ -39,7 +39,7 @@ public class ScenesModel extends ARISModel {
 
 	public void setPlayerScene(Scene s) {
 		playerScene = s;
-		mGamePlayAct.mDispatch.scenes_player_scene_available(); // _ARIS_NOTIF_SEND_(@"MODEL_SCENES_PLAYER_SCENE_AVAILABLE",nil,nil); // for reference; iOS messages
+		mGamePlayAct.mDispatch.model_scenes_player_scene_available(); // _ARIS_NOTIF_SEND_(@"MODEL_SCENES_PLAYER_SCENE_AVAILABLE",nil,nil); // for reference; iOS messages
 	}
 
 	public void clearPlayerData() {
@@ -85,7 +85,7 @@ public class ScenesModel extends ARISModel {
 	private void updatePlayerScene(Scene newScene) {
 		playerScene = newScene;
 		n_player_data_received++;
-		mGamePlayAct.mDispatch.scenes_player_scene_available(); // _ARIS_NOTIF_SEND_(@"MODEL_SCENES_PLAYER_SCENE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_scenes_player_scene_available(); // _ARIS_NOTIF_SEND_(@"MODEL_SCENES_PLAYER_SCENE_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.game_player_piece_available(); // _ARIS_NOTIF_SEND_(@"PLAYER_PIECE_AVAILABLE",nil,nil);
 
 	}
@@ -97,7 +97,7 @@ public class ScenesModel extends ARISModel {
 			if (!scenes.containsKey(newSceneId)) scenes.put(newSceneId, newScene);
 		}
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.scenes_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_SCENES_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_scenes_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_SCENES_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.game_piece_available(); //		_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 

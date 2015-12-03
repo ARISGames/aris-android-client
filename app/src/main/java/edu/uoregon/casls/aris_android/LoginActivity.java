@@ -327,7 +327,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) {
 		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Return status to server Req: " + jsonReturn.toString());
  		if (callingReq.equals(Calls.HTTP_USER_LOGIN_REQ_API)) {
-			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Landed successfully in colling Req: " + Calls.HTTP_USER_LOGIN_REQ_API);
 			try {
 				// check for login denial response from server
 				if (jsonReturn.has("returnCode") && jsonReturn.getInt(AppConfig.SVR_RETURN_CODE) > 0) {

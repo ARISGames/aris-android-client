@@ -158,7 +158,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mGame.requestMaintenanceData();
 	}
 
-	public void maintenanceDataLoaded() {
+	public void maintenanceDataLoaded() { // fixme: not getting here?
 		if (!mGame.hasLatestDownload() || !mGame.begin_fresh)
 			this.requestPlayerData();
 		else {
@@ -214,6 +214,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	}
 
 	public void mediaDataLoaded() { this.beginGame(); }
+
+	public void mediaDataComplete() {}
 
 	// todo: implement Android version of these iOS methods:
 /*

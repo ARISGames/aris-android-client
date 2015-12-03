@@ -244,7 +244,6 @@ public class CreateAccountActivity extends AppCompatActivity {
 		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Return status to server Req: " + jsonReturn.toString());
 		if (callingReq.contentEquals(HTTP_CLIENT_CREATE_USER_REQ_API) ) { //todo: create user call returns nulls on localhost. Need to fix.
 			// Response looks like this: {"data":{"media_id":"0","display_name":"","user_name":"scotta","user_id":"10269","read_write_key":"WQ52...gQN"},"returnCode":0,"returnCodeDescription":null}
-			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Landed successfully in colling Req: " + callingReq);
 			try {
 				// process incoming json data
 				if (jsonReturn.has("data")) {

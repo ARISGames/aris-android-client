@@ -161,13 +161,18 @@ public class Dispatcher {
 		if (mGamePlayAct.mGame.listen_player_piece_available)
 			mGamePlayAct.mGame.playerPieceReceived();
 	}
+
+	public void maintenance_data_loaded() {
+		mGamePlayAct.maintenanceDataLoaded();
+	}
+
 	// MAINTENANCE_PIECE_AVAILABLE",nil,nil);
 	public void maintenance_piece_available() {
 		if (mGamePlayAct.mGame.listen_maintenance_piece_available) mGamePlayAct.mGame.maintenancePieceReceived();
 	}
 
 	//	MODEL_GROUP_INSTANCES_AVAILABLE",nil,nil);
-	public void group_instances_available() {
+	public void model_group_instances_available() {
 		// no listeners
 	}
 
@@ -182,42 +187,42 @@ public class Dispatcher {
 	}
 
 	//	MODEL_GROUPS_AVAILABLE",nil,nil);
-	public void groups_available() {
+	public void model_groups_available() {
 		// no listeners
 	}
 
 	//	MODEL_GROUPS_PLAYER_GROUP_AVAILABLE",nil,nil);
-	public void groups_player_group_available() {
+	public void model_groups_player_group_available() {
 		// no listeners
 	}
 
 	//	MODEL_INSTANCES_AVAILABLE",nil,gameDeltas);
-	public void instances_available(Map<String, Map<String, Object>> gameDeltas) {
+	public void model_instances_available(Map<String, Map<String, Object>> gameDeltas) {
 	}
 
 	//	MODEL_INSTANCES_GAINED",nil,gameDeltas);
-	public void instances_gained(Map<String, Map<String, Object>> gameDeltas) {
+	public void model_instances_gained(Map<String, Map<String, Object>> gameDeltas) {
 	}
 
 	//	MODEL_INSTANCES_LOST",  nil,gameDeltas);
-	public void instances_lost(Map<String, Map<String, Object>> gameDeltas) {
+	public void model_instances_lost(Map<String, Map<String, Object>> gameDeltas) {
 	}
 
 	//	MODEL_INSTANCES_PLAYER_AVAILABLE",nil,playerDeltas);
-	public void instances_player_available(Map<String, Map<String, Object>> playerDeltas) {
+	public void model_instances_player_available(Map<String, Map<String, Object>> playerDeltas) {
 	}
 
 	//	MODEL_INSTANCES_PLAYER_GAINED",nil,playerDeltas);
-	public void instances_player_gained(Map<String, Map<String, Object>> playerDeltas) {
+	public void model_instances_player_gained(Map<String, Map<String, Object>> playerDeltas) {
 	}
 
 	//	MODEL_INSTANCES_PLAYER_LOST",  nil,playerDeltas);
-	public void instances_player_lost(Map<String, Map<String, Object>> playerDeltas) {
+	public void model_instances_player_lost(Map<String, Map<String, Object>> playerDeltas) {
 		// todo: see UI change behavour that this causes in (iOS) GameNotificationViewController.parseLostInstancesIntoNotifications()
 	}
 
 	//	MODEL_ITEMS_AVAILABLE",nil,nil);
-	public void items_available() {
+	public void model_items_available() {
 		// todo: listeners?
 	}
 
@@ -225,44 +230,53 @@ public class Dispatcher {
 //	MODEL_LOGGED_OUT",nil,nil); // Handled in LoginActivity -sem
 //	MODEL_LOGIN_FAILED",nil,nil); } // Handled in LoginActivity -sem
 //	MODEL_LOGS_AVAILABLE",nil,nil);
-	public void logs_available() {
+	public void model_logs_available() {
 //	broadcast only; no receivers
 	}
 
 	//	MODEL_MEDIA_AVAILABLE",nil,nil);
-	public void media_available() {
+	public void model_media_available() {
 		// todo: iOS call = ARISMediaLoader.retryLoadingAllMedia()
 	}
 
-	//	MODEL_MEDIA_DATA_COMPLETE",nil,nil);
-	public void media_data_complete() {
-		// todo: iOS Call = LoadingViewController.mediaDataComplete() (calls beginGame!)
-	}
+	// depricated
+//	//	MODEL_MEDIA_DATA_COMPLETE",nil,nil);
+//	public void model_media_data_complete() {
+//		mGamePlayAct.mediaDataComplete();
+//	}
 
 	//	MODEL_MEDIA_DATA_LOADED",nil,nil);
-	public void media_data_loaded() {
+	public void model_media_data_loaded() {
 		// todo: iOS Call = LoadingViewController.mediaDataLoaded()
+		mGamePlayAct.mediaDataLoaded();
+	}
+
+	public void media_percent_loaded(float v) {
+	}
+
+	public void media_piece_available() {
+		if (mGamePlayAct.mGame.listen_media_piece_available) mGamePlayAct.mGame.mediaPieceReceived();
 	}
 
 	//	MODEL_MINE_GAMES_AVAILABLE",nil,nil); } // Handled in GamesListActivity - sem
 //	MODEL_NEARBY_GAMES_AVAILABLE",nil,nil); } // Handled in GamesListActivity - sem
 //	MODEL_NOTE_COMMENTS_AVAILABLE",nil,nil);
-	public void note_comments_available() {
+	public void model_note_comments_available() {
 		// no listeners
 	}
 
 	//	MODEL_NOTES_AVAILABLE",nil,nil);
-	public void notes_available() {
+	public void model_notes_available() {
 		// no Listeners
 	}
 
 	//	MODEL_OBJECT_TAGS_AVAILABLE",nil,nil);
-	public void object_tags_available() {
+	public void model_object_tags_available() {
 		// no listeners
 	}
 
 	//	MODEL_OVERLAYS_AVAILABLE",nil,nil);
-	public void overlays_available(Map<Long, Overlay> overlays) {
+	public void model_overlays_available(Map<Long, Overlay> overlays) {
 		// no listeners
 	}
 
@@ -272,14 +286,18 @@ public class Dispatcher {
 	}
 
 	//	MODEL_OVERLAYS_NEW_AVAILABLE",nil,@{@"added":addedOverlays});
-	public void overlays_new_available(List<Overlay> addedOverlays) {
+	public void model_overlays_new_available(List<Overlay> addedOverlays) {
 		// todo: MapViewController.refreshViewFromModel()
 	}
 
 	//	MODEL_PLAQUES_AVAILABLE",nil,nil); // from plaquesModel; not listened to. -sem
 
+	public void model_player_data_loaded() {
+		mGamePlayAct.playerDataLoaded();
+	}
+
 	//	MODEL_PLAYER_INSTANCES_AVAILABLE",nil,nil);
-	public void player_instances_available() {
+	public void model_player_instances_available() {
 		// todo: find listners
 	}
 
@@ -291,7 +309,7 @@ public class Dispatcher {
 	//	MODEL_PLAYER_PLAYED_GAME_AVAILABLE",nil,notif.userInfo); // May be unnecessary in Android.
 //	MODEL_PLAYER_SCRIPT_OPTIONS_AVAILABLE",nil,uInfo); // handled as internal method redirect in DialogsModel - sem
 //	MODEL_PLAYER_TRIGGERS_AVAILABLE",nil,nil);
-	public void player_triggers_available() {
+	public void model_player_triggers_available() {
 		// todo: MapViewController.refreshViewFromModel()
 		// todo: NotebookNotesViewController.newNoteListAvailable()
 		mGamePlayAct.mGame.notesModel.invalidateCaches();
@@ -299,31 +317,31 @@ public class Dispatcher {
 
 	//	MODEL_POPULAR_GAMES_AVAILABLE",nil,nil); } // Handled in GamesListActivity - sem
 //	MODEL_QUESTS_ACTIVE_LESS_AVAILABLE",nil,deltas);
-	public void quests_active_less_available(Map<String, List<Quest>> deltas) {
+	public void model_quests_active_less_available(Map<String, List<Quest>> deltas) {
 		// todo: duplicate (UI) behaviour of IconQuestsViewController.refreshViewFromModel()
 		// todo: duplicate UI of QuestsViewController.refreshViewFromModel()
 	}
 
 	//	MODEL_QUESTS_ACTIVE_NEW_AVAILABLE",nil,deltas);
-	public void quests_active_new_available(Map<String, List<Quest>> deltas) {
+	public void model_quests_active_new_available(Map<String, List<Quest>> deltas) {
 		// todo: duplicate UI of GameNotificationViewController.parseActiveQuestsIntoNotifications(deltas)
 		// todo: duplicate UI of IconQuestsViewController.refreshViewFromModel()
 		// todo: duplicate UI of QuestsViewController.refreshViewFromModel()
 	}
 
 	//	MODEL_QUESTS_AVAILABLE",nil,nil);
-	public void quests_available() {
+	public void model_quests_available() {
 		// no listeners
 	}
 
 	//	MODEL_QUESTS_COMPLETE_LESS_AVAILABLE",nil,deltas);
-	public void quests_complete_less_available(Map<String, List<Quest>> deltas) {
+	public void model_quests_complete_less_available(Map<String, List<Quest>> deltas) {
 		// todo: duplicate (UI) behaviour of IconQuestsViewController.refreshViewFromModel()
 		// todo: duplicate UI of QuestsViewController.refreshViewFromModel()
 	}
 
 	//	MODEL_QUESTS_COMPLETE_NEW_AVAILABLE",nil,deltas);
-	public void quests_complete_new_available(Map<String, List<Quest>> deltas) {
+	public void model_quests_complete_new_available(Map<String, List<Quest>> deltas) {
 		// todo: duplicate UI of GameNotificationViewController.parseCompleteQuestsIntoNotifications(deltas)
 		// todo: duplicate UI of IconQuestsViewController.refreshViewFromModel()
 		// todo: duplicate UI of QuestsViewController.refreshViewFromModel()
@@ -331,17 +349,17 @@ public class Dispatcher {
 
 	//	MODEL_RECENT_GAMES_AVAILABLE",nil,nil); }
 //	MODEL_REQUIREMENT_AND_PACKAGES_AVAILABLE",nil,nil);
-	public void requirement_and_packages_available() {
+	public void model_requirement_and_packages_available() {
 		// No recipients
 	}
 
 	//	MODEL_REQUIREMENT_ATOMS_AVAILABLE",nil,nil);
-	public void requirement_atoms_packages_available() {
+	public void model_requirement_atoms_packages_available() {
 		// Adrift at sea with no destination
 	}
 
 	//	MODEL_REQUIREMENT_ROOT_PACKAGES_AVAILABLE",nil,nil);
-	public void requirement_root_packages_available() {
+	public void model_requirement_root_packages_available() {
 		// nada.
 	}
 
@@ -351,64 +369,64 @@ public class Dispatcher {
 	}
 
 	//	MODEL_SCENES_AVAILABLE",nil,nil);
-	public void scenes_available() {
+	public void model_scenes_available() {
 		// todo: find listeners
 	}
 
 	//	MODEL_SCENES_PLAYER_SCENE_AVAILABLE",nil,nil);
-	public void scenes_player_scene_available() {
+	public void model_scenes_player_scene_available() {
 		// sent from ScenesModel (in two places) but not listened to by anyone.
 	}
 
 	//	MODEL_SEARCH_GAMES_AVAILABLE",nil,nil); } // Handled in GamesListActivity - sem
 //	MODEL_TABS_AVAILABLE",nil,nil);
-	public void tabs_available() {
+	public void model_tabs_available() {
 		// no listeners
 	}
 //	MODEL_TABS_LESS_AVAILABLE",nil,deltas);
 
-	public void tabs_less_available(Map<String, List<Tab>> deltas) {
+	public void model_tabs_less_available(Map<String, List<Tab>> deltas) {
 		// todo: GamePlayTabSelectorViewController.refreshFromModel()
 	}
 
 	//	MODEL_TABS_NEW_AVAILABLE",nil,deltas);
-	public void tabs_new_available(Map<String, List<Tab>> deltas) {
+	public void model_tabs_new_available(Map<String, List<Tab>> deltas) {
 		// todo: GamePlayTabSelectorViewController.refreshFromModel()
 	}
 
 	//	MODEL_TAGS_AVAILABLE",nil,nil);
-	public void tags_available() {
+	public void model_tags_available() {
 		// no listeners
 	}
 
 	//	MODEL_TRIGGERS_AVAILABLE",nil,nil);
-	public void triggers_available() {
+	public void model_triggers_available() {
 		// no listeners
 	}
 
 	//	MODEL_TRIGGERS_INVALIDATED",nil,@{@"invalidated_triggers":invalidatedTriggers});
-	public void triggers_invalidated(List<Trigger> invalidatedTriggers) {
+	public void model_triggers_invalidated(List<Trigger> invalidatedTriggers) {
 		// todo: DisplayQueueModel.reevaluateAutoTriggers(invalidatedTriggers)
 		// todo: MapViewController.triggersInvalidated(invalidatedTriggers)
 	}
 
 	//	MODEL_TRIGGERS_LESS_AVAILABLE",nil,@{@"removed":removedTriggers});
-	public void triggers_less_available(List<Trigger> removedTriggers) {
+	public void model_triggers_less_available(List<Trigger> removedTriggers) {
 		// todo: DisplayQueueModel.reevaluateAutoTriggers(removedTriggers)
 	}
 
 	//	MODEL_TRIGGERS_NEW_AVAILABLE",nil,@{@"added":addedTriggers});
-	public void triggers_new_available(List<Trigger> addedTriggers) {
+	public void model_triggers_new_available(List<Trigger> addedTriggers) {
 		// todo: DisplayQueueModel.reevaluateAutoTriggers(addedTriggers)
 	}
 
 	//	MODEL_USERS_AVAILABLE",nil,nil);
-	public void users_available() {
+	public void model_users_available() {
 		//no listeners
 	}
 
 	//	MODEL_WEB_PAGES_AVAILABLE",nil,nil);
-	public void web_pages_available() {
+	public void model_web_pages_available() {
 		// no listeners
 	}
 
@@ -463,7 +481,6 @@ public class Dispatcher {
 //	SERVICES_GAME_RECEIVED", nil, @{@"game":[[Game alloc] initWithDictionary:(NSDictionary *)result.resultData]});
 //	SERVICES_GROUP_INSTANCES_TOUCHED", nil, nil);
 	public void services_group_instances_touched() {
-		// no senders to this as of 12/3/15
 		mGamePlayAct.mGame.groupInstancesModel.groupInstancesTouched();
 	}
 //	SERVICES_GROUP_RECEIVED", nil, @{@"group":group});
@@ -649,18 +666,6 @@ public class Dispatcher {
 	public void player_percent_loaded(float v) {
 	}
 
-	public void media_percent_loaded(float v) {
-	}
-
-	public void maintenance_data_loaded() {
-	}
-
-	public void player_data_loaded() {
-	}
-
-	public void media_piece_available() {
-		mGamePlayAct.mGame.mediaPieceReceived();
-	}
 
 
 
