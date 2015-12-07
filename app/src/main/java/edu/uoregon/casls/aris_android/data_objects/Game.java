@@ -495,7 +495,7 @@ public class Game {
 		}
 	}
 
-	//old method just for reference. delete when you get tired of seeing it here.
+	// ad acta. old method just for reference. delete when you get tired of seeing it here.
 //	public void gamePlayerPieceReceived() {
 //		n_player_data_received++;
 //		if (n_player_data_received >= n_player_data_to_receive) {

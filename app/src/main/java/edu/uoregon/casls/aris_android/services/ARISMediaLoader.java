@@ -90,8 +90,10 @@ public class ARISMediaLoader {
 		mGamePlayAct.mServices.fetchMediaById(mr.media.media_id); //_SERVICES_ fetchMediaById:mr.media.media_id;
 	}
 
-//	public void retryLoadingAllMedia()
-//	{
+	public void retryLoadingAllMedia()
+	{
+		// this is where we need to walk through the list of media that need to be loaded from server
+	}
 //		//do the ol' switcheroo so we wont get into an infinite loop of adding, removing, readding, etc...
 //		NSMutableArray oldMetaConnections = metaConnections;
 //		metaConnections = NSMutableArray alloc initWithCapacity:10;

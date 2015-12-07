@@ -99,10 +99,6 @@ public class MediaModel extends ARISModel {
 		Log.i(AppConfig.LOGTAG, getClass().getSimpleName() + "All Media deleted from Local DB."); //this is really only useful because this potentially takes a while, and this shows that its not frozen
 	}
 
-	public void requestGameData() {
-		this.requestMedia();
-	}
-
 	public void clearGameData() {
 		medias.clear();
 		mediaIDsToLoad.clear();
@@ -134,6 +130,14 @@ public class MediaModel extends ARISModel {
 //		_ARIS_LOG_(@"Error saving media context - error:%@",error);
 //	}
 
+	public void requestGameData() {
+		this.requestMedia(); // ergo: mGamePlayAct.mServices.fetchMedias();
+	}
+
+	public void requestMedia() {
+		mGamePlayAct.mServices.fetchMedias();
+	}
+
 	public void mediasReceived(List<Map<String, String>> rawMediaArr) {
 		this.updateMedias(rawMediaArr);
 	}
@@ -155,24 +159,27 @@ public class MediaModel extends ARISModel {
 //		[currentlyCachedMediaMap setObject:currentlyCachedMediaArray[i] forKey:((MediaCD *)currentlyCachedMediaArray[i]).media_id];
 
 		MediaCD tmpMedia;
-		// iterate through the "dict" versions of the media data and do...?
+		// iterate through the "dict" versions of the media data and do...
 		for (Map<String, String> mediaDict : mediaToCacheDicts) {
 
 			int media_id = Integer.parseInt(mediaDict.get("media_id"));// [mediaDict validIntForKey:@"media_id"]; // get the id from k/v pair with key "media_id"
+			// 1. populate an array of media ids representing media content data yet to be loaded from the server
 			mediaIDsToLoad.add(media_id); // setObject:[NSNumber numberWithLong:media_id] forKey:[NSNumber numberWithLong:media_id]];
+			// 2. See if this media_id is already chached (it's binary data loaded form server and saved on device(in DB field or file))
 			tmpMedia = currentlyCachedMediaMap.get(media_id);
+			// 3. If thmMedia is null the data (binary) for this media_id has not yet been chached to device, so make a place for it (instantiate a new mediaCD object)
 			if (tmpMedia == null) {
 				// todo: get new object by inserting into DB at same time
 //				tmpMedia = insertNewObjectForEntityForName("MediaCD");
 				tmpMedia = new MediaCD();
 				tmpMedia.media_id = media_id;
 			}
-
-			String remoteURL = mediaDict.get("url"); // validObjectForKey:@"url"];
-			if (tmpMedia.remoteURL != null && !remoteURL.contentEquals(tmpMedia.remoteURL)) //if remote URL changed, invalidate local URL
+			// 4. Check to see if the URL for this media_id has changed from a previous value. If so (or if this is new media) set tmpMedia remoteURL to it
+			String remoteURL = mediaDict.get("url"); // 4a. get the URL for this media data (from the incoming data from server)
+			if (tmpMedia.remoteURL != null && !remoteURL.contentEquals(tmpMedia.remoteURL)) // 4b. if remote URL changed, invalidate local URL
 				tmpMedia.localURL = "";
-			tmpMedia.remoteURL = remoteURL;
-
+			tmpMedia.remoteURL = remoteURL; // 4c. set tmpMedia to incoming URL from server
+			// 5. Set the game id and user ids to incoming values.
 			if (mediaDict.containsKey("game_id")) tmpMedia.game_id = Integer.parseInt(mediaDict.get("game_id"));
 			if (mediaDict.containsKey("user_id")) tmpMedia.user_id = Integer.parseInt(mediaDict.get("user_id"));
 
@@ -182,17 +189,13 @@ public class MediaModel extends ARISModel {
 //			else
 //				Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "Failed to insert Media: Media id:" + media_id + " cached:" + tmpMedia.remoteURL);
 		}
+
 //		this.commitContext(); // as best I can tell the intention is to insert each of these incoming "medicCDs" but why/how are they being set up for individual insertion in the loop above?
 		n_game_data_received++;
+		// indicate to dispatcher that we have media available and potentially waiting to be uploaded from server
 		mGamePlayAct.mDispatch.model_media_available(); //_ARIS_NOTIF_SEND_(@"MODEL_MEDIA_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
-
-
-	public void requestMedia() {
-		mGamePlayAct.mServices.fetchMedias();
-	}
-
 
 	// todo: convert this functionality to Andriod.
 	public long requestMediaData() {
