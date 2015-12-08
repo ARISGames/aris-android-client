@@ -108,7 +108,7 @@ public class EventsModel extends ARISModel {
 	}
 
 	public void requestEvents() {
-		mGamePlayAct.mServices.fetchEvents();
+		mGamePlayAct.mAppServices.fetchEvents();
 	}
 
 	public List<Event> eventsForEventPackageId(long event_package_id) {

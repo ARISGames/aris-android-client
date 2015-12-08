@@ -65,7 +65,7 @@ public class LogsModel extends ARISModel {
 	}
 
 	public void requestPlayerLogs() {
-		mGamePlayAct.mServices.fetchLogsForPlayer();
+		mGamePlayAct.mAppServices.fetchLogsForPlayer();
 	}
 
 	public ArisLog logForId(long log_id) {
@@ -74,38 +74,38 @@ public class LogsModel extends ARISModel {
 
 	public void playerEnteredGame() {
 		if (!mGame.network_level.contentEquals("LOCAL"))
-			mGamePlayAct.mServices.logPlayerEnteredGame();
+			mGamePlayAct.mAppServices.logPlayerEnteredGame();
 		this.playerMoved(); //start off with a move to set location
 	}
 
 	public void playerMoved() {
 		if (!mGame.network_level.contentEquals("LOCAL"))
-			mGamePlayAct.mServices.logPlayerMoved();
+			mGamePlayAct.mAppServices.logPlayerMoved();
 		mGamePlayAct.mDispatch.user_moved(); //_ARIS_NOTIF_SEND_(@"USER_MOVED",nil,nil);
 	}
 
 	public void playerViewedTabId(long tab_id) {
 		if (!mGame.network_level.contentEquals("LOCAL"))
-			mGamePlayAct.mServices.logPlayerViewedTabId(tab_id);
+			mGamePlayAct.mAppServices.logPlayerViewedTabId(tab_id);
 		this.addLogType("VIEW_TAB", tab_id, 0);
 	}
 
 	public void playerViewedContent(String content, long content_id) {
 		if (mGame.network_level.contentEquals("LOCAL")) {
 			if (content.contentEquals("PLAQUE"))
-				mGamePlayAct.mServices.logPlayerViewedPlaqueId(content_id);
+				mGamePlayAct.mAppServices.logPlayerViewedPlaqueId(content_id);
 			if (content.contentEquals("ITEM"))
-				mGamePlayAct.mServices.logPlayerViewedItemId(content_id);
+				mGamePlayAct.mAppServices.logPlayerViewedItemId(content_id);
 			if (content.contentEquals("DIALOG"))
-				mGamePlayAct.mServices.logPlayerViewedDialogId(content_id);
+				mGamePlayAct.mAppServices.logPlayerViewedDialogId(content_id);
 			if (content.contentEquals("DIALOG_SCRIPT"))
-				mGamePlayAct.mServices.logPlayerViewedDialogScriptId(content_id);
+				mGamePlayAct.mAppServices.logPlayerViewedDialogScriptId(content_id);
 			if (content.contentEquals("WEB_PAGE"))
-				mGamePlayAct.mServices.logPlayerViewedWebPageId(content_id);
+				mGamePlayAct.mAppServices.logPlayerViewedWebPageId(content_id);
 			if (content.contentEquals("NOTE"))
-				mGamePlayAct.mServices.logPlayerViewedNoteId(content_id);
+				mGamePlayAct.mAppServices.logPlayerViewedNoteId(content_id);
 			if (content.contentEquals("SCENE"))
-				mGamePlayAct.mServices.logPlayerViewedSceneId(content_id);
+				mGamePlayAct.mAppServices.logPlayerViewedSceneId(content_id);
 		}
 
 		if (content.contentEquals("PLAQUE")) this.addLogType("VIEW_PLAQUE", content_id, 0);
@@ -122,73 +122,73 @@ public class LogsModel extends ARISModel {
 
 	public void playerViewedInstanceId(long instance_id) {
 		if (!mGame.network_level.contentEquals("LOCAL"))
-			mGamePlayAct.mServices.logPlayerViewedInstanceId(instance_id);
+			mGamePlayAct.mAppServices.logPlayerViewedInstanceId(instance_id);
 		this.addLogType("VIEW_INSTANCE", instance_id, 0);
 	}
 
 	public void playerTriggeredTriggerId(long trigger_id) {
 		if (!mGame.network_level.contentEquals("LOCAL"))
-			mGamePlayAct.mServices.logPlayerTriggeredTriggerId(trigger_id);
+			mGamePlayAct.mAppServices.logPlayerTriggeredTriggerId(trigger_id);
 		this.addLogType("TRIGGER_TRIGGER", trigger_id, 0);
 	}
 
 	public void playerReceivedItemId(long item_id, long qty) {
 		if (!mGame.network_level.contentEquals("LOCAL"))
-			mGamePlayAct.mServices.logPlayerReceivedItemId(item_id, qty);
+			mGamePlayAct.mAppServices.logPlayerReceivedItemId(item_id, qty);
 		this.addLogType("RECEIVE_ITEM", item_id, 0);
 		mGame.questsModel.logAnyNewlyCompletedQuests();
 	}
 
 	public void playerLostItemId(long item_id, long qty) {
 		if (!mGame.network_level.contentEquals("LOCAL"))
-			mGamePlayAct.mServices.logPlayerLostItemId(item_id, qty);
+			mGamePlayAct.mAppServices.logPlayerLostItemId(item_id, qty);
 		this.addLogType("LOSE_ITEM", item_id, 0);
 		mGame.questsModel.logAnyNewlyCompletedQuests();
 	}
 
 	public void gameReceivedItemId(long item_id, long qty) {
 		if (!mGame.network_level.contentEquals("LOCAL"))
-			mGamePlayAct.mServices.logGameReceivedItemId(item_id, qty);
+			mGamePlayAct.mAppServices.logGameReceivedItemId(item_id, qty);
 		this.addLogType("GAME_RECEIVE_ITEM", item_id, 0);
 		mGame.questsModel.logAnyNewlyCompletedQuests();
 	}
 
 	public void gameLostItemId(long item_id, long qty) {
 		if (!mGame.network_level.contentEquals("LOCAL"))
-			mGamePlayAct.mServices.logGameLostItemId(item_id, qty);
+			mGamePlayAct.mAppServices.logGameLostItemId(item_id, qty);
 		this.addLogType("GAME_LOSE_ITEM", item_id, 0);
 		mGame.questsModel.logAnyNewlyCompletedQuests();
 	}
 
 	public void groupReceivedItemId(long item_id, long qty) {
 		if (!mGame.network_level.contentEquals("LOCAL"))
-			mGamePlayAct.mServices.logGroupReceivedItemId(item_id, qty);
+			mGamePlayAct.mAppServices.logGroupReceivedItemId(item_id, qty);
 		this.addLogType("GROUP_RECEIVE_ITEM", item_id, 0);
 		mGame.questsModel.logAnyNewlyCompletedQuests();
 	}
 
 	public void groupLostItemId(long item_id, long qty) {
 		if (!mGame.network_level.contentEquals("LOCAL"))
-			mGamePlayAct.mServices.logGroupLostItemId(item_id, qty);
+			mGamePlayAct.mAppServices.logGroupLostItemId(item_id, qty);
 		this.addLogType("GROUP_LOSE_ITEM", item_id, 0);
 		mGame.questsModel.logAnyNewlyCompletedQuests();
 	}
 
 	public void playerChangedSceneId(long scene_id) {
 		if (!mGame.network_level.contentEquals("LOCAL"))
-			mGamePlayAct.mServices.logPlayerSetSceneId(scene_id);
+			mGamePlayAct.mAppServices.logPlayerSetSceneId(scene_id);
 		this.addLogType("CHANGE_SCENE", scene_id, 0);
 	}
 
 	public void playerChangedGroupId(long group_id) {
 		if (!mGame.network_level.contentEquals("LOCAL"))
-			mGamePlayAct.mServices.logPlayerJoinedGroupId(group_id);
+			mGamePlayAct.mAppServices.logPlayerJoinedGroupId(group_id);
 		this.addLogType("JOIN_GROUP", group_id, 0);
 	}
 
 	public void playerRanEventPackageId(long event_package_id) {
 		if (!mGame.network_level.contentEquals("LOCAL"))
-			mGamePlayAct.mServices.logPlayerRanEventPackageId(event_package_id);
+			mGamePlayAct.mAppServices.logPlayerRanEventPackageId(event_package_id);
 		this.addLogType("RUN_EVENT_PACKAGE", event_package_id, 0);
 		mGame.questsModel.logAnyNewlyCompletedQuests();
 	}

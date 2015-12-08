@@ -40,6 +40,7 @@ public class Calls {
 	// Game cyclical update calls
 	public static final String HTTP_GET_SCENE_4_PLAYER        = "v2.client.getSceneForPlayer/";
 	public static final String HTTP_GET_INSTANCES_4_PLAYER    = "v2.client.getInstancesForPlayer/"; // Needs game_id, owner_id
+	public static final String HTTP_GET_GROUP_4_PLAYER        = "v2.client.getGroupForPlayer/";
 	public static final String HTTP_GET_TRIGGERS_4_PLAYER     = "v2.client.getTriggersForPlayer/"; // "tick_factories","game_id"
 	public static final String HTTP_GET_OVERLAYS_4_PLAYER     = "v2.client.getOverlaysForPlayer/";
 	public static final String HTTP_GET_QUESTS_4_PLAYER       = "v2.client.getQuestsForPlayer/";
@@ -54,7 +55,7 @@ public class Calls {
 	public static final String HTTP_USER_LOGIN_REQ_API        = "v2.users.logIn/";
 	public static final String HTTP_USER_REQ_FORGOT_PASSWD    = "v2.users.requestForgotPasswordEmail/";
 
-	public static final String HTTP_GET_NOTE = "v2.notes.getNote/"; // todo check this call syntax and server prefix paths
+	public static final String HTTP_GET_NOTE  = "v2.notes.getNote/"; // todo check this call syntax and server prefix paths
 	public static final String HTTP_GET_MEDIA = "v2.media.getMedia/";
 
 }

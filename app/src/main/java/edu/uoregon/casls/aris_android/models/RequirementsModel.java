@@ -56,9 +56,9 @@ public class RequirementsModel extends ARISModel {
 	}
 
 	public void requestRequirements() {
-		mGamePlayAct.mServices.fetchRequirementRoots(); //_SERVICES_ fetchRequirementRoots;
-		mGamePlayAct.mServices.fetchRequirementAnds(); //_SERVICES_ fetchRequirementAnds;
-		mGamePlayAct.mServices.fetchRequirementAtoms(); //_SERVICES_ fetchRequirementAtoms;
+		mGamePlayAct.mAppServices.fetchRequirementRoots(); //_SERVICES_ fetchRequirementRoots;
+		mGamePlayAct.mAppServices.fetchRequirementAnds(); //_SERVICES_ fetchRequirementAnds;
+		mGamePlayAct.mAppServices.fetchRequirementAtoms(); //_SERVICES_ fetchRequirementAtoms;
 	}
 
 	//ROOT

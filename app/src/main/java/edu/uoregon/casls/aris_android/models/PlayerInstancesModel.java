@@ -51,12 +51,20 @@ public class PlayerInstancesModel extends ARISModel {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
 	}
 
-	public void clearGameData() {
-		n_game_data_received = 0;
-	}
+//	public void clearGameData() {
+//		n_maintenance_data_received = 0;
+//	}
 
 	public void clearPlayerData() {
+		playerInstances.clear();
+		this.invalidateCaches();
+		currentWeight = 0;
 
+	}
+
+	public void invalidateCaches() {
+		inventory.clear();
+		attributes.clear();
 	}
 
 	public void requestMaintenanceData() {
@@ -72,13 +80,13 @@ public class PlayerInstancesModel extends ARISModel {
 	}
 
 	public void playerInstancesTouched() { // called after response received to touchItemsForPlayer via Dispatcher.services_player_instances_touched()
-		n_game_data_received++;
+		n_maintenance_data_received++;
 		mGamePlayAct.mDispatch.model_player_instances_touched(); //		_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_INSTANCES_TOUCHED",nil,nil);
 		mGamePlayAct.mDispatch.maintenance_piece_available(); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void touchPlayerInstances() {
-		mGamePlayAct.mServices.touchItemsForPlayer();
+		mGamePlayAct.mAppServices.touchItemsForPlayer();
 		// call (via two messages) Game.gamePieceReceived() // todo: check for completeness
 
 	}
@@ -119,7 +127,6 @@ public class PlayerInstancesModel extends ARISModel {
 
 		for (Instance inst : insts) {
 			if (inst.object_type.contentEquals("ITEM")) {
-//				Item item = mItemsModel.itemForId(inst.object_id);
 				Item item = mGamePlayAct.mGame.itemsModel.itemForId(inst.object_id);
 				currentWeight += item.weight * inst.qty;
 			}

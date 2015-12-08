@@ -27,7 +27,7 @@ import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.data_objects.User;
 import edu.uoregon.casls.aris_android.models.MediaModel;
 import edu.uoregon.casls.aris_android.models.UsersModel;
-import edu.uoregon.casls.aris_android.services.Services;
+import edu.uoregon.casls.aris_android.services.AppServices;
 
 public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActivity
 		implements GamePlayNavDrawerFragment.NavigationDrawerCallbacks, GamePlayMapFragment.OnFragmentInteractionListener {
@@ -39,7 +39,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	public  User            mPlayer; // Sanity note: Now that the game is "playing" we will refer to the logged in User as "Player"
 	public  Game            mGame;
 	public  Dispatcher      mDispatch;
-	public  Services        mServices;
+	public  AppServices     mAppServices;
 	public  ResponseHandler mResposeHandler;
 	public  MediaModel      mMediaModel;
 	public  UsersModel      mUsersModel;
@@ -90,7 +90,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				R.animator.slide_in_from_right, R.animator.slide_out_to_left).toBundle();
 
 		mDispatch = new Dispatcher(); // Centralized place for object to object messaging
-		mServices = new Services(); // Centralized place for server calls.
+		mAppServices = new AppServices(); // Centralized place for server calls.
 		mResposeHandler = new ResponseHandler(); // Where calls to server return for landing.
 		mMediaModel = new MediaModel(this);
 		mUsersModel = new UsersModel(this);
@@ -112,11 +112,11 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		// todo: restore saved Game object if it was stashed for app sleep.
 		// reinit contexts to be safe after a resume.
 		mDispatch.initContext(this); // initialize contexts
-		mServices.initContext(this);
+		mAppServices.initContext(this);
 		mGame.initContext(this);
 		mResposeHandler.initContext(this);
 
-		if (!mGame.hasLatestDownload()) // loadingViewController.startLoading equivalent in iOS
+		if (!mGame.hasLatestDownload() || mGame.network_level.contentEquals("REMOTE")) // loadingViewController.startLoading equivalent in iOS
 			this.requestGameData(); // load all game data
 		else {
 			// todo:   Basically we'll sub in Android life cycle state save and restore (which means this needs to go in the onResume or onStart method
@@ -158,7 +158,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mGame.requestMaintenanceData();
 	}
 
-	public void maintenanceDataLoaded() { // fixme: not getting here?
+	public void maintenanceDataLoaded() { //fixme: not ever getting here
 		if (!mGame.hasLatestDownload() || !mGame.begin_fresh)
 			this.requestPlayerData();
 		else {
@@ -185,10 +185,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mGame.requestPlayerData();
 	}
 
-	public void playerDataLoaded() {
+	public void playerDataLoaded() { // gets called only after all game, player and maint data loaded
 		if (!mGame.hasLatestDownload()) {
 			if (mGame.preload_media)
-				this.requestMediaData();
+				this.requestMediaData(); // won't load until maintDataLoaded <-
 			else
 				this.beginGame(); //[_MODEL_ beginGame];
 		}

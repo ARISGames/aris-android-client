@@ -141,11 +141,11 @@ public class InstancesModel extends ARISModel {
 	}
 
 	public void requestInstances() {
-		mGamePlayAct.mServices.fetchInstances();
+		mGamePlayAct.mAppServices.fetchInstances();
 	}
 
 	public void requestInstance(long i) {
-		mGamePlayAct.mServices.fetchInstanceById(i);
+		mGamePlayAct.mAppServices.fetchInstanceById(i);
 	}// _SERVICES_ fetchInstanceById(i);
 
 	public void requestPlayerInstances() {
@@ -157,7 +157,7 @@ public class InstancesModel extends ARISModel {
 		if (!this.playerDataReceived() ||
 				mGamePlayAct.mGame.network_level.contentEquals("HYBRID") ||
 				mGamePlayAct.mGame.network_level.contentEquals("REMOTE"))
-			mGamePlayAct.mServices.fetchInstancesForPlayer(); // _SERVICES_ fetchInstancesForPlayer;
+			mGamePlayAct.mAppServices.fetchInstancesForPlayer(); // _SERVICES_ fetchInstancesForPlayer;
 	}
 
 	public long setQtyForInstanceId(long instance_id, long qty) {
@@ -191,7 +191,7 @@ public class InstancesModel extends ARISModel {
 		}
 
 		if (!mGamePlayAct.mGame.network_level.contentEquals("LOCAL"))
-			mGamePlayAct.mServices.setQtyForInstanceId(instance_id, qty); // _SERVICES_ setQtyForInstanceId:instance_id qty:qty;
+			mGamePlayAct.mAppServices.setQtyForInstanceId(instance_id, qty); // _SERVICES_ setQtyForInstanceId:instance_id qty:qty;
 		return qty;
 	}
 

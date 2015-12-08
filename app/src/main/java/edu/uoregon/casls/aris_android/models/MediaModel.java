@@ -43,6 +43,14 @@ public class MediaModel extends ARISModel {
 		initContext(gamePlayActivity);
 	}
 
+	public void initContext(GamePlayActivity gamePlayAct) {
+		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
+		if (dbDealer == null)
+			dbDealer = new DBDealer(gamePlayAct); // only instantiate once
+//		else
+//			dbDealer.initContext(mGamePlayAct); // todo: maybe invalidate and recreate with updated context. Or do nothing?
+	}
+
 // todo: figure out how to encorporate this iOS code into the android app
 	// Essentially this is a database call to a (device) persistent database.
 	// The predicate is the SQL to be executed
@@ -62,10 +70,11 @@ public class MediaModel extends ARISModel {
 		return cachedMediaArray; // return array (list) of MediaCD objects
 	}*/
 
+
 	/**
 	 * mediaForPredicate(where)
 	 *
-	 * @param whereClause SQL where string w/o "where"; e.g. "name = 'Bob' AND (this = 1 OR that >= 33)"
+	 * @param whereClause SQL where string w/o "where"; e.g. "media_id = 1234 AND (localURL != '' OR remoteURL = '')"
 	 * @return Map of resulting MediaCD objs indexed by mediaID.
 	 */
 
@@ -76,7 +85,7 @@ public class MediaModel extends ARISModel {
 		cursor.moveToFirst();
 		// convert cursor to Map of mediaCDs
 		while (!cursor.isAfterLast()) {
-			MediaCD mediaCDItem = parseMedia(cursor);
+			MediaCD mediaCDItem = populateMediaCD(cursor);
 			listOfMedia.put(mediaCDItem.media_id, mediaCDItem);
 			cursor.moveToNext();
 		}
@@ -84,14 +93,6 @@ public class MediaModel extends ARISModel {
 		cursor.close();
 
 		return listOfMedia;
-	}
-
-	public void initContext(GamePlayActivity gamePlayAct) {
-		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
-		if (dbDealer == null)
-			dbDealer = new DBDealer(gamePlayAct); // only instantiate once
-//		else
-//			dbDealer.initContext(mGamePlayAct); // todo: maybe invalidate and recreate with updated context. Or do nothing?
 	}
 
 	public void clearCache() { // delete all stored rows in media table.
@@ -113,7 +114,7 @@ public class MediaModel extends ARISModel {
 
 	}
 
-	private MediaCD parseMedia(Cursor cursor) {
+	private MediaCD populateMediaCD(Cursor cursor) {
 		MediaCD mediaCD = new MediaCD();
 		mediaCD.media_id = cursor.getInt(cursor.getColumnIndexOrThrow(DBDealer.MEDIA_ID));
 		mediaCD.game_id = cursor.getInt(cursor.getColumnIndexOrThrow(DBDealer.GAME_ID));
@@ -135,7 +136,7 @@ public class MediaModel extends ARISModel {
 	}
 
 	public void requestMedia() {
-		mGamePlayAct.mServices.fetchMedias();
+		mGamePlayAct.mAppServices.fetchMedias();
 	}
 
 	public void mediasReceived(List<Map<String, String>> rawMediaArr) {
@@ -183,21 +184,22 @@ public class MediaModel extends ARISModel {
 			if (mediaDict.containsKey("game_id")) tmpMedia.game_id = Integer.parseInt(mediaDict.get("game_id"));
 			if (mediaDict.containsKey("user_id")) tmpMedia.user_id = Integer.parseInt(mediaDict.get("user_id"));
 
-			// old code
-//			if (dbDealer.insertMedia(tmpMedia))
-//				Log.i(AppConfig.LOGTAG, getClass().getSimpleName() + "Media cache   : Media id:" + media_id + " cached:" + tmpMedia.remoteURL);
-//			else
-//				Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "Failed to insert Media: Media id:" + media_id + " cached:" + tmpMedia.remoteURL);
+			// add this item, stub or fleshed to DB
+			if (dbDealer.addMedia(tmpMedia))
+				Log.i(AppConfig.LOGTAG, getClass().getSimpleName() + "Media cache   : Media id:" + media_id + " cached:" + tmpMedia.remoteURL);
+			else
+				Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "Failed to insert Media: Media id:" + media_id + " cached:" + tmpMedia.remoteURL);
 		}
 
 //		this.commitContext(); // as best I can tell the intention is to insert each of these incoming "medicCDs" but why/how are they being set up for individual insertion in the loop above?
 		n_game_data_received++;
 		// indicate to dispatcher that we have media available and potentially waiting to be uploaded from server
+		//  dispatcher will call the MediaLoader.retryLoadingAllMedia()
 		mGamePlayAct.mDispatch.model_media_available(); //_ARIS_NOTIF_SEND_(@"MODEL_MEDIA_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 
-	// todo: convert this functionality to Andriod.
+	// todo: convert this functionality to Android.
 	public long requestMediaData() {
 		List<Integer> media_ids = mediaIDsToLoad;  // allKeys];
 		Media m;

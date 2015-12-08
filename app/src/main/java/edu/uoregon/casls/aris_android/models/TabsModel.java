@@ -65,7 +65,7 @@ public class TabsModel extends ARISModel {
 	}
 
 	public void requestTabs() {
-		mGamePlayAct.mServices.fetchTabs();
+		mGamePlayAct.mAppServices.fetchTabs();
 	}
 
 	public void requestPlayerTabs() {
@@ -81,7 +81,7 @@ public class TabsModel extends ARISModel {
 		if (!this.playerDataReceived() ||
 				mGame.network_level.contentEquals("HYBRID") ||
 				mGame.network_level.contentEquals("REMOTE"))
-			mGamePlayAct.mServices.fetchTabsForPlayer();
+			mGamePlayAct.mAppServices.fetchTabsForPlayer();
 	}
 
 	//admittedly a bit silly, but a great way to rid any risk of deviation from flyweight by catching it at the beginning

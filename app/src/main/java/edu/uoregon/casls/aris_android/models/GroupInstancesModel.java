@@ -56,13 +56,13 @@ public class GroupInstancesModel extends ARISModel {
 	}
 
 	public void groupInstancesTouched() { // called as listener to Dispatcher.services_group_instances_touched(). Not called as of 12/3/15
-		n_game_data_received++;
+		n_maintenance_data_received++;
 		mGamePlayAct.mDispatch.model_group_instances_touched();  //_ARIS_NOTIF_SEND_(@"MODEL_GROUP_INSTANCES_TOUCHED",nil,nil);
 		mGamePlayAct.mDispatch.maintenance_piece_available();  //_ARIS_NOTIF_SEND_(@"MAINTENANCE_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void touchGroupInstances() {
-		mGamePlayAct.mServices.touchItemsForGroups();
+		mGamePlayAct.mAppServices.touchItemsForGroups();
 	}
 
 	public void groupInstancesAvailable() {
@@ -85,7 +85,7 @@ public class GroupInstancesModel extends ARISModel {
 		if (gII.qty < qty) qty = gII.qty;
 
 		if (!mGame.network_level.contentEquals("LOCAL"))
-			mGamePlayAct.mServices.dropItem(item_id, qty);
+			mGamePlayAct.mAppServices.dropItem(item_id, qty);
 		return this.takeItemFromGroup(item_id, qty);
 	}
 

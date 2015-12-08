@@ -52,7 +52,7 @@ public class FactoriesModel extends ARISModel {
 
 	public void requestFactories()
 	{
-		mGamePlayAct.mServices.fetchFactories();
+		mGamePlayAct.mAppServices.fetchFactories();
 	}
 
 // null factory (id == 0) NOT flyweight!!! (to allow for temporary customization safety)

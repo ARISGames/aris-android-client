@@ -33,23 +33,27 @@ import edu.uoregon.casls.aris_android.data_objects.Trigger;
  * asynchronously. Responses are fielded by ResponseHandler which must be instantiated
  * in GamePlayActivity and referenced herein.
  */
-public class Services {
+public class AppServices {
 
 
 	public transient GamePlayActivity mGamePlayAct;
+	public ARISMediaLoader mMediaLoader; // transient?
 //	public transient Game mGame;
 //	public User mPlayer;
 
-	public Services(GamePlayActivity gamePlayActivity) {
+	public AppServices(GamePlayActivity gamePlayActivity) {
 		initContext(gamePlayActivity);
 	}
 
-	public Services() {
+	public AppServices() {
 	}
 
 	public void initContext(GamePlayActivity gamePlayActivity) {
 		// reference to GamePlayActivity
 		mGamePlayAct = gamePlayActivity;
+		// set up media loader
+		if (mMediaLoader == null)
+			mMediaLoader = new ARISMediaLoader(mGamePlayAct);
 		//convenience references:
 //		mGame = mGamePlayAct.mGame;
 //		mPlayer = mGamePlayAct.mPlayer;
@@ -65,7 +69,7 @@ public class Services {
 
 
 	public void fetchInstancesForPlayer() {
-
+		pollServer(Calls.HTTP_GET_INSTANCES_4_PLAYER, jsonGameId());
 	}
 
 	public void setQtyForInstanceId(long instance_id, long qty) {
@@ -261,6 +265,7 @@ public class Services {
 	}
 
 	public void fetchGroupForPlayer() {
+		pollServer(Calls.HTTP_GET_GROUP_4_PLAYER, jsonGameId());
 	}
 
 	public void setPlayerGroupId(long group_id) {
@@ -300,6 +305,7 @@ public class Services {
 	}
 
 	public void fetchUsers() {
+		pollServer(Calls.HTTP_GET_USERS_4_GAME, jsonGameId());
 	}
 
 	public void fetchUserById(long t) {
@@ -314,14 +320,13 @@ public class Services {
 	}
 
 	public void touchSceneForPlayer() {
+		pollServer(Calls.HTTP_TOUCH_SCENE_4_PLAYER, jsonGameId());
 	}
 
 	public void fetchSceneForPlayer() {
 		pollServer(Calls.HTTP_GET_SCENE_4_PLAYER, jsonGameId());
 	}
 
-
-	private final static String TAG_SERVER_SUCCESS = "success";
 	public JSONObject mJsonAuth;
 
 	public JSONObject jsonGameId() {
@@ -402,7 +407,7 @@ public class Services {
 				public void onSuccess(int statusCode, Header[] headers, JSONObject jsonReturn) {
 //					showProgress(false);
 					try {
-						mGamePlayAct.mResposeHandler.processJsonHttpResponse(requestApi, TAG_SERVER_SUCCESS, jsonReturn);
+						mGamePlayAct.mResposeHandler.processJsonHttpResponse(requestApi, AppConfig.TAG_SERVER_SUCCESS, jsonReturn);
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}

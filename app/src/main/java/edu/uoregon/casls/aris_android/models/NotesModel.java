@@ -52,29 +52,29 @@ public class NotesModel extends ARISModel {
 	}
 
 	public void createNote(Note n, Tag t, Media m, Trigger tr) {
-		mGamePlayAct.mServices.createNote(n, t, m, tr); //just forward to services
+		mGamePlayAct.mAppServices.createNote(n, t, m, tr); //just forward to services
 	}
 
 	public void saveNote(Note n, Tag t, Media m, Trigger tr) {
-		mGamePlayAct.mServices.updateNote(n, t, m, tr); //just forward to services
+		mGamePlayAct.mAppServices.updateNote(n, t, m, tr); //just forward to services
 	}
 
 	public void deleteNoteId(long note_id) {
-		mGamePlayAct.mServices.deleteNoteId(note_id); //just forward to services
+		mGamePlayAct.mAppServices.deleteNoteId(note_id); //just forward to services
 		notes.remove(note_id);
 		this.invalidateCaches();
 	}
 
 	public void createNoteComment(NoteComment n) {
-		mGamePlayAct.mServices.createNoteComment(n); //just forward to services
+		mGamePlayAct.mAppServices.createNoteComment(n); //just forward to services
 	}
 
 	public void saveNoteComment(NoteComment n) {
-		mGamePlayAct.mServices.updateNoteComment(n); //just forward to services
+		mGamePlayAct.mAppServices.updateNoteComment(n); //just forward to services
 	}
 
 	public void deleteNoteCommentId(long note_comment_id) {
-		mGamePlayAct.mServices.deleteNoteCommentId(note_comment_id); //just forward to services
+		mGamePlayAct.mAppServices.deleteNoteCommentId(note_comment_id); //just forward to services
 		noteComments.remove(note_comment_id);// removeObjectForKey:[NSNumber numberWithLong:note_comment_id]];
 	}
 
@@ -105,7 +105,7 @@ public class NotesModel extends ARISModel {
 	}
 
 	public void requestNotes() {
-		mGamePlayAct.mServices.fetchNotes();
+		mGamePlayAct.mAppServices.fetchNotes();
 	}
 
 	public void noteCommentsReceived(List<NoteComment> newNoteComments) {
@@ -128,7 +128,7 @@ public class NotesModel extends ARISModel {
 	}
 
 	public void requestNoteComments() {
-		mGamePlayAct.mServices.fetchNoteComments();
+		mGamePlayAct.mAppServices.fetchNoteComments();
 	}
 
 	// null note (id == 0) NOT flyweight!!! (to allow for temporary customization safety)

@@ -70,8 +70,8 @@ public class TagsModel extends ARISModel {
 	}
 
 	public void requestTags() {
-		mGamePlayAct.mServices.fetchTags();
-		mGamePlayAct.mServices.fetchObjectTags();
+		mGamePlayAct.mAppServices.fetchTags();
+		mGamePlayAct.mAppServices.fetchObjectTags();
 	}
 
 	public List<Tag> tagsForObjectType(String t, long object_id) {

@@ -75,7 +75,7 @@ public class QuestsModel extends ARISModel {
 	}
 
 	public void requestQuests() {
-		mGamePlayAct.mServices.fetchQuests();
+		mGamePlayAct.mAppServices.fetchQuests();
 	}
 
 	public void requestPlayerQuests() {
@@ -107,7 +107,7 @@ public class QuestsModel extends ARISModel {
 		if (!this.playerDataReceived() ||
 				mGame.network_level.contentEquals("HYBRID") ||
 				mGame.network_level.contentEquals("REMOTE"))
-			mGamePlayAct.mServices.fetchQuestsForPlayer();
+			mGamePlayAct.mAppServices.fetchQuestsForPlayer();
 	}
 
 	public void logAnyNewlyCompletedQuests() {

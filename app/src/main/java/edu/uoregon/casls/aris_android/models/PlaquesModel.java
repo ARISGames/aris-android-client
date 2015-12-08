@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
-import edu.uoregon.casls.aris_android.data_objects.Item;
 import edu.uoregon.casls.aris_android.data_objects.Plaque;
 
 /**
@@ -46,7 +45,7 @@ public class PlaquesModel extends ARISModel {
 	}
 
 	public void requestPlaques() {
-		mGamePlayAct.mServices.fetchPlaques(); //[_SERVICES_ fetchPlaques];
+		mGamePlayAct.mAppServices.fetchPlaques(); //[_SERVICES_ fetchPlaques];
 
 	}
 

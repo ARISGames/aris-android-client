@@ -1,7 +1,5 @@
 package edu.uoregon.casls.aris_android.models;
 
-import com.google.android.gms.games.internal.game.GameInstance;
-
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -65,13 +63,13 @@ public class GameInstancesModel extends ARISModel {
 	}
 
 	public void gameInstancesTouched() { // No one ever really calls this. coded for potential future use and for code consistency
-		n_game_data_received++;
+		n_maintenance_data_received++;
 		mGamePlayAct.mDispatch.model_game_instances_touched(); //_ARIS_NOTIF_SEND_(@"MODEL_GAME_INSTANCES_TOUCHED",nil,nil);
 		mGamePlayAct.mDispatch.maintenance_piece_available(); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void touchGameInstances() {
-		mGamePlayAct.mServices.touchItemsForGame();
+		mGamePlayAct.mAppServices.touchItemsForGame();
 	}
 
 	public void gameInstancesAvailable() {
@@ -93,7 +91,7 @@ public class GameInstancesModel extends ARISModel {
 		if (gII.qty < qty) qty = gII.qty; // uh, ok...whatever.
 
 		if (!mGame.network_level.contentEquals("LOCAL"))
-			mGamePlayAct.mServices.dropItem(item_id, qty);
+			mGamePlayAct.mAppServices.dropItem(item_id, qty);
 		return this.takeItemFromGame(item_id, qty);
 	}
 

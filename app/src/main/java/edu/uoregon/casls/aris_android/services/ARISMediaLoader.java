@@ -1,5 +1,6 @@
 package edu.uoregon.casls.aris_android.services;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,8 +8,22 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.BinaryHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.Header;
+import org.apache.http.entity.StringEntity;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -16,6 +31,8 @@ import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
+import edu.uoregon.casls.aris_android.Utilities.AppConfig;
+import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.media.ARISDelegateHandle;
 import edu.uoregon.casls.aris_android.models.MediaModel;
@@ -87,12 +104,31 @@ public class ARISMediaLoader {
 			}
 		}
 		metaConnections.add(mr);// addObject:mr;
-		mGamePlayAct.mServices.fetchMediaById(mr.media.media_id); //_SERVICES_ fetchMediaById:mr.media.media_id;
+		mGamePlayAct.mAppServices.fetchMediaById(mr.media.media_id); //_SERVICES_ fetchMediaById:mr.media.media_id;
 	}
 
-	public void retryLoadingAllMedia()
-	{
+	// calling stack as formed at start of game or continue game:
+	//  this.retryLoadingAllMedia()
+	//  <- listen from Dispatcher.model_media_available() <-
+	//  MediaModel.updateMedias() <-- call to Dispatcher.model_media_available()
+	//  MediaModel.mediasReceived()
+	//  <- Disptcher.services_medias_received() <-
+	//  ResponseHandler.processJsonHttpResponse( HTTP_GET_MEDIA_4_GAME ... ) <-- call to Dispatcher.services_medias_received()
+	//  (From among others...) MediaModel.requestGameData <-- ergo, ...AppServices.fetchMedias()
+	//  .........................Game.requestGameData()
+	//  .........................GamePlayActivity.requestGameData()
+	//  .........................GamePlayActivity.onStart() <-- loading sequence at start of game (or continue game)
+	public void retryLoadingAllMedia() {
 		// this is where we need to walk through the list of media that need to be loaded from server
+
+		// walk through list of all media meta data MediaModel.mediaIdsToLoad array (ids of urls that need to gat their (binary) data from server)
+		for (int mediaIdToLoad : mGamePlayAct.mMediaModel.mediaIDsToLoad) {
+			// dispatch an async service to try and load this data into a MediaResult obj
+			Media mediaToLoad = mGamePlayAct.mMediaModel.mediaForId(mediaIdToLoad);
+			this.pollServer(mediaToLoad.remoteURL.toString(), mediaIdToLoad);
+				// in that call: if call succeeds, add image to DB with it's data or just save as a file and put the rest in DB
+				//  if load failed, leave it in the queue to be retried.
+		}
 	}
 //		//do the ol' switcheroo so we wont get into an infinite loop of adding, removing, readding, etc...
 //		NSMutableArray oldMetaConnections = metaConnections;
@@ -203,5 +239,79 @@ public class ARISMediaLoader {
 //		this.loadMediaFromMR(mr);
 //	}
 
+	public void pollServer(final String requestURL, final int mediaIdToLoad) {
+//		showProgress(true);
+
+		RequestParams rqParams = new RequestParams();
+
+		final Context context = mGamePlayAct;
+//		final String request_url = AppConfig.SERVER_URL_MOBILE + requestURL;
+
+//		StringEntity entity;
+//		entity = null;
+		String[] allowedContentTypes = new String[]{"image/png", "image/jpeg", "image/gif"};
+
+		// Get request
+		if (AppUtils.isNetworkAvailable(mGamePlayAct.getApplicationContext())) {
+			AsyncHttpClient client = new AsyncHttpClient();
+//			static String reqCall
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient Sending Req for Media Data: " + requestURL);
+			client.get(context, requestURL, new BinaryHttpResponseHandler(allowedContentTypes /*, looper here? */) { // the looper might be able to handle failed attempts?
+				@Override
+				public void onSuccess(int statusCode, Header[] headers, byte[] mediaBytes) {
+					processLoadedMedia(mediaBytes, mediaIdToLoad);
+				}
+
+				@Override
+				public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
+					processFailedMediaLoad(mediaIdToLoad);
+				}
+			});
+
+//			client.post(context, requestURL, entity, "application/json", new JsonHttpResponseHandler() {
+//				@Override
+//				public void onSuccess(int statusCode, Header[] headers, JSONObject jsonReturn) {
+////					showProgress(false);
+//					try {
+//						// todo: custom response handler for media data
+//						mGamePlayAct.mResposeHandler.processJsonHttpResponse(requestURL, AppConfig.TAG_SERVER_SUCCESS, jsonReturn);
+//					} catch (JSONException e) {
+//						e.printStackTrace();
+//					}
+//				}
+//				@Override
+//				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+//					Log.w(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient failed server call. ", throwable);
+////					showProgress(false);
+//					Toast t = Toast.makeText(mGamePlayAct.getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
+//							Toast.LENGTH_SHORT);
+//					t.setGravity(Gravity.CENTER, 0, 0);
+//					t.show();
+//					super.onFailure(statusCode, headers, responseString, throwable);
+//				}
+//				@Override
+//				public void onProgress(int remaining, int total) {
+////					Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient Progress for Req: " + requestApi + ". Progress: " + remaining + "/" + total);
+//					// todo: set up progress bars of some sort for each request.
+//				}
+//			});
+		}
+		else {
+			// todo: what to do when internet is unavailable. A toast is not what we want here. May even want to test connectivity in calling method.
+//			Toast t = Toast.makeText(mGamePlayAct.getApplicationContext(), "You are not connected to the internet currently. Please try again later.",
+//					Toast.LENGTH_SHORT);
+//			t.setGravity(Gravity.CENTER, 0, 0);
+//			t.show();
+		}
+
+	}
+
+	private void processLoadedMedia(byte[] mediaBytes, int mediaIdToLoad) {
+		// save binary to a local file.
+		// enter this media data into database and a local URI to the file (Should there
+		// already be a row for this from prior entry or upstream empty placeholder stub?)
+	}
+
+	private void processFailedMediaLoad(int mediaIdToLoad) {}
 
 }

@@ -109,12 +109,12 @@ public class OverlaysModel extends ARISModel {
 		if (addedOverlays.size() > 0)
 			mGamePlayAct.mDispatch.model_overlays_new_available(addedOverlays); //@"MODEL_OVERLAYS_NEW_AVAILABLE",nil,@{@"added":addedOverlays});
 		if (removedOverlays.size() > 0)
-			mGamePlayAct.mDispatch.overlays_less_available(removedOverlays); //_ARIS_NOTIF_SEND_(@"MODEL_OVERLAYS_LESS_AVAILABLE",nil,@{@"removed":removedOverlays});
+			mGamePlayAct.mDispatch.model_overlays_less_available(removedOverlays); //_ARIS_NOTIF_SEND_(@"MODEL_OVERLAYS_LESS_AVAILABLE",nil,@{@"removed":removedOverlays});
 		mGamePlayAct.mDispatch.game_player_piece_available();  //_ARIS_NOTIF_SEND_(@"PLAYER_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void requestOverlays() {
-		mGamePlayAct.mServices.fetchOverlays();
+		mGamePlayAct.mAppServices.fetchOverlays();
 	}
 
 	public void requestPlayerOverlays() {
@@ -136,7 +136,7 @@ public class OverlaysModel extends ARISModel {
 		if (!this.playerDataReceived() ||
 				mGame.network_level.contentEquals("HYBRID") ||
 				mGame.network_level.contentEquals("REMOTE"))
-			mGamePlayAct.mServices.fetchOverlaysForPlayer();
+			mGamePlayAct.mAppServices.fetchOverlaysForPlayer();
 	}
 
 	public Overlay overlayForId(long overlay_id) {

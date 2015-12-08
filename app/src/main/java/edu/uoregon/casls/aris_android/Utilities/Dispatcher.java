@@ -1,7 +1,5 @@
 package edu.uoregon.casls.aris_android.Utilities;
 
-import android.util.Log;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +28,6 @@ import edu.uoregon.casls.aris_android.data_objects.Tag;
 import edu.uoregon.casls.aris_android.data_objects.Trigger;
 import edu.uoregon.casls.aris_android.data_objects.User;
 import edu.uoregon.casls.aris_android.data_objects.WebPage;
-import edu.uoregon.casls.aris_android.services.ARISMediaLoader;
 
 /**
  * Created by smorison on 10/6/15.
@@ -237,12 +234,10 @@ public class Dispatcher {
 
 	//	MODEL_MEDIA_AVAILABLE",nil,nil);
 	public void model_media_available() {
-		// todo: iOS call = ARISMediaLoader.retryLoadingAllMedia()
 		// todo: in Android, we may need to ser up a background service that will periodically
 		// todo:  cycle through all yet-to-be-loaded media, and load it during net-connectivity
 		// todo:  positive periods. This may or may not be how iOS was doing it.
-		// todo:  leaving next line broken so I can't miss it when I start coding next.
-		ARISMediaLoader.retryLoadingAllMedia();
+		mGamePlayAct.mAppServices.mMediaLoader.retryLoadingAllMedia();
 	}
 
 	// depricated
@@ -253,7 +248,7 @@ public class Dispatcher {
 
 	//	MODEL_MEDIA_DATA_LOADED",nil,nil);
 	public void model_media_data_loaded() {
-		// todo: iOS Call = LoadingViewController.mediaDataLoaded()
+		// iOS Call = LoadingViewController.mediaDataLoaded()
 		mGamePlayAct.mediaDataLoaded();
 	}
 
@@ -287,7 +282,7 @@ public class Dispatcher {
 	}
 
 	//	MODEL_OVERLAYS_LESS_AVAILABLE",nil,@{@"removed":removedOverlays});
-	public void overlays_less_available(List<Overlay> removedOverlays) {
+	public void model_overlays_less_available(List<Overlay> removedOverlays) {
 		// todo: MapViewController.refreshViewFromModel()
 	}
 

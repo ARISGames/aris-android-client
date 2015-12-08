@@ -50,7 +50,7 @@ public class WebPagesModel extends ARISModel {
 	}
 
 	public void requestWebPages() {
-		mGamePlayAct.mServices.fetchWebPages();
+		mGamePlayAct.mAppServices.fetchWebPages();
 	}
 
 	// null webpage (id == 0) NOT flyweight!!! (to allow for temporary customization safety)

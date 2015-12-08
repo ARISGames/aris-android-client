@@ -64,7 +64,7 @@ public class GroupsModel extends ARISModel {
 	}
 
 	public void touchGroupInstances() {
-		mGamePlayAct.mServices.touchItemsForGroups();
+		mGamePlayAct.mAppServices.touchItemsForGroups();
 	}
 
 	public void playerGroupReceived(Group newGroup) {
@@ -74,14 +74,13 @@ public class GroupsModel extends ARISModel {
 	}
 
 	public void groupTouched() {
-		n_game_data_received++;
+		n_maintenance_data_received++;
 		mGamePlayAct.mDispatch.model_group_touched(); //_ARIS_NOTIF_SEND_("MODEL_GROUP_TOUCHED", null, null);
 		mGamePlayAct.mDispatch.maintenance_piece_available(); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void updateGroups(List<Group> newGroups) {
 		long newGroupId;
-		int size = newGroups.size();
 		for (Group newGroup : newGroups) {
 			newGroupId = newGroup.group_id;
 			if (!groups.containsKey(newGroupId)) {
@@ -101,11 +100,11 @@ public class GroupsModel extends ARISModel {
 	}
 
 	public void requestGroups() {
-		mGamePlayAct.mServices.fetchGroups();
+		mGamePlayAct.mAppServices.fetchGroups();
 	}
 
 	public void touchPlayerGroup() {
-		mGamePlayAct.mServices.touchGroupForPlayer();
+		mGamePlayAct.mAppServices.touchGroupForPlayer();
 	}
 
 	public void requestPlayerGroup() {
@@ -113,7 +112,7 @@ public class GroupsModel extends ARISModel {
 			mGamePlayAct.mDispatch.services_player_group_received(playerGroup); //_ARIS_NOTIF_SEND_("SERVICES_PLAYER_GROUP_RECEIVED", null, @{@"group":playerGroup}); //just return current
 		}
 		if (!this.playerDataReceived() || mGamePlayAct.mGame.network_level.equals("HYBRID") || mGamePlayAct.mGame.network_level.equals("REMOTE")) {
-			mGamePlayAct.mServices.fetchGroupForPlayer();
+			mGamePlayAct.mAppServices.fetchGroupForPlayer();
 		}
 	}
 
@@ -125,7 +124,7 @@ public class GroupsModel extends ARISModel {
 		playerGroup = g;
 		mGamePlayAct.mGame.logsModel.playerChangedGroupId(g.group_id);
 		if (!mGamePlayAct.mGame.network_level.equals("LOCAL")) {
-			mGamePlayAct.mServices.setPlayerGroupId(g.group_id);
+			mGamePlayAct.mAppServices.setPlayerGroupId(g.group_id);
 		}
 		mGamePlayAct.mDispatch.model_groups_player_group_available(); //_ARIS_NOTIF_SEND_("MODEL_GROUPS_PLAYER_GROUP_AVAILABLE", null, null);
 	}

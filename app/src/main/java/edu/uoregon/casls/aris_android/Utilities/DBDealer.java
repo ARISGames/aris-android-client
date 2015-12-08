@@ -58,14 +58,15 @@ public class DBDealer extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 
-	public boolean insertMedia(MediaCD newMedia) {
+	public boolean addMedia(MediaCD newMedia) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(MEDIA_ID, newMedia.media_id);
 		contentValues.put(GAME_ID, newMedia.game_id);
 		contentValues.put(LOCAL_URL, newMedia.localURL);
 		contentValues.put(REMOTE_URL, newMedia.remoteURL);
-		db.insert(MEDIA, null, contentValues);
+		long res = db.insert(MEDIA, null, contentValues);
+		if (res == -1) return false;
 		return true;
 	}
 

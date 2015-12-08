@@ -93,10 +93,10 @@ public class DialogsModel extends ARISModel {
 	}
 
 	public void requestDialogs() {
-		mGamePlayAct.mServices.fetchDialogs(); //[_SERVICES_ fetchDialogs];
-		mGamePlayAct.mServices.fetchDialogCharacters(); //[_SERVICES_ fetchDialogCharacters];
-		mGamePlayAct.mServices.fetchDialogScripts(); //[_SERVICES_ fetchDialogScripts];
-		mGamePlayAct.mServices.fetchDialogOptions(); //[_SERVICES_ fetchDialogOptions];
+		mGamePlayAct.mAppServices.fetchDialogs(); //[_SERVICES_ fetchDialogs];
+		mGamePlayAct.mAppServices.fetchDialogCharacters(); //[_SERVICES_ fetchDialogCharacters];
+		mGamePlayAct.mAppServices.fetchDialogScripts(); //[_SERVICES_ fetchDialogScripts];
+		mGamePlayAct.mAppServices.fetchDialogOptions(); //[_SERVICES_ fetchDialogOptions];
 	}
 
 	public void requestPlayerOptionsForDialogId(long dialog_id, long dialog_script_id) {
@@ -119,7 +119,7 @@ public class DialogsModel extends ARISModel {
 			}
 			mGamePlayAct.mDispatch.services_player_script_options_received(uInfo); //_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_SCRIPT_OPTIONS_RECEIVED", nil, uInfo);
 		}
-		else  mGamePlayAct.mServices.fetchOptionsForPlayerForDialog(dialog_id, dialog_script_id); //_SERVICES_ fetchOptionsForPlayerForDialog:dialog_id script:dialog_script_id];
+		else  mGamePlayAct.mAppServices.fetchOptionsForPlayerForDialog(dialog_id, dialog_script_id); //_SERVICES_ fetchOptionsForPlayerForDialog:dialog_id script:dialog_script_id];
 	}
 
 // null dialog/character/script (id == 0) NOT flyweight!!! (to allow for temporary customization safety)

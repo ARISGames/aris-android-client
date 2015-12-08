@@ -44,7 +44,7 @@ public class ItemsModel extends ARISModel {
 	}
 
 	public void requestItems() {
-		mGamePlayAct.mServices.fetchItems();
+		mGamePlayAct.mAppServices.fetchItems();
 	}
 
 	public Map<Long, Item> items() {

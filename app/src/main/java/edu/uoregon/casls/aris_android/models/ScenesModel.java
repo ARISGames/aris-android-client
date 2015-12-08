@@ -43,6 +43,8 @@ public class ScenesModel extends ARISModel {
 	}
 
 	public void clearPlayerData() {
+		playerScene = null;
+		n_player_data_received = 0;
 	}
 
 	public void requestPlayerData() {
@@ -102,17 +104,17 @@ public class ScenesModel extends ARISModel {
 	}
 
 	public void sceneTouched() {
-		n_game_data_received++;
+		n_maintenance_data_received++;
 		mGamePlayAct.mDispatch.model_scene_touched(); //		_ARIS_NOTIF_SEND_(@"MODEL_SCENE_TOUCHED",nil,nil);
 		mGamePlayAct.mDispatch.maintenance_piece_available(); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void requestScenes() {
-		mGamePlayAct.mServices.fetchScenes();
+		mGamePlayAct.mAppServices.fetchScenes();
 	}
 
 	public void touchPlayerScene() {
-		mGamePlayAct.mServices.touchSceneForPlayer();
+		mGamePlayAct.mAppServices.touchSceneForPlayer();
 	}
 
 	public void requestPlayerScene() {
@@ -125,7 +127,7 @@ public class ScenesModel extends ARISModel {
 		if (!this.playerDataReceived() ||
 				mGamePlayAct.mGame.network_level.contentEquals("HYBRID") ||
 				mGamePlayAct.mGame.network_level.contentEquals("REMOTE"))
-			mGamePlayAct.mServices.fetchSceneForPlayer();
+			mGamePlayAct.mAppServices.fetchSceneForPlayer();
 
 	}
 

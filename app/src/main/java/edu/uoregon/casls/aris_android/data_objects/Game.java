@@ -160,10 +160,21 @@ public class Game {
 		authors.clear(); // redundant at this point, but left in to keep in sync with iOS code
 		comments.clear();
 
+		// todo: check for game save as file from prior play load if found iOS:
+/*
+		NSString *gameJsonFile = [[_MODEL_ applicationDocumentsDirectory] stringByAppendingPathComponent:[NSString stringWithFormat:@"%ld/game.json",game_id]];
+		if([[NSFileManager defaultManager] fileExistsAtPath:gameJsonFile])
+		{
+			//careful to not 'initGameWithDict' here, or infinite loop
+			SBJsonParser *jsonParser = [[SBJsonParser alloc] init];
+			NSDictionary *gameDict = [jsonParser objectWithString:[NSString stringWithContentsOfFile:gameJsonFile encoding:NSUTF8StringEncoding error:nil]];
+			downloadedVersion = [gameDict validIntForKey:@"version"];
+		}
+*/
+
 		downloadedVersion = 0;
 		know_if_begin_fresh = false;
 		begin_fresh = false;
-
 	}
 
 	public void initContext(GamePlayActivity gamePlayActivity) {
@@ -326,6 +337,9 @@ public class Game {
 		listen_game_piece_available = true;        // _ARIS_NOTIF_LISTEN_(@"GAME_PIECE_AVAILABLE",self,@selector(gamePieceReceived),null);
 		listen_media_piece_available = true;        // _ARIS_NOTIF_LISTEN_(@"MEDIA_PIECE_AVAILABLE",self,@selector(mediaPieceReceived),nil);
 
+		n_game_data_received = 0;
+		n_player_data_received = 0;
+
 		scenesModel = new ScenesModel();
 		models.add(scenesModel);
 		plaquesModel = new PlaquesModel();
@@ -394,6 +408,8 @@ public class Game {
 	public void endPlay() {
 		n_game_data_to_receive = 0;
 		n_game_data_received = 0;
+		n_maintenance_data_to_receive = 0;
+		n_maintenance_data_received = 0;
 		n_player_data_to_receive = 0;
 		n_player_data_received = 0;
 
@@ -431,7 +447,7 @@ public class Game {
 	}
 
 	public void requestMaintenanceData() {
-		n_player_data_received = 0; //
+		n_maintenance_data_received = 0; //
 		for (ARISModel model : models) {
 			model.requestMaintenanceData();
 		}
@@ -464,12 +480,12 @@ public class Game {
 			mGamePlayAct.mDispatch.game_data_loaded(); // _ARIS_NOTIF_SEND_(@"DATA_LOADED", nil, nil); // will call requestPlayerData()
 		}
 	}
-
+	//fixme: watch here and see why we're never passing the condition below.
 	public void maintenancePieceReceived() { // called as listener to [GameInstances|GroupInstance|Groups|PlayerInstance|Scenes]Touched() via Dispater.maintenance_piece_available()
 		n_maintenance_data_received++;
 		mGamePlayAct.mDispatch.maintenance_percent_loaded((float) n_maintenance_data_received / (float) n_maintenance_data_to_receive); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_PERCENT_LOADED", nil,
 		// @{@"percent":[NSNumber numberWithFloat:(float)n_maintenance_data_received/(float)n_maintenance_data_to_receive]});
-		if (this.allMaintenanceDataReceived()) {
+		if (this.allMaintenanceDataReceived()) {//fixme: this condition, yes.
 			n_maintenance_data_received = n_maintenance_data_to_receive; //should already be exactly this...
 			mGamePlayAct.mDispatch.maintenance_data_loaded(); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_DATA_LOADED", nil, nil);
 		}
@@ -562,7 +578,7 @@ public class Game {
 		return n_media_data_received >= n_media_data_to_receive; //a bit more fragile than others'...
 	}
 
-	public boolean hasLatestDownload() {
+	public boolean hasLatestDownload() { // todo: follow the version values below and ensure they're getting set correctly; I think they're not.
 		return (this.downloadedVersion != 0 && this.version == this.downloadedVersion);
 	}
 

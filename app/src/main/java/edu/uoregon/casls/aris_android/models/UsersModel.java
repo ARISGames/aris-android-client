@@ -88,11 +88,11 @@ public class UsersModel extends ARISModel {
 	}
 
 	public void requestUsers() {
-		mGamePlayAct.mServices.fetchUsers();
+		mGamePlayAct.mAppServices.fetchUsers();
 	}
 
 	public void requestUser(long t) {
-		mGamePlayAct.mServices.fetchUserById(t);
+		mGamePlayAct.mAppServices.fetchUserById(t);
 	}
 
 	// null user (id == 0) NOT flyweight!!! (to allow for temporary customization safety)

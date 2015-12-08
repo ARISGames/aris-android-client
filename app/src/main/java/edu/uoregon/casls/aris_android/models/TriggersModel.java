@@ -179,10 +179,10 @@ public class TriggersModel extends ARISModel {
 	}
 
 	public void requestTriggers() {
-		mGamePlayAct.mServices.fetchTriggers();
+		mGamePlayAct.mAppServices.fetchTriggers();
 	}
 	public void requestTrigger(long t) {
-		mGamePlayAct.mServices.fetchTriggerById(t);
+		mGamePlayAct.mAppServices.fetchTriggerById(t);
 	}
 
 	public void requestPlayerTriggers() {
@@ -220,7 +220,7 @@ public class TriggersModel extends ARISModel {
 			mGamePlayAct.mDispatch.services_player_triggers_received(ptrigs); //("SERVICES_PLAYER_TRIGGERS_RECEIVED", null, @{@"triggers":ptrigs});
 		}
 		if (!this.playerDataReceived() || mGame.network_level.equals("HYBRID") || mGame.network_level.equals("REMOTE")) {
-			mGamePlayAct.mServices.fetchTriggersForPlayer();
+			mGamePlayAct.mAppServices.fetchTriggersForPlayer();
 		}
 	}
 
