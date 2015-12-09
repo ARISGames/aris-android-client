@@ -130,14 +130,13 @@ public class Game {
 	// medias (in GamePlayAct 		// Game Piece
 
 	//local stuff
-	long downloadedVersion = 0;
+	public long downloadedVersion = 0;
 	public boolean know_if_begin_fresh = false;
 	public boolean begin_fresh = false;
 
 	//	PollTimer vars
 	public Boolean isPollTImerRunning = false;
 	private Intent pollTimerSvcIntent = null;
-
 
 	// FYI transient indicates "do not serialize"; gson will die a recursive death if it did.
 	public transient GamePlayActivity mGamePlayAct; // For reference to GamePlayActivity; do not instantiate (new) object or circular references will ensue.
@@ -161,6 +160,12 @@ public class Game {
 		comments.clear();
 
 		// todo: check for game save as file from prior play load if found iOS:
+		// todo: perhaps use the Game stored in GamePlayAct.bundle; ultimately needs to be placed in
+		// todo: appPrefs or a file if it's too big for appPrefs. Looks like in iOS they're saving
+		// todo: multiple game files as "[path=game_id]/game.json". That would seem to indicate that we really
+		// todo: need to be following suit by using individual files, not appPrefs or Bundle.
+		// fixme: store game files into FS files on device, as suggested above. Needs to be saved in GamePlayAct itself.
+		// fixme: conditions to start actual game depend on a downloaded file's "version" field
 /*
 		NSString *gameJsonFile = [[_MODEL_ applicationDocumentsDirectory] stringByAppendingPathComponent:[NSString stringWithFormat:@"%ld/game.json",game_id]];
 		if([[NSFileManager defaultManager] fileExistsAtPath:gameJsonFile])
@@ -168,7 +173,7 @@ public class Game {
 			//careful to not 'initGameWithDict' here, or infinite loop
 			SBJsonParser *jsonParser = [[SBJsonParser alloc] init];
 			NSDictionary *gameDict = [jsonParser objectWithString:[NSString stringWithContentsOfFile:gameJsonFile encoding:NSUTF8StringEncoding error:nil]];
-			downloadedVersion = [gameDict validIntForKey:@"version"];
+			downloadedVersion = [gameDict validIntForKey:@"version"]; // fixme: game start depends on this value assignment.
 		}
 */
 
@@ -657,6 +662,9 @@ public class Game {
 		return (String) "Game- Id:" + game_id + "\tName:" + name;
 	}
 
+	public void mergeDataFromGame(Game g) {
+
+	}
 }
 
 /*

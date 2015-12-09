@@ -1,6 +1,7 @@
 package edu.uoregon.casls.aris_android;
 
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
@@ -17,14 +18,18 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.Utilities.Dispatcher;
 import edu.uoregon.casls.aris_android.Utilities.ResponseHandler;
 import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.data_objects.User;
+import edu.uoregon.casls.aris_android.models.GamesModel;
 import edu.uoregon.casls.aris_android.models.MediaModel;
 import edu.uoregon.casls.aris_android.models.UsersModel;
 import edu.uoregon.casls.aris_android.services.AppServices;
@@ -43,7 +48,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	public  ResponseHandler mResposeHandler;
 	public  MediaModel      mMediaModel;
 	public  UsersModel      mUsersModel;
-	//	public GamesModel mGamesModel; // todo: needed for Android?
+//	public  GamesModel      mGamesModel; // needed to store multiple games on device for future retrieval.
 	private View            mProgressView; // todo: install a progress spinner for server delays
 	public  JSONObject      mJsonAuth;
 	public Map<Long, Media>  mGameMedia = new LinkedHashMap<>();
@@ -59,6 +64,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	 * Used to store the last screen title. For use in {@link #restoreActionBar()}.
 	 */
 	private CharSequence mTitle;
+	private long         preferred_game_id;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +83,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			//GSON (Slow in debug mode. Ok in regular run mode)
 			mGame = gson.fromJson(extras.getString("game"), Game.class);
 			mGame.initContext(this); // to allow upward visibility to activities various game/player objects
+
 
 			try {
 				mJsonAuth = new JSONObject(extras.getString("json_auth"));
@@ -123,7 +130,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			//[_MODEL_ restoreGameData]; // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restoreGameData
 			this.gameDataLoaded(); //
 		}
-
 	}
 
 	public void requestGameData() {
@@ -158,12 +164,13 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mGame.requestMaintenanceData();
 	}
 
-	public void maintenanceDataLoaded() { //fixme: not ever getting here
+	// will be called from Game.maintenancePieceReceived() when Game.allMaintenanceDataLoaded() is satisfied.
+	public void maintenanceDataLoaded() {
 		if (!mGame.hasLatestDownload() || !mGame.begin_fresh)
 			this.requestPlayerData();
 		else {
 			//_MODEL_ restorePlayerData]; // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restorePlayerData
-			this.playerDataLoaded();
+			this.playerDataLoaded();//fixme: not ever getting here
 		}
 	}
 
@@ -213,7 +220,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mGame.requestMediaData();
 	}
 
-	public void mediaDataLoaded() { this.beginGame(); }
+	public void mediaDataLoaded() {
+		this.beginGame();
+	}
 
 	public void mediaDataComplete() {}
 
@@ -240,9 +249,61 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	}
 
 	private void beginGame() {
-		mGame.gameBegan(); // Main game data loaded start cyclic game data rolling
+		this.preferred_game_id = 0; //assume the preference was met
+		if (mGame.begin_fresh)
+			this.storeGame(); //we loaded fresh, so can store player data
+
+		mGame.logsModel.playerEnteredGame(); //		[_MODEL_LOGS_ playerEnteredGame];
+		mDispatch.game_began(); // calls mGame.gameBegan() and mGamePlayAct.gameBegan()
 	}
 
+	private void storeGame() {
+
+		Gson gson = new Gson();
+		String jsonGame = gson.toJson(mGame); // data = mGame.serialize] dataUsingEncoding:NSUTF8StringEncoding];
+
+		File gameStorageFile = AppUtils.gameStorageFile(this);
+		AppUtils.writeToFileStream(this, gameStorageFile, jsonGame);
+
+//		File appDir = new File(getFilesDir().getPath());
+//		File gameDir = getDir(appDir + String.valueOf(mGame.game_id), Context.MODE_PRIVATE); //Creating an internal dir;
+//		File gameFile = new File(gameDir, "game.json"); //Getting a file within the dir.
+//		AppUtils.writeToFileStream(this, gameFile, jsonGame);
+//
+//		NSString *folder = [[self applicationDocumentsDirectory] stringByAppendingPathComponent:[NSString stringWithFormat:@"%ld",_MODEL_GAME_.game_id]];
+//		[[NSFileManager defaultManager] createDirectoryAtPath:folder withIntermediateDirectories:YES attributes:nil error:&error];
+
+		// sem: store this game model (set of games)
+//		file = [folder stringByAppendingPathComponent:@"game.json"];
+//		[data writeToFile:file atomically:YES];
+//		[[NSURL fileURLWithPath:file] setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+
+/* save the whole ARISModel (iOS) done by gson in Android along with the Game object. */
+//		ARISModel *m;
+//		for(long i = 0; i < _MODEL_GAME_.models.count; i++)
+//		{
+//			m = _MODEL_GAME_.models[i];
+//			data = [[m serializeGameData] dataUsingEncoding:NSUTF8StringEncoding];
+//			file = [folder stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_game.json",m.serializedName]];
+//			[data writeToFile:file atomically:YES];
+//			[[NSURL fileURLWithPath:file] setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+//		}
+//		for(long i = 0; i < _MODEL_GAME_.models.count; i++)
+//		{
+//			m = _MODEL_GAME_.models[i];
+//			data = [[m serializePlayerData] dataUsingEncoding:NSUTF8StringEncoding];
+//			file = [folder stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_player.json",m.serializedName]];
+//			[data writeToFile:file atomically:YES];
+//			[[NSURL fileURLWithPath:file] setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+//		}
+		mGame.downloadedVersion = mGame.version;
+	}
+
+	private void deleteStoredGame() {
+		// todo: should there not be some house cleaning so game files don't accumulate on device?
+		// todo: question is, when to call this?
+		this.deleteFile(AppUtils.gameStorageFile(this).getName());
+	}
 
 	@Override
 	public void onStop() {

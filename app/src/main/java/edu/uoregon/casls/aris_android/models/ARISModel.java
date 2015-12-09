@@ -47,6 +47,8 @@ public class ARISModel {
 	}
 
 	public Boolean maintenanceDataReceived() {
+		long nMainDataToRcv = this.nMaintenanceDataToReceive();
+		long n_maint_data_to_rcv = n_maintenance_data_received;
 		return n_maintenance_data_received >= this.nMaintenanceDataToReceive();
 	}
 

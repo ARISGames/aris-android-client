@@ -12,6 +12,7 @@ import edu.uoregon.casls.aris_android.data_objects.DialogOption;
 import edu.uoregon.casls.aris_android.data_objects.DialogScript;
 import edu.uoregon.casls.aris_android.data_objects.Event;
 import edu.uoregon.casls.aris_android.data_objects.Factory;
+import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Group;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
 import edu.uoregon.casls.aris_android.data_objects.Note;
@@ -132,13 +133,8 @@ public class Dispatcher {
 		// not listened for;
 	}
 
-	//	MODEL_GAME_INSTANCES_TOUCHED",nil,nil);
-	public void model_game_instances_touched() {
-		// no action assigned to this yet.
-	}
-
 	//	LEFT",nil,nil); // Will be handled in GamePlayActivity -sem
-//	PERCENT_LOADED", nil, @{@"percent":percentReceived});
+	//	PERCENT_LOADED", nil, @{@"percent":percentReceived});
 	public void game_percent_loaded(float percentReceived) {
 		// todo: LoadingViewController.percentLoaded();
 	}
@@ -167,6 +163,16 @@ public class Dispatcher {
 	// MAINTENANCE_PIECE_AVAILABLE",nil,nil);
 	public void maintenance_piece_available() {
 		if (mGamePlayAct.mGame.listen_maintenance_piece_available) mGamePlayAct.mGame.maintenancePieceReceived();
+	}
+
+	public void model_game_available(Game game) {
+		// may only be needed for iOS where here we would inform the game picker view that this game
+		//  should be added to the list of available games.
+	}
+
+	//	MODEL_GAME_INSTANCES_TOUCHED",nil,nil);
+	public void model_game_instances_touched() {
+		// no action assigned to this yet.
 	}
 
 	//	MODEL_GROUP_INSTANCES_AVAILABLE",nil,nil);
@@ -666,8 +672,6 @@ public class Dispatcher {
 
 	public void player_percent_loaded(float v) {
 	}
-
-
 
 
 //	WIFI_CONNECTED",self,nil); break;
