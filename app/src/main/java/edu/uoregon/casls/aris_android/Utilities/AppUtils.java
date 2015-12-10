@@ -64,23 +64,20 @@ public class AppUtils {
 		return locationManager.getLastKnownLocation(provider);
 	}
 
-
 	public class deltaMap {
 		Map<String, Map<String, Object>> deltas;
 	}
 
-	public static File appStorageDir(GamePlayActivity gamePlayAct) {
-		File appDir = new File(gamePlayAct.getFilesDir().getPath());
-		File gameDir = gamePlayAct.getDir(appDir + String.valueOf(gamePlayAct.mGame.game_id), Context.MODE_PRIVATE); //Creating an internal dir;
-		return gameDir;
-	}
-
 	public static File gameStorageFile(GamePlayActivity gamePlayAct) {
+		String gameFileName = String.valueOf(gamePlayAct.mGame.game_id) + "_game.json";
 		File appDir = new File(gamePlayAct.getFilesDir().getPath());
-		File gameDir = gamePlayAct.getDir(appDir + String.valueOf(gamePlayAct.mGame.game_id), Context.MODE_PRIVATE); //Creating an internal dir;
-		File gameFile = new File(gameDir, "game.json"); //Getting a file within the dir.
+		File gameFile = new File(appDir, gameFileName);
 		return gameFile;
 	}
+
+//	public static boolean streamFileExists(Context context, File file) {
+//
+//	}
 
 	public static void writeToFileStream(Context context, File file, String stringData) {
 		try {

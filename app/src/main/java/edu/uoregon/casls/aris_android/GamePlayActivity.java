@@ -2,6 +2,7 @@ package edu.uoregon.casls.aris_android;
 
 import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
@@ -23,6 +24,7 @@ import java.io.FileOutputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.Utilities.Dispatcher;
 import edu.uoregon.casls.aris_android.Utilities.ResponseHandler;
@@ -40,6 +42,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 // Todo 9.29.15: Need to see what happens now when the game tries to load, and then set about setting up the cyclic app status calls
 
 	private final static String TAG_SERVER_SUCCESS = "success";
+	public static SharedPreferences appPrefs;
+
 	public  Bundle          mTransitionAnimationBndl;
 	public  User            mPlayer; // Sanity note: Now that the game is "playing" we will refer to the logged in User as "Player"
 	public  Game            mGame;
@@ -74,6 +78,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mNavigationDrawerFragment = (GamePlayNavDrawerFragment)
 				getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
+		appPrefs = getSharedPreferences(AppConfig.APP_PREFS_FILE_NAME, MODE_PRIVATE);
 
 		Gson gson = new Gson();
 
@@ -166,7 +171,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	// will be called from Game.maintenancePieceReceived() when Game.allMaintenanceDataLoaded() is satisfied.
 	public void maintenanceDataLoaded() {
-		if (!mGame.hasLatestDownload() || !mGame.begin_fresh)
+		if (!mGame.hasLatestDownload()) // || !mGame.begin_fresh) // fixme: temporaryily cut out the begin_game condition
 			this.requestPlayerData();
 		else {
 			//_MODEL_ restorePlayerData]; // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restorePlayerData
@@ -259,24 +264,24 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	private void storeGame() {
 
+		// serialize entire game to an app internal local file
 		Gson gson = new Gson();
 		String jsonGame = gson.toJson(mGame); // data = mGame.serialize] dataUsingEncoding:NSUTF8StringEncoding];
 
 		File gameStorageFile = AppUtils.gameStorageFile(this);
 		AppUtils.writeToFileStream(this, gameStorageFile, jsonGame);
 
-//		File appDir = new File(getFilesDir().getPath());
-//		File gameDir = getDir(appDir + String.valueOf(mGame.game_id), Context.MODE_PRIVATE); //Creating an internal dir;
-//		File gameFile = new File(gameDir, "game.json"); //Getting a file within the dir.
-//		AppUtils.writeToFileStream(this, gameFile, jsonGame);
-//
-//		NSString *folder = [[self applicationDocumentsDirectory] stringByAppendingPathComponent:[NSString stringWithFormat:@"%ld",_MODEL_GAME_.game_id]];
-//		[[NSFileManager defaultManager] createDirectoryAtPath:folder withIntermediateDirectories:YES attributes:nil error:&error];
+		// just store the game downloadedVersion field on App prefs
+		SharedPreferences.Editor prefsEd = appPrefs.edit();
+		prefsEd.putLong(AppUtils.gameStorageFile(this).getName() + ".downloadedVersion", mGame.downloadedVersion);
+		prefsEd.commit();
 
-		// sem: store this game model (set of games)
-//		file = [folder stringByAppendingPathComponent:@"game.json"];
-//		[data writeToFile:file atomically:YES];
-//		[[NSURL fileURLWithPath:file] setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+//		// also store just the game base data attributes EXPERIMENTAL Android; delete if it's a failed experiment
+//		String jsonGameLite = gson.toJson(mGame);
+//		SharedPreferences.Editor prefsEd = appPrefs.edit();
+//		prefsEd.putString(gameStorageFile.getName(), jsonGameLite);
+//		prefsEd.commit();
+
 
 /* save the whole ARISModel (iOS) done by gson in Android along with the Game object. */
 //		ARISModel *m;

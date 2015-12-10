@@ -15,12 +15,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.Utilities.AppConfig;
+import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.services.PollTimerService;
 import edu.uoregon.casls.aris_android.models.ARISModel;
 import edu.uoregon.casls.aris_android.models.DialogsModel;
@@ -164,23 +166,60 @@ public class Game {
 		// todo: appPrefs or a file if it's too big for appPrefs. Looks like in iOS they're saving
 		// todo: multiple game files as "[path=game_id]/game.json". That would seem to indicate that we really
 		// todo: need to be following suit by using individual files, not appPrefs or Bundle.
-		// fixme: store game files into FS files on device, as suggested above. Needs to be saved in GamePlayAct itself.
-		// fixme: conditions to start actual game depend on a downloaded file's "version" field
-/*
-		NSString *gameJsonFile = [[_MODEL_ applicationDocumentsDirectory] stringByAppendingPathComponent:[NSString stringWithFormat:@"%ld/game.json",game_id]];
-		if([[NSFileManager defaultManager] fileExistsAtPath:gameJsonFile])
-		{
-			//careful to not 'initGameWithDict' here, or infinite loop
-			SBJsonParser *jsonParser = [[SBJsonParser alloc] init];
-			NSDictionary *gameDict = [jsonParser objectWithString:[NSString stringWithContentsOfFile:gameJsonFile encoding:NSUTF8StringEncoding error:nil]];
-			downloadedVersion = [gameDict validIntForKey:@"version"]; // fixme: game start depends on this value assignment.
-		}
-*/
 
 		downloadedVersion = 0;
+
+		// this is insane to deserialize the entire game and all descendant classes just for one field. I'm going to use appPrefs.?
+		//   check for game saved as file from prior play; load if found.
+//		File gameFile = AppUtils.gameStorageFile(mGamePlayAct);
+//		if (gameFile.exists()) {
+//			Gson gson = new Gson();
+//			String jsonStoredGame = AppUtils.readFromFileStream(mGamePlayAct, gameFile); // read raw json from stored game file
+//			Game storedGame = gson.fromJson(jsonStoredGame, Game.class); // deserialize json into Game
+//
+//			this.downloadedVersion = storedGame.version;
+////			GameDataLite storedGameLite = gson.fromJson(jsonStoredGame, GameDataLite.class); // deserialize json into Game
+////			this.downloadedVersion = storedGameLite.version;
+//
+//		}
+
+		// getDownloaded version via appPrefs
+		if (mGamePlayAct != null) {
+			String gameStorageFileName = gameStorageFile(mGamePlayAct).getName();
+			if (mGamePlayAct.appPrefs.contains(gameStorageFileName + ".downloadedVersion")) {
+				this.downloadedVersion = mGamePlayAct.appPrefs.getLong(gameStorageFileName + ".downloadedVersion", 0);
+			}
+		}
+//		NSString *gameJsonFile = [[_MODEL_ applicationDocumentsDirectory] stringByAppendingPathComponent:[NSString stringWithFormat:@"%ld/game.json",game_id]];
+//		if([[NSFileManager defaultManager] fileExistsAtPath:gameJsonFile])
+//		{
+//			//careful to not 'initGameWithDict' here, or infinite loop
+//			SBJsonParser *jsonParser = [[SBJsonParser alloc] init];
+//			NSDictionary *gameDict = [jsonParser objectWithString:[NSString stringWithContentsOfFile:gameJsonFile encoding:NSUTF8StringEncoding error:nil]];
+//			downloadedVersion = [gameDict validIntForKey:@"version"]; // fixme: game start depends on this value assignment.
+//		}
+
 		know_if_begin_fresh = false;
 		begin_fresh = false;
 	}
+
+	// only to be called from an instatiation of GamePlayActivity.
+	public static File appStorageDir(GamePlayActivity gamePlayAct) {
+		File appDir = new File(gamePlayAct.getFilesDir().getPath());
+		File gameDir = gamePlayAct.getDir(appDir + String.valueOf(gamePlayAct.mGame.game_id), Context.MODE_PRIVATE); //Creating an internal dir;
+		return gameDir;
+	}
+
+	public static File gameStorageFile(GamePlayActivity gamePlayAct) {
+		String gameFileName = String.valueOf(gamePlayAct.mGame.game_id) + "_game.json";
+		File appDir = new File(gamePlayAct.getFilesDir().getPath());
+		File gameFile = new File(appDir, gameFileName);
+		return gameFile;
+	}
+
+//	public static boolean streamFileExists(Context context, File file) {
+//
+//	}
 
 	public void initContext(GamePlayActivity gamePlayActivity) {
 		mGamePlayAct = gamePlayActivity;
@@ -490,7 +529,8 @@ public class Game {
 		n_maintenance_data_received++;
 		mGamePlayAct.mDispatch.maintenance_percent_loaded((float) n_maintenance_data_received / (float) n_maintenance_data_to_receive); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_PERCENT_LOADED", nil,
 		// @{@"percent":[NSNumber numberWithFloat:(float)n_maintenance_data_received/(float)n_maintenance_data_to_receive]});
-		if (this.allMaintenanceDataReceived()) {//fixme: this condition, yes.
+		if (this.allMaintenanceDataReceived()) {
+			downloadedVersion = version; // fixme: just a test. don't leave this in final code.
 			n_maintenance_data_received = n_maintenance_data_to_receive; //should already be exactly this...
 			mGamePlayAct.mDispatch.maintenance_data_loaded(); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_DATA_LOADED", nil, nil);
 		}
@@ -568,8 +608,11 @@ public class Game {
 	}
 
 	public boolean allMaintenanceDataReceived() {
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " MAINTCYCLE  - - - - - - - - allMaintenanceDataReceived()");
+
 		for (ARISModel model : models)
 			if (!model.maintenanceDataReceived()) return false;
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " MAINTCYCLE  - - - - - - - - allMaintenanceDataReceived() PASSED PASSED PASSED");
 		return true;
 	}
 

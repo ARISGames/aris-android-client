@@ -53,7 +53,7 @@ public class InstancesModel extends ARISModel {
 		this.updateInstances(instances);
 		n_player_data_received++;
 
-		mGamePlayAct.mDispatch.game_player_piece_available(); // _ARIS_NOTIF_SEND_(@"PLAYER_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.player_piece_available(); // _ARIS_NOTIF_SEND_(@"PLAYER_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void gameInstancesReceived(List<Instance> instances) {

@@ -107,7 +107,7 @@ public class TabsModel extends ARISModel {
 			mGamePlayAct.mDispatch.model_tabs_new_available(deltas); //_ARIS_falseTIF_SEND_(@"MODEL_TABS_NEW_AVAILABLE",nil,deltas);
 		if (deltas.containsKey("removed"))
 			mGamePlayAct.mDispatch.model_tabs_less_available(deltas); //_ARIS_falseTIF_SEND_(@"MODEL_TABS_LESS_AVAILABLE",nil,deltas);
-		mGamePlayAct.mDispatch.game_player_piece_available(); //_ARIS_falseTIF_SEND_(@"PLAYER_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.player_piece_available(); //_ARIS_falseTIF_SEND_(@"PLAYER_PIECE_AVAILABLE",nil,nil);
 	}
 
 	Map<String, List<Tab>> findDeltasInNew(List<Tab> newTabs, List<Tab> oldTabs) {

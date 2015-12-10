@@ -88,7 +88,7 @@ public class ScenesModel extends ARISModel {
 		playerScene = newScene;
 		n_player_data_received++;
 		mGamePlayAct.mDispatch.model_scenes_player_scene_available(); // _ARIS_NOTIF_SEND_(@"MODEL_SCENES_PLAYER_SCENE_AVAILABLE",nil,nil);
-		mGamePlayAct.mDispatch.game_player_piece_available(); // _ARIS_NOTIF_SEND_(@"PLAYER_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.player_piece_available(); // _ARIS_NOTIF_SEND_(@"PLAYER_PIECE_AVAILABLE",nil,nil);
 
 	}
 

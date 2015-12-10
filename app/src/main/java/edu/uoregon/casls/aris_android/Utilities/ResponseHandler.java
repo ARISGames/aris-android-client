@@ -173,6 +173,20 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_instances_received(instances);
 				}
 			}
+			else if (callingReq.equals(Calls.HTTP_GET_INSTANCES_4_PLAYER)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").create();
+					List<Instance> instances = new LinkedList<>();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						Instance instance = gson.fromJson(dataStr, Instance.class);
+						//populate hashmap as instances_id, Instance Obj>
+						instances.add(instance);
+					}
+					mGamePlayAct.mDispatch.services_player_instances_received(instances);
+				}
+			}
 			else if (callingReq.equals(Calls.HTTP_GET_ITEMS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");

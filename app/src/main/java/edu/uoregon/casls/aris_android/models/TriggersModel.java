@@ -175,7 +175,7 @@ public class TriggersModel extends ARISModel {
 			mGamePlayAct.mDispatch.model_triggers_less_available(removedTriggers);//_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_LESS_AVAILABLE", null, @{@"removed":removedTriggers});
 		}
 		mGamePlayAct.mDispatch.model_player_triggers_available(); //_ARIS_NOTIF_SEND_("MODEL_PLAYER_TRIGGERS_AVAILABLE", null, null);
-		mGamePlayAct.mDispatch.game_player_piece_available();//_ARIS_NOTIF_SEND_("PLAYER_PIECE_AVAILABLE", null, null);
+		mGamePlayAct.mDispatch.player_piece_available();//_ARIS_NOTIF_SEND_("PLAYER_PIECE_AVAILABLE", null, null);
 	}
 
 	public void requestTriggers() {

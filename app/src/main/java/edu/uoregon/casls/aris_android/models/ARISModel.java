@@ -1,6 +1,9 @@
 package edu.uoregon.casls.aris_android.models;
 
+import android.util.Log;
+
 import edu.uoregon.casls.aris_android.GamePlayActivity;
+import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 
 /**
  * Created by smorison on 9/29/15.
@@ -49,7 +52,17 @@ public class ARISModel {
 	public Boolean maintenanceDataReceived() {
 		long nMainDataToRcv = this.nMaintenanceDataToReceive();
 		long n_maint_data_to_rcv = n_maintenance_data_received;
-		return n_maintenance_data_received >= this.nMaintenanceDataToReceive();
+//		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "    MAINTCYCLE  - - - - maintenanceDataReceived. return " + nMainDataToRcv + " >= " + n_maint_data_to_rcv + " ??");
+
+//		return n_maintenance_data_received >= this.nMaintenanceDataToReceive();
+		if ( n_maintenance_data_received >= this.nMaintenanceDataToReceive()) {
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "    MAINTCYCLE  - - - - maintenanceDataReceived. return " + n_maint_data_to_rcv + " >= " + nMainDataToRcv + " TRUE TRUE");
+			return true;
+		}
+		else {
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "    MAINTCYCLE  - - - - maintenanceDataReceived. return " + n_maint_data_to_rcv + " >= " + nMainDataToRcv + " FALSE FALSE");
+			return false;
+		}
 	}
 
 	public Boolean playerDataReceived() {

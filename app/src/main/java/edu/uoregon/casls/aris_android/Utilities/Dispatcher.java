@@ -151,7 +151,7 @@ public class Dispatcher {
 	}
 
 	//	PLAYER_PIECE_AVAILABLE",nil,nil);
-	public void game_player_piece_available() {
+	public void player_piece_available() {
 		if (mGamePlayAct.mGame.listen_player_piece_available)
 			mGamePlayAct.mGame.playerPieceReceived();
 	}
@@ -437,6 +437,10 @@ public class Dispatcher {
 		// no listeners
 	}
 
+//	public void player_piece_available() {
+//
+//	}
+
 	//	PusherGameEventReceived",event,nil);
 //	PusherGroupEventReceived",event,nil);
 //	PusherPlayerEventReceived",event,nil);
@@ -672,6 +676,7 @@ public class Dispatcher {
 
 	public void player_percent_loaded(float v) {
 	}
+
 
 
 //	WIFI_CONNECTED",self,nil); break;

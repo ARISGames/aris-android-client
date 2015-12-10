@@ -110,7 +110,7 @@ public class OverlaysModel extends ARISModel {
 			mGamePlayAct.mDispatch.model_overlays_new_available(addedOverlays); //@"MODEL_OVERLAYS_NEW_AVAILABLE",nil,@{@"added":addedOverlays});
 		if (removedOverlays.size() > 0)
 			mGamePlayAct.mDispatch.model_overlays_less_available(removedOverlays); //_ARIS_NOTIF_SEND_(@"MODEL_OVERLAYS_LESS_AVAILABLE",nil,@{@"removed":removedOverlays});
-		mGamePlayAct.mDispatch.game_player_piece_available();  //_ARIS_NOTIF_SEND_(@"PLAYER_PIECE_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.player_piece_available();  //_ARIS_NOTIF_SEND_(@"PLAYER_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void requestOverlays() {

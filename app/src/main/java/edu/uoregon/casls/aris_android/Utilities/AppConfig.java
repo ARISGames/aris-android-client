@@ -29,6 +29,7 @@ public class AppConfig {
 	public static final String TAG_SERVER_SUCCESS = "success";
 	public static final String SVR_RETURN_CODE = "returnCode";
 
+	public static final String APP_PREFS_FILE_NAME = "LFO_ToGo_Prefs";
 
 	public static final String[] gameDrawerList = {
 			// moved to strings.xml for proper internationalization potential
