@@ -144,18 +144,6 @@ public class Dispatcher {
 		if (mGamePlayAct.mGame.listen_game_piece_available) mGamePlayAct.mGame.gamePieceReceived();
 	}
 
-	//	PLAYER_DATA_LOADED", nil, nil);
-	public void game_player_data_loaded() {
-		// todo: LoadingViewController.playerDataLoaded();
-		mGamePlayAct.playerDataLoaded();
-	}
-
-	//	PLAYER_PIECE_AVAILABLE",nil,nil);
-	public void player_piece_available() {
-		if (mGamePlayAct.mGame.listen_player_piece_available)
-			mGamePlayAct.mGame.playerPieceReceived();
-	}
-
 	public void maintenance_data_loaded() {
 		mGamePlayAct.maintenanceDataLoaded();
 	}
@@ -437,9 +425,18 @@ public class Dispatcher {
 		// no listeners
 	}
 
-//	public void player_piece_available() {
-//
-//	}
+	//	PLAYER_DATA_LOADED", nil, nil);
+	public void game_player_data_loaded() {
+		// todo: LoadingViewController.playerDataLoaded();
+		mGamePlayAct.playerDataLoaded();
+	}
+
+	//	PLAYER_PIECE_AVAILABLE",nil,nil);
+	public void player_piece_available() {
+		if (mGamePlayAct.mGame.listen_player_piece_available)
+			mGamePlayAct.mGame.playerPieceReceived();
+	}
+
 
 	//	PusherGameEventReceived",event,nil);
 //	PusherGroupEventReceived",event,nil);
