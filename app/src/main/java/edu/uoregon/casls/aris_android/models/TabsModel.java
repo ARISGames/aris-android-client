@@ -38,6 +38,10 @@ public class TabsModel extends ARISModel {
 		n_player_data_received = 0;
 	}
 
+	public long nPlayerDataToReceive() {
+		return 1;
+	}
+
 	public void requestGameData() {
 		this.requestTabs();
 	}

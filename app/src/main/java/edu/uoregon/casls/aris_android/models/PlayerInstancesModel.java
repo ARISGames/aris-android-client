@@ -21,8 +21,8 @@ public class PlayerInstancesModel extends ARISModel {
 
 
 	public Map<Long, Instance> playerInstances = new LinkedHashMap<>();
-	public Map<Long, Instance> inventory;// = new LinkedHashMap<>(); to be instantiated later and parcel to logic.
-	public Map<Long, Instance> attributes;// = new LinkedHashMap<>(); // todo: is this an array of "Item" or something else?
+	public Map<Long, Instance> inventory = new LinkedHashMap<>(); // to be instantiated later and parcel to logic.
+	public Map<Long, Instance> attributes = new LinkedHashMap<>(); // todo: is this an array of "Item" or something else?
 	
 	public int currentWeight;
 
@@ -106,7 +106,7 @@ public class PlayerInstancesModel extends ARISModel {
   _ARIS_NOTIF_SEND_(@"MODEL_PLAYER_INSTANCES_AVAILABLE",nil,nil);
 }
 */
-	public void playerInstancesAvailable() {
+	public void playerInstancesAvailable(Map<String, Map<String, Object>> playerDeltas) {
 		List<Instance> newInstances = new ArrayList<>();
 		newInstances = mGamePlayAct.mGame.instancesModel.playerInstances();
 //		NSArray *newInstances = [_MODEL_INSTANCES_ playerInstances];
@@ -117,6 +117,7 @@ public class PlayerInstancesModel extends ARISModel {
 			if(!newInstance.object_type.contentEquals("ITEM") || newInstance.owner_id != Long.parseLong(mGamePlayAct.mPlayer.user_id)) continue;
 
 		}
+		// Notify Attributes and Inventory Views of new stuff.
 		mGamePlayAct.mDispatch.model_player_instances_available(); //		_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_INSTANCES_AVAILABLE",nil,nil);
 	}
 

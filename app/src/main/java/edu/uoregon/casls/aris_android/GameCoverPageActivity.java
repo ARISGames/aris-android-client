@@ -175,6 +175,8 @@ public class GameCoverPageActivity extends AppCompatActivity {
 					if (jsonReturn.has("returnCode") && jsonReturn.getLong("returnCode") == 0) {
 						JSONObject jsonDataBlock = new JSONObject(jsonReturn.getString("data"));
 						mHasPlayed = jsonDataBlock.getBoolean("has_played");
+						mGame.begin_fresh = !mHasPlayed; // set Game begin_fresh property to inverse of HasPlayed.
+						mGame.know_if_begin_fresh = true;
 						updateAllViews();
 					}
 

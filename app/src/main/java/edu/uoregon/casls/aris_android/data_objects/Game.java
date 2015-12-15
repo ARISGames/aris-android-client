@@ -530,7 +530,7 @@ public class Game {
 		mGamePlayAct.mDispatch.maintenance_percent_loaded((float) n_maintenance_data_received / (float) n_maintenance_data_to_receive); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_PERCENT_LOADED", nil,
 		// @{@"percent":[NSNumber numberWithFloat:(float)n_maintenance_data_received/(float)n_maintenance_data_to_receive]});
 		if (this.allMaintenanceDataReceived()) {
-			downloadedVersion = version; // fixme: just a test. don't leave this in final code.
+//			downloadedVersion = version; // fixme: just a test. don't leave this in final code.
 			n_maintenance_data_received = n_maintenance_data_to_receive; //should already be exactly this...
 			mGamePlayAct.mDispatch.maintenance_data_loaded(); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_DATA_LOADED", nil, nil);
 		}
@@ -595,7 +595,7 @@ public class Game {
 	}
 
 	public void gameLeft() {
-		if (isPollTImerRunning) {
+		if (isPollTImerRunning) { // todo: clear/cancel all outstanding service requests for poll timer
 			mGamePlayAct.stopService(pollTimerSvcIntent);
 			isPollTImerRunning = false;
 		}

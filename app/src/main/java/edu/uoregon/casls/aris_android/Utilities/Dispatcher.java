@@ -1,5 +1,6 @@
 package edu.uoregon.casls.aris_android.Utilities;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -202,10 +203,12 @@ public class Dispatcher {
 
 	//	MODEL_INSTANCES_PLAYER_AVAILABLE",nil,playerDeltas);
 	public void model_instances_player_available(Map<String, Map<String, Object>> playerDeltas) {
+		mGamePlayAct.mGame.playerInstancesModel.playerInstancesAvailable(playerDeltas);
 	}
 
 	//	MODEL_INSTANCES_PLAYER_GAINED",nil,playerDeltas);
 	public void model_instances_player_gained(Map<String, Map<String, Object>> playerDeltas) {
+		// todo: View update: GameNotificationViewController.parseReceivedInstancesIntoNotifications
 	}
 
 	//	MODEL_INSTANCES_PLAYER_LOST",  nil,playerDeltas);
@@ -293,7 +296,9 @@ public class Dispatcher {
 
 	//	MODEL_PLAYER_INSTANCES_AVAILABLE",nil,nil);
 	public void model_player_instances_available() {
-		// todo: find listners
+		// todo: iOS listners:
+		// InventoryViewController.refreshViews
+		// AttributesViewController.refreshViews
 	}
 
 	//	MODEL_PLAYER_INSTANCES_TOUCHED",nil,nil);
@@ -552,7 +557,7 @@ public class Dispatcher {
 
 	//	SERVICES_PLAYER_INSTANCES_RECEIVED",nil,@{@"instances":pinsts});
 	public void services_player_instances_received(Collection<Instance> insts) {
-		// todo: something here?
+		mGamePlayAct.mGame.instancesModel.playerInstancesReceived(new ArrayList<>(insts)); // convert Collection to List
 	}
 
 	//	SERVICES_PLAYER_INSTANCES_TOUCHED", nil, nil);
@@ -596,7 +601,7 @@ public class Dispatcher {
 	public void services_player_triggers_received(List<Trigger> ptrigs) {
 		// todo: MapViewController.refreshViewFromModel(ptrigs)
 		// todo: NotebookNotesViewController.newNoteListAvailable()
-		mGamePlayAct.mGame.notesModel.invalidateCaches();
+		mGamePlayAct.mGame.triggersModel.playerTriggersReceived(ptrigs);
 	}
 
 	//	SERVICES_POPULAR_GAMES_RECEIVED", nil, @{@"games":[self parseGames:(NSArray *)result.resultData]});

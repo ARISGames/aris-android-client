@@ -51,21 +51,33 @@ public class ARISModel {
 
 	public Boolean maintenanceDataReceived() {
 		long nMainDataToRcv = this.nMaintenanceDataToReceive();
-		long n_maint_data_to_rcv = n_maintenance_data_received;
+		long n_maint_data_rcvd = n_maintenance_data_received;
 //		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "    MAINTCYCLE  - - - - maintenanceDataReceived. return " + nMainDataToRcv + " >= " + n_maint_data_to_rcv + " ??");
 
-//		return n_maintenance_data_received >= this.nMaintenanceDataToReceive();
-		if ( n_maintenance_data_received >= this.nMaintenanceDataToReceive()) {
-			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "    MAINTCYCLE  - - - - maintenanceDataReceived. return " + n_maint_data_to_rcv + " >= " + nMainDataToRcv + " TRUE TRUE");
-			return true;
-		}
-		else {
-			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "    MAINTCYCLE  - - - - maintenanceDataReceived. return " + n_maint_data_to_rcv + " >= " + nMainDataToRcv + " FALSE FALSE");
-			return false;
-		}
+		return n_maintenance_data_received >= this.nMaintenanceDataToReceive();
+//		if ( n_maintenance_data_received >= this.nMaintenanceDataToReceive()) {
+//			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "    MAINTCYCLE  - - - - maintenanceDataReceived. return " + n_maint_data_rcvd + " >= " + nMainDataToRcv + " TRUE TRUE");
+//			return true;
+//		}
+//		else {
+//			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "    MAINTCYCLE  - - - - maintenanceDataReceived. return " + n_maint_data_rcvd + " >= " + nMainDataToRcv + " FALSE FALSE");
+//			return false;
+//		}
 	}
 
 	public Boolean playerDataReceived() {
+		long nPlayerDataToRcv = this.nPlayerDataToReceive();
+		long n_player_data_rcvd = n_player_data_received;
+
+		if ( n_player_data_received >= this.nPlayerDataToReceive()) {
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "    PLAYERDATACYCLE  - - - - playerDataReceived. return " + n_player_data_rcvd + " >= " + nPlayerDataToRcv + " TRUE TRUE");
+//			return true;
+		}
+		else {
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "    PLAYERDATACYCLE  - - - - playerDataReceived. return " + n_player_data_rcvd + " >= " + nPlayerDataToRcv + " FALSE FALSE");
+//			return false;
+		}
+
 		return n_player_data_received >= this.nPlayerDataToReceive();
 	}
 

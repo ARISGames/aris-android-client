@@ -77,8 +77,19 @@ public class InstancesModel extends ARISModel {
 
 		// Hashmaps of->[HashMap of variable object types]
 		//  e.g. playerDeltas = [ "added"->["instance"->(Instance obj), "delta"->(Long obj)]], "lost"->["instance"->(Instance obj), "delta"->(Long obj)]] ]
+//		Map<String, Object> playerDeltas = new HashMap<>();
+//		Map<String, Object> gameDeltas = new HashMap<>();
+//		playerDeltas.put("added", new ArrayList<Object>());
+//		playerDeltas.put("lost", new ArrayList<Object>());
+//		gameDeltas.put("added", new ArrayList<Object>());
+//		gameDeltas.put("lost", new ArrayList<Object>());
+
 		Map<String, Map<String, Object>> playerDeltas = new HashMap<>();
 		Map<String, Map<String, Object>> gameDeltas = new HashMap<>();
+		playerDeltas.put("added", new HashMap<String, Object>());
+		playerDeltas.put("lost", new HashMap<String, Object>());
+		gameDeltas.put("added", new HashMap<String, Object>());
+		gameDeltas.put("lost", new HashMap<String, Object>());
 
 		for (Instance newInstance : newInstances) {
 			newInstance.initContext(mGamePlayAct);
@@ -89,7 +100,7 @@ public class InstancesModel extends ARISModel {
 				fakeExistingInstance.initContext(mGamePlayAct);
 				fakeExistingInstance.mergeDataFromInstance(newInstance);
 				fakeExistingInstance.qty = 0;
-				instances.put(newInstanceId, fakeExistingInstance);
+				instances.put(newInstanceId, fakeExistingInstance); // fixme: instances is not getting set correctly missing elements compared to iOS
 				blacklist.remove(newInstanceId);
 			}
 
@@ -149,8 +160,7 @@ public class InstancesModel extends ARISModel {
 	}// _SERVICES_ fetchInstanceById(i);
 
 	public void requestPlayerInstances() {
-		if (this.playerDataReceived() &&
-				!mGamePlayAct.mGame.network_level.contentEquals("REMOTE")) {
+		if (this.playerDataReceived() && !mGamePlayAct.mGame.network_level.contentEquals("REMOTE")) {
 			Collection<Instance> pinsts = instances.values();
 			mGamePlayAct.mDispatch.services_player_instances_received(pinsts); // ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_INSTANCES_RECEIVED",nil,@{@"instances":pinsts});
 		}

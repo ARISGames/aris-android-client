@@ -46,7 +46,7 @@ public class Instance {
 		this.qty = i.qty;
 		this.infinite_qty = i.infinite_qty;
 		this.factory_id = i.factory_id;
-		this.created = i.getCreated().toString();
+		if (this.created != null) this.created = i.getCreated().toString();
 	}
 
 	public void setCreated(Date date) {

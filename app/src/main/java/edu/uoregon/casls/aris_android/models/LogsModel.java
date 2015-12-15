@@ -27,6 +27,12 @@ public class LogsModel extends ARISModel {
 
 	public void clearPlayerData() {
 		logs.clear();
+		local_log_id = 1;
+		n_game_data_received = 0;
+	}
+
+	public long nPlayerDataToReceive() {
+		return 1;
 	}
 
 	public void requestPlayerData() {
@@ -35,8 +41,6 @@ public class LogsModel extends ARISModel {
 
 	public void clearGameData() {
 		this.clearPlayerData();
-		local_log_id = 1;
-		n_game_data_received = 0;
 	}
 
 	public void logsReceived(List<ArisLog> logs) {
@@ -51,8 +55,8 @@ public class LogsModel extends ARISModel {
 				logs.put(newLogId, newLog); // setObject:newLog forKey:newLogId);
 		}
 		mGamePlayAct.mDispatch.model_logs_available(); //_ARIS_NOTIF_SEND_(@"MODEL_LOGS_AVAILABLE",nil,nil);
-		n_game_data_received++;
-		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
+		n_player_data_received++;
+		mGamePlayAct.mDispatch.player_piece_available(); //_ARIS_NOTIF_SEND_(@"PLAYER_PIECE_AVAILABLE",nil,nil);
 	}
 
 	public void addLogType(String type, long content_id, long qty) {

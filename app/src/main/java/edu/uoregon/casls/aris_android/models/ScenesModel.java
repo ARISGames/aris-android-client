@@ -51,6 +51,10 @@ public class ScenesModel extends ARISModel {
 		this.requestPlayerScene();
 	}
 
+	public long nPlayerDataToReceive() {
+		return 1;
+	}
+
 	public void clearMaintenanceData() {
 		n_maintenance_data_received = 0;
 	}

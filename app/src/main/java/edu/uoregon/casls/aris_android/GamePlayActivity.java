@@ -171,7 +171,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	// will be called from Game.maintenancePieceReceived() when Game.allMaintenanceDataLoaded() is satisfied.
 	public void maintenanceDataLoaded() {
-		if (!mGame.hasLatestDownload()) // || !mGame.begin_fresh) // fixme: temporaryily cut out the begin_game condition
+		if (!mGame.hasLatestDownload() || !mGame.begin_fresh) // fixme: ensure begin_game condition is being set meaningfully from server call, getPlayerPlayedGame
 			this.requestPlayerData();
 		else {
 			//_MODEL_ restorePlayerData]; // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restorePlayerData
