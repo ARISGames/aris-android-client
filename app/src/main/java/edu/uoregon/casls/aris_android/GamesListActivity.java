@@ -564,6 +564,7 @@ public class GamesListActivity extends AppCompatActivity {
 			int i = 0;
 			for (final String game_id_key: mListedGamesMap.keySet()) {
 				final Game gameItem = mListedGamesMap.get(game_id_key);
+				gameItem.initContext(this);
 
 				LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				final View gameItemView = inflater.inflate(R.layout.games_list_item, null);
@@ -646,6 +647,7 @@ public class GamesListActivity extends AppCompatActivity {
 			JSONObject jsonFullGameData = jsonFullGameHTTPReturnSet.getJSONObject("data");
 			String game_id = jsonFullGameData.getString("game_id"); // get game id from json block
 			Game game = mListedGamesMap.get(game_id); // get game instance
+			game.initContext(this);
 			game.initFullGameDetailsWithJson(jsonFullGameHTTPReturnSet);
 		}
 		else { //json "data" block was null
@@ -732,7 +734,7 @@ public class GamesListActivity extends AppCompatActivity {
 		for (int i = 0; i < gamesList.length(); i++) {
 			JSONObject jsonGame = gamesList.getJSONObject(i);
 			//populate hashmap as <game_id, Game Obj>
-			games.put(jsonGame.getString("game_id"), new Game(jsonGame)); // add to hashmap
+			games.put(jsonGame.getString("game_id"), new Game(jsonGame, this)); // add to hashmap
 
 		}
 		return games;

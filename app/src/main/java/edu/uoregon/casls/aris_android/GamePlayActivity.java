@@ -175,7 +175,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			this.requestPlayerData();
 		else {
 			//_MODEL_ restorePlayerData]; // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restorePlayerData
-			this.playerDataLoaded();//fixme: not ever getting here
+			this.playerDataLoaded();
 		}
 	}
 
@@ -199,7 +199,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	public void playerDataLoaded() { // gets called only after all game, player and maint data loaded
 		if (!mGame.hasLatestDownload()) {
-			if (mGame.preload_media)
+			if (mGame.preload_media) //fixme: preload_media not getting set?
 				this.requestMediaData(); // won't load until maintDataLoaded <-
 			else
 				this.beginGame(); //[_MODEL_ beginGame];
@@ -268,12 +268,12 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		Gson gson = new Gson();
 		String jsonGame = gson.toJson(mGame); // data = mGame.serialize] dataUsingEncoding:NSUTF8StringEncoding];
 
-		File gameStorageFile = AppUtils.gameStorageFile(this);
+		File gameStorageFile = AppUtils.gameStorageFile(this, mGame.game_id);
 		AppUtils.writeToFileStream(this, gameStorageFile, jsonGame);
 
 		// just store the game downloadedVersion field on App prefs
 		SharedPreferences.Editor prefsEd = appPrefs.edit();
-		prefsEd.putLong(AppUtils.gameStorageFile(this).getName() + ".downloadedVersion", mGame.downloadedVersion);
+		prefsEd.putLong(AppUtils.gameStorageFile(this, mGame.game_id).getName() + ".downloadedVersion", mGame.downloadedVersion);
 		prefsEd.commit();
 
 //		// also store just the game base data attributes EXPERIMENTAL Android; delete if it's a failed experiment
@@ -307,7 +307,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	private void deleteStoredGame() {
 		// todo: should there not be some house cleaning so game files don't accumulate on device?
 		// todo: question is, when to call this?
-		this.deleteFile(AppUtils.gameStorageFile(this).getName());
+		this.deleteFile(AppUtils.gameStorageFile(this, mGame.game_id).getName());
 	}
 
 	@Override

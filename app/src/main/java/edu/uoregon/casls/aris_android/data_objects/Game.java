@@ -142,7 +142,7 @@ public class Game {
 
 	// FYI transient indicates "do not serialize"; gson will die a recursive death if it did.
 	public transient GamePlayActivity mGamePlayAct; // For reference to GamePlayActivity; do not instantiate (new) object or circular references will ensue.
-
+	public transient Context mContext;
 	// Empty Constructor
 	public Game() {
 		this.initialize();
@@ -152,6 +152,20 @@ public class Game {
 	public Game(JSONObject jsonGame) throws JSONException {
 		this.initialize();
 		initWithJson(jsonGame);
+	}
+
+	public Game(JSONObject jsonGame, Context context) throws JSONException {
+		this.initContext(context);
+		this.initialize();
+		initWithJson(jsonGame);
+	}
+
+	public void initContext(GamePlayActivity gamePlayActivity) {
+		mGamePlayAct = gamePlayActivity;
+	}
+
+	public void initContext(Context context) {
+		mContext = context; // used for pregameplay activities e.g. GamesListActivity
 	}
 
 	private void initialize() {
@@ -171,20 +185,22 @@ public class Game {
 
 		// this is insane to deserialize the entire game and all descendant classes just for one field. I'm going to use appPrefs.?
 		//   check for game saved as file from prior play; load if found.
-//		File gameFile = AppUtils.gameStorageFile(mGamePlayAct);
-//		if (gameFile.exists()) {
-//			Gson gson = new Gson();
-//			String jsonStoredGame = AppUtils.readFromFileStream(mGamePlayAct, gameFile); // read raw json from stored game file
-//			Game storedGame = gson.fromJson(jsonStoredGame, Game.class); // deserialize json into Game
-//
-//			this.downloadedVersion = storedGame.version;
-////			GameDataLite storedGameLite = gson.fromJson(jsonStoredGame, GameDataLite.class); // deserialize json into Game
-////			this.downloadedVersion = storedGameLite.version;
-//
-//		}
+		if (mContext != null) {
+			File gameFile = AppUtils.gameStorageFile(mContext, this.game_id);
+			Boolean letMePass = false; // something I can use to trick my way past the condition below in the debugger.
+			if (gameFile.exists() || letMePass) {
+				Gson gson = new Gson();
+				String jsonStoredGame = AppUtils.readFromFileStream(mContext, gameFile); // read raw json from stored game file
+				Game storedGame = gson.fromJson(jsonStoredGame, Game.class); // deserialize json into Game
 
+				this.downloadedVersion = storedGame.version;
+//			GameDataLite storedGameLite = gson.fromJson(jsonStoredGame, GameDataLite.class); // deserialize json into Game
+//			this.downloadedVersion = storedGameLite.version;
+
+			}
+		}
 		// getDownloaded version via appPrefs
-		if (mGamePlayAct != null) {
+		if (mGamePlayAct != null) { //fixMe: need to get downloadedVersion set correctly. Media load condition depends on it.
 			String gameStorageFileName = gameStorageFile(mGamePlayAct).getName();
 			if (mGamePlayAct.appPrefs.contains(gameStorageFileName + ".downloadedVersion")) {
 				this.downloadedVersion = mGamePlayAct.appPrefs.getLong(gameStorageFileName + ".downloadedVersion", 0);
@@ -221,17 +237,13 @@ public class Game {
 //
 //	}
 
-	public void initContext(GamePlayActivity gamePlayActivity) {
-		mGamePlayAct = gamePlayActivity;
-	}
-
 	private void initWithJson(JSONObject jsonGame) throws JSONException {
 		if (jsonGame.has("game_id") && !jsonGame.getString("game_id").equals("null"))
 			game_id = Long.parseLong(jsonGame.getString("game_id"));
 		if (jsonGame.has("name"))
 			name = jsonGame.getString("name");
 		if (jsonGame.has("allow_download"))
-			allow_download = Boolean.parseBoolean(jsonGame.getString("allow_download"));
+			allow_download = jsonGame.getString("allow_download").equals("1");
 		if (jsonGame.has("description"))
 			desc = jsonGame.getString("description");
 //		if (jsonGame.has("tick_script"))
@@ -259,23 +271,23 @@ public class Game {
 		if (jsonGame.has("map_zoom_level") && !jsonGame.getString("map_zoom_level").equals("null"))
 			map_zoom_level = Double.parseDouble(jsonGame.getString("map_zoom_level"));
 		if (jsonGame.has("map_show_player") && !jsonGame.getString("map_show_player").equals("null"))
-			map_show_player = Boolean.parseBoolean(jsonGame.getString("map_show_player"));
+			map_show_player = jsonGame.getString("map_show_player").equals("1");
 		if (jsonGame.has("map_show_players") && !jsonGame.getString("map_show_players").equals("null"))
-			map_show_players = Boolean.parseBoolean(jsonGame.getString("map_show_players"));
+			map_show_players = jsonGame.getString("map_show_players").equals("1");
 		if (jsonGame.has("map_offsite_mode") && !jsonGame.getString("map_offsite_mode").equals("null"))
-			map_offsite_mode = Boolean.parseBoolean(jsonGame.getString("map_offsite_mode"));
+			map_offsite_mode = jsonGame.getString("map_offsite_mode").equals("1");
 		if (jsonGame.has("network_level") && !jsonGame.getString("network_level").equals("null"))
 			network_level = jsonGame.getString("network_level");
 		if (jsonGame.has("notebook_allow_comments") && !jsonGame.getString("notebook_allow_comments").equals("null"))
-			notebook_allow_comments = Boolean.parseBoolean(jsonGame.getString("notebook_allow_comments"));
+			notebook_allow_comments = jsonGame.getString("notebook_allow_comments").equals("1");
 		if (jsonGame.has("notebook_allow_likes") && !jsonGame.getString("notebook_allow_likes").equals("null"))
-			notebook_allow_likes = Boolean.parseBoolean(jsonGame.getString("notebook_allow_likes"));
+			notebook_allow_likes = jsonGame.getString("notebook_allow_likes").equals("1");
 		if (jsonGame.has("notebook_allow_player_tags") && !jsonGame.getString("notebook_allow_player_tags").equals("null"))
-			notebook_allow_player_tags = Boolean.parseBoolean(jsonGame.getString("notebook_allow_player_tags"));
+			notebook_allow_player_tags = jsonGame.getString("notebook_allow_player_tags").equals("1");
 		if (jsonGame.has("published") && !jsonGame.getString("published").equals("null"))
-			published = Boolean.parseBoolean(jsonGame.getString("published"));
+			published = jsonGame.getString("published").equals("1");
 		if (jsonGame.has("preload_media") && !jsonGame.getString("preload_media").equals("null"))
-			preload_media = Boolean.parseBoolean(jsonGame.getString("preload_media"));
+			preload_media = jsonGame.getString("preload_media").equals("1");
 		if (jsonGame.has("type") && !jsonGame.getString("type").equals("null"))
 			type = jsonGame.getString("type");
 		if (jsonGame.has("intro_scene_id") && !jsonGame.getString("intro_scene_id").equals("null"))

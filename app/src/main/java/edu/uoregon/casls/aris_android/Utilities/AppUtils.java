@@ -75,6 +75,13 @@ public class AppUtils {
 		return gameFile;
 	}
 
+	public static File gameStorageFile(Context context, Long gameId) {
+		String gameFileName = gameId + "_game.json";
+		File appDir = new File(context.getFilesDir().getPath());
+		File gameFile = new File(appDir, gameFileName);
+		return gameFile;
+	}
+
 //	public static boolean streamFileExists(Context context, File file) {
 //
 //	}
