@@ -88,7 +88,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			//GSON (Slow in debug mode. Ok in regular run mode)
 			mGame = gson.fromJson(extras.getString("game"), Game.class);
 			mGame.initContext(this); // to allow upward visibility to activities various game/player objects
-
+// fixme: tell game to look for past cached game data / files here.
 
 			try {
 				mJsonAuth = new JSONObject(extras.getString("json_auth"));

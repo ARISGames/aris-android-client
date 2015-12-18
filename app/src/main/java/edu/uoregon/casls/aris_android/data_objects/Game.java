@@ -145,7 +145,7 @@ public class Game {
 	public transient Context mContext;
 	// Empty Constructor
 	public Game() {
-		this.initialize();
+		this.initialize(); // fixme: Don't do initialize via constructor. Use declaration defaults for set up values
 	}
 
 	// Basic Constructor with json game block
@@ -183,6 +183,8 @@ public class Game {
 
 		downloadedVersion = 0;
 
+		// Fixme: relocate all game file / stored cache restoration to separate method to be called explicitly
+		// Fixme: only at points where the the GamePlayAct is avavilable.
 		// this is insane to deserialize the entire game and all descendant classes just for one field. I'm going to use appPrefs.?
 		//   check for game saved as file from prior play; load if found.
 		if (mContext != null) {
