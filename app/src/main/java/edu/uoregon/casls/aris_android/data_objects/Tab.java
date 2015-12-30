@@ -4,13 +4,14 @@ package edu.uoregon.casls.aris_android.data_objects;
  * Created by smorison on 8/19/15.
  */
 public class Tab {
-	public long tab_id;
-	public String type;
-	public String name;
-	public long icon_media_id;
-	public long content_id;
-	public String info;
-	public long sort_index;
-	public long requirement_root_package_id;
+	public int    tab_id        = 0;
+	public String type          = "MAP";
+	public String name          = "MAP";
+	public int    icon_media_id = 0;
+	public int    content_id    = 0;
+	public String info          = "";
+	public int    sort_index    = 0;
+
+	public int requirement_root_package_id = 0;
 
 }

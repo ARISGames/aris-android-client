@@ -60,18 +60,16 @@ public class Game {
 	public long n_media_data_to_receive       = 0;
 	public long n_media_data_received         = 0;
 
-	public boolean listen_player_piece_available      = true;
-	public boolean listen_game_piece_available        = true;
-	public boolean listen_maintenance_piece_available = true;
-	public boolean listen_media_piece_available       = true;
-//	public NSTimer *poller; todo: android equivalent
-	// todo: this will not serialize (crashes gson.toJson()) so I need to locate it in the gameplay activity itself.
+	public int listen_player_piece_available      = 1;
+	public int listen_game_piece_available        = 1;
+	public int listen_maintenance_piece_available = 1;
+	public int listen_media_piece_available       = 1;
 
 	private static final String HTTP_GET_FULL_GAME_REQ_API = "v2.games.getFullGame/";
 	public long game_id;
 	public String name = "";
 	public String desc = "";
-	public boolean published;
+	public int published;
 	public String   type     = "";
 	public Location location = new Location("0"); // from iOS; not used?
 	public long player_count;
@@ -90,19 +88,20 @@ public class Game {
 	public String   map_focus    = "";
 	public Location map_location = new Location("0");
 	public double  map_zoom_level;
-	public boolean map_show_player;
-	public boolean map_show_players;
-	public boolean map_offsite_mode;
+	public int map_show_player;
+	public int map_show_players;
+	public int map_offsite_mode;
 
-	public boolean notebook_allow_comments;
-	public boolean notebook_allow_likes;
-	public boolean notebook_allow_player_tags;
+
+	public int notebook_allow_comments;
+	public int notebook_allow_likes;
+	public int notebook_allow_player_tags;
 
 	public long    inventory_weight_cap;
 	//	public String network_level = "";
 	public String  network_level;
-	public boolean allow_download;
-	public boolean preload_media;
+	public int allow_download;
+	public int preload_media;
 	public long    version;
 
 	public List<ARISModel> models = new ArrayList<>(); // List of all the models below for iteration convenience
@@ -133,8 +132,8 @@ public class Game {
 
 	//local stuff
 	public long    downloadedVersion   = 0;
-	public boolean know_if_begin_fresh = false;
-	public boolean begin_fresh         = false;
+	public int know_if_begin_fresh = 0;
+	public int begin_fresh         = 0;
 
 	//	PollTimer vars
 	public  Boolean isPollTimerRunning = false;
@@ -178,8 +177,8 @@ public class Game {
 
 		downloadedVersion = 0;
 
-		know_if_begin_fresh = false;
-		begin_fresh = false;
+		know_if_begin_fresh = 0;
+		begin_fresh = 0;
 	}
 
 	// function name in keeping with iOS, but just look up stored game file and set downloadedVersion attribute.
@@ -241,7 +240,7 @@ public class Game {
 		if (jsonGame.has("name"))
 			name = jsonGame.getString("name");
 		if (jsonGame.has("allow_download"))
-			allow_download = jsonGame.getString("allow_download").equals("1");
+			allow_download = Integer.parseInt(jsonGame.getString("allow_download"));
 		if (jsonGame.has("description"))
 			desc = jsonGame.getString("description");
 //		if (jsonGame.has("tick_script"))
@@ -269,23 +268,23 @@ public class Game {
 		if (jsonGame.has("map_zoom_level") && !jsonGame.getString("map_zoom_level").equals("null"))
 			map_zoom_level = Double.parseDouble(jsonGame.getString("map_zoom_level"));
 		if (jsonGame.has("map_show_player") && !jsonGame.getString("map_show_player").equals("null"))
-			map_show_player = jsonGame.getString("map_show_player").equals("1");
+			map_show_player = Integer.parseInt(jsonGame.getString("map_show_player"));
 		if (jsonGame.has("map_show_players") && !jsonGame.getString("map_show_players").equals("null"))
-			map_show_players = jsonGame.getString("map_show_players").equals("1");
+			map_show_players = Integer.parseInt(jsonGame.getString("map_show_players"));
 		if (jsonGame.has("map_offsite_mode") && !jsonGame.getString("map_offsite_mode").equals("null"))
-			map_offsite_mode = jsonGame.getString("map_offsite_mode").equals("1");
+			map_offsite_mode = Integer.parseInt(jsonGame.getString("map_offsite_mode"));
 		if (jsonGame.has("network_level") && !jsonGame.getString("network_level").equals("null"))
 			network_level = jsonGame.getString("network_level");
 		if (jsonGame.has("notebook_allow_comments") && !jsonGame.getString("notebook_allow_comments").equals("null"))
-			notebook_allow_comments = jsonGame.getString("notebook_allow_comments").equals("1");
+			notebook_allow_comments = Integer.parseInt(jsonGame.getString("notebook_allow_comments"));
 		if (jsonGame.has("notebook_allow_likes") && !jsonGame.getString("notebook_allow_likes").equals("null"))
-			notebook_allow_likes = jsonGame.getString("notebook_allow_likes").equals("1");
+			notebook_allow_likes = Integer.parseInt(jsonGame.getString("notebook_allow_likes"));
 		if (jsonGame.has("notebook_allow_player_tags") && !jsonGame.getString("notebook_allow_player_tags").equals("null"))
-			notebook_allow_player_tags = jsonGame.getString("notebook_allow_player_tags").equals("1");
+			notebook_allow_player_tags = Integer.parseInt(jsonGame.getString("notebook_allow_player_tags"));
 		if (jsonGame.has("published") && !jsonGame.getString("published").equals("null"))
-			published = jsonGame.getString("published").equals("1");
+			published = Integer.parseInt(jsonGame.getString("published"));
 		if (jsonGame.has("preload_media") && !jsonGame.getString("preload_media").equals("null"))
-			preload_media = jsonGame.getString("preload_media").equals("1");
+			preload_media = Integer.parseInt(jsonGame.getString("preload_media"));
 		if (jsonGame.has("type") && !jsonGame.getString("type").equals("null"))
 			type = jsonGame.getString("type");
 		if (jsonGame.has("intro_scene_id") && !jsonGame.getString("intro_scene_id").equals("null"))
@@ -386,10 +385,10 @@ public class Game {
 	}
 
 	public void getReadyToPlay() {
-		listen_player_piece_available = true;        //_ARIS_NOTIF_LISTEN_(@"PLAYER_PIECE_AVAILABLE",self,@selector(gamePlayerPieceReceived),null);
-		listen_maintenance_piece_available = true;    // _ARIS_NOTIF_LISTEN_(@"MAINTENANCE_PIECE_AVAILABLE",self,@selector(maintenancePieceReceived),nil);
-		listen_game_piece_available = true;        // _ARIS_NOTIF_LISTEN_(@"GAME_PIECE_AVAILABLE",self,@selector(gamePieceReceived),null);
-		listen_media_piece_available = true;        // _ARIS_NOTIF_LISTEN_(@"MEDIA_PIECE_AVAILABLE",self,@selector(mediaPieceReceived),nil);
+		listen_player_piece_available = 1;        //_ARIS_NOTIF_LISTEN_(@"PLAYER_PIECE_AVAILABLE",self,@selector(gamePlayerPieceReceived),null);
+		listen_maintenance_piece_available = 1;    // _ARIS_NOTIF_LISTEN_(@"MAINTENANCE_PIECE_AVAILABLE",self,@selector(maintenancePieceReceived),nil);
+		listen_game_piece_available = 1;        // _ARIS_NOTIF_LISTEN_(@"GAME_PIECE_AVAILABLE",self,@selector(gamePieceReceived),null);
+		listen_media_piece_available = 1;        // _ARIS_NOTIF_LISTEN_(@"MEDIA_PIECE_AVAILABLE",self,@selector(mediaPieceReceived),nil);
 
 		n_game_data_received = 0;
 		n_player_data_received = 0;
@@ -595,10 +594,10 @@ public class Game {
 
 	public void gameBegan() {
 
-		listen_game_piece_available = false;        // _ARIS_NOTIF_IGNORE_(@"GAME_PIECE_AVAILABLE", self, null);
-		listen_player_piece_available = false;        // _ARIS_NOTIF_IGNORE_(@"PLAYER_PIECE_AVAILABLE", self, null);
-		listen_maintenance_piece_available = false;    // _ARIS_NOTIF_IGNORE_(@"MAINTENANCE_PIECE_AVAILABLE", self, nil);
-		listen_media_piece_available = false;        // _ARIS_NOTIF_IGNORE_(@"MEDIA_PIECE_AVAILABLE", self, nil);
+		listen_game_piece_available = 0;        // _ARIS_NOTIF_IGNORE_(@"GAME_PIECE_AVAILABLE", self, null);
+		listen_player_piece_available = 0;        // _ARIS_NOTIF_IGNORE_(@"PLAYER_PIECE_AVAILABLE", self, null);
+		listen_maintenance_piece_available = 0;    // _ARIS_NOTIF_IGNORE_(@"MAINTENANCE_PIECE_AVAILABLE", self, nil);
+		listen_media_piece_available = 0;        // _ARIS_NOTIF_IGNORE_(@"MEDIA_PIECE_AVAILABLE", self, nil);
 //		todo: build poller!
 //		poller = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(requestPlayerData) userInfo:null repeats:true];
 		this.startPollTimer();
@@ -717,6 +716,30 @@ public class Game {
 
 	public void mergeDataFromGame(Game g) {
 
+	}
+
+	public boolean begin_fresh() {
+		return begin_fresh == 1;
+	}
+
+	public boolean preload_media() {
+		return preload_media == 1;
+	}
+
+	public boolean listen_game_piece_available() {
+		return listen_game_piece_available == 1;
+	}
+
+	public boolean listen_maintenance_piece_available() {
+		return listen_maintenance_piece_available == 1;
+	}
+
+	public boolean listen_media_piece_available() {
+		return listen_media_piece_available == 1;
+	}
+
+	public boolean listen_player_piece_available() {
+		return listen_player_piece_available == 1;
 	}
 }
 

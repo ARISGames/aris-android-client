@@ -175,8 +175,8 @@ public class GameCoverPageActivity extends AppCompatActivity {
 					if (jsonReturn.has("returnCode") && jsonReturn.getLong("returnCode") == 0) {
 						JSONObject jsonDataBlock = new JSONObject(jsonReturn.getString("data"));
 						mHasPlayed = jsonDataBlock.getBoolean("has_played");
-						mGame.begin_fresh = !mHasPlayed; // set Game begin_fresh property to inverse of HasPlayed.
-						mGame.know_if_begin_fresh = true;
+						mGame.begin_fresh = !mHasPlayed ? 1 : 0; // set Game begin_fresh property to inverse of HasPlayed.
+						mGame.know_if_begin_fresh = 1;
 						updateAllViews();
 					}
 
@@ -254,7 +254,7 @@ public class GameCoverPageActivity extends AppCompatActivity {
 		[self refreshFromGame];
 */
 		pollServer(HTTP_LOG_PLAYER_RESET_GAME); // covers the actions of [_MODEL_GAMES_ playerResetGame:game.game_id];
-		mGame.begin_fresh = true;
+		mGame.begin_fresh = 1;
 		//[self refreshFromGame]; in Android this happens after server return call in rcv'd via updateAllViews()
 
 	}

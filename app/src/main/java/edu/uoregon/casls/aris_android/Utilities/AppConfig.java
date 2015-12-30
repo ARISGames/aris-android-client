@@ -11,23 +11,23 @@ import edu.uoregon.casls.aris_android.R;
 public class AppConfig {
 
 	//	public static final String SERVER_URL_BASE = "http://10.223.178.105"; //localhost
-	public static final String SERVER_URL_BASE = "http://arisgames.org"; //aris server
+	public static final String SERVER_URL_BASE   = "http://arisgames.org"; //aris server
 	public static final String SERVER_URL_MOBILE = SERVER_URL_BASE + "/server/json.php/";
-	public static final String LOGTAG = "ARIS_ANDROID";
+	public static final String LOGTAG            = "ARIS_ANDROID";
 
-	public static final Boolean DEBUG_ON = true; //todo: Make sure to turn this off for release version
+	public static final Boolean DEBUG_ON        = true; //todo: Make sure to turn this off for release version
 	public static final Boolean FAKE_GOOD_LOGIN = false; //todo: Make sure to turn this off for release version
 
 	// PollTimer Consts
-	public static final int POLLTIMER_CYCLE_PASS = 1;
-	public static final int POLLTIMER_RESULT = 2;
+	public static final int    POLLTIMER_CYCLE_PASS = 1;
+	public static final int    POLLTIMER_RESULT     = 2;
 	public static final String POLLTIMER_SVC_ACTION =
 			"edu.uoregon.casls.aris_android.ACTION_POLLTIMER_SVC";
-	public static final String COMMAND = "command";
-	public static final String DATA = "data";
+	public static final String COMMAND              = "command";
+	public static final String DATA                 = "data";
 
 	public static final String TAG_SERVER_SUCCESS = "success";
-	public static final String SVR_RETURN_CODE = "returnCode";
+	public static final String SVR_RETURN_CODE    = "returnCode";
 
 	public static final String APP_PREFS_FILE_NAME = "LFO_ToGo_Prefs";
 

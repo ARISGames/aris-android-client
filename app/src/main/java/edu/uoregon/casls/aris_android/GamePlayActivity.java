@@ -144,7 +144,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	public void gameDataLoaded() {
 		// decide if game needs to be loaded from server or if it is already stored on device from previous load. // todo: perform the device save of game
-		if (!mGame.hasLatestDownload() || !mGame.begin_fresh || !mGame.network_level.contentEquals("LOCAL")) //if !local, need to perform maintenance on server so it doesn't keep conflicting with local data
+		if (!mGame.hasLatestDownload() || !mGame.begin_fresh() || !mGame.network_level.contentEquals("LOCAL")) //if !local, need to perform maintenance on server so it doesn't keep conflicting with local data
 			this.requestMaintenanceData();
 		else {
 			//skip maintenance step
@@ -171,7 +171,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	// will be called from Game.maintenancePieceReceived() when Game.allMaintenanceDataLoaded() is satisfied.
 	public void maintenanceDataLoaded() {
-		if (!mGame.hasLatestDownload() || !mGame.begin_fresh) // fixme: ensure begin_game condition is being set meaningfully from server call, getPlayerPlayedGame
+		if (!mGame.hasLatestDownload() || !mGame.begin_fresh()) // fixme: ensure begin_game condition is being set meaningfully from server call, getPlayerPlayedGame
 			this.requestPlayerData();
 		else {
 			//_MODEL_ restorePlayerData]; // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restorePlayerData
@@ -199,7 +199,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	public void playerDataLoaded() { // gets called only after all game, player and maint data loaded
 		if (!mGame.hasLatestDownload()) {
-			if (mGame.preload_media) //fixme: preload_media not getting set?
+			if (mGame.preload_media()) //fixme: preload_media not getting set?
 				this.requestMediaData(); // won't load until maintDataLoaded <-
 			else
 				this.beginGame(); //[_MODEL_ beginGame];
@@ -255,7 +255,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	private void beginGame() {
 		this.preferred_game_id = 0; //assume the preference was met
-		if (mGame.begin_fresh)
+		if (mGame.begin_fresh())
 			this.storeGame(); //we loaded fresh, so can store player data
 
 		boolean debugThis = true; // dev debugging

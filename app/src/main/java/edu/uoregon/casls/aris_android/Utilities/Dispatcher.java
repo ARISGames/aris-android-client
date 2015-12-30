@@ -143,7 +143,7 @@ public class Dispatcher {
 
 	//	GAME_PIECE_AVAILABLE",nil,nil);
 	public void game_piece_available() {
-		if (mGamePlayAct.mGame.listen_game_piece_available) mGamePlayAct.mGame.gamePieceReceived();
+		if (mGamePlayAct.mGame.listen_game_piece_available()) mGamePlayAct.mGame.gamePieceReceived();
 	}
 
 	public void maintenance_data_loaded() {
@@ -152,7 +152,7 @@ public class Dispatcher {
 
 	// MAINTENANCE_PIECE_AVAILABLE",nil,nil);
 	public void maintenance_piece_available() {
-		if (mGamePlayAct.mGame.listen_maintenance_piece_available) mGamePlayAct.mGame.maintenancePieceReceived();
+		if (mGamePlayAct.mGame.listen_maintenance_piece_available()) mGamePlayAct.mGame.maintenancePieceReceived();
 	}
 
 	public void model_game_available(Game game) {
@@ -254,7 +254,7 @@ public class Dispatcher {
 	}
 
 	public void media_piece_available() {
-		if (mGamePlayAct.mGame.listen_media_piece_available) mGamePlayAct.mGame.mediaPieceReceived();
+		if (mGamePlayAct.mGame.listen_media_piece_available()) mGamePlayAct.mGame.mediaPieceReceived();
 	}
 
 	//	MODEL_MINE_GAMES_AVAILABLE",nil,nil); } // Handled in GamesListActivity - sem
@@ -439,7 +439,7 @@ public class Dispatcher {
 
 	//	PLAYER_PIECE_AVAILABLE",nil,nil);
 	public void player_piece_available() {
-		if (mGamePlayAct.mGame.listen_player_piece_available)
+		if (mGamePlayAct.mGame.listen_player_piece_available())
 			mGamePlayAct.mGame.playerPieceReceived();
 	}
 

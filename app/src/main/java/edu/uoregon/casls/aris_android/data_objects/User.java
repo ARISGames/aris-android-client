@@ -10,13 +10,13 @@ import org.json.JSONObject;
  */
 public class User {
 
-	public String user_id;      // is Long in iOS, but never really used in as a long
-	public String user_name;
+	public String user_id = "0";      // is Long in iOS, but never really used in as a long
+	public String user_name = "Unknown Player";
 	public String password;
-	public String display_name;
-	public String email;
-	public String media_id;     // is Long in iOS, but never really used in as a long
-	public String read_write_key;
+	public String display_name = "Unknown Player";
+	public String email = "";
+	public String media_id = "0";     // is Long in iOS, but never really used in as a long
+	public String read_write_key = "";
 	public Location location = new Location("0");
 
 	public User() {
