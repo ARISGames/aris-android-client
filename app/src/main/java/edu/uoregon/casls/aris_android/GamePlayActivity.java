@@ -88,7 +88,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			//GSON (Slow in debug mode. Ok in regular run mode)
 			mGame = gson.fromJson(extras.getString("game"), Game.class);
 			mGame.initContext(this); // to allow upward visibility to activities various game/player objects
-// fixme: tell game to look for past cached game data / files here.
+			mGame.initWithDictionary(); // misleading name in Android. Checks for and loads version number of saved game file.
 
 			try {
 				mJsonAuth = new JSONObject(extras.getString("json_auth"));
@@ -258,6 +258,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		if (mGame.begin_fresh)
 			this.storeGame(); //we loaded fresh, so can store player data
 
+		boolean debugThis = true; // dev debugging
+		if (debugThis) checkGameFile(); // dev debugging delete after code is working.
+
 		mGame.logsModel.playerEnteredGame(); //		[_MODEL_LOGS_ playerEnteredGame];
 		mDispatch.game_began(); // calls mGame.gameBegan() and mGamePlayAct.gameBegan()
 	}
@@ -304,8 +307,26 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mGame.downloadedVersion = mGame.version;
 	}
 
+	public void checkGameFile() { // for debugging; open, or attempt to open the game file and deserialize its contents
+		//get directory listing of the "FilesDir"
+		File appDir = new File(this.getFilesDir().getPath());
+		File[] directoryContent = appDir.listFiles();
+		int numFiles = directoryContent.length;
+
+		File gameFile = AppUtils.gameStorageFile(this, mGame.game_id);
+		boolean existsAndIsFile = gameFile.exists() && gameFile.isFile();
+		if ( gameFile.isFile() && gameFile.getName().endsWith("_game.json") ) {
+			String jsonStoredGame = AppUtils.readFromFileStream(this, gameFile); // read raw json from stored game file
+			Gson gson = new Gson();
+			Game g = gson.fromJson(jsonStoredGame, Game.class); // deserialize json into Game
+			String temp = g.name;
+		}
+
+	}
+
 	private void deleteStoredGame() {
 		// todo: should there not be some house cleaning so game files don't accumulate on device?
+		// todo: A single game file can take over 350kb. 20 or 30 files might start to become an issue.
 		// todo: question is, when to call this?
 		this.deleteFile(AppUtils.gameStorageFile(this, mGame.game_id).getName());
 	}

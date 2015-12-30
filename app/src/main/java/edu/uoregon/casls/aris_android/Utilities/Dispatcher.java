@@ -100,6 +100,7 @@ public class Dispatcher {
 
 	//	MODEL_DISPLAY_NEW_ENQUEUED", nil, nil); // Will be handled in GamePlayActivity -sem
 //	MODEL_DOWNLOADED_GAMES_AVAILABLE",nil,nil); } // Handled in GamesListActivity - sem
+	public void model_downloaded_games_available() {}
 //	MODEL_EVENTS_AVAILABLE",nil,nil);
 	public void events_available() {
 		// no listners
@@ -473,6 +474,11 @@ public class Dispatcher {
 	}
 
 	//	SERVICES_DOWNLOADED_GAMES_RECEIVED", nil, @{@"games":d_games});
+	public void services_downloaded_games_received(List<Game> d_games) {
+		// In iOS we would call GamesModel.updateDownloadedGames() but since the only caller is
+		// also GamesModel, we're removing this middleman.
+	}
+
 //	SERVICES_EVENT_RECEIVED", nil, @{@"event":event});
 //	SERVICES_EVENTS_RECEIVED", nil, @{@"events":events});
 	public void services_events_received(List<Event> events) {
@@ -575,6 +581,7 @@ public class Dispatcher {
 		mGamePlayAct.mGame.overlaysModel.playerOverlaysReceived(overlays);
 	}
 
+	// fixme: implement the following. Should happen after parse PlayerPlayedGame()
 	//	SERVICES_PLAYER_PLAYED_GAME_RECEIVED", nil, (NSDictionary *)result.resultData);
 //	SERVICES_PLAYER_QUESTS_RECEIVED", nil, quests);
 	public void services_player_quests_received(Map<String, List<Quest>> pquests) {

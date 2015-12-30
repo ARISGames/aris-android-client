@@ -51,19 +51,19 @@ import edu.uoregon.casls.aris_android.models.WebPagesModel;
  */
 public class Game {
 
-	public long n_game_data_to_receive = 0;
-	public long n_game_data_received = 0;
+	public long n_game_data_to_receive        = 0;
+	public long n_game_data_received          = 0;
 	public long n_maintenance_data_to_receive = 0;
-	public long n_maintenance_data_received = 0;
-	public long n_player_data_to_receive = 0;
-	public long n_player_data_received = 0;
-	public long n_media_data_to_receive = 0;
-	public long n_media_data_received = 0;
+	public long n_maintenance_data_received   = 0;
+	public long n_player_data_to_receive      = 0;
+	public long n_player_data_received        = 0;
+	public long n_media_data_to_receive       = 0;
+	public long n_media_data_received         = 0;
 
-	public boolean listen_player_piece_available = true;
-	public boolean listen_game_piece_available = true;
+	public boolean listen_player_piece_available      = true;
+	public boolean listen_game_piece_available        = true;
 	public boolean listen_maintenance_piece_available = true;
-	public boolean listen_media_piece_available = true;
+	public boolean listen_media_piece_available       = true;
 //	public NSTimer *poller; todo: android equivalent
 	// todo: this will not serialize (crashes gson.toJson()) so I need to locate it in the gameplay activity itself.
 
@@ -72,24 +72,24 @@ public class Game {
 	public String name = "";
 	public String desc = "";
 	public boolean published;
-	public String type = "";
+	public String   type     = "";
 	public Location location = new Location("0"); // from iOS; not used?
 	public long player_count;
 
 	public Media icon_media;
-	public long icon_media_id;
+	public long  icon_media_id;
 	public Media media;
-	public long media_id;
+	public long  media_id;
 
 	public long intro_scene_id;
 
-	public List<User> authors = new ArrayList<>();
+	public List<User>        authors  = new ArrayList<>();
 	public List<GameComment> comments = new ArrayList<GameComment>();
 
-	public String map_type = "";
-	public String map_focus = "";
+	public String   map_type     = "";
+	public String   map_focus    = "";
 	public Location map_location = new Location("0");
-	public double map_zoom_level;
+	public double  map_zoom_level;
 	public boolean map_show_player;
 	public boolean map_show_players;
 	public boolean map_offsite_mode;
@@ -98,54 +98,55 @@ public class Game {
 	public boolean notebook_allow_likes;
 	public boolean notebook_allow_player_tags;
 
-	public long inventory_weight_cap;
+	public long    inventory_weight_cap;
 	//	public String network_level = "";
-	public String network_level;
+	public String  network_level;
 	public boolean allow_download;
 	public boolean preload_media;
-	public long version;
+	public long    version;
 
 	public List<ARISModel> models = new ArrayList<>(); // List of all the models below for iteration convenience
 
 	// Game subcomponent classes
-	public ScenesModel scenesModel;        // Game Piece
-	public GroupsModel groupsModel;        // Game Piece
-	public PlaquesModel plaquesModel;        // Game Piece
-	public ItemsModel itemsModel;        // Game Piece
-	public DialogsModel dialogsModel;        // Game Piece
-	public WebPagesModel webPagesModel;
-	public NotesModel notesModel;        // Game Piece
-	public TagsModel tagsModel;
-	public EventsModel eventsModel;            // Game Piece
-	public RequirementsModel requirementsModel;            // Game Piece
-	public TriggersModel triggersModel;
-	public FactoriesModel factoriesModel;        // Game Piece
-	public OverlaysModel overlaysModel;        // Game Piece
-	public InstancesModel instancesModel;        // Game Piece
+	public ScenesModel          scenesModel;        // Game Piece
+	public GroupsModel          groupsModel;        // Game Piece
+	public PlaquesModel         plaquesModel;        // Game Piece
+	public ItemsModel           itemsModel;        // Game Piece
+	public DialogsModel         dialogsModel;        // Game Piece
+	public WebPagesModel        webPagesModel;
+	public NotesModel           notesModel;        // Game Piece
+	public TagsModel            tagsModel;
+	public EventsModel          eventsModel;            // Game Piece
+	public RequirementsModel    requirementsModel;            // Game Piece
+	public TriggersModel        triggersModel;
+	public FactoriesModel       factoriesModel;        // Game Piece
+	public OverlaysModel        overlaysModel;        // Game Piece
+	public InstancesModel       instancesModel;        // Game Piece
 	public PlayerInstancesModel playerInstancesModel;        // Game Piece todo: is this where gameUsers go? Players == Users??
-	public GameInstancesModel gameInstancesModel;
-	public GroupInstancesModel groupInstancesModel;
-	public TabsModel tabsModel;
-	public LogsModel logsModel;
-	public QuestsModel questsModel;        // Game Piece
+	public GameInstancesModel   gameInstancesModel;
+	public GroupInstancesModel  groupInstancesModel;
+	public TabsModel            tabsModel;
+	public LogsModel            logsModel;
+	public QuestsModel          questsModel;        // Game Piece
 //	public DisplayQueueModel 	displayQueueModel; // iOS only for now
 	// medias (in GamePlayAct 		// Game Piece
 
 	//local stuff
-	public long downloadedVersion = 0;
+	public long    downloadedVersion   = 0;
 	public boolean know_if_begin_fresh = false;
-	public boolean begin_fresh = false;
+	public boolean begin_fresh         = false;
 
 	//	PollTimer vars
-	public Boolean isPollTImerRunning = false;
-	private Intent pollTimerSvcIntent = null;
+	public  Boolean isPollTimerRunning = false;
+	private Intent  pollTimerSvcIntent = null;
 
 	// FYI transient indicates "do not serialize"; gson will die a recursive death if it did.
 	public transient GamePlayActivity mGamePlayAct; // For reference to GamePlayActivity; do not instantiate (new) object or circular references will ensue.
-	public transient Context mContext;
+	public transient Context          mContext;
+
 	// Empty Constructor
 	public Game() {
-		this.initialize(); // fixme: Don't do initialize via constructor. Use declaration defaults for set up values
+		this.initialize(); // almost certainly redundant in Android since all vars are init'd when declared todo: remove if so.
 	}
 
 	// Basic Constructor with json game block
@@ -175,19 +176,24 @@ public class Game {
 		authors.clear(); // redundant at this point, but left in to keep in sync with iOS code
 		comments.clear();
 
-		// todo: check for game save as file from prior play load if found iOS:
+		downloadedVersion = 0;
+
+		know_if_begin_fresh = false;
+		begin_fresh = false;
+	}
+
+	// function name in keeping with iOS, but just look up stored game file and set downloadedVersion attribute.
+	public void initWithDictionary() {
+		// todo: check for game saved as file from prior play load if found iOS:
 		// todo: perhaps use the Game stored in GamePlayAct.bundle; ultimately needs to be placed in
 		// todo: appPrefs or a file if it's too big for appPrefs. Looks like in iOS they're saving
 		// todo: multiple game files as "[path=game_id]/game.json". That would seem to indicate that we really
 		// todo: need to be following suit by using individual files, not appPrefs or Bundle.
 
-		downloadedVersion = 0;
-
-		// Fixme: relocate all game file / stored cache restoration to separate method to be called explicitly
-		// Fixme: only at points where the the GamePlayAct is avavilable.
 		// this is insane to deserialize the entire game and all descendant classes just for one field. I'm going to use appPrefs.?
 		//   check for game saved as file from prior play; load if found.
-		if (mContext != null) {
+		// fixme: pick only one of the following two blocks below. The second would be vastly more efficient, if the whole game obj isn't needed.
+		if (mGamePlayAct != null && false) { // fixme: temporairly block this cond. while playing with appPrefs
 			File gameFile = AppUtils.gameStorageFile(mContext, this.game_id);
 			Boolean letMePass = false; // something I can use to trick my way past the condition below in the debugger.
 			if (gameFile.exists() || letMePass) {
@@ -208,18 +214,8 @@ public class Game {
 				this.downloadedVersion = mGamePlayAct.appPrefs.getLong(gameStorageFileName + ".downloadedVersion", 0);
 			}
 		}
-//		NSString *gameJsonFile = [[_MODEL_ applicationDocumentsDirectory] stringByAppendingPathComponent:[NSString stringWithFormat:@"%ld/game.json",game_id]];
-//		if([[NSFileManager defaultManager] fileExistsAtPath:gameJsonFile])
-//		{
-//			//careful to not 'initGameWithDict' here, or infinite loop
-//			SBJsonParser *jsonParser = [[SBJsonParser alloc] init];
-//			NSDictionary *gameDict = [jsonParser objectWithString:[NSString stringWithContentsOfFile:gameJsonFile encoding:NSUTF8StringEncoding error:nil]];
-//			downloadedVersion = [gameDict validIntForKey:@"version"]; // fixme: game start depends on this value assignment.
-//		}
-
-		know_if_begin_fresh = false;
-		begin_fresh = false;
 	}
+
 
 	// only to be called from an instatiation of GamePlayActivity.
 	public static File appStorageDir(GamePlayActivity gamePlayAct) {
@@ -609,9 +605,9 @@ public class Game {
 	}
 
 	public void gameLeft() {
-		if (isPollTImerRunning) { // todo: clear/cancel all outstanding service requests for poll timer
+		if (isPollTimerRunning) { // todo: clear/cancel all outstanding service requests for poll timer
 			mGamePlayAct.stopService(pollTimerSvcIntent);
-			isPollTImerRunning = false;
+			isPollTimerRunning = false;
 		}
 	}
 
@@ -656,10 +652,10 @@ public class Game {
 		// register receiver
 		LocalBroadcastManager.getInstance(mGamePlayAct).registerReceiver(mMessageReceiver, new IntentFilter(AppConfig.POLLTIMER_SVC_ACTION));
 
-		if (!isPollTImerRunning) {
+		if (!isPollTimerRunning) {
 			pollTimerSvcIntent = new Intent(mGamePlayAct, PollTimerService.class);
 			mGamePlayAct.startService(pollTimerSvcIntent);
-			isPollTImerRunning = true;
+			isPollTimerRunning = true;
 		}
 
 	}
@@ -673,7 +669,7 @@ public class Game {
 	};
 
 	private void handleMessage(Intent msg) {
-		if (!isPollTImerRunning) return; // ignore any calls after timer was killed
+		if (!isPollTimerRunning) return; // ignore any calls after timer was killed
 		Bundle data = msg.getExtras();
 		switch (data.getInt(AppConfig.COMMAND, 0)) {
 			case AppConfig.POLLTIMER_CYCLE_PASS:

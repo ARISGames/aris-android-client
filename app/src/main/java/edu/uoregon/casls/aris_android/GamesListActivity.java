@@ -641,6 +641,7 @@ public class GamesListActivity extends AppCompatActivity {
 
 	}
 
+	/* Called after GET_FULL_GAME_REQ_API returned */
 	private void fillInFullGameData(JSONObject jsonFullGameHTTPReturnSet) throws JSONException {
 		//get "data" block
 		if (jsonFullGameHTTPReturnSet.getJSONObject("data") != null) {
@@ -882,6 +883,51 @@ Mine Button:
 {"data":{"game_id":"6","name":"test game 2","description":"testing some concepts in aris","tick_script":null,"tick_delay":null,"icon_media_id":"0","media_id":"0","map_type":"STREET","map_latitude":"0","map_longitude":"0","map_zoom_level":"0","map_show_player":"1","map_show_players":"1","map_offsite_mode":"0","notebook_allow_comments":"1","notebook_allow_likes":"1","notebook_trigger_scene_id":"0","notebook_trigger_requirement_root_package_id":"0","notebook_trigger_title":"","notebook_trigger_icon_media_id":"0","notebook_trigger_distance":"0","notebook_trigger_infinite_distance":"0","notebook_trigger_wiggle":"0","notebook_trigger_show_title":"1","notebook_trigger_hidden":"0","notebook_trigger_on_enter":"0","inventory_weight_cap":"0","is_siftr":null,"siftr_url":null,"published":"0","type":"LOCATION","intro_scene_id":"0","moderated":null,"authors":[{"user_id":"1","user_name":"scott","display_name":"scott","media_id":"0"}],"media":{"media_id":"0","game_id":0,"name":"Default NPC","file_name":"npc.png","url":"http:\/\/aris.localhost\/server\/gamedata\/v2\/0\/npc.png","thumb_url":"http:\/\/aris.localhost\/server\/gamedata\/v2\/0\/npc_128.png"},"icon_media":{"media_id":"0","game_id":0,"name":"Default NPC","file_name":"npc.png","url":"http:\/\/aris.localhost\/server\/gamedata\/v2\/0\/npc.png","thumb_url":"http:\/\/aris.localhost\/server\/gamedata\/v2\/0\/npc_128.png"}},"returnCode":0,"returnCodeDescription":null}
 2015-07-28 15:28:13.036 ARIS[241:18902] NSNotification: SERVICES_GAME_RECEIVED
 2015-07-28 15:28:13.038 ARIS[241:18902] NSNotification: MODEL_GAME_AVAILABLE
+
+
+// initial game data sent in list (example of just one game item)
+{
+    "allow_download": "0",
+    "colors_id": null,
+    "created": "2014-09-17 03:52:04",
+    "description": "",
+    "game_id": "64",
+    "icon_media_id": "2827",
+    "intro_scene_id": "76",
+    "inventory_weight_cap": "0",
+    "is_siftr": "0",
+    "latitude": "42.947888441436",
+    "longitude": "-89.823401156616",
+    "map_focus": "PLAYER",
+    "map_latitude": "0",
+    "map_longitude": "0",
+    "map_offsite_mode": "1",
+    "map_show_player": "1",
+    "map_show_players": "1",
+    "map_type": "STREET",
+    "map_zoom_level": "0",
+    "media_id": "2384",
+    "moderated": "0",
+    "name": "Quibble",
+    "network_level": "HYBRID",
+    "notebook_allow_comments": "1",
+    "notebook_allow_likes": "1",
+    "notebook_trigger_distance": "0",
+    "notebook_trigger_hidden": "0",
+    "notebook_trigger_icon_media_id": "0",
+    "notebook_trigger_infinite_distance": "0",
+    "notebook_trigger_on_enter": "0",
+    "notebook_trigger_requirement_root_package_id": "0",
+    "notebook_trigger_scene_id": "0",
+    "notebook_trigger_show_title": "0",
+    "notebook_trigger_title": "",
+    "notebook_trigger_wiggle": "0",
+    "preload_media": "0",
+    "published": "1",
+    "siftr_url": null,
+    "type": "LOCATION",
+    "version": "25"
+}
 
 
  */

@@ -25,7 +25,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.GamesListActivity;
@@ -123,6 +125,18 @@ public class AppUtils {
 			Log.e("login activity", "Can not read file: " + e.toString());
 		}
 		return ret;
+	}
+
+	/**
+	 * Get a diff between two dates
+	 * @param date1 the oldest date
+	 * @param date2 the newest date
+	 * @param timeUnit the unit in which you want the diff
+	 * @return the diff value, in the provided unit
+	 */
+	public static long getTimeDiff(Date date1, Date date2, TimeUnit timeUnit) {
+		long diffInMillies = date2.getTime() - date1.getTime();
+		return timeUnit.convert(diffInMillies, TimeUnit.MILLISECONDS);
 	}
 
 }

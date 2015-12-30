@@ -248,7 +248,15 @@ public class GameCoverPageActivity extends AppCompatActivity {
 	}
 
 	public void onClickResetGame (View v) {
-		pollServer(HTTP_LOG_PLAYER_RESET_GAME);
+/* iOS reference code for your convenience
+		[_MODEL_GAMES_ playerResetGame:game.game_id];
+		game.begin_fresh = YES;
+		[self refreshFromGame];
+*/
+		pollServer(HTTP_LOG_PLAYER_RESET_GAME); // covers the actions of [_MODEL_GAMES_ playerResetGame:game.game_id];
+		mGame.begin_fresh = true;
+		//[self refreshFromGame]; in Android this happens after server return call in rcv'd via updateAllViews()
+
 	}
 
 	public void onClickResumeGame (View v) {
