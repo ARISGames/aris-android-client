@@ -107,28 +107,28 @@ public class Game {
 	public List<ARISModel> models = new ArrayList<>(); // List of all the models below for iteration convenience
 
 	// Game subcomponent classes
-	public ScenesModel          scenesModel;        // Game Piece
-	public GroupsModel          groupsModel;        // Game Piece
-	public PlaquesModel         plaquesModel;        // Game Piece
-	public ItemsModel           itemsModel;        // Game Piece
-	public DialogsModel         dialogsModel;        // Game Piece
+	public ScenesModel          scenesModel;        
+	public GroupsModel          groupsModel;        
+	public PlaquesModel         plaquesModel;        
+	public ItemsModel           itemsModel;        
+	public DialogsModel         dialogsModel;        
 	public WebPagesModel        webPagesModel;
-	public NotesModel           notesModel;        // Game Piece
+	public NotesModel           notesModel;        
 	public TagsModel            tagsModel;
-	public EventsModel          eventsModel;            // Game Piece
-	public RequirementsModel    requirementsModel;            // Game Piece
+	public EventsModel          eventsModel;            
+	public RequirementsModel    requirementsModel;            
 	public TriggersModel        triggersModel;
-	public FactoriesModel       factoriesModel;        // Game Piece
-	public OverlaysModel        overlaysModel;        // Game Piece
-	public InstancesModel       instancesModel;        // Game Piece
-	public PlayerInstancesModel playerInstancesModel;        // Game Piece todo: is this where gameUsers go? Players == Users??
+	public FactoriesModel       factoriesModel;        
+	public OverlaysModel        overlaysModel;        
+	public InstancesModel       instancesModel;        
+	public PlayerInstancesModel playerInstancesModel;         //todo: is this where gameUsers go? Players == Users??
 	public GameInstancesModel   gameInstancesModel;
 	public GroupInstancesModel  groupInstancesModel;
 	public TabsModel            tabsModel;
 	public LogsModel            logsModel;
-	public QuestsModel          questsModel;        // Game Piece
+	public QuestsModel          questsModel;        
 //	public DisplayQueueModel 	displayQueueModel; // iOS only for now
-	// medias (in GamePlayAct 		// Game Piece
+	// medias (in GamePlayAct 		
 
 	//local stuff
 	public long    downloadedVersion   = 0;
@@ -311,13 +311,6 @@ public class Game {
 //		jsonGame.getString("notebook_trigger_show_title");
 //		jsonGame.getString("notebook_trigger_hidden");
 //		jsonGame.getString("notebook_trigger_on_enter");
-
-		// defer this to full game init
-//		if (jsonGame.has("authors")) {
-//			JSONArray jsonAuthorsList = jsonGame.getJSONArray("authors");
-//			// in iOS they parse an authors array and include a member array of Author objs
-//			// todo: add authors parse code
-//		}
 
 		// run through full game init, in the event that there are comments present in the basic game json block
 //		initFullGameDetailsWithJson(jsonGame);
@@ -539,7 +532,7 @@ public class Game {
 		mGamePlayAct.mDispatch.maintenance_percent_loaded((float) n_maintenance_data_received / (float) n_maintenance_data_to_receive); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_PERCENT_LOADED", nil,
 		// @{@"percent":[NSNumber numberWithFloat:(float)n_maintenance_data_received/(float)n_maintenance_data_to_receive]});
 		if (this.allMaintenanceDataReceived()) {
-//			downloadedVersion = version; // fixme: just a test. don't leave this in final code.
+//			downloadedVersion = version; // just used for dev testing. don't leave this in final code.
 			n_maintenance_data_received = n_maintenance_data_to_receive; //should already be exactly this...
 			mGamePlayAct.mDispatch.maintenance_data_loaded(); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_DATA_LOADED", nil, nil);
 		}
@@ -564,28 +557,6 @@ public class Game {
 			mGamePlayAct.mDispatch.model_media_data_loaded(); //_ARIS_NOTIF_SEND_(@"MEDIA_DATA_LOADED", nil, nil);
 		}
 	}
-
-	// ad acta. old method just for reference. delete when you get tired of seeing it here.
-//	public void gamePlayerPieceReceived() {
-//		n_player_data_received++;
-//		if (n_player_data_received >= n_player_data_to_receive) {
-//			mGamePlayAct.mDispatch.game_player_data_loaded(); // _ARIS_NOTIF_SEND_(@"PLAYER_DATA_LOADED", null, null); // broadcast to any listeners that game data is ready
-//		}
-//		percentLoadedChanged();
-//	}
-//
-//	public boolean allGameDataReceived() {
-//
-//		for (int i = 0; i < models.size(); i++) {
-////		for (ARISModel model : models) {    // iterate through all models
-//			ARISModel model = models.get(i);
-//			boolean gdr = model.gameDataReceived();
-//			if (!gdr) { // stop if one reports it's not received all its data.
-//				return false;
-//			}
-//		}
-//		return true;
-//	}
 
 	public void percentLoadedChanged() {
 		float percentReceived = (n_game_data_received + n_player_data_received) / (n_game_data_to_receive + n_player_data_to_receive);
@@ -683,19 +654,6 @@ public class Game {
 		}
 	}
 
-
-//	private Runnable runnable = new Runnable() {
-//		@Override
-//		public void run() {
-//      /* do what you need to do */
-//			foobar();
-//			]\
-//      /* and here comes the "trick" */
-//			poller.postDelayed(this, 100);
-//		}
-//	};
-
-
 	public void clearModels() {
 		n_game_data_received = 0;
 		n_player_data_received = 0;
@@ -742,59 +700,3 @@ public class Game {
 		return listen_player_piece_available == 1;
 	}
 }
-
-/*
-Example of getFullGame reult JSON:
-http://arisgames.org/server/json.php/v2.games.getFullGame/	(1.126998)
-2015-08-13 15:57:52.920 ARIS[717:244847] Fin async data:
-{"data":{
-"game_id":"91",
-"name":"Dinner Search",
-"description":"Help Mr. and Mrs. Hill get ready for... Mr. Hill.",
-"icon_media_id":"2891",
-"media_id":"2891",
-"map_type":"STREET",
-"map_latitude":"0",
-"map_longitude":"0",
-"map_zoom_level":"0",
-"map_show_player":"1",
-"map_show_players":"1",
-"map_offsite_mode":"0",
-"notebook_allow_comments":"1",
-"notebook_allow_likes":"1",
-"notebook_trigger_scene_id":"0",
-"notebook_trigger_requirement_root_package_id":"0",
-"notebook_trigger_title":"",
-"notebook_trigger_icon_media_id":"0",
-"notebook_trigger_distance":"0",
-"notebook_trigger_infinite_distance":"0",
-"notebook_trigger_wiggle":"0",
-"notebook_trigger_show_title":"0",
-"notebook_trigger_hidden":"0",
-"notebook_trigger_on_enter":"0",
-"inventory_weight_cap":"0",
-"is_siftr":"0",
-"siftr_url":null,
-"published":"1",
-"type":"QR",
-"intro_scene_id":"1",
-"moderated":"0",
-"authors":[{"user_id":"34","user_name":"erica.white","display_name":"","media_id":"0"}],
-"media":{
-	"media_id":"2891",
-	"game_id":"91",
-	"name":"Dinner",
-	"file_name":"aris18ae30099ba6d75e05d2c445f4eecafd.jpg",
-	"url":"http:\/\/arisgames.org\/server\/gamedatav2\/91\/aris18ae30099ba6d75e05d2c445f4eecafd.jpg",
-	"thumb_url":"http:\/\/arisgames.org\/server\/gamedatav2\/91\/aris18ae30099ba6d75e05d2c445f4eecafd_128.jpg"},
-"icon_media":{
-	"media_id":"2891",
-	"game_id":"91",
-	"name":"Dinner",
-	"file_name":"aris18ae30099ba6d75e05d2c445f4eecafd.jpg",
-	"url":"http:\/\/arisgames.org\/server\/gamedatav2\/91\/aris18ae30099ba6d75e05d2c445f4eecafd.jpg",
-	"thumb_url":"http:\/\/arisgames.org\/server\/gamedatav2\/91\/aris18ae30099ba6d75e05d2c445f4eecafd_128.jpg"
-	}
-},"returnCode":0,"returnCodeDescription":null}
-
- */

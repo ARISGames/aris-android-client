@@ -279,13 +279,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		prefsEd.putLong(AppUtils.gameStorageFile(this, mGame.game_id).getName() + ".downloadedVersion", mGame.downloadedVersion);
 		prefsEd.commit();
 
-//		// also store just the game base data attributes EXPERIMENTAL Android; delete if it's a failed experiment
-//		String jsonGameLite = gson.toJson(mGame);
-//		SharedPreferences.Editor prefsEd = appPrefs.edit();
-//		prefsEd.putString(gameStorageFile.getName(), jsonGameLite);
-//		prefsEd.commit();
-
-
 /* save the whole ARISModel (iOS) done by gson in Android along with the Game object. */
 //		ARISModel *m;
 //		for(long i = 0; i < _MODEL_GAME_.models.count; i++)

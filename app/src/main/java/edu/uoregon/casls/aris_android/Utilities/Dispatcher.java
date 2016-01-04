@@ -238,12 +238,6 @@ public class Dispatcher {
 		mGamePlayAct.mAppServices.mMediaLoader.retryLoadingAllMedia();
 	}
 
-	// depricated
-//	//	MODEL_MEDIA_DATA_COMPLETE",nil,nil);
-//	public void model_media_data_complete() {
-//		mGamePlayAct.mediaDataComplete();
-//	}
-
 	//	MODEL_MEDIA_DATA_LOADED",nil,nil);
 	public void model_media_data_loaded() {
 		// iOS Call = LoadingViewController.mediaDataLoaded()
