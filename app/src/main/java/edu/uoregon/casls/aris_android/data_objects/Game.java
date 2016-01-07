@@ -23,7 +23,6 @@ import java.util.List;
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
-import edu.uoregon.casls.aris_android.services.PollTimerService;
 import edu.uoregon.casls.aris_android.models.ARISModel;
 import edu.uoregon.casls.aris_android.models.DialogsModel;
 import edu.uoregon.casls.aris_android.models.EventsModel;
@@ -45,6 +44,7 @@ import edu.uoregon.casls.aris_android.models.TabsModel;
 import edu.uoregon.casls.aris_android.models.TagsModel;
 import edu.uoregon.casls.aris_android.models.TriggersModel;
 import edu.uoregon.casls.aris_android.models.WebPagesModel;
+import edu.uoregon.casls.aris_android.services.PollTimerService;
 
 /*
   Created by smorison on 7/28/15.
@@ -60,6 +60,7 @@ public class Game {
 	public long n_media_data_to_receive       = 0;
 	public long n_media_data_received         = 0;
 
+	// booleans as ints to conform to json from ARIS responses
 	public int listen_player_piece_available      = 1;
 	public int listen_game_piece_available        = 1;
 	public int listen_maintenance_piece_available = 1;
@@ -69,7 +70,7 @@ public class Game {
 	public long game_id;
 	public String name = "";
 	public String desc = "";
-	public int published;
+	public int published; // boolean as int
 	public String   type     = "";
 	public Location location = new Location("0"); // from iOS; not used?
 	public long player_count;
@@ -87,53 +88,54 @@ public class Game {
 	public String   map_type     = "";
 	public String   map_focus    = "";
 	public Location map_location = new Location("0");
-	public double  map_zoom_level;
+	public double map_zoom_level;
+
+	// booleans as ints to conform to json from ARIS server
 	public int map_show_player;
 	public int map_show_players;
 	public int map_offsite_mode;
-
 
 	public int notebook_allow_comments;
 	public int notebook_allow_likes;
 	public int notebook_allow_player_tags;
 
-	public long    inventory_weight_cap;
+	public long   inventory_weight_cap;
 	//	public String network_level = "";
-	public String  network_level;
-	public int allow_download;
-	public int preload_media;
-	public long    version;
+	public String network_level;
+	public int    allow_download; // boolean as int
+	public int    preload_media; // boolean as int
+	public long   version;
 
 	public List<ARISModel> models = new ArrayList<>(); // List of all the models below for iteration convenience
 
 	// Game subcomponent classes
-	public ScenesModel          scenesModel;        
-	public GroupsModel          groupsModel;        
-	public PlaquesModel         plaquesModel;        
-	public ItemsModel           itemsModel;        
-	public DialogsModel         dialogsModel;        
+	public ScenesModel          scenesModel;
+	public GroupsModel          groupsModel;
+	public PlaquesModel         plaquesModel;
+	public ItemsModel           itemsModel;
+	public DialogsModel         dialogsModel;
 	public WebPagesModel        webPagesModel;
-	public NotesModel           notesModel;        
+	public NotesModel           notesModel;
 	public TagsModel            tagsModel;
-	public EventsModel          eventsModel;            
-	public RequirementsModel    requirementsModel;            
+	public EventsModel          eventsModel;
+	public RequirementsModel    requirementsModel;
 	public TriggersModel        triggersModel;
-	public FactoriesModel       factoriesModel;        
-	public OverlaysModel        overlaysModel;        
-	public InstancesModel       instancesModel;        
+	public FactoriesModel       factoriesModel;
+	public OverlaysModel        overlaysModel;
+	public InstancesModel       instancesModel;
 	public PlayerInstancesModel playerInstancesModel;         //todo: is this where gameUsers go? Players == Users??
 	public GameInstancesModel   gameInstancesModel;
 	public GroupInstancesModel  groupInstancesModel;
 	public TabsModel            tabsModel;
 	public LogsModel            logsModel;
-	public QuestsModel          questsModel;        
+	public QuestsModel          questsModel;
 //	public DisplayQueueModel 	displayQueueModel; // iOS only for now
 	// medias (in GamePlayAct 		
 
 	//local stuff
-	public long    downloadedVersion   = 0;
-	public int know_if_begin_fresh = 0;
-	public int begin_fresh         = 0;
+	public long downloadedVersion   = 0;
+	public int  know_if_begin_fresh = 0; // boolean as int
+	public int  begin_fresh         = 0; // boolean as int
 
 	//	PollTimer vars
 	public  Boolean isPollTimerRunning = false;
@@ -385,49 +387,31 @@ public class Game {
 
 		n_game_data_received = 0;
 		n_player_data_received = 0;
-
-		scenesModel = new ScenesModel();
-		models.add(scenesModel);
-		plaquesModel = new PlaquesModel();
-		models.add(plaquesModel);
-		itemsModel = new ItemsModel();
-		models.add(itemsModel);
-		dialogsModel = new DialogsModel();
-		models.add(dialogsModel);
-		webPagesModel = new WebPagesModel();
-		models.add(webPagesModel);
-		notesModel = new NotesModel();
-		models.add(notesModel);
-		tagsModel = new TagsModel();
-		models.add(tagsModel);
-		eventsModel = new EventsModel();
-		models.add(eventsModel);
-		requirementsModel = new RequirementsModel();
-		models.add(requirementsModel);
-		triggersModel = new TriggersModel();
-		models.add(triggersModel);
-		factoriesModel = new FactoriesModel();
-		models.add(factoriesModel);
-		overlaysModel = new OverlaysModel();
-		models.add(overlaysModel);
-		instancesModel = new InstancesModel();
-		models.add(instancesModel);
-		playerInstancesModel = new PlayerInstancesModel();
-		models.add(playerInstancesModel);
-		gameInstancesModel = new GameInstancesModel();
-		models.add(gameInstancesModel);
-		groupInstancesModel = new GroupInstancesModel();
-		models.add(groupInstancesModel);
-		tabsModel = new TabsModel();
-		models.add(tabsModel);
-		logsModel = new LogsModel();
-		models.add(logsModel);
-		questsModel = new QuestsModel();
-		models.add(questsModel);
+		//@formatter:off
+		scenesModel = new ScenesModel();                   models.add(scenesModel);
+		groupsModel = new GroupsModel();                   models.add(groupsModel);
+		plaquesModel = new PlaquesModel();                 models.add(plaquesModel);
+		itemsModel = new ItemsModel();                     models.add(itemsModel);
+		dialogsModel = new DialogsModel();                 models.add(dialogsModel);
+		webPagesModel = new WebPagesModel();               models.add(webPagesModel);
+		notesModel = new NotesModel();                     models.add(notesModel);
+		tagsModel = new TagsModel();                       models.add(tagsModel);
+		eventsModel = new EventsModel();                   models.add(eventsModel);
+		requirementsModel = new RequirementsModel();       models.add(requirementsModel);
+		triggersModel = new TriggersModel();               models.add(triggersModel);
+		factoriesModel = new FactoriesModel();             models.add(factoriesModel);
+		overlaysModel = new OverlaysModel();               models.add(overlaysModel);
+		instancesModel = new InstancesModel();             models.add(instancesModel);
+		playerInstancesModel = new PlayerInstancesModel(); models.add(playerInstancesModel);
+		gameInstancesModel = new GameInstancesModel();     models.add(gameInstancesModel);
+		groupInstancesModel = new GroupInstancesModel();   models.add(groupInstancesModel);
+		tabsModel = new TabsModel();                       models.add(tabsModel);
+		logsModel = new LogsModel();                       models.add(logsModel);
+		questsModel = new QuestsModel();                   models.add(questsModel);
+		//@formatter:on
 //		displayQueueModel    = new DisplayQueueModel();	 	models.add(displayQueueModel   ); // iOS only for now
-		// todo: user Model and media model added??
-//		[models addObject:_MODEL_USERS_];
-//		[models addObject:_MODEL_MEDIA_];
+		models.add(mGamePlayAct.mUsersModel); //		[models addObject:_MODEL_USERS_];
+		models.add(mGamePlayAct.mMediaModel); //		[models addObject:_MODEL_MEDIA_];
 
 		n_game_data_to_receive = 0;
 		n_maintenance_data_to_receive = 0;
@@ -438,10 +422,9 @@ public class Game {
 			n_maintenance_data_to_receive += model.nMaintenanceDataToReceive();
 			n_player_data_to_receive += model.nPlayerDataToReceive();
 		}
-		// todo: waiting for previous todo to solve this
-//		n_media_data_to_receive = mediaModel.numMediaTryingToLoad(); //must be recalculated once game info gotten
+		n_media_data_to_receive = mGamePlayAct.mMediaModel.numMediaTryingToLoad(); //must be recalculated once game info gotten
 
-		initModelContexts();
+		initModelContexts();  // android only
 	}
 
 	public void initModelContexts() { // pass on the context for upward visibility in object instantiation tree
@@ -526,6 +509,7 @@ public class Game {
 			mGamePlayAct.mDispatch.game_data_loaded(); // _ARIS_NOTIF_SEND_(@"DATA_LOADED", nil, nil); // will call requestPlayerData()
 		}
 	}
+
 	//fixme: watch here and see why we're never passing the condition below.
 	public void maintenancePieceReceived() { // called as listener to [GameInstances|GroupInstance|Groups|PlayerInstance|Scenes]Touched() via Dispater.maintenance_piece_available()
 		n_maintenance_data_received++;

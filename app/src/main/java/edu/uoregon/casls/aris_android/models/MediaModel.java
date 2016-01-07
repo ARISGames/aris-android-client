@@ -185,6 +185,7 @@ public class MediaModel extends ARISModel {
 			if (mediaDict.containsKey("user_id")) tmpMedia.user_id = Integer.parseInt(mediaDict.get("user_id"));
 
 			// add this item, stub or fleshed to DB
+			Cursor mediasAlreadyInDB = dbDealer.getMedias("");
 			if (dbDealer.addMedia(tmpMedia))
 				Log.i(AppConfig.LOGTAG, getClass().getSimpleName() + "Media cache   : Media id:" + media_id + " cached:" + tmpMedia.remoteURL);
 			else
@@ -339,7 +340,7 @@ public class MediaModel extends ARISModel {
 			return media;
 		}
 
-		Media media = medias.get(media_id); //[[NSNumber numberWithLong:media_id]
+		Media media = medias.get(media_id); //[[NSNumber numberWithLong:media_id] // fixme: null check me causing NPE
 		if (media == null) //if doesn't exist in light cache...
 		{
 			String where = "media_id = " + media_id;

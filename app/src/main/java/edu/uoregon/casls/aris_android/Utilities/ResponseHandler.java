@@ -146,6 +146,19 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_factories_received(factories);
 				}
 			}
+			else if (callingReq.equals(Calls.HTTP_GET_GROUP_4_PLAYER)) {
+				if (jsonReturn.has("data")) {
+					JSONArray jsonData = jsonReturn.getJSONArray("data");
+					Gson gson = new Gson();
+					List<Group> groups = new ArrayList<>();
+					for (int i = 0; i < jsonData.length(); i++) {
+						String dataStr = jsonData.getJSONObject(i).toString();
+						Group group = gson.fromJson(dataStr, Group.class);
+						groups.add(group);
+					}
+					mGamePlayAct.mGame.groupsModel.groupsReceived(groups);
+				}
+			}
 			else if (callingReq.equals(Calls.HTTP_GET_GROUPS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");

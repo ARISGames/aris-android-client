@@ -36,7 +36,7 @@ public class DBDealer extends SQLiteOpenHelper {
 			+ USER_ID + " integer, "
 			+ LOCAL_URL + " text, "
 			+ REMOTE_URL + " text "
-			+ ");";
+			+ ")";
 
 	public DBDealer(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -63,6 +63,7 @@ public class DBDealer extends SQLiteOpenHelper {
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(MEDIA_ID, newMedia.media_id);
 		contentValues.put(GAME_ID, newMedia.game_id);
+		contentValues.put(USER_ID, 0); // todo real value here. stubbed in 0 for testing
 		contentValues.put(LOCAL_URL, newMedia.localURL);
 		contentValues.put(REMOTE_URL, newMedia.remoteURL);
 		long res = db.insert(MEDIA, null, contentValues);
@@ -82,6 +83,19 @@ public class DBDealer extends SQLiteOpenHelper {
 				null,                                // group by
 				null,                                // having
 				null); 							// order by
+
+//		if (cursor.moveToFirst()) {
+//			do {
+//				int c0_MediaId = cursor.getInt(0);
+//				int c1_GameId = cursor.getInt(1);
+//				int c2_UserId = cursor.getInt(2);
+//				String c3_localUrl = cursor.getString(3);
+//				String c4_remoteUrl = cursor.getString(4);
+//				int i = 33;
+//				i += 1;
+//				i -= 1;
+//			} while (cursor.moveToNext());
+//		}
 
 		return cursor;
 	}

@@ -111,32 +111,32 @@ public class Dispatcher {
 		// no listeners
 	}
 
-	//	AVAILABLE",nil,@{@"game":[self gameForId:g.game_id]});// Will be handled in GamePlayActivity -sem
-//	BEGAN",nil,nil); // Will be handled in GamePlayActivity -sem
+	//	MODEL_GAME_AVAILABLE",nil,@{@"game":[self gameForId:g.game_id]});// Will be handled in GamePlayActivity -sem
+//	MODEL_GAME_BEGAN",nil,nil); // Will be handled in GamePlayActivity -sem
 	public void game_began() {
 		mGamePlayAct.mGame.gameBegan();
 		mGamePlayAct.gameBegan(); // possibly not needed.
 	}
 
-	//	CHOSEN",nil,nil); // Will be handled in GamePlayActivity -sem
+	//	MODEL_GAME_CHOSEN",nil,nil); // Will be handled in GamePlayActivity -sem
 	public void game_chosen() {
 		mGamePlayAct.gameChosen(); // possibly not needed.
 	}
 
-	//	DATA_LOADED", nil, nil);
+	//	MODEL_GAME_DATA_LOADED", nil, nil);
 	public void game_data_loaded() {
 		// in iOS would call LoadingViewController.gameDataLoaded(), which then calls Game.requestPlayerData(); I'll call it directly.
 //		mGamePlayAct.mGame.requestPlayerData(); // looks wrong. Is wrong. Bug. Causes infinite loop.
 		mGamePlayAct.gameDataLoaded();
 	}
 
-	//	INSTANCES_AVAILABLE",nil,nil);
+	//	MODEL_GAME_INSTANCES_AVAILABLE",nil,nil);
 	public void game_instances_available() {
 		// not listened for;
 	}
 
-	//	LEFT",nil,nil); // Will be handled in GamePlayActivity -sem
-	//	PERCENT_LOADED", nil, @{@"percent":percentReceived});
+	//	MODEL_GAME_LEFT",nil,nil); // Will be handled in GamePlayActivity -sem
+	//	MODEL_GAME_PERCENT_LOADED", nil, @{@"percent":percentReceived});
 	public void game_percent_loaded(float percentReceived) {
 		// todo: LoadingViewController.percentLoaded();
 	}

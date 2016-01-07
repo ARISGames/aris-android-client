@@ -244,6 +244,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	// Stubs from iOS RootViewController. May be unnecessary in Android vers. but included while developing App just in case they become useful.
 	public void gameBegan() { // stub for potential use later to duplicate RootViewController behaviours as exist in iOS vs.
 		// in iOS, initializes View Controller. Not much else.
+//		gamePlayViewController = [[GamePlayViewController alloc] initWithDelegate:self];
+//		[self displayContentController:gamePlayViewController];
 	}
 	public void gameChosen() { // stub for potential use later to duplicate RootViewController behaviours as exist in iOS vs.
 		// in iOS, starts the game loading sequence.

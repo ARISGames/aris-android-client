@@ -125,11 +125,12 @@ public class ARISMediaLoader {
 		for (int mediaIdToLoad : mGamePlayAct.mMediaModel.mediaIDsToLoad) {
 			// dispatch an async service to try and load this data into a MediaResult obj
 			Media mediaToLoad = mGamePlayAct.mMediaModel.mediaForId(mediaIdToLoad);
-			this.pollServer(mediaToLoad.remoteURL.toString(), mediaIdToLoad);
+			this.pollServer(mediaToLoad.remoteURL.toString(), mediaIdToLoad); //fixme: NPE here after game load but before start.
 				// in that call: if call succeeds, add image to DB with it's data or just save as a file and put the rest in DB
 				//  if load failed, leave it in the queue to be retried.
 		}
 	}
+
 //		//do the ol' switcheroo so we wont get into an infinite loop of adding, removing, readding, etc...
 //		NSMutableArray oldMetaConnections = metaConnections;
 //		metaConnections = NSMutableArray alloc initWithCapacity:10;
