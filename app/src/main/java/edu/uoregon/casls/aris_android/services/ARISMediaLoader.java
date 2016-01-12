@@ -1,6 +1,7 @@
 package edu.uoregon.casls.aris_android.services;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,8 +23,11 @@ import org.apache.http.entity.StringEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -34,6 +38,7 @@ import edu.uoregon.casls.aris_android.R;
 import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.data_objects.Media;
+import edu.uoregon.casls.aris_android.data_objects.cd_data_objects.MediaCD;
 import edu.uoregon.casls.aris_android.media.ARISDelegateHandle;
 import edu.uoregon.casls.aris_android.models.MediaModel;
 
@@ -82,7 +87,7 @@ public class ARISMediaLoader {
 //			dataConnections setObject:mr forKey:mr.connection.description; // add this connection to the array (of currently active connections)
 			// todo: may need to make this an async req. otherwise it might bog down the main thread -sem
 			try {
-				mr.media.data = BitmapFactory.decodeStream(mr.media.localURL.openConnection().getInputStream()); // for server retrieval
+				mr.media.data = BitmapFactory.decodeStream(mr.media.localURL.openConnection().getInputStream()); // for server retrieval of local file
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -125,7 +130,7 @@ public class ARISMediaLoader {
 		for (int mediaIdToLoad : mGamePlayAct.mMediaModel.mediaIDsToLoad) {
 			// dispatch an async service to try and load this data into a MediaResult obj
 			Media mediaToLoad = mGamePlayAct.mMediaModel.mediaForId(mediaIdToLoad);
-			this.pollServer(mediaToLoad.remoteURL.toString(), mediaIdToLoad); //fixme: NPE here after game load but before start.
+			this.pollServer(mediaToLoad.mediaCD.remoteURL, mediaToLoad.mediaCD);
 				// in that call: if call succeeds, add image to DB with it's data or just save as a file and put the rest in DB
 				//  if load failed, leave it in the queue to be retried.
 		}
@@ -240,7 +245,10 @@ public class ARISMediaLoader {
 //		this.loadMediaFromMR(mr);
 //	}
 
-	public void pollServer(final String requestURL, final int mediaIdToLoad) {
+/**
+	retrieve media bitmap data from server
+*/
+	public void pollServer(final String requestURL, final MediaCD mediaCDToLoad) {
 //		showProgress(true);
 
 		RequestParams rqParams = new RequestParams();
@@ -260,12 +268,12 @@ public class ARISMediaLoader {
 			client.get(context, requestURL, new BinaryHttpResponseHandler(allowedContentTypes /*, looper here? */) { // the looper might be able to handle failed attempts?
 				@Override
 				public void onSuccess(int statusCode, Header[] headers, byte[] mediaBytes) {
-					processLoadedMedia(mediaBytes, mediaIdToLoad);
+					processLoadedMedia(mediaBytes, mediaCDToLoad);
 				}
 
 				@Override
 				public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
-					processFailedMediaLoad(mediaIdToLoad);
+					processFailedMediaLoad(mediaCDToLoad);
 				}
 			});
 
@@ -307,12 +315,40 @@ public class ARISMediaLoader {
 
 	}
 
-	private void processLoadedMedia(byte[] mediaBytes, int mediaIdToLoad) {
+/*
+	 Android replacement of connectionDidFinishLoading();
+	 Save data to local file, and populate the localURL with file location
+*/
+	private String processLoadedMedia(byte[] mediaBytes, MediaCD mediaCDToLoad) {
 		// save binary to a local file.
 		// enter this media data into database and a local URI to the file (Should there
 		// already be a row for this from prior entry or upstream empty placeholder stub?)
+		ContextWrapper cw = new ContextWrapper(mGamePlayAct);
+		// path to /data/data/appName/app_data/gameMedia_(game_id)
+		File directory = cw.getDir("gameMedia_" + mGamePlayAct.mGame.game_id, Context.MODE_PRIVATE);
+		// Create directory with file.
+		File mypath = new File(directory, mediaCDToLoad.media_id + "." + mediaCDToLoad.fileExtension());
+
+		FileOutputStream fos = null;
+		try {
+			fos = new FileOutputStream(mypath);
+
+			fos.write(mediaBytes);
+			fos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		mediaCDToLoad.localURL = mypath.getAbsolutePath();
+
+		// update DB to reflect new local URL
+		mGamePlayAct.mMediaModel.addOrUpdateMediaCD(mediaCDToLoad);
+
+		return mypath.getAbsolutePath();
 	}
 
-	private void processFailedMediaLoad(int mediaIdToLoad) {}
+	private void processFailedMediaLoad(MediaCD mediaToLoad) {
+		// todo: finish me
+	}
 
 }

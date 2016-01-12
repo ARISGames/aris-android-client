@@ -3,6 +3,7 @@ package edu.uoregon.casls.aris_android.Utilities;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -58,7 +59,7 @@ public class DBDealer extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 
-	public boolean addMedia(MediaCD newMedia) {
+	public boolean addMediaCD(MediaCD newMedia) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(MEDIA_ID, newMedia.media_id);
@@ -68,6 +69,31 @@ public class DBDealer extends SQLiteOpenHelper {
 		contentValues.put(REMOTE_URL, newMedia.remoteURL);
 		long res = db.insert(MEDIA, null, contentValues);
 		if (res == -1) return false;
+		return true;
+	}
+
+	// same as addMedia, but with update if record exists
+	public boolean addOrUpdateMediaCD(MediaCD newMedia) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(MEDIA_ID, newMedia.media_id);
+		contentValues.put(GAME_ID, newMedia.game_id);
+		contentValues.put(USER_ID, 0); // todo real value here. stubbed in 0 for testing
+		contentValues.put(LOCAL_URL, newMedia.localURL);
+		contentValues.put(REMOTE_URL, newMedia.remoteURL);
+		long res = 0;
+		try {
+			res = db.insertOrThrow(MEDIA, null, contentValues);
+		}
+		catch (SQLiteConstraintException constraintViolation) {
+			ContentValues updateContentValues = new ContentValues();
+			updateContentValues.put(LOCAL_URL, newMedia.localURL);
+			updateContentValues.put(REMOTE_URL, newMedia.remoteURL);
+
+			String[] args = new String[]{String.valueOf(newMedia.media_id), String.valueOf(newMedia.game_id)};
+			res = db.update(MEDIA, updateContentValues, MEDIA_ID + "=? AND " + GAME_ID + "=?", args);
+		}
+		if (res < 1) return false;
 		return true;
 	}
 
@@ -84,6 +110,7 @@ public class DBDealer extends SQLiteOpenHelper {
 				null,                                // having
 				null); 							// order by
 
+		// dev code to look at resulting cursor
 //		if (cursor.moveToFirst()) {
 //			do {
 //				int c0_MediaId = cursor.getInt(0);
@@ -92,8 +119,8 @@ public class DBDealer extends SQLiteOpenHelper {
 //				String c3_localUrl = cursor.getString(3);
 //				String c4_remoteUrl = cursor.getString(4);
 //				int i = 33;
-//				i += 1;
-//				i -= 1;
+//				i += 1; // dummy
+//				i -= 1; // dummy's brother
 //			} while (cursor.moveToNext());
 //		}
 

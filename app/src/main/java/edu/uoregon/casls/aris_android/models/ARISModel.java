@@ -46,6 +46,13 @@ public class ARISModel {
 
 	public Boolean gameDataReceived()
 	{
+		long nGameDataToReceive = this.nGameDataToReceive();
+		if ( n_game_data_received >= this.nGameDataToReceive()) {
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "    GAMEDATACYCLE  - - - - gameDataReceived. return " + n_game_data_received + " >= " + nGameDataToReceive + " TRUE TRUE");
+		}
+		else {
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "    GAMEDATACYCLE  - - - - gameDataReceived. return " + n_game_data_received + " >= " + nGameDataToReceive + " FALSE FALSE");
+		}
 		return n_game_data_received >= this.nGameDataToReceive();
 	}
 

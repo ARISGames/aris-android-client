@@ -39,7 +39,8 @@ public class UsersModel extends ARISModel {
 	}
 
 	public void usersReceived(Map<String, User> mGameUsers) {
-
+		List<User> gameUserList = new ArrayList<User>(mGameUsers.values());
+		this.updateUsers(gameUserList);
 	}
 
 	public void clearData() {

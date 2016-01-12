@@ -10,4 +10,12 @@ public class MediaCD {
 	public int user_id;
 	public String localURL;
 	public String remoteURL;
+
+	public String fileExtension() {
+		if (this.remoteURL != null && !this.remoteURL.isEmpty())
+			return this.remoteURL.substring(this.remoteURL.lastIndexOf(".") + 1);
+		// (else)
+		return this.localURL.substring(this.localURL.lastIndexOf(".") + 1);
+	}
+
 }

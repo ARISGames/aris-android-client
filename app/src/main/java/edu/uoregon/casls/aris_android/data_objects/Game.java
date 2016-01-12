@@ -504,13 +504,12 @@ public class Game {
 	public void gamePieceReceived() { // called as listener to todo: GAME_PIECE_AVAILABLE?
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.game_percent_loaded((float) n_game_data_received / (float) n_game_data_to_receive);
-		if (this.allGameDataReceived()) {
+		if (this.allGameDataReceived()) { // fixme: not geting past this
 			n_game_data_received = n_game_data_to_receive; //should already be exactly this...
 			mGamePlayAct.mDispatch.game_data_loaded(); // _ARIS_NOTIF_SEND_(@"DATA_LOADED", nil, nil); // will call requestPlayerData()
 		}
 	}
 
-	//fixme: watch here and see why we're never passing the condition below.
 	public void maintenancePieceReceived() { // called as listener to [GameInstances|GroupInstance|Groups|PlayerInstance|Scenes]Touched() via Dispater.maintenance_piece_available()
 		n_maintenance_data_received++;
 		mGamePlayAct.mDispatch.maintenance_percent_loaded((float) n_maintenance_data_received / (float) n_maintenance_data_to_receive); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_PERCENT_LOADED", nil,
@@ -566,8 +565,10 @@ public class Game {
 	}
 
 	public boolean allGameDataReceived() {
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " GAMEDATALOAD  - - - - - - - - allGameDataReceived()");
 		for (ARISModel model : models)
 			if (!model.gameDataReceived()) return false;
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " GAMEDATALOAD  - - - - - - - - allGameDataReceived() PASSED PASSED PASSED");
 		return true;
 	}
 
