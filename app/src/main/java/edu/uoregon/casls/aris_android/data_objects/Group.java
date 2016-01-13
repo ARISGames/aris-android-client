@@ -7,7 +7,7 @@ public class Group {
 	public long group_id = 0;
 	public String name = "";
 
-	public void init() {
+	public void init() { // redundant since new Group() will start with these values.
 		this.group_id = 0;
 		this.name = "";
 	}
