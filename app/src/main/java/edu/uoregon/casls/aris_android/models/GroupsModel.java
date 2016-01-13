@@ -67,6 +67,7 @@ public class GroupsModel extends ARISModel {
 		mGamePlayAct.mAppServices.touchItemsForGroups();
 	}
 
+	/* Called via dispatcher.services_player_group_received() <- this.requestPlayerGroup()*/
 	public void playerGroupReceived(Group newGroup) {
 //		Group s = this.groupForId(((Group)notif.userInfo["group"]).group_id); //todo: figure out if this is needed for now I'm shorting the circuit
 //		this.updatePlayerGroup(s);

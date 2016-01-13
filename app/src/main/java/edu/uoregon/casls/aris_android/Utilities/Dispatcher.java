@@ -502,6 +502,9 @@ public class Dispatcher {
 		mGamePlayAct.mGame.groupsModel.groupTouched();
 	}
 //	SERVICES_GROUPS_RECEIVED", nil, @{@"groups":groups});
+	public void services_groups_received(List<Group> groups) {
+		mGamePlayAct.mGame.groupsModel.groupsReceived(groups);
+	}
 //	SERVICES_INSTANCE_RECEIVED", nil, @{@"instance":instance});
 //	SERVICES_INSTANCES_RECEIVED", nil, @{@"instances":instances});
 	public void services_instances_received(List<Instance> instances) {

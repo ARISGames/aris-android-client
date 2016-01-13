@@ -582,8 +582,10 @@ public class Game {
 	}
 
 	public boolean allPlayerDataReceived() {
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " PLAYERDATALOAD  - - - - - - - - allPlayerDataReceived()");
 		for (ARISModel model : models)
 			if (!model.playerDataReceived()) return false;
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " PLAYERDATALOAD  - - - - - - - - allPlayerDataReceived() PASSED PASSED PASSED");
 		return true;
 	}
 

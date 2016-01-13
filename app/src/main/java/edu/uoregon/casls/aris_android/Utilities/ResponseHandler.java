@@ -146,17 +146,19 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_factories_received(factories);
 				}
 			}
+			/* parsePlayerGroup */
 			else if (callingReq.equals(Calls.HTTP_GET_GROUP_4_PLAYER)) {
 				if (jsonReturn.has("data")) {
-					JSONArray jsonData = jsonReturn.getJSONArray("data");
-					Gson gson = new Gson();
-					List<Group> groups = new ArrayList<>();
-					for (int i = 0; i < jsonData.length(); i++) {
-						String dataStr = jsonData.getJSONObject(i).toString();
-						Group group = gson.fromJson(dataStr, Group.class);
-						groups.add(group);
+					Group group = new Group();
+					if (!jsonReturn.isNull("data")) {
+						JSONObject jsonData = jsonReturn.getJSONObject("data");
+						group = new Gson().fromJson(jsonData.toString(), Group.class);
 					}
-					mGamePlayAct.mGame.groupsModel.groupsReceived(groups);
+					else
+						group.init(); // set attribs to empty values
+
+					mGamePlayAct.mDispatch.services_player_group_received(group);
+//					mGamePlayAct.mGame.groupsModel.groupsReceived(group);
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_GROUPS_4_GAME)) {
@@ -169,7 +171,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 						Group group = gson.fromJson(dataStr, Group.class);
 						groups.add(group);
 					}
-					mGamePlayAct.mGame.groupsModel.groupsReceived(groups);
+					mGamePlayAct.mDispatch.services_groups_received(groups);
 				}
 			}
 			else if (callingReq.equals(Calls.HTTP_GET_INSTANCES_4_GAME)) {
@@ -420,6 +422,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_requirement_root_packages_received(reqRoots);
 				}
 			}
+			/* parsePlayerScene */
 			else if (callingReq.equals(Calls.HTTP_GET_SCENE_4_PLAYER)) {
 				if (jsonReturn.has("data")) {
 					JSONObject jsonData = jsonReturn.getJSONObject("data");
