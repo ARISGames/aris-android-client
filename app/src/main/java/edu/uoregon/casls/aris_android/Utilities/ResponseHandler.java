@@ -61,7 +61,8 @@ public class ResponseHandler { // for now only handles responses with respect to
 	
 	public void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) throws JSONException {
 		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Server response to Req: " + callingReq + "; data: " + jsonReturn.toString());
-		if (jsonReturn.has("returnCode") && jsonReturn.getLong("returnCode") == 0) {
+		if ((jsonReturn.has("returnCode") && jsonReturn.getLong("returnCode") == 0) && !jsonReturn.has("faultCode")) {
+			/* parseDialogCharacters */
 			if (callingReq.equals(Calls.HTTP_GET_DIALOG_CHARS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -76,6 +77,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_dialog_characters_received(dialogCharacters); // _ARIS_NOTIF_SEND_(@"SERVICES_DIALOG_CHARACTERS_RECEIVED", nil, @{@"dialogCharacters":dialogCharacters});
 				}
 			}
+			/* parseDialogScripts */
 			else if (callingReq.equals(Calls.HTTP_GET_DIALOG_SCRIPTS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -90,6 +92,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_dialog_scipts_received(dialogScripts); // _ARIS_NOTIF_SEND_(@"SERVICES_DIALOG_SCRIPTS_RECEIVED", nil, @{@"dialogScripts":dialogScripts});
 				}
 			}
+			/* parseDialogOptions */
 			else if (callingReq.equals(Calls.HTTP_GET_DIALOG_OPTNS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -104,6 +107,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_dialog_options_received(dialogOptions);
 				}
 			}
+			/* parseDialogs */
 			else if (callingReq.equals(Calls.HTTP_GET_DIALOGS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -118,6 +122,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_dialog_received(dialogs); //_ARIS_NOTIF_SEND_(@"SERVICES_DIALOGS_RECEIVED", nil, @{@"dialogs":dialogs});
 				}
 			}
+			/* parseEvents */
 			else if (callingReq.equals(Calls.HTTP_GET_EVENTS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -132,6 +137,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_events_received(events);
 				}
 			}
+			/* parseFactories */
 			else if (callingReq.equals(Calls.HTTP_GET_FACTORIES_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -149,18 +155,19 @@ public class ResponseHandler { // for now only handles responses with respect to
 			/* parsePlayerGroup */
 			else if (callingReq.equals(Calls.HTTP_GET_GROUP_4_PLAYER)) {
 				if (jsonReturn.has("data")) {
-					Group group = new Group();
+					Group group;
 					if (!jsonReturn.isNull("data")) {
 						JSONObject jsonData = jsonReturn.getJSONObject("data");
 						group = new Gson().fromJson(jsonData.toString(), Group.class);
 					}
 					else
-						group.init(); // set attribs to empty values
+						group = new Group(); // set attribs to empty values
 
 					mGamePlayAct.mDispatch.services_player_group_received(group);
 //					mGamePlayAct.mGame.groupsModel.groupsReceived(group);
 				}
 			}
+			/* parseGroups */
 			else if (callingReq.equals(Calls.HTTP_GET_GROUPS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -174,6 +181,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_groups_received(groups);
 				}
 			}
+			/* parseInstances */
 			else if (callingReq.equals(Calls.HTTP_GET_INSTANCES_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -188,6 +196,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_instances_received(instances);
 				}
 			}
+			/* parsePlayerInstances */
 			else if (callingReq.equals(Calls.HTTP_GET_INSTANCES_4_PLAYER)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -202,6 +211,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_player_instances_received(instances);
 				}
 			}
+			/* parseItems */
 			else if (callingReq.equals(Calls.HTTP_GET_ITEMS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -215,6 +225,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mGame.itemsModel.itemsReceived(newItems);
 				}
 			}
+			/* parsePlayerLogs */
 			else if (callingReq.equals(Calls.HTTP_GET_LOGS_4_PLAYER)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -228,6 +239,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_player_logs_received(newLogs); //_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_LOGS_RECEIVED", nil, @{@"logs":logs});
 				}
 			}
+			/* parseMedia */
 			else if (callingReq.equals(Calls.HTTP_GET_MEDIA)) {
 				if (jsonReturn.has("data")) {
 					JSONObject jsonData = jsonReturn.getJSONObject("data");
@@ -239,6 +251,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_media_received(rawMediaArr); //_ARIS_NOTIF_SEND_(@"SERVICES_MEDIA_RECEIVED", nil, @{@"media":mediaDict}); // fakes an entire list and does same as fetching all media
 				}
 			}
+			/* parseMedias */
 			else if (callingReq.equals(Calls.HTTP_GET_MEDIA_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -254,6 +267,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_medias_received(rawMediaArr); // _ARIS_NOTIF_SEND_(@"SERVICES_MEDIAS_RECEIVED", nil, @{@"medias":mediaDicts}); // fakes an entire list and does same as fetching all media
 				}
 			}
+			/* parseNoteComments */
 			else if (callingReq.equals(Calls.HTTP_GET_NOTE_COMMNTS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -268,6 +282,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_note_comments_received(noteComments);
 				}
 			}
+			/* parseNotes */
 			else if (callingReq.equals(Calls.HTTP_GET_NOTES_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -282,6 +297,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_notes_received(notes);
 				}
 			}
+			/* parseObjectTags */
 			else if (callingReq.equals(Calls.HTTP_GET_OBJ_TAGS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -296,6 +312,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_object_tags_received(objectTags);
 				}
 			}
+			/* parseOverlays */
 			else if (callingReq.equals(Calls.HTTP_GET_OVERLAYS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -310,6 +327,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_overlays_received(overlays);
 				}
 			}
+			/* parsePlayerOverlays */
 			else if (callingReq.equals(Calls.HTTP_GET_OVERLAYS_4_PLAYER)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -324,6 +342,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_player_overlays_received(overlays); //_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_OVERLAYS_RECEIVED", nil, @{@"overlays":overlays});
 				}
 			}
+			/* parsePlaques */
 			else if (callingReq.equals(Calls.HTTP_GET_PLAQUES_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -339,6 +358,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mGame.plaquesModel.plaquesReceived(plaques);
 				}
 			}
+			/* parseQuests */
 			else if (callingReq.equals(Calls.HTTP_GET_QUESTS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -353,6 +373,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_quests_received(quests);
 				}
 			}
+			/* parsePlayerQuests */
 			else if (callingReq.equals(Calls.HTTP_GET_QUESTS_4_PLAYER)) {
 				if (jsonReturn.has("data")) {
 					JSONObject jsonData = jsonReturn.getJSONObject("data");
@@ -380,6 +401,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_player_quests_received(playerQuests);
 				}
 			}
+			/* parseRequirementAndPackages */
 			else if (callingReq.equals(Calls.HTTP_GET_REQ_AND_PKGS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -394,6 +416,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_requirement_and_packages_received(reqAnds);
 				}
 			}
+			/* parseRequirementAtoms */
 			else if (callingReq.equals(Calls.HTTP_GET_REQ_ATOMS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -408,6 +431,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_requirement_atoms_received(reqAtoms);
 				}
 			}
+			/* parseRequirementRootPackages */
 			else if (callingReq.equals(Calls.HTTP_GET_REQ_ROOT_PKGS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -435,6 +459,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_player_scene_received(s);  //_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_SCENE_RECEIVED", nil, @{@"scene":s});
 				}
 			}
+			/* parseScenes */
 			else if (callingReq.contentEquals(Calls.HTTP_GET_SCENES_4_GAME)) { // parse array of returns scenes
 				// Response looks like this:
 				// {"data":[{"scene_id":"98","game_id":"78","name":"James J Hill","description":"","editor_x":"0","editor_y":"0"}],"returnCode":0,"returnCodeDescription":null}
@@ -456,6 +481,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					e.printStackTrace();
 				}
 			}
+			/* parseTabs */
 			else if (callingReq.equals(Calls.HTTP_GET_TABS_4_GAME)) { // returns array of teh items for the game mode drawer
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -470,6 +496,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_tabs_received(tabs);
 				}
 			}
+			/* parsePlayerTabs */
 			else if (callingReq.equals(Calls.HTTP_GET_TABS_4_PLAYER)) { // returns array of teh items for the game mode drawer
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -484,6 +511,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_player_tabs_received(tabs); // SERVICES_PLAYER_TABS_RECEIVED
 				}
 			}
+			/* parseTags */
 			else if (callingReq.equals(Calls.HTTP_GET_TAGS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -498,6 +526,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_tags_received(tags);
 				}
 			}
+			/* parseTriggers */
 			else if (callingReq.equals(Calls.HTTP_GET_TRIGGERS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -512,6 +541,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_triggers_received(triggers);
 				}
 			}
+			/* parsePlayerTriggers */
 			else if (callingReq.equals(Calls.HTTP_GET_TRIGGERS_4_PLAYER)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -526,6 +556,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_player_triggers_received(triggers);
 				}
 			}
+			/* parseUsers */
 			else if (callingReq.equals(Calls.HTTP_GET_USERS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -540,6 +571,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 
 				}
 			}
+			/* parseWebPages */
 			else if (callingReq.equals(Calls.HTTP_GET_WEB_PAGES_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -558,18 +590,23 @@ public class ResponseHandler { // for now only handles responses with respect to
 			/******
 			* TOUCH Calls
 			*******/
+			/* parseGameItemTouch */
 			else if (callingReq.equals(Calls.HTTP_TOUCH_ITEMS_4_GAME)) {
 				mGamePlayAct.mDispatch.services_game_instances_touched(); //_ARIS_NOTIF_SEND_(@"SERVICES_GAME_INSTANCES_TOUCHED", nil, nil);
 			}
+			/* parseGroupItemTouch */
 			else if (callingReq.equals(Calls.HTTP_TOUCH_ITEMS_4_GROUPS)) {
 				mGamePlayAct.mDispatch.services_group_instances_touched(); //_ARIS_NOTIF_SEND_(@"SERVICES_GROUP_INSTANCES_TOUCHED", nil, nil);
 			}
+			/* parsePlayerItemTouch */
 			else if (callingReq.equals(Calls.HTTP_TOUCH_ITEMS_4_PLAYER)) {
 				mGamePlayAct.mDispatch.services_player_instances_touched(); //_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_INSTANCES_TOUCHED", nil, nil);
 			}
+			/* parseGroupTouch */
 			else if (callingReq.equals(Calls.HTTP_TOUCH_GROUP_4_PLAYER)) {
 				mGamePlayAct.mDispatch.services_group_touched(); //_ARIS_NOTIF_SEND_(@"SERVICES_GROUP_TOUCHED", nil, nil);
 			}
+			/* parseSceneTouch */
 			else if (callingReq.equals(Calls.HTTP_TOUCH_SCENE_4_PLAYER)) {
 				mGamePlayAct.mDispatch.services_scene_touched(); //_ARIS_NOTIF_SEND_(@"SERVICES_SCENE_TOUCHED", nil, nil);
 			}
@@ -587,10 +624,35 @@ public class ResponseHandler { // for now only handles responses with respect to
 
 			}
 		}
-		else { // server denial. Probably need to alert user (?)
-			Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "Server request " + callingReq + " failed; server returned code: " + jsonReturn.getLong("returnCode")
-					+ "\nPlayer Id: " + mGamePlayAct.mPlayer.user_id
-					+ "\nGame Id: " + mGamePlayAct.mGame.game_id);
+		else { // server denial. Game probably incomplete, possibly unplayable. If the game/player/main counting logic works, the game shouldn't start anyway.
+			// todo: Probably need to alert user;
+			int returnCode = 0;
+			String faultString = "Fault Not Specified by ARIS server.";
+			String faultDetail = "Details Not Specified by ARIS server.";
+			String faultCode = "Code Not Specified by ARIS server.";
+			// why did we fail?
+			if (jsonReturn.has("returnCode") && !jsonReturn.isNull("returnCode")) { // General HTTP failure.
+				returnCode = jsonReturn.getInt("returnCode");
+				Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + " - Server request " + callingReq + " failed; server returned code: " + returnCode);
+			}
+			else { // ARIS server took issue with the API requested.
+				if (jsonReturn.has("faultString") && !jsonReturn.isNull("faultString")) {
+					faultString = jsonReturn.getString("faultString");
+				}
+				if (jsonReturn.has("faultDetail") && !jsonReturn.isNull("faultDetail")) {
+					faultDetail = jsonReturn.getString("faultDetail");
+				}
+				if (jsonReturn.has("faultCode") && !jsonReturn.isNull("faultCode")) {
+					faultCode = jsonReturn.getString("faultCode");
+				}
+
+				Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + " - Server request " + callingReq + " failed; "
+						+ "\nFault Message: " + faultString
+						+ "\nFault Detail: " + faultDetail
+						+ "\nFault Code: " + faultCode
+						+ "\nPlayer Id: " + mGamePlayAct.mPlayer.user_id
+						+ "\nGame Id: " + mGamePlayAct.mGame.game_id);
+			}
 		}
 	}
 
