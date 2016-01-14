@@ -100,4 +100,10 @@ public class GamesModel {
 		return mergedNewGames;
 	}
 
+	/*
+	* Note: the following methods, or at least their respective behaviours all get handled in the GamesListActivity
+	* pingPopularGames, pingRecentGames, pingSearchGames, pingMineGames and their related data getters
+	*
+	* pingDownloadedGames is not yet implemented and will get addressed when offline games functionality is added.
+	*/
 }

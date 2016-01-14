@@ -578,7 +578,7 @@ public class Dispatcher {
 		mGamePlayAct.mGame.overlaysModel.playerOverlaysReceived(overlays);
 	}
 
-	// fixme: implement the following. Should happen after parse PlayerPlayedGame()
+	// fixme: implement the following. Should happen after parsePlayerPlayedGame()
 	//	SERVICES_PLAYER_PLAYED_GAME_RECEIVED", nil, (NSDictionary *)result.resultData);
 //	SERVICES_PLAYER_QUESTS_RECEIVED", nil, quests);
 	public void services_player_quests_received(Map<String, List<Quest>> pquests) {
