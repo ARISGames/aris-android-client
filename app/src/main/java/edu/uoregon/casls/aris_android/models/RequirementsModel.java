@@ -147,85 +147,89 @@ public class RequirementsModel extends ARISModel {
 		return true;
 	}
 
+	/* Note: because we're having to use a long in place of an ordinary boolean for the bool_operator
+	*        the logical comparisons are abstracted with inline long value comparisons.
+	*        e.g. ([logical expression] ? 1 : 0)
+	*/
 	public boolean evaluateRequirementAtom(long requirement_atom_id) {
 		if (requirement_atom_id == 0) return true;
 		RequirementAtom a = this.requirementAtomForId(requirement_atom_id);
 		if (a.requirement_atom_id == 0) return true; //'null' req atom
 
 		if (a.requirement.contentEquals("ALWAYS_TRUE")) {
-			return a.bool_operator == true;
+			return a.bool_operator == 1;
 		}
 		if (a.requirement.contentEquals("ALWAYS_FALSE")) {
-			return a.bool_operator == false;
+			return a.bool_operator == 0;
 		}
 		if (a.requirement.contentEquals("PLAYER_HAS_ITEM")) {
-			return a.bool_operator == (mGame.playerInstancesModel.qtyOwnedForItem(a.content_id) >= a.qty); //_MODEL_PLAYER_INSTANCES_ qtyOwnedForItem:a.content_id >= a.qty);
+			return a.bool_operator == ((mGame.playerInstancesModel.qtyOwnedForItem(a.content_id) >= a.qty) ? 1 : 0); //_MODEL_PLAYER_INSTANCES_ qtyOwnedForItem:a.content_id >= a.qty);
 		}
 		if (a.requirement.contentEquals("PLAYER_HAS_TAGGED_ITEM")) {
-			return a.bool_operator == (mGame.playerInstancesModel.qtyOwnedForTag(a.content_id) >= a.qty);
+			return a.bool_operator == ((mGame.playerInstancesModel.qtyOwnedForTag(a.content_id) >= a.qty) ? 1 : 0);
 		}
 		if (a.requirement.contentEquals("GAME_HAS_ITEM")) {
-			return a.bool_operator == (mGame.gameInstancesModel.qtyOwnedForItem(a.content_id) >= a.qty); // _MODEL_GAME_INSTANCES_ qtyOwnedForItem:a.content_id >= a.qty);
+			return a.bool_operator == ((mGame.gameInstancesModel.qtyOwnedForItem(a.content_id) >= a.qty) ? 1 : 0); // _MODEL_GAME_INSTANCES_ qtyOwnedForItem:a.content_id >= a.qty);
 		}
 		if (a.requirement.contentEquals("GAME_HAS_TAGGED_ITEM")) {
-			return a.bool_operator == (mGame.gameInstancesModel.qtyOwnedForTag(a.content_id) >= a.qty);
+			return a.bool_operator == ((mGame.gameInstancesModel.qtyOwnedForTag(a.content_id) >= a.qty) ? 1 : 0);
 		}
 		if (a.requirement.contentEquals("GROUP_HAS_ITEM")) {
-			return a.bool_operator == (mGame.groupInstancesModel.qtyOwnedForItem(a.content_id) >= a.qty);
+			return a.bool_operator == ((mGame.groupInstancesModel.qtyOwnedForItem(a.content_id) >= a.qty) ? 1 : 0);
 		}
 		if (a.requirement.contentEquals("GROUP_HAS_TAGGED_ITEM")) {
-			return a.bool_operator == (mGame.groupInstancesModel.qtyOwnedForTag(a.content_id) >= a.qty);
+			return a.bool_operator == ((mGame.groupInstancesModel.qtyOwnedForTag(a.content_id) >= a.qty) ? 1 : 0);
 		}
 		if (a.requirement.contentEquals("PLAYER_VIEWED_ITEM")) {
-			return a.bool_operator == mGame.logsModel.hasLogType("VIEW_ITEM", a.content_id);
+			return a.bool_operator == (mGame.logsModel.hasLogType("VIEW_ITEM", a.content_id) ? 1 : 0);
 		}
 		if (a.requirement.contentEquals("PLAYER_VIEWED_PLAQUE")) {
-			return a.bool_operator == mGame.logsModel.hasLogType("VIEW_PLAQUE", a.content_id);
+			return a.bool_operator == (mGame.logsModel.hasLogType("VIEW_PLAQUE", a.content_id) ? 1 : 0);
 		}
 		if (a.requirement.contentEquals("PLAYER_VIEWED_DIALOG")) {
-			return a.bool_operator == mGame.logsModel.hasLogType("VIEW_DIALOG", a.content_id);
+			return a.bool_operator == (mGame.logsModel.hasLogType("VIEW_DIALOG", a.content_id) ? 1 : 0);
 		}
 		if (a.requirement.contentEquals("PLAYER_VIEWED_DIALOG_SCRIPT")) {
-			return a.bool_operator == mGame.logsModel.hasLogType("VIEW_DIALOG_SCRIPT", a.content_id);
+			return a.bool_operator == (mGame.logsModel.hasLogType("VIEW_DIALOG_SCRIPT", a.content_id) ? 1 : 0);
 		}
 		if (a.requirement.contentEquals("PLAYER_VIEWED_WEB_PAGE")) {
-			return a.bool_operator == mGame.logsModel.hasLogType("VIEW_WEB_PAGE", a.content_id);
+			return a.bool_operator == (mGame.logsModel.hasLogType("VIEW_WEB_PAGE", a.content_id) ? 1 : 0);
 		}
 		if (a.requirement.contentEquals("PLAYER_RAN_EVENT_PACKAGE")) {
-			return a.bool_operator == mGame.logsModel.hasLogType("RUN_EVENT_PACKAGE", a.content_id);
+			return a.bool_operator == (mGame.logsModel.hasLogType("RUN_EVENT_PACKAGE", a.content_id) ? 1 : 0);
 		}
 		if (a.requirement.contentEquals("PLAYER_HAS_UPLOADED_MEDIA_ITEM")) {
-			return a.bool_operator == false;
+			return a.bool_operator == 0;
 		}
 		if (a.requirement.contentEquals("PLAYER_HAS_UPLOADED_MEDIA_ITEM_IMAGE")) {
-			return a.bool_operator == false;
+			return a.bool_operator == 0;
 		}
 		if (a.requirement.contentEquals("PLAYER_HAS_UPLOADED_MEDIA_ITEM_AUDIO")) {
-			return a.bool_operator == false;
+			return a.bool_operator == 0;
 		}
 		if (a.requirement.contentEquals("PLAYER_HAS_UPLOADED_MEDIA_ITEM_VIDEO")) {
-			return a.bool_operator == false;
+			return a.bool_operator == 0;
 		}
 		if (a.requirement.contentEquals("PLAYER_HAS_COMPLETED_QUEST")) {
-			return a.bool_operator == mGame.logsModel.hasLogType("COMPLETE_QUEST", a.content_id);
+			return a.bool_operator == (mGame.logsModel.hasLogType("COMPLETE_QUEST", a.content_id) ? 1 : 0);
 		}
 		if (a.requirement.contentEquals("PLAYER_HAS_RECEIVED_INCOMING_WEB_HOOK")) {
-			return a.bool_operator == false;
+			return a.bool_operator == 0;
 		}
-		if (a.requirement.contentEquals("PLAYER_HAS_falseTE")) {
-			return a.bool_operator == false;
+		if (a.requirement.contentEquals("PLAYER_HAS_NOTE")) {
+			return a.bool_operator == 0;
 		}
-		if (a.requirement.contentEquals("PLAYER_HAS_falseTE_WITH_TAG")) {
-			return a.bool_operator == false;
+		if (a.requirement.contentEquals("PLAYER_HAS_NOTE_WITH_TAG")) {
+			return a.bool_operator == 0;
 		}
-		if (a.requirement.contentEquals("PLAYER_HAS_falseTE_WITH_LIKES")) {
-			return a.bool_operator == false;
+		if (a.requirement.contentEquals("PLAYER_HAS_NOTE_WITH_LIKES")) {
+			return a.bool_operator == 0;
 		}
-		if (a.requirement.contentEquals("PLAYER_HAS_falseTE_WITH_COMMENTS")) {
-			return a.bool_operator == false;
+		if (a.requirement.contentEquals("PLAYER_HAS_NOTE_WITH_COMMENTS")) {
+			return a.bool_operator == 0;
 		}
-		if (a.requirement.contentEquals("PLAYER_HAS_GIVEN_falseTE_COMMENTS")) {
-			return a.bool_operator == false;
+		if (a.requirement.contentEquals("PLAYER_HAS_GIVEN_NOTE_COMMENTS")) {
+			return a.bool_operator == 0;
 		}
 
 		return true;
@@ -266,7 +270,7 @@ public class RequirementsModel extends ARISModel {
 	public void logRequirementAtom(long requirement_atom_id) {
 		Log.i(AppConfig.LOGTAG, getClass().getSimpleName() + "    Atom: " + requirement_atom_id);
 		RequirementAtom a = this.requirementAtomForId(requirement_atom_id);
-		if (a.bool_operator)
+		if (a.bool_operator == 1)
 			Log.i(AppConfig.LOGTAG, getClass().getSimpleName() + "      Req: " + a.requirement + " " + a.content_id);//_ARIS_LOG_(@"      Req: %@ %ld",a.requirement,a.content_id);
 		else
 			Log.i(AppConfig.LOGTAG, getClass().getSimpleName() + "      Req: Not " + a.requirement + " " + a.content_id);//_ARIS_LOG_(@"      Req: Not %@ %ld",a.requirement,a.content_id);

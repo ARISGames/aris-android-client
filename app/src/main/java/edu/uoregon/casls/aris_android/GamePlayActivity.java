@@ -261,7 +261,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			this.storeGame(); //we loaded fresh, so can store player data
 
 		boolean debugThis = true; // dev debugging
-		if (debugThis) checkGameFile(); // dev debugging delete after code is working.
+		if (debugThis) checkGameFile(); // dev debugging delete or disable after code is working.
 
 		mGame.logsModel.playerEnteredGame(); //		[_MODEL_LOGS_ playerEnteredGame];
 		mDispatch.game_began(); // calls mGame.gameBegan() and mGamePlayAct.gameBegan()

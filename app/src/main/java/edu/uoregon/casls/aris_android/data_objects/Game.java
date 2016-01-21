@@ -73,6 +73,8 @@ public class Game {
 	public int published; // boolean as int
 	public String   type     = "";
 	public Location location = new Location("0"); // from iOS; not used?
+	public float    latitude      = 0.0f;
+	public float    longitude     = 0.0f;
 	public long player_count;
 
 	public Media icon_media;
@@ -88,6 +90,8 @@ public class Game {
 	public String   map_type     = "";
 	public String   map_focus    = "";
 	public Location map_location = new Location("0");
+	public float    map_latitude      = 0.0f;
+	public float    map_longitude     = 0.0f;
 	public double map_zoom_level;
 
 	// booleans as ints to conform to json from ARIS server
@@ -106,7 +110,7 @@ public class Game {
 	public int    preload_media; // boolean as int
 	public long   version;
 
-	public List<ARISModel> models = new ArrayList<>(); // List of all the models below for iteration convenience
+	public transient List<ARISModel> models = new ArrayList<>(); // List of all the models below for iteration convenience
 
 	// Game subcomponent classes
 	public ScenesModel          scenesModel;
@@ -171,6 +175,12 @@ public class Game {
 	}
 
 	private void initialize() {
+		// deserialize geocoords from discrete values.
+		location.setLatitude(latitude);
+		location.setLongitude(longitude);
+		map_location.setLatitude(map_latitude);
+		map_location.setLongitude(map_longitude);
+
 		n_game_data_received = 0;
 		n_player_data_received = 0;
 
@@ -552,7 +562,6 @@ public class Game {
 		listen_player_piece_available = 0;        // _ARIS_NOTIF_IGNORE_(@"PLAYER_PIECE_AVAILABLE", self, null);
 		listen_maintenance_piece_available = 0;    // _ARIS_NOTIF_IGNORE_(@"MAINTENANCE_PIECE_AVAILABLE", self, nil);
 		listen_media_piece_available = 0;        // _ARIS_NOTIF_IGNORE_(@"MEDIA_PIECE_AVAILABLE", self, nil);
-//		todo: build poller!
 //		poller = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(requestPlayerData) userInfo:null repeats:true];
 		this.startPollTimer();
 	}

@@ -1,17 +1,15 @@
 package edu.uoregon.casls.aris_android.data_objects;
 
-import edu.uoregon.casls.aris_android.Utilities.AppConfig;
-
 /**
  * Created by smorison on 8/19/15.
  */
 public class Dialog {
-	public long    dialog_id              = 0;
+	public long   dialog_id              = 0;
 	public String name                   = "Dialog";
 	public String desc                   = "";
-	public long    icon_media_id          = 0;
-	public long    intro_dialog_script_id = 0;
-	public long    back_button_enabled    = 1;
+	public long   icon_media_id          = 0;
+	public long   intro_dialog_script_id = 0;
+	public long   back_button_enabled    = 1; // Boolean as long
 
 	public Dialog copy() {
 		Dialog c = new Dialog();

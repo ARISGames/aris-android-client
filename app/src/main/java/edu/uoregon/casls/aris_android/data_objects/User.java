@@ -10,17 +10,21 @@ import org.json.JSONObject;
  */
 public class User {
 
-	public String user_id = "0";      // is Long in iOS, but never really used in as a long
+	public String user_id   = "0";      // is Long in iOS, but never really used in as a long
 	public String user_name = "Unknown Player";
 	public String password;
-	public String display_name = "Unknown Player";
-	public String email = "";
-	public String media_id = "0";     // is Long in iOS, but never really used in as a long
-	public String read_write_key = "";
-	public Location location = new Location("0");
+	public String   display_name   = "Unknown Player";
+	public String   email          = "";
+	public String   media_id       = "0";     // is Long in iOS, but never really used in as a long
+	public String   read_write_key = "";
+	public Location location       = new Location("0");
+	public float    latitude      = 0.0f;
+	public float    longitude     = 0.0f;
 
 	public User() {
-		// empty constructor
+		// deserialize geocoords from discrete values.
+		location.setLatitude(latitude);
+		location.setLongitude(longitude);
 	}
 
 	// Construct with json string encoded user data.
@@ -37,7 +41,7 @@ public class User {
 		initWithJson(jsonNewUser);
 	}
 
-	public void initWithJson (JSONObject jsonUser) throws JSONException {
+	public void initWithJson(JSONObject jsonUser) throws JSONException {
 		// Ex Author Json: "authors":[{"user_id":"1","user_name":"scott","display_name":"scott","media_id":"0"}]
 		if (jsonUser.has("user_id") /*&& !jsonUser.getString("user_id").contentEquals("null")*/)
 			user_id = jsonUser.getString("user_id");
@@ -63,7 +67,7 @@ public class User {
 	}
 
 	// class specific conversion to json string for stashing into appPrefs or intent bundles.
-	public String toJsonStr () {
+	public String toJsonStr() {
 		JSONObject jsonUser = new JSONObject();
 		try {
 			jsonUser.put("user_id", user_id);

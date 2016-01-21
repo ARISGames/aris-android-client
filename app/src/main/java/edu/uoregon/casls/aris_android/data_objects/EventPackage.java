@@ -5,7 +5,7 @@ package edu.uoregon.casls.aris_android.data_objects;
  */
 public class EventPackage {
 
-	public long event_package_id;
+	public long event_package_id = 0;
 	public String name = ""; // dummy var to placate Instance.name() function - Android only
 	public long icon_media_id = 0; // dummy var to placate Instance.icon_media_id() function - Android only
 

@@ -24,6 +24,7 @@ public class Media {
 
 	public MediaCD mediaCD;
 
+	// no default values assigned. from iOS: "SHOULDNT MANUALLY INIT MEDIA- get it from mediaModel"
 	public long   media_id;
 	public long   game_id;
 	public long   user_id; //??

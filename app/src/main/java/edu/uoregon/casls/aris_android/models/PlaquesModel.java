@@ -12,7 +12,7 @@ import edu.uoregon.casls.aris_android.data_objects.Plaque;
  */
 public class PlaquesModel extends ARISModel {
 
-	public Map<Integer, Plaque> plaques = new LinkedHashMap<>();
+	public Map<Long, Plaque> plaques = new LinkedHashMap<>();
 	public transient GamePlayActivity mGamePlayAct;
 
 	public void initContext(GamePlayActivity gamePlayAct) {
@@ -33,7 +33,7 @@ public class PlaquesModel extends ARISModel {
 	}
 
 	private void updatePlaques(List<Plaque> newPlaques) {
-		Integer newPlaqueId;
+		long newPlaqueId;
 		for (Plaque newPlaque : newPlaques) {
 			newPlaqueId = newPlaque.plaque_id;
 			if (!plaques.containsKey(newPlaqueId)) plaques.put(newPlaqueId, newPlaque);

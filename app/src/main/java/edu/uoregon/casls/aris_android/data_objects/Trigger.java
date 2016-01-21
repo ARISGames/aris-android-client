@@ -6,45 +6,34 @@ import android.location.Location;
  * Created by smorison on 8/19/15.
  */
 public class Trigger {
-	public long trigger_id;
-	public long requirement_root_package_id;
-	public long instance_id;
-	public long scene_id;
-	public String type;
-	public String name;
-	public String title;
-	public long icon_media_id;
-	public Location location;
-	public long distance;
-	public int infinite_distance;
-	public int wiggle;
-	public int show_title;
-	public int hidden;
-	public int trigger_on_enter;
-	public String qr_code;
-	public long seconds;
-	public long time_left;
+	public long     trigger_id    = 0;
+	public long     instance_id   = 0;
+	public long     scene_id      = 0;
+	public String   type          = "IMMEDIATE";
+	public String   name          = "";
+	public String   title         = "";
+	public long     icon_media_id = 0;
+	public Location location      = new Location("0");
+	public float    latitude      = 0.0f;
+	public float    longitude     = 0.0f;
+	public long     distance      = 10;
+	public String   qr_code       = "";
+	public long     seconds       = 0;
+	public long     time_left     = 0;
+
+	public long requirement_root_package_id = 0;
+
+	//Booleans (as longs for ARIS server json conformance)
+	public long infinite_distance = 0; // Boolean as long
+	public long wiggle            = 0; // Boolean as long
+	public long show_title        = 0; // Boolean as long
+	public long hidden            = 0; // Boolean as long
+	public long trigger_on_enter  = 0; // Boolean as long
 
 	public Trigger() {
-		trigger_id = 0;
-		requirement_root_package_id = 0;
-		instance_id = 0;
-		scene_id = 0;
-		type = "IMMEDIATE";
-		name = "";
-		title = "";
-		icon_media_id = 0;
-		location = new Location("0");
-		distance = 10;
-		infinite_distance = 0;
-		wiggle = 0;
-		show_title = 0;
-		hidden = 0;
-		trigger_on_enter = 0;
-		qr_code = "";
-		seconds = 0;
-		time_left = 0;
-
+		// deserialize geocoords from discrete values.
+		location.setLatitude(latitude);
+		location.setLongitude(longitude);
 	}
 
 	public Boolean mergeDataFromTrigger(Trigger t) //returns whether or not an update occurred
@@ -59,6 +48,8 @@ public class Trigger {
 		title = t.title;
 		icon_media_id = t.icon_media_id;
 		location = t.location;
+		latitude = t.latitude;
+		longitude = t.longitude;
 		distance = t.distance;
 		infinite_distance = t.infinite_distance;
 		wiggle = t.wiggle;
