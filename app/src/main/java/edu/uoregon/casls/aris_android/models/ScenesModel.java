@@ -39,6 +39,9 @@ public class ScenesModel extends ARISModel {
 
 	public void setPlayerScene(Scene s) {
 		playerScene = s;
+		mGamePlayAct.mGame.logsModel.playerChangedSceneId(s.scene_id); // [_MODEL_LOGS_ playerChangedSceneId:s.scene_id];
+		if (!mGamePlayAct.mGame.network_level.contentEquals("LOCAL")) //if(![_MODEL_GAME_.network_level isEqualToString:@"LOCAL"])
+			mGamePlayAct.mAppServices.setPlayerSceneId(s.scene_id); //[_SERVICES_ setPlayerSceneId:s.scene_id];
 		mGamePlayAct.mDispatch.model_scenes_player_scene_available(); // _ARIS_NOTIF_SEND_(@"MODEL_SCENES_PLAYER_SCENE_AVAILABLE",nil,nil); // for reference; iOS messages
 	}
 

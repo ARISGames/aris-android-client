@@ -117,63 +117,224 @@ public class AppServices {
 	}
 
 	public void logPlayerEnteredGame() {
+		pollServer(Calls.HTTP_LOG_PLAYER_BEGAN_GAME, jsonGameId());
+	}
 
+	public void logPlayerResetGame() { // handled in GameCoverPageActivity() in Android; just here for consistency
+		pollServer(Calls.HTTP_LOG_PLAYER_RESET_GAME, jsonGameId());
 	}
 
 	public void logPlayerMoved() {
+		JSONObject jsonArgs = jsonGameId();
+		// add to params
+		try {
+			jsonArgs.put("latitude", mGamePlayAct.mPlayer.latitude);
+			jsonArgs.put("longitude", mGamePlayAct.mPlayer.longitude);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_LOG_PLAYER_MOVED, jsonArgs);
 
 	}
 
 	public void logPlayerViewedTabId(long tab_id) {
-
+		JSONObject jsonArgs = jsonGameId();
+		// add to params
+		try {
+			jsonArgs.put("tab_id", tab_id);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_LOG_PLAYER_MOVED, jsonArgs);
 	}
 
 	public void logPlayerViewedPlaqueId(long content_id) {
+		JSONObject jsonArgs = jsonGameId();
+		// add to params
+		try {
+			jsonArgs.put("content_type", "PLAQUE");  //    @"content_type":@"PLAQUE",
+			jsonArgs.put("content_id", content_id); // @"content_id":[NSNumber numberWithLong:plaque_id]
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_LOG_PLAYER_VIEWED_CONTENT, jsonArgs);
 	}
 
 	public void logPlayerViewedItemId(long content_id) {
+		JSONObject jsonArgs = jsonGameId();
+		// add to params
+		try {
+			jsonArgs.put("content_type", "ITEM");  //
+			jsonArgs.put("content_id", content_id); // @"content_id":[NSNumber numberWithLong:plaque_id]
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_LOG_PLAYER_VIEWED_CONTENT, jsonArgs);
 	}
 
 	public void logPlayerViewedDialogId(long content_id) {
+		JSONObject jsonArgs = jsonGameId();
+		// add to params
+		try {
+			jsonArgs.put("content_type", "DIALOG");  //
+			jsonArgs.put("content_id", content_id); // @"content_id":[NSNumber numberWithLong:plaque_id]
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_LOG_PLAYER_VIEWED_CONTENT, jsonArgs);
 	}
 
 	public void logPlayerViewedDialogScriptId(long content_id) {
+		JSONObject jsonArgs = jsonGameId();
+		// add to params
+		try {
+			jsonArgs.put("content_type", "DIALOG_SCRIPT");  //
+			jsonArgs.put("content_id", content_id); // @"content_id":[NSNumber numberWithLong:plaque_id]
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_LOG_PLAYER_VIEWED_CONTENT, jsonArgs);
 	}
 
 	public void logPlayerViewedWebPageId(long content_id) {
+		JSONObject jsonArgs = jsonGameId();
+		// add to params
+		try {
+			jsonArgs.put("content_type", "WEB_PAGE");  //
+			jsonArgs.put("content_id", content_id); // @"content_id":[NSNumber numberWithLong:plaque_id]
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_LOG_PLAYER_VIEWED_CONTENT, jsonArgs);
 	}
 
 	public void logPlayerViewedNoteId(long content_id) {
+		JSONObject jsonArgs = jsonGameId();
+		// add to params
+		try {
+			jsonArgs.put("content_type", "NOTE");  //
+			jsonArgs.put("content_id", content_id); // @"content_id":[NSNumber numberWithLong:plaque_id]
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_LOG_PLAYER_VIEWED_CONTENT, jsonArgs);
 	}
 
 	public void logPlayerViewedSceneId(long content_id) {
+		JSONObject jsonArgs = jsonGameId();
+		// add the scene ID to params
+		try {
+			jsonArgs.put("content_type", "SCENE");  //
+			jsonArgs.put("content_id", content_id); // @"content_id":[NSNumber numberWithLong:plaque_id]
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_LOG_PLAYER_VIEWED_CONTENT, jsonArgs);
 	}
 
 	public void logPlayerViewedInstanceId(long instance_id) {
+		JSONObject jsonArgs = jsonGameId();
+		// add to params
+		try {
+			jsonArgs.put("instance_id", instance_id);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_LOG_PLAYER_VIEWED_INSTANCE, jsonArgs);
 	}
 
 	public void logPlayerTriggeredTriggerId(long trigger_id) {
+		JSONObject jsonArgs = jsonGameId();
+		// add to params
+		try {
+			jsonArgs.put("trigger_id", trigger_id);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_LOG_PLAYER_TRIGGERED_TRIGGER, jsonArgs);
 	}
 
 	public void logPlayerReceivedItemId(long item_id, long qty) {
+		JSONObject jsonArgs = jsonGameId();
+		// add to params
+		try {
+			jsonArgs.put("item_id", item_id);
+			jsonArgs.put("qty", qty);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_LOG_PLAYER_RECEIVED_ITEM, jsonArgs);
 	}
 
 	public void logPlayerLostItemId(long item_id, long qty) {
+		JSONObject jsonArgs = jsonGameId();
+		// add to params
+		try {
+			jsonArgs.put("item_id", item_id);
+			jsonArgs.put("qty", qty);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_LOG_PLAYER_LOST_ITEM, jsonArgs);
 	}
 
 	public void logGameReceivedItemId(long item_id, long qty) {
+		JSONObject jsonArgs = jsonGameId();
+		// add to params
+		try {
+			jsonArgs.put("item_id", item_id);
+			jsonArgs.put("qty", qty);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_LOG_GAME_RECEIVED_ITEM, jsonArgs);
 	}
 
 	public void logGameLostItemId(long item_id, long qty) {
+		JSONObject jsonArgs = jsonGameId();
+		// add to params
+		try {
+			jsonArgs.put("item_id", item_id);
+			jsonArgs.put("qty", qty);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_LOG_GAME_LOST_ITEM, jsonArgs);
 	}
 
 	public void logGroupReceivedItemId(long item_id, long qty) {
+		JSONObject jsonArgs = jsonGameId();
+		// add to params
+		try {
+			jsonArgs.put("item_id", item_id);
+			jsonArgs.put("qty", qty);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_LOG_GROUP_RECEIVED_ITEM, jsonArgs);
 	}
 
 	public void logGroupLostItemId(long item_id, long qty) {
+		JSONObject jsonArgs = jsonGameId();
+		// add to params
+		try {
+			jsonArgs.put("item_id", item_id);
+			jsonArgs.put("qty", qty);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_LOG_GROUP_LOST_ITEM, jsonArgs);
 	}
 
 	public void logPlayerSetSceneId(long scene_id) {
+		JSONObject jsonArgs = jsonGameId();
+		// add the scene ID to params
+		try {
+			jsonArgs.put("scene_id", scene_id);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_GET_LOG_PLAYER_SET_SCENE, jsonArgs);
 	}
 
 	public void logPlayerJoinedGroupId(long group_id) {
@@ -223,9 +384,76 @@ public class AppServices {
 	}
 
 	public void createNote(Note n, Tag t, Media m, Trigger tr) {
+		/*    NSMutableDictionary *args =
+    [@{
+      @"game_id":[NSNumber numberWithLong:_MODEL_GAME_.game_id],
+      @"user_id":[NSNumber numberWithLong:_MODEL_PLAYER_.user_id],
+      @"name":n.name,
+      @"description":n.desc,
+     } mutableCopy];
+    if(m)
+    {
+      args[@"media"] =
+        @{
+           @"game_id":[NSNumber numberWithLong:_MODEL_GAME_.game_id],
+           @"file_name":[m.localURL absoluteString],
+          @"data":[m.data base64EncodedStringWithOptions:0]
+        };
+    }
+    if(t)
+    {
+        args[@"tag_id"] = [NSNumber numberWithLong:t.tag_id];
+    }
+    if(tr)
+    {
+      args[@"trigger"] =
+        @{
+           @"game_id":[NSNumber numberWithLong:_MODEL_GAME_.game_id],
+           @"latitude":[NSNumber numberWithDouble:tr.location.coordinate.latitude],
+           @"longitude":[NSNumber numberWithDouble:tr.location.coordinate.longitude]
+        };
+    }
+    [connection performAsynchronousRequestWithService:@"notes" method:@"createNote" arguments:args handler:self successSelector:@selector(parseCreateNote:) failSelector:nil retryOnFail:YES humanDesc:@"Creating Note..." userInfo:nil];
+*/
 	}
 
 	public void updateNote(Note n, Tag t, Media m, Trigger tr) {
+	/*    NSMutableDictionary *args =
+    [@{
+      @"game_id":[NSNumber numberWithLong:_MODEL_GAME_.game_id],
+      @"note_id":[NSNumber numberWithLong:n.note_id],
+      @"user_id":[NSNumber numberWithLong:n.user_id],
+      @"name":n.name,
+      @"description":n.desc,
+     } mutableCopy];
+    if(m)
+    {
+      args[@"media"] =
+        @{
+           @"game_id":[NSNumber numberWithLong:_MODEL_GAME_.game_id],
+           @"file_name":[m.localURL absoluteString],
+           @"data":[m.data base64EncodedStringWithOptions:0]
+        };
+    }
+    if(t)
+    {
+        args[@"tag_id"] = [NSNumber numberWithLong:t.tag_id];
+    }
+    else
+    {
+        args[@"tag_id"] = [NSNumber numberWithLong:0];
+    }
+    if(tr)
+    {
+      args[@"trigger"] =
+        @{
+           @"game_id":[NSNumber numberWithLong:_MODEL_GAME_.game_id],
+           @"latitude":[NSNumber numberWithDouble:tr.location.coordinate.latitude],
+           @"longitude":[NSNumber numberWithDouble:tr.location.coordinate.longitude]
+        };
+    }
+    [connection performAsynchronousRequestWithService:@"notes" method:@"updateNote" arguments:args handler:self successSelector:@selector(parseUpdateNote:) failSelector:nil retryOnFail:NO humanDesc:@"Updating Note..." userInfo:nil];
+*/
 	}
 
 	public void deleteNoteId(long note_id) {
@@ -327,6 +555,22 @@ public class AppServices {
 		pollServer(Calls.HTTP_GET_SCENE_4_PLAYER, jsonGameId());
 	}
 
+	public void setPlayerSceneId(long scene_id) {
+		JSONObject jsonArgs = jsonGameId();
+		// add the scene ID to params
+		try {
+			jsonArgs.put("scene_id", scene_id);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_SET_PLAYER_SCENE, jsonArgs);
+//		@{
+//			@"game_id":[NSNumber numberWithLong:_MODEL_GAME_.game_id],
+//			@"scene_id":[NSNumber numberWithLong:scene_id]
+//		};
+//		[connection performAsynchronousRequestWithService:@"client" method:@"setPlayerScene" arguments:args handler:self successSelector:@selector(parseSetPlayerScene:) failSelector:nil retryOnFail:NO humanDesc:@"Updating Scene..." userInfo:nil];
+
+	}
 	public JSONObject mJsonAuth;
 
 	public JSONObject jsonGameId() {

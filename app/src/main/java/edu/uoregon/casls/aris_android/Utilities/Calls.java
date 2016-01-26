@@ -46,11 +46,22 @@ public class Calls {
 	public static final String HTTP_GET_QUESTS_4_PLAYER       = "v2.client.getQuestsForPlayer/";
 	public static final String HTTP_GET_TABS_4_PLAYER         = "v2.client.getTabsForPlayer/";
 	public static final String HTTP_GET_LOGS_4_PLAYER         = "v2.client.getLogsForPlayer/";
+	// log game events
+	public static final String HTTP_LOG_GAME_RECEIVED_ITEM = "v2.client.logGameReceivedItem/";
+	public static final String HTTP_LOG_GAME_LOST_ITEM = "v2.client.logGameLostItem/";
+	public static final String HTTP_LOG_GROUP_RECEIVED_ITEM = "v2.client.logGroupReceivedItem/";
+	public static final String HTTP_LOG_GROUP_LOST_ITEM = "v2.client.logGroupLostItem/";
 	// Client behaviour initiated calls:
 	public static final String HTTP_GET_LOG_PLAYER_SET_SCENE  = "v2.client.logPlayerSetScene/"; // "game_id", "item_id"
 	public static final String HTTP_SET_PLAYER_SCENE          = "v2.client.setPlayerScene/"; // "game_id","scene_id"
 	public static final String HTTP_LOG_PLAYER_BEGAN_GAME     = "v2.client.logPlayerBeganGame/"; // "game_id","scene_id"
 	public static final String HTTP_LOG_PLAYER_MOVED          = "v2.client.logPlayerMoved/"; // "game_id","scene_id"
+	public static final String HTTP_LOG_PLAYER_VIEWED_CONTENT = "v2.client.logPlayerViewedContent/";
+	public static final String HTTP_LOG_PLAYER_VIEWED_INSTANCE = "v2.client.logPlayerViewedInstance/";
+	public static final String HTTP_LOG_PLAYER_TRIGGERED_TRIGGER = "v2.client.logPlayerTriggeredTrigger/";
+	public static final String HTTP_LOG_PLAYER_LOST_ITEM = "v2.client.logPlayerLostItem/";
+	public static final String HTTP_LOG_PLAYER_RECEIVED_ITEM = "v2.client.logPlayerReceivedItem/";
+	public static final String HTTP_LOG_PLAYER_RESET_GAME = "v2.client.logPlayerResetGame/";
 	// Client utility calls
 	public static final String HTTP_USER_LOGIN_REQ_API        = "v2.users.logIn/";
 	public static final String HTTP_USER_REQ_FORGOT_PASSWD    = "v2.users.requestForgotPasswordEmail/";
