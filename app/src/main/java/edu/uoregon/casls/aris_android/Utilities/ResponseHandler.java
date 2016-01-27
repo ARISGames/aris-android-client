@@ -63,7 +63,13 @@ public class ResponseHandler { // for now only handles responses with respect to
 		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Server response to Req: " + callingReq + "; data: " + jsonReturn.toString());
 		if ((jsonReturn.has("returnCode") && jsonReturn.getLong("returnCode") == 0) && !jsonReturn.has("faultCode")) {
 			/* parseDialogCharacters */
-			if (callingReq.equals(Calls.HTTP_GET_DIALOG_CHARS_4_GAME)) {
+			/*****
+			 *  For all the calls for which a response is not fielded for data
+			 *****/
+			if (Calls.FIRE_AND_FORGET_CALLS.contains(callingReq)) {
+				// do nothing.
+			}
+			else if (callingReq.equals(Calls.HTTP_GET_DIALOG_CHARS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
@@ -234,6 +240,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 					for (int i = 0; i < jsonData.length(); i++) {
 						String dataStr = jsonData.getJSONObject(i).toString();
 						ArisLog log = gson.fromJson(dataStr, ArisLog.class);
+						log.initGeos();
 						newLogs.add(log);
 					}
 					mGamePlayAct.mDispatch.services_player_logs_received(newLogs); //_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_LOGS_RECEIVED", nil, @{@"logs":logs});
@@ -610,12 +617,13 @@ public class ResponseHandler { // for now only handles responses with respect to
 			else if (callingReq.equals(Calls.HTTP_TOUCH_SCENE_4_PLAYER)) {
 				mGamePlayAct.mDispatch.services_scene_touched(); //_ARIS_NOTIF_SEND_(@"SERVICES_SCENE_TOUCHED", nil, nil);
 			}
+
 			else if (callingReq.equals("")) { // stub
 				if (jsonReturn.has("data")) {
 					JSONObject jsonData = jsonReturn.getJSONObject("data");
 				}
 			}
-			else { // unknown callinRequest
+			else { // unhandled calling Request; Many calls require no response handler. (eg, log... set...)
 				Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient returned successfully but with unhandled server callingReq: " + callingReq);
 //				Toast t = Toast.makeText(mGamePlayAct.getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
 //						Toast.LENGTH_SHORT);

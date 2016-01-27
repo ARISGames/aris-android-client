@@ -81,15 +81,15 @@ public class AppServices {
 	}
 
 	public void fetchRequirementAtoms() {
-		pollServer(Calls.HTTP_GET_REQ_ATOMS_4_GAME, jsonGameId()); // todo needs Response condition
+		pollServer(Calls.HTTP_GET_REQ_ATOMS_4_GAME, jsonGameId());
 	}
 
 	public void fetchRequirementAnds() {
-		pollServer(Calls.HTTP_GET_REQ_AND_PKGS_4_GAME, jsonGameId()); // todo needs Response condition
+		pollServer(Calls.HTTP_GET_REQ_AND_PKGS_4_GAME, jsonGameId());
 	}
 
 	public void fetchRequirementRoots() {
-		pollServer(Calls.HTTP_GET_REQ_ROOT_PKGS_4_GAME, jsonGameId()); // todo needs Response condition
+		pollServer(Calls.HTTP_GET_REQ_ROOT_PKGS_4_GAME, jsonGameId());
 	}
 
 	public void touchItemsForGame() {
@@ -334,7 +334,7 @@ public class AppServices {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		pollServer(Calls.HTTP_GET_LOG_PLAYER_SET_SCENE, jsonArgs);
+		pollServer(Calls.HTTP_LOG_PLAYER_SET_SCENE, jsonArgs);
 	}
 
 	public void logPlayerJoinedGroupId(long group_id) {
