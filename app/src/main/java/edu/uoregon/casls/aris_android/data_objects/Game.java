@@ -71,10 +71,10 @@ public class Game {
 	public String name = "";
 	public String desc = "";
 	public int published; // boolean as int
-	public String   type     = "";
-	public Location location = new Location("0"); // from iOS; not used?
-	public float    latitude      = 0.0f;
-	public float    longitude     = 0.0f;
+	public String   type      = "";
+	public Location location  = new Location("0"); // from iOS; not used?
+	public double   latitude  = 0.0;
+	public double   longitude = 0.0;
 	public long player_count;
 
 	public Media icon_media;
@@ -87,11 +87,11 @@ public class Game {
 	public List<User>        authors  = new ArrayList<>();
 	public List<GameComment> comments = new ArrayList<GameComment>();
 
-	public String   map_type     = "";
-	public String   map_focus    = "";
-	public Location map_location = new Location("0");
-	public float    map_latitude      = 0.0f;
-	public float    map_longitude     = 0.0f;
+	public String   map_type      = "";
+	public String   map_focus     = "";
+	public Location map_location  = new Location("0");
+	public double   map_latitude  = 0.0;
+	public double   map_longitude = 0.0;
 	public double map_zoom_level;
 
 	// booleans as ints to conform to json from ARIS server
@@ -226,7 +226,6 @@ public class Game {
 			}
 		}
 	}
-
 
 	// only to be called from an instatiation of GamePlayActivity.
 	public static File appStorageDir(GamePlayActivity gamePlayAct) {
@@ -514,7 +513,7 @@ public class Game {
 	public void gamePieceReceived() { // called as listener to todo: GAME_PIECE_AVAILABLE?
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.game_percent_loaded((float) n_game_data_received / (float) n_game_data_to_receive);
-		if (this.allGameDataReceived()) { // fixme: not geting past this
+		if (this.allGameDataReceived()) {
 			n_game_data_received = n_game_data_to_receive; //should already be exactly this...
 			mGamePlayAct.mDispatch.game_data_loaded(); // _ARIS_NOTIF_SEND_(@"DATA_LOADED", nil, nil); // will call requestPlayerData()
 		}
@@ -523,7 +522,7 @@ public class Game {
 	public void maintenancePieceReceived() { // called as listener to [GameInstances|GroupInstance|Groups|PlayerInstance|Scenes]Touched() via Dispater.maintenance_piece_available()
 		n_maintenance_data_received++;
 		mGamePlayAct.mDispatch.maintenance_percent_loaded((float) n_maintenance_data_received / (float) n_maintenance_data_to_receive); //_ARIS_NOTIF_SEND_(@"MAINTENANCE_PERCENT_LOADED", nil,
-		// @{@"percent":[NSNumber numberWithFloat:(float)n_maintenance_data_received/(float)n_maintenance_data_to_receive]});
+		// @{@"percent":[NSNumber numberWithfloat:(float)n_maintenance_data_received/(float)n_maintenance_data_to_receive]});
 		if (this.allMaintenanceDataReceived()) {
 //			downloadedVersion = version; // just used for dev testing. don't leave this in final code.
 			n_maintenance_data_received = n_maintenance_data_to_receive; //should already be exactly this...
@@ -534,7 +533,7 @@ public class Game {
 	public void playerPieceReceived() {
 		n_player_data_received++;
 		mGamePlayAct.mDispatch.player_percent_loaded((float) n_player_data_received / (float) n_player_data_to_receive); //_ARIS_NOTIF_SEND_(@"PLAYER_PERCENT_LOADED", nil,
-		// @{@"percent":[NSNumber numberWithFloat:(float)n_player_data_received/(float)n_player_data_to_receive]});
+		// @{@"percent":[NSNumber numberWithfloat:(float)n_player_data_received/(float)n_player_data_to_receive]});
 		if (this.allPlayerDataReceived()) {
 			n_player_data_received = n_player_data_to_receive; //should already be exactly this...
 			mGamePlayAct.mDispatch.model_player_data_loaded(); //_ARIS_NOTIF_SEND_(@"PLAYER_DATA_LOADED", nil, nil);
@@ -544,7 +543,7 @@ public class Game {
 	public void mediaPieceReceived() {
 		n_media_data_received++;
 		mGamePlayAct.mDispatch.media_percent_loaded((float) n_media_data_received / (float) n_media_data_to_receive); //_ARIS_NOTIF_SEND_(@"MEDIA_PERCENT_LOADED", nil,
-		// @{@"percent":[NSNumber numberWithFloat:(float)n_media_data_received/(float)n_media_data_to_receive]});
+		// @{@"percent":[NSNumber numberWithfloat:(float)n_media_data_received/(float)n_media_data_to_receive]});
 		if (this.allMediaDataReceived()) {
 			n_media_data_received = n_media_data_to_receive; //should already be exactly this...
 			mGamePlayAct.mDispatch.model_media_data_loaded(); //_ARIS_NOTIF_SEND_(@"MEDIA_DATA_LOADED", nil, nil);

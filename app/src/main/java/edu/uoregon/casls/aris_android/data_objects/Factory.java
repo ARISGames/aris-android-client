@@ -30,8 +30,8 @@ public class Factory {
 	public String   trigger_title             = "";
 	public long     trigger_icon_media_id     = 0;
 	public Location trigger_location          = new Location("0");
-	public float    latitude                  = 0.0f;
-	public float    longitude                 = 0.0f;
+	public double   latitude                  = 0.0;
+	public double   longitude                 = 0.0;
 	public long     trigger_infinite_distance = 0;  // boolean as long
 	public long     trigger_wiggle            = 0;  // boolean as long
 	public long     trigger_show_title        = 0;  // boolean as long

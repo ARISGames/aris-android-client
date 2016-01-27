@@ -14,8 +14,8 @@ public class Trigger {
 	public String   title         = "";
 	public long     icon_media_id = 0;
 	public Location location      = new Location("0");
-	public float    latitude      = 0.0f;
-	public float    longitude     = 0.0f;
+	public double   latitude      = 0.0;
+	public double   longitude     = 0.0;
 	public long     distance      = 10;
 	public String   qr_code       = "";
 	public long     seconds       = 0;

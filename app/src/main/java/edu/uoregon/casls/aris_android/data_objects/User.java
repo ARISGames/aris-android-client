@@ -18,8 +18,8 @@ public class User {
 	public String   media_id       = "0";     // is Long in iOS, but never really used in as a long
 	public String   read_write_key = "";
 	public Location location       = new Location("0");
-	public float    latitude      = 0.0f;
-	public float    longitude     = 0.0f;
+	public double   latitude       = 0.0;
+	public double   longitude      = 0.0;
 
 	public User() {
 		// deserialize geocoords from discrete values.

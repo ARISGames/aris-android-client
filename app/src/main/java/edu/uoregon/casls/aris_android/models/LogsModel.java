@@ -50,7 +50,7 @@ public class LogsModel extends ARISModel {
 	public void updateLogs(List<ArisLog> newLogs) {
 		long newLogId;
 		for (ArisLog newLog : newLogs) {
-			newLogId = newLog.log_id;
+			newLogId = newLog.user_log_id;
 			if (!logs.containsKey(newLogId))
 				logs.put(newLogId, newLog); // setObject:newLog forKey:newLogId);
 		}
@@ -61,11 +61,11 @@ public class LogsModel extends ARISModel {
 
 	public void addLogType(String type, long content_id, long qty) {
 		ArisLog l = new ArisLog();
-		l.log_id = local_log_id++;
+		l.user_log_id = local_log_id++;
 		l.event_type = type;
 		l.content_id = content_id;
 		l.qty = qty;
-		logs.put(l.log_id, l); // setObject:l forKey:[NSNumber numberWithLong:l.log_id]);
+		logs.put(l.user_log_id, l); // setObject:l forKey:[NSNumber numberWithLong:l.user_log_id]);
 	}
 
 	public void requestPlayerLogs() {
@@ -73,7 +73,7 @@ public class LogsModel extends ARISModel {
 	}
 
 	public ArisLog logForId(long log_id) {
-		return logs.get(log_id); // objectForKey:[NSNumber numberWithLong:log_id]);
+		return logs.get(log_id); // objectForKey:[NSNumber numberWithLong:user_log_id]);
 	}
 
 	public void playerEnteredGame() {
