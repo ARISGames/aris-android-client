@@ -14,7 +14,7 @@ public class NoteComment implements Comparable<NoteComment> {
 	public  long   note_id           = 0;
 	public  long   user_id           = 0;
 	public  String name              = "";
-	public  String desc              = "";
+	public  String description       = "";
 	public  String user_display_name = "";
 	//	public Date created = new Date();
 	private String created           = new SimpleDateFormat(AppConfig.GAME_DATE_FORMAT).format(new Date());

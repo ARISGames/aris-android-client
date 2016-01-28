@@ -72,6 +72,10 @@ public class AppServices {
 		pollServer(Calls.HTTP_GET_INSTANCES_4_PLAYER, jsonGameId());
 	}
 
+	public void fetchPlayerPlayedGame() {
+		pollServer(Calls.HTTP_GET_PLAYER_PLAYED_GAME, jsonGameId());
+	}
+
 	public void setQtyForInstanceId(long instance_id, long qty) {
 
 	}
@@ -109,7 +113,17 @@ public class AppServices {
 	}
 
 	public void dropItem(long item_id, long qty) {
-
+		JSONObject jsonArgs = jsonGameId();
+		// add to params
+		try {
+			jsonArgs.put("item_id", item_id);
+			jsonArgs.put("qty", qty);
+			jsonArgs.put("latitude", mGamePlayAct.mPlayer.latitude);
+			jsonArgs.put("longitude", mGamePlayAct.mPlayer.longitude);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_DROP_ITEM, jsonArgs);
 	}
 
 	public void fetchLogsForPlayer() {
@@ -337,10 +351,10 @@ public class AppServices {
 		pollServer(Calls.HTTP_LOG_PLAYER_SET_SCENE, jsonArgs);
 	}
 
-	public void logPlayerJoinedGroupId(long group_id) {
+	public void logPlayerJoinedGroupId(long group_id) { // todo: this
 	}
 
-	public void logPlayerRanEventPackageId(long event_package_id) {
+	public void logPlayerRanEventPackageId(long event_package_id) { // todo:
 	}
 
 	public void fetchDialogs() {
@@ -384,6 +398,7 @@ public class AppServices {
 	}
 
 	public void createNote(Note n, Tag t, Media m, Trigger tr) {
+		// todo: Make me work
 		/*    NSMutableDictionary *args =
     [@{
       @"game_id":[NSNumber numberWithLong:_MODEL_GAME_.game_id],
@@ -418,6 +433,7 @@ public class AppServices {
 	}
 
 	public void updateNote(Note n, Tag t, Media m, Trigger tr) {
+		// todo: Make me work
 	/*    NSMutableDictionary *args =
     [@{
       @"game_id":[NSNumber numberWithLong:_MODEL_GAME_.game_id],
@@ -457,6 +473,17 @@ public class AppServices {
 	}
 
 	public void deleteNoteId(long note_id) {
+		JSONObject jsonParams = jsonGameId();
+		try {
+			jsonParams.put("note_id", note_id);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_DELETE_NOTE, jsonParams);
+	}
+
+	public void fetchNoteById(long note_id) {
+		pollServer(Calls.HTTP_GET_NOTE, longToJSONReqParam  ("note_id", note_id));
 	}
 
 	public void fetchNotes() {
@@ -467,13 +494,41 @@ public class AppServices {
 		pollServer(Calls.HTTP_GET_NOTE_COMMNTS_4_GAME, jsonGameId());
 	}
 
-	public void createNoteComment(NoteComment n) {
+	public void createNoteComment(NoteComment noteComment) {
+		JSONObject jsonParams = jsonGameId();
+		try {
+			jsonParams.put("user_id", mGamePlayAct.mPlayer.user_id);
+			jsonParams.put("note_id", noteComment.note_id);
+			jsonParams.put("name", noteComment.name);
+			jsonParams.put("description", noteComment.description);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_CREATE_NOTE_COMMENT, jsonParams);
 	}
 
-	public void updateNoteComment(NoteComment n) {
+	public void updateNoteComment(NoteComment noteComment) {
+		JSONObject jsonParams = jsonGameId();
+		try {
+			jsonParams.put("user_id", mGamePlayAct.mPlayer.user_id);
+			jsonParams.put("note_id", noteComment.note_id);
+			jsonParams.put("note_comment_id", noteComment.note_comment_id);
+			jsonParams.put("name", noteComment.name);
+			jsonParams.put("description", noteComment.description);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_UPDATE_NOTE_COMMENT, jsonParams);
 	}
 
 	public void deleteNoteCommentId(long note_comment_id) {
+		JSONObject jsonParams = jsonGameId();
+		try {
+			jsonParams.put("note_comment_id", note_comment_id);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_DELETE_NOTE_COMMENT, jsonParams);
 	}
 
 	public void fetchEvents() {
@@ -497,14 +552,21 @@ public class AppServices {
 	}
 
 	public void setPlayerGroupId(long group_id) {
-
+		JSONObject jsonParams = jsonGameId();
+		try {
+			jsonParams.put("group_id", group_id);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_SET_PLAYER_GROUP, jsonParams);
 	}
 
 	public void fetchTriggers() {
 		pollServer(Calls.HTTP_GET_TRIGGERS_4_GAME, jsonGameId());
 	}
 
-	public void fetchTriggerById(long t) {
+	public void fetchTriggerById(long trigger_id) {
+		pollServer(Calls.HTTP_GET_TRIGGER, longToJSONReqParam("trigger_id", trigger_id));
 	}
 
 	public void fetchTriggersForPlayer() {
@@ -536,7 +598,8 @@ public class AppServices {
 		pollServer(Calls.HTTP_GET_USERS_4_GAME, jsonGameId());
 	}
 
-	public void fetchUserById(long t) {
+	public void fetchUserById(long user_id) {
+		pollServer(Calls.HTTP_GET_USER, longToJSONReqParam("user_id", user_id));
 	}
 
 	public void fetchPlaques() {

@@ -529,12 +529,19 @@ public class Dispatcher {
 	//	SERVICES_MINE_GAMES_RECEIVED", nil, @{@"games":[self parseGames:(NSArray *)result.resultData]});
 //	SERVICES_NEARBY_GAMES_RECEIVED", nil, @{@"games":[self parseGames:(NSArray *)result.resultData]});
 //	SERVICES_NOTE_COMMENT_RECEIVED", nil, @{@"note_comment":noteComment});
+	public void services_note_comment_received(List<NoteComment> newNoteComments) {
+		mGamePlayAct.mGame.notesModel.noteCommentReceived(newNoteComments);
+	}
 //	SERVICES_NOTE_COMMENTS_RECEIVED", nil, @{@"note_comments":noteComments});
 	public void services_note_comments_received(List<NoteComment> noteComments) {
 		mGamePlayAct.mGame.notesModel.noteCommentsReceived(noteComments);
 	}
 
 	//	SERVICES_NOTE_RECEIVED", nil, @{@"note":note});
+	public void services_note_received(List<Note> newNote) {
+		mGamePlayAct.mGame.notesModel.noteReceived(newNote);
+	}
+
 //	SERVICES_NOTES_RECEIVED", nil, @{@"notes":notes});
 	public void services_notes_received(List<Note> notes) {
 		mGamePlayAct.mGame.notesModel.notesReceived(notes);
@@ -578,8 +585,11 @@ public class Dispatcher {
 		mGamePlayAct.mGame.overlaysModel.playerOverlaysReceived(overlays);
 	}
 
-	// fixme: implement the following. Should happen after parsePlayerPlayedGame()
 	//	SERVICES_PLAYER_PLAYED_GAME_RECEIVED", nil, (NSDictionary *)result.resultData);
+	public void services_player_played_game_received(Game g) {
+		// this happens in GamePageCoverActivity as a discrete call.
+	}
+
 //	SERVICES_PLAYER_QUESTS_RECEIVED", nil, quests);
 	public void services_player_quests_received(Map<String, List<Quest>> pquests) {
 		mGamePlayAct.mGame.questsModel.playerQuestsReceived(pquests);
@@ -660,12 +670,20 @@ public class Dispatcher {
 	//	SERVICES_UPDATE_USER_FAILED",nil,nil); return; }
 //	SERVICES_UPDATE_USER_RECEIVED",nil,@{@"user":user});
 //	SERVICES_USER_RECEIVED", nil, @{@"user":user});
+	public void services_user_received(User u) {
+		mGamePlayAct.mUsersModel.userReceived(u);
+	}
+
 //	SERVICES_USERS_RECEIVED", nil, @{@"users":users});
 	public void services_users_received(Map<String, User> mGameUsers) {
 		mGamePlayAct.mUsersModel.usersReceived(mGameUsers);
 	}
 
 	//	SERVICES_WEB_PAGE_RECEIVED", nil, @{@"web_page":webPage});
+	public void services_trigger_received(Trigger trigger) {
+		mGamePlayAct.mGame.triggersModel.triggerReceived(trigger);
+	}
+
 //	SERVICES_WEB_PAGES_RECEIVED", nil, @{@"webPages":webPages});
 	public void services_web_pages_received(List<WebPage> webPages) {
 		mGamePlayAct.mGame.webPagesModel.webPagesReceived(webPages);

@@ -25,6 +25,7 @@ import edu.uoregon.casls.aris_android.data_objects.DialogOption;
 import edu.uoregon.casls.aris_android.data_objects.DialogScript;
 import edu.uoregon.casls.aris_android.data_objects.Event;
 import edu.uoregon.casls.aris_android.data_objects.Factory;
+import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Group;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
 import edu.uoregon.casls.aris_android.data_objects.Item;
@@ -62,13 +63,44 @@ public class ResponseHandler { // for now only handles responses with respect to
 	public void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) throws JSONException {
 		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Server response to Req: " + callingReq + "; data: " + jsonReturn.toString());
 		if ((jsonReturn.has("returnCode") && jsonReturn.getLong("returnCode") == 0) && !jsonReturn.has("faultCode")) {
-			/* parseDialogCharacters */
 			/*****
 			 *  For all the calls for which a response is not fielded for data
 			 *****/
 			if (Calls.FIRE_AND_FORGET_CALLS.contains(callingReq)) {
 				// do nothing.
 			}
+			/* parseCreateNote*/
+			else if (callingReq.equals(Calls.HTTP_CREATE_NOTE)) { // todo: may add update note here handler here too
+				if (jsonReturn.has("data")) {
+					JSONObject jsonData = jsonReturn.getJSONObject("data");
+					Gson gson = new Gson();
+					Note note;
+					if (jsonData != null)
+						note = gson.fromJson(jsonData.toString(), Note.class);
+					else
+						note = new Note();
+					List<Note> newNote = new ArrayList<>(1);
+					newNote.add(note); // subsequent calls want the new item to be in a list already. So be it.
+					mGamePlayAct.mDispatch.services_note_received(newNote);  //    _ARIS_NOTIF_SEND_(@"SERVICES_NOTE_COMMENT_RECEIVED", nil, @{@"note_comment":noteComment});
+				}
+			}
+			/* parseCreateNoteComment or parseUpdateNoteComment*/
+			else if (callingReq.equals(Calls.HTTP_CREATE_NOTE_COMMENT)
+					|| callingReq.equals(Calls.HTTP_UPDATE_NOTE_COMMENT)) {
+				if (jsonReturn.has("data")) {
+					JSONObject jsonData = jsonReturn.getJSONObject("data");
+					Gson gson = new Gson();
+					NoteComment noteComment;
+					if (jsonData != null)
+						noteComment = gson.fromJson(jsonData.toString(), NoteComment.class);
+					else
+						noteComment = new NoteComment();
+					List<NoteComment> newNoteComments = new ArrayList<>(1);
+					newNoteComments.add(noteComment); // subsequent calls want the new item to be in a list already. So be it.
+					mGamePlayAct.mDispatch.services_note_comment_received(newNoteComments);  //    _ARIS_NOTIF_SEND_(@"SERVICES_NOTE_COMMENT_RECEIVED", nil, @{@"note_comment":noteComment});
+				}
+			}
+			/* parseDialogCharacters */
 			else if (callingReq.equals(Calls.HTTP_GET_DIALOG_CHARS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
@@ -365,6 +397,20 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mGame.plaquesModel.plaquesReceived(plaques);
 				}
 			}
+			/* parsePlayerPlayedGame <-- this is handled in GameCoverPageActivity with discrete call. May need to unify this if call elsewhere.*/
+//			else if (callingReq.equals(Calls.HTTP_GET_PLAYER_PLAYED_GAME)) {
+//				if (jsonReturn.has("data")) {
+//					Game g; // I don't think this call returns an entire Game object. I think it just has a "has_played" json field. See ResponceHander in GameCoverPageActivity
+//					if (!jsonReturn.isNull("data")) {
+//						JSONObject jsonData = jsonReturn.getJSONObject("data");
+//						g = new Gson().fromJson(jsonData.toString(), Game.class);
+//					}
+//					else
+//						g = new Game(); // set attribs to empty values
+//
+//					mGamePlayAct.mDispatch.services_player_played_game_received(g);
+//				}
+//			}
 			/* parseQuests */
 			else if (callingReq.equals(Calls.HTTP_GET_QUESTS_4_GAME)) {
 				if (jsonReturn.has("data")) {
@@ -533,6 +579,19 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_tags_received(tags);
 				}
 			}
+			/* parseTrigger */
+			else if (callingReq.equals(Calls.HTTP_GET_TRIGGER)) {
+				if (jsonReturn.has("data")) {
+					JSONObject jsonData = jsonReturn.getJSONObject("data");
+					Gson gson = new Gson();
+					Trigger trigger;
+					if (jsonData != null)
+						trigger = gson.fromJson(jsonData.toString(), Trigger.class);
+					else
+						trigger = new Trigger(); // to prevent NPE but will still result in bad wrongness behaviourally
+					mGamePlayAct.mDispatch.services_trigger_received(trigger);
+				}
+			}
 			/* parseTriggers */
 			else if (callingReq.equals(Calls.HTTP_GET_TRIGGERS_4_GAME)) {
 				if (jsonReturn.has("data")) {
@@ -563,6 +622,19 @@ public class ResponseHandler { // for now only handles responses with respect to
 					mGamePlayAct.mDispatch.services_player_triggers_received(triggers);
 				}
 			}
+			/* parseUser */
+			else if (callingReq.equals(Calls.HTTP_GET_USER)) {
+				if (jsonReturn.has("data")) {
+					JSONObject jsonData = jsonReturn.getJSONObject("data");
+					Gson gson = new Gson();
+					User user;
+					if (jsonData != null)
+						user = gson.fromJson(jsonData.toString(), User.class);
+					else
+						user = new User(); // to prevent NPE but will still result in bad wrongness behaviourally
+					mGamePlayAct.mDispatch.services_user_received(user);
+				}
+			}
 			/* parseUsers */
 			else if (callingReq.equals(Calls.HTTP_GET_USERS_4_GAME)) {
 				if (jsonReturn.has("data")) {
@@ -578,6 +650,8 @@ public class ResponseHandler { // for now only handles responses with respect to
 
 				}
 			}
+			/* parseUpdateNoteComment (see parseCreateNoteComment above) */
+
 			/* parseWebPages */
 			else if (callingReq.equals(Calls.HTTP_GET_WEB_PAGES_4_GAME)) {
 				if (jsonReturn.has("data")) {

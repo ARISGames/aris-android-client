@@ -47,6 +47,13 @@ public class GamesModel {
 		return this.games.get(game_id);
 	}
 
+
+	public void playerPlayedGameReceived() {
+		//just turn event around and re-send it // all this gets taken care of in GameCoverPageActivity() in a discrete call.
+//		mGamePlayAct.mDispatch.services_player_played_game_received(g);
+//		_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_PLAYED_GAME_AVAILABLE",nil,notif.userInfo);
+	}
+
 	public Map<Long, Game> pingDownloadedGames() {
 		if (downloadedStamp == null || AppUtils.getTimeDiff(downloadedStamp, new Date(), TimeUnit.SECONDS) > 10) {
 			downloadedStamp = new Date();
