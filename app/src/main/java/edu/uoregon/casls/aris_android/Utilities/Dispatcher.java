@@ -99,6 +99,10 @@ public class Dispatcher {
 	}
 
 	//	MODEL_DISPLAY_NEW_ENQUEUED", nil, nil); // Will be handled in GamePlayActivity -sem
+	public void model_display_new_enqueued() {
+		// todo: find listeners
+	}
+
 //	MODEL_DOWNLOADED_GAMES_AVAILABLE",nil,nil); } // Handled in GamesListActivity - sem
 	public void model_downloaded_games_available() {}
 //	MODEL_EVENTS_AVAILABLE",nil,nil);

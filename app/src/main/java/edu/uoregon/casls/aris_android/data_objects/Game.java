@@ -25,6 +25,7 @@ import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.models.ARISModel;
 import edu.uoregon.casls.aris_android.models.DialogsModel;
+import edu.uoregon.casls.aris_android.models.DisplayQueueModel;
 import edu.uoregon.casls.aris_android.models.EventsModel;
 import edu.uoregon.casls.aris_android.models.FactoriesModel;
 import edu.uoregon.casls.aris_android.models.GameInstancesModel;
@@ -133,7 +134,7 @@ public class Game {
 	public TabsModel            tabsModel;
 	public LogsModel            logsModel;
 	public QuestsModel          questsModel;
-//	public DisplayQueueModel 	displayQueueModel; // iOS only for now
+	public DisplayQueueModel 	displayQueueModel;
 	// medias (in GamePlayAct 		
 
 	//local stuff
@@ -417,8 +418,8 @@ public class Game {
 		tabsModel = new TabsModel();                       models.add(tabsModel);
 		logsModel = new LogsModel();                       models.add(logsModel);
 		questsModel = new QuestsModel();                   models.add(questsModel);
+		displayQueueModel = new DisplayQueueModel();       models.add(displayQueueModel);
 		//@formatter:on
-//		displayQueueModel    = new DisplayQueueModel();	 	models.add(displayQueueModel   ); // iOS only for now
 		models.add(mGamePlayAct.mUsersModel); //		[models addObject:_MODEL_USERS_];
 		models.add(mGamePlayAct.mMediaModel); //		[models addObject:_MODEL_MEDIA_];
 
@@ -473,7 +474,9 @@ public class Game {
 		tabsModel = null;
 		questsModel = null;
 		logsModel = null;
-//		displayQueueModel    = null; // iOS
+
+		displayQueueModel.endPlay();
+		displayQueueModel    = null;
 	}
 
 	public void requestGameData() {
@@ -660,7 +663,7 @@ public class Game {
 			model.clearGameData();
 		}
 
-//		displayQueueModel.clear();
+		displayQueueModel.clearPlayerData();
 	}
 
 	public String description() {
