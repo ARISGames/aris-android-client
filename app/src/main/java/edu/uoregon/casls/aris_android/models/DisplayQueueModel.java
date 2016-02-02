@@ -74,27 +74,27 @@ public class DisplayQueueModel extends ARISModel {
 	public Object dequeue()
 	{
 		this.purgeInvalidFromQueue();
-		Object o;
+		Object o = null;
 		if(displayQueue.size() > 0)
 		{
-			o = displayQueue[0];
-			[displayQueue removeObject(o);
+			o = displayQueue.get(0);
+			displayQueue.remove(o); //removeObject(o);
 
-			if([o isKindOfClass:[Trigger class]] && ((Trigger *)o).trigger_id != 0) [displayBlacklist addObject(o);
+			if(o.getClass().isInstance(Trigger.class)  && ((Trigger) o).trigger_id != 0) displayBlacklist.add((Trigger) o);// addObject(o);
 		}
 		return o;
 	}
 
 	public boolean displayInQueue(Object d)
 	{
-		for(long i = 0; i < displayQueue.size(); i++)
+		for(int i = 0; i < displayQueue.size(); i++)
 			if(d == displayQueue.get(i)) return true;
 		return false;
 	}
 
 	public boolean displayBlacklisted(Object d)
 	{
-		for(long i = 0; i < displayBlacklist.size(); i++)
+		for(int i = 0; i < displayBlacklist.size(); i++)
 			if(d == displayBlacklist.get(i)) return true;
 		return false;
 	}
@@ -115,32 +115,32 @@ public class DisplayQueueModel extends ARISModel {
 		for(int i = 0; i < displayQueue.size(); i++)
 		{
 			boolean valid = false;
-			if(!displayQueue.get(i).getClass().isInstance(Trigger) /*.instanceof(Trigger)*/) continue; // isKindOfClass:[Trigger class]]) continue; //only triggers are blacklisted
+			if(!displayQueue.get(i).getClass().isInstance(Trigger.class)) continue; // isKindOfClass:[Trigger class]]) continue; //only triggers are blacklisted
 			t = displayQueue.get(i);
-			for(long j = 0; j < pt.size(); j++)
-				if(t.trigger_id == 0 || t.trigger_id == ((Trigger *)pt[j]).trigger_id) valid = true; //allow artificial triggers to stay in queue
+			for(int j = 0; j < pt.size(); j++)
+				if(t.trigger_id == 0 || t.trigger_id == ((Trigger)pt.get(j)).trigger_id) valid = true; //allow artificial triggers to stay in queue
 			if(!valid) displayQueue.remove(t);
 		}
 
 		//if trigger in blacklist no longer available/within range, remove from blacklist
-		for(long i = 0; i < displayBlacklist.size(); i++)
+		for(int i = 0; i < displayBlacklist.size(); i++)
 		{
 			boolean valid = false;
-			if(displayBlacklist.get(i) isKindOfClass:[Trigger class]]) //only triggers are blacklisted
+			if(displayBlacklist.get(i).getClass().isInstance(Trigger.class)) //only triggers are blacklisted
 			{
 				t = displayBlacklist.get(i);
-				for(long j = 0; j < pt.size(); j++)
+				for(int j = 0; j < pt.size(); j++)
 				{
 					if(
-							t == pt[j] &&
+							t == pt.get(j) &&
 									(
-											[t.type isEqualToString:@"IMMEDIATE"] ||
+											t.type.contentEquals("IMMEDIATE") ||
 					(
-							[t.type isEqualToString:@"LOCATION"] &&
+							t.type.contentEquals("LOCATION") &&
 					t.trigger_on_enter &&
 							(
-									t.infinite_distance ||
-									[t.location distanceFromLocation:_MODEL_PLAYER_.location] < t.distance
+									t.infinite_distance == 1 ||
+									t.location. distanceFromLocation:_MODEL_PLAYER_.location] < t.distance
 					)
 					)
 					)
@@ -148,11 +148,11 @@ public class DisplayQueueModel extends ARISModel {
 					valid = true;
 				}
 			}
-			if(!valid) [displayBlacklist removeObject(t);
+			if(!valid) displayBlacklist.remove(t);// removeObject(t);
 		}
 	}
 
-	public void tickAndEnqueueAvailableTimers()
+/*	public void tickAndEnqueueAvailableTimers()
 	{
 		List<Trigger> pt = _MODEL_TRIGGERS_.playerTriggers;
 		Trigger t;
@@ -212,5 +212,5 @@ public class DisplayQueueModel extends ARISModel {
 		_ARIS_NOTIF_IGNORE_ALL_(self);
 	}
 
-
+*/
 }
