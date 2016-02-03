@@ -81,7 +81,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
         </activity>
-        <service android:name=".services.PollTimerService">
+        <service android:name=".services.PollServerService">
+        </service>
+        <service android:name=".services.PollTriggerService">
         </service>
     </application>
 

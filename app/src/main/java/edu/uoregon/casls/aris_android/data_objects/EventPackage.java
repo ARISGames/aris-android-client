@@ -3,7 +3,7 @@ package edu.uoregon.casls.aris_android.data_objects;
 /**
  * Created by smorison on 10/13/15.
  */
-public class EventPackage {
+public class EventPackage implements InstantiableProtocol {
 
 	public long event_package_id = 0;
 	public String name = ""; // dummy var to placate Instance.name() function - Android only

@@ -3,7 +3,7 @@ package edu.uoregon.casls.aris_android.data_objects;
 /**
  * Created by smorison on 8/19/15.
  */
-public class Item {
+public class Item implements InstantiableProtocol {
 	public long   item_id              = 0;
 	public String name                 = "Item";
 	public String desc                 = "";

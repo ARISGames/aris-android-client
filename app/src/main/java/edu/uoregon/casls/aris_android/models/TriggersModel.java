@@ -4,6 +4,7 @@ package edu.uoregon.casls.aris_android.models;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -215,7 +216,6 @@ public class TriggersModel extends ARISModel {
 				}
 				ptrigs.add(t);
 			}
-			//TODO unsure of logging
 			Log.i(AppConfig.LOGTAG, getClass().getSimpleName() + "Accepted: " + ptrigs.size() + ", Rejected: " + rejected.size());
 			mGamePlayAct.mDispatch.services_player_triggers_received(ptrigs); //("SERVICES_PLAYER_TRIGGERS_RECEIVED", null, @{@"triggers":ptrigs});
 		}
@@ -240,10 +240,8 @@ public class TriggersModel extends ARISModel {
 
 	public List<Trigger> triggersForInstanceId(long instance_id) {
 		List<Trigger> a = new ArrayList<>();
-
-		int size = triggers.size();
-		for (long i = 0; i < size; i++) {
-			Trigger t = triggers.get(i);
+		Collection<Trigger> trigList = triggers.values(); // convert to Collection for iterating
+		for (Trigger t : trigList) {
 			if (t.instance_id == instance_id) {
 				a.add(t);
 			}

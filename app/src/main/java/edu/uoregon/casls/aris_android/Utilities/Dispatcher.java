@@ -75,26 +75,33 @@ public class Dispatcher {
 //	DEFAULTS_UPDATED",nil,nil);
 //	DEVICE_MOVED", nil, @{@"location":lastKnownLocation}); // will be handled in GamePlayActivity.
 //	GAME_PLAY_DISPLAYED_INSTANCE",nil,@{@"instance":i}); // sent by GamePLayViewController; no listeners - sem
-//	GAME_PLAY_DISPLAYED_TRIGGER",nil,@{@"trigger":t}); // sent by GamePLayViewController; no listeners - sem
+	public void game_play_displayed_instance(Instance i) {
+		// No Listeners
+	}
+
+	//	GAME_PLAY_DISPLAYED_TRIGGER",nil,@{@"trigger":t}); // sent by GamePLayViewController; no listeners - sem
+	public void game_play_display_triggered(Trigger t) {
+		// no listners
+	}
 //	LowMemoryWarning",nil,nil);
 //	MODEL_ANYWHERE_GAMES_AVAILABLE",nil,nil); } // sent by GamesModel; listened for by GamePickerAnywhereViewController(); I think we're doing this already in Android GamesListActivity
 //	MODEL_DIALOG_CHARACTERS_AVAILABLE",nil,nil);
-	public void dialog_characters_available() {
+	public void model_dialog_characters_available() {
 		// no one to field this one. Oh well. Die in space.
 	}
 
 	//	MODEL_DIALOG_OPTIONS_AVAILABLE",nil,nil);
-	public void dialog_options_available() {
+	public void model_dialog_options_available() {
 		// nope. me neither.
 	}
 
 	//	MODEL_DIALOG_SCRIPTS_AVAILABLE",nil,nil);
-	public void dialog_scripts_available() {
+	public void model_dialog_scripts_available() {
 		// no one for this call either.
 	}
 
 	//	MODEL_DIALOGS_AVAILABLE",nil,nil);
-	public void dialogs_available() {
+	public void model_dialogs_available() {
 		// no listeners in this version?
 	}
 
@@ -106,42 +113,42 @@ public class Dispatcher {
 //	MODEL_DOWNLOADED_GAMES_AVAILABLE",nil,nil); } // Handled in GamesListActivity - sem
 	public void model_downloaded_games_available() {}
 //	MODEL_EVENTS_AVAILABLE",nil,nil);
-	public void events_available() {
+	public void model_events_available() {
 		// no listners
 	}
 
 	//	MODEL_FACTORIES_AVAILABLE",nil,nil);
-	public void factories_available() {
+	public void model_factories_available() {
 		// no listeners
 	}
 
 	//	MODEL_GAME_AVAILABLE",nil,@{@"game":[self gameForId:g.game_id]});// Will be handled in GamePlayActivity -sem
 //	MODEL_GAME_BEGAN",nil,nil); // Will be handled in GamePlayActivity -sem
-	public void game_began() {
+	public void model_game_began() {
 		mGamePlayAct.mGame.gameBegan();
 		mGamePlayAct.gameBegan(); // possibly not needed.
 	}
 
 	//	MODEL_GAME_CHOSEN",nil,nil); // Will be handled in GamePlayActivity -sem
-	public void game_chosen() {
+	public void model_game_chosen() {
 		mGamePlayAct.gameChosen(); // possibly not needed.
 	}
 
 	//	MODEL_GAME_DATA_LOADED", nil, nil);
-	public void game_data_loaded() {
+	public void model_game_data_loaded() {
 		// in iOS would call LoadingViewController.gameDataLoaded(), which then calls Game.requestPlayerData(); I'll call it directly.
 //		mGamePlayAct.mGame.requestPlayerData(); // looks wrong. Is wrong. Bug. Causes infinite loop.
 		mGamePlayAct.gameDataLoaded();
 	}
 
 	//	MODEL_GAME_INSTANCES_AVAILABLE",nil,nil);
-	public void game_instances_available() {
+	public void model_game_instances_available() {
 		// not listened for;
 	}
 
 	//	MODEL_GAME_LEFT",nil,nil); // Will be handled in GamePlayActivity -sem
 	//	MODEL_GAME_PERCENT_LOADED", nil, @{@"percent":percentReceived});
-	public void game_percent_loaded(float percentReceived) {
+	public void model_game_percent_loaded(float percentReceived) {
 		// todo: LoadingViewController.percentLoaded();
 	}
 
@@ -405,18 +412,21 @@ public class Dispatcher {
 
 	//	MODEL_TRIGGERS_INVALIDATED",nil,@{@"invalidated_triggers":invalidatedTriggers});
 	public void model_triggers_invalidated(List<Trigger> invalidatedTriggers) {
-		// todo: DisplayQueueModel.reevaluateAutoTriggers(invalidatedTriggers)
+		if (mGamePlayAct.mGame.displayQueueModel.listen_model_triggers_invalidated == 1)
+			mGamePlayAct.mGame.displayQueueModel.reevaluateAutoTriggers();
 		// todo: MapViewController.triggersInvalidated(invalidatedTriggers)
 	}
 
 	//	MODEL_TRIGGERS_LESS_AVAILABLE",nil,@{@"removed":removedTriggers});
 	public void model_triggers_less_available(List<Trigger> removedTriggers) {
-		// todo: DisplayQueueModel.reevaluateAutoTriggers(removedTriggers)
+		if (mGamePlayAct.mGame.displayQueueModel.listen_model_triggers_less_available == 1)
+			mGamePlayAct.mGame.displayQueueModel.reevaluateAutoTriggers();
 	}
 
 	//	MODEL_TRIGGERS_NEW_AVAILABLE",nil,@{@"added":addedTriggers});
 	public void model_triggers_new_available(List<Trigger> addedTriggers) {
-		// todo: DisplayQueueModel.reevaluateAutoTriggers(addedTriggers)
+		if (mGamePlayAct.mGame.displayQueueModel.listen_model_triggers_new_available == 1)
+			mGamePlayAct.mGame.displayQueueModel.reevaluateAutoTriggers();
 	}
 
 	//	MODEL_USERS_AVAILABLE",nil,nil);
@@ -695,8 +705,9 @@ public class Dispatcher {
 
 	//	USER_MOVED",nil,nil);
 	public void user_moved() {
-		// todo: display Queue Model reevaluateAutoTriggers() - update UI locations e.g. map
-		// todo: also MapViewController.playerMoved()
+		if (mGamePlayAct.mGame.displayQueueModel.listen_user_moved == 1)
+			mGamePlayAct.mGame.displayQueueModel.reevaluateAutoTriggers();
+		// in iOS MapViewController.playerMoved() is called but called method is commented out.
 	}
 
 	public void maintenance_percent_loaded(float v) {
@@ -704,7 +715,6 @@ public class Dispatcher {
 
 	public void player_percent_loaded(float v) {
 	}
-
 
 
 //	WIFI_CONNECTED",self,nil); break;

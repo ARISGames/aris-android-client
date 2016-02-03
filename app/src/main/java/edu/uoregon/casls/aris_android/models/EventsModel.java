@@ -54,7 +54,7 @@ public class EventsModel extends ARISModel {
 			if (!events.containsKey(newEventId)) events.put(newEventId, newEvent);
 		}
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.events_available(); // _ARIS_NOTIF_SEND_(@"MODEL_EVENTS_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_events_available(); // _ARIS_NOTIF_SEND_(@"MODEL_EVENTS_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 	}
 

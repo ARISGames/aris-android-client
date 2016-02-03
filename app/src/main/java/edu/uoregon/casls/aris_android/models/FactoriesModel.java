@@ -45,7 +45,7 @@ public class FactoriesModel extends ARISModel {
 			newFactoryId = newFactory.factory_id;
 			if(!factories.containsKey(newFactoryId)) factories.put(newFactoryId, newFactory);
 		}
-		mGamePlayAct.mDispatch.factories_available(); //_ARIS_NOTIF_SEND_(@"MODEL_FACTORIES_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_factories_available(); //_ARIS_NOTIF_SEND_(@"MODEL_FACTORIES_AVAILABLE",nil,nil);
 		mGamePlayAct.mDispatch.game_piece_available(); //_ARIS_NOTIF_SEND_(@"GAME_PIECE_AVAILABLE",nil,nil);
 		n_game_data_received = 1;
 	}

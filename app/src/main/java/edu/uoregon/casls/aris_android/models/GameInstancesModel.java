@@ -81,7 +81,7 @@ public class GameInstancesModel extends ARISModel {
 				continue;
 			instances.put(newInstance.object_id, newInstance); //[[NSNumber numberWithLong:newInstance.object_id]] = newInstance;
 		}
-		mGamePlayAct.mDispatch.game_instances_available(); // _ARIS_NOTIF_SEND_(@"INSTANCES_AVAILABLE",nil,nil);
+		mGamePlayAct.mDispatch.model_game_instances_available(); // _ARIS_NOTIF_SEND_(@"INSTANCES_AVAILABLE",nil,nil);
 	}
 
 	public long dropItemFromGame(long item_id, long qty) {

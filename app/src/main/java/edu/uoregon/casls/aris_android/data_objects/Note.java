@@ -9,7 +9,7 @@ import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 /**
  * Created by smorison on 8/19/15.
  */
-public class Note {
+public class Note implements InstantiableProtocol {
 	public  long   note_id           = 0;
 	public  long   user_id           = 0;
 	public  String name              = "";

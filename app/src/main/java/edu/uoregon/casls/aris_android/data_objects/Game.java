@@ -45,7 +45,7 @@ import edu.uoregon.casls.aris_android.models.TabsModel;
 import edu.uoregon.casls.aris_android.models.TagsModel;
 import edu.uoregon.casls.aris_android.models.TriggersModel;
 import edu.uoregon.casls.aris_android.models.WebPagesModel;
-import edu.uoregon.casls.aris_android.services.PollTimerService;
+import edu.uoregon.casls.aris_android.services.PollServerService;
 
 /*
   Created by smorison on 7/28/15.
@@ -143,8 +143,8 @@ public class Game {
 	public int  begin_fresh         = 0; // boolean as int
 
 	//	PollTimer vars
-	public  Boolean isPollTimerRunning = false;
-	private Intent  pollTimerSvcIntent = null;
+	public  Boolean isServerPollerRunning = false;
+	private Intent  pollServerSvcIntent = null;
 
 	// FYI transient indicates "do not serialize"; gson will die a recursive death if it did.
 	public transient GamePlayActivity mGamePlayAct; // For reference to GamePlayActivity; do not instantiate (new) object or circular references will ensue.
@@ -515,10 +515,10 @@ public class Game {
 
 	public void gamePieceReceived() { // called as listener to todo: GAME_PIECE_AVAILABLE?
 		n_game_data_received++;
-		mGamePlayAct.mDispatch.game_percent_loaded((float) n_game_data_received / (float) n_game_data_to_receive);
+		mGamePlayAct.mDispatch.model_game_percent_loaded((float) n_game_data_received / (float) n_game_data_to_receive);
 		if (this.allGameDataReceived()) {
 			n_game_data_received = n_game_data_to_receive; //should already be exactly this...
-			mGamePlayAct.mDispatch.game_data_loaded(); // _ARIS_NOTIF_SEND_(@"DATA_LOADED", nil, nil); // will call requestPlayerData()
+			mGamePlayAct.mDispatch.model_game_data_loaded(); // _ARIS_NOTIF_SEND_(@"DATA_LOADED", nil, nil); // will call requestPlayerData()
 		}
 	}
 
@@ -555,7 +555,7 @@ public class Game {
 
 	public void percentLoadedChanged() {
 		float percentReceived = (n_game_data_received + n_player_data_received) / (n_game_data_to_receive + n_player_data_to_receive);
-		mGamePlayAct.mDispatch.game_percent_loaded(percentReceived); // _ARIS_NOTIF_SEND_(@"PERCENT_LOADED", null, @{@"percent":percentReceived});
+		mGamePlayAct.mDispatch.model_game_percent_loaded(percentReceived); // _ARIS_NOTIF_SEND_(@"PERCENT_LOADED", null, @{@"percent":percentReceived});
 	}
 
 	public void gameBegan() {
@@ -565,13 +565,13 @@ public class Game {
 		listen_maintenance_piece_available = 0;    // _ARIS_NOTIF_IGNORE_(@"MAINTENANCE_PIECE_AVAILABLE", self, nil);
 		listen_media_piece_available = 0;        // _ARIS_NOTIF_IGNORE_(@"MEDIA_PIECE_AVAILABLE", self, nil);
 //		poller = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(requestPlayerData) userInfo:null repeats:true];
-		this.startPollTimer();
+		this.startServerPoller();
 	}
 
 	public void gameLeft() {
-		if (isPollTimerRunning) { // todo: clear/cancel all outstanding service requests for poll timer
-			mGamePlayAct.stopService(pollTimerSvcIntent);
-			isPollTimerRunning = false;
+		if (isServerPollerRunning) { // todo: clear/cancel all outstanding service requests for poll timer
+			mGamePlayAct.stopService(pollServerSvcIntent);
+			isServerPollerRunning = false;
 		}
 	}
 
@@ -616,14 +616,14 @@ public class Game {
 		return rating / comments.size();
 	}
 
-	private void startPollTimer() {
+	private void startServerPoller() {
 		// register receiver
-		LocalBroadcastManager.getInstance(mGamePlayAct).registerReceiver(mMessageReceiver, new IntentFilter(AppConfig.POLLTIMER_SVC_ACTION));
+		LocalBroadcastManager.getInstance(mGamePlayAct).registerReceiver(mMessageReceiver, new IntentFilter(AppConfig.SERVER_POLLER_SVC_ACTION));
 
-		if (!isPollTimerRunning) {
-			pollTimerSvcIntent = new Intent(mGamePlayAct, PollTimerService.class);
-			mGamePlayAct.startService(pollTimerSvcIntent);
-			isPollTimerRunning = true;
+		if (!isServerPollerRunning) {
+			pollServerSvcIntent = new Intent(mGamePlayAct, PollServerService.class);
+			mGamePlayAct.startService(pollServerSvcIntent);
+			isServerPollerRunning = true;
 		}
 
 	}
@@ -632,12 +632,12 @@ public class Game {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " PollTimer has Cycled  - - - - - - - - DING!");
-			handleMessage(intent);
+			handleServerPollerMessage(intent);
 		}
 	};
 
-	private void handleMessage(Intent msg) {
-		if (!isPollTimerRunning) return; // ignore any calls after timer was killed
+	private void handleServerPollerMessage(Intent msg) {
+		if (!isServerPollerRunning) return; // ignore any calls after timer was killed
 		Bundle data = msg.getExtras();
 		switch (data.getInt(AppConfig.COMMAND, 0)) {
 			case AppConfig.POLLTIMER_CYCLE_PASS:

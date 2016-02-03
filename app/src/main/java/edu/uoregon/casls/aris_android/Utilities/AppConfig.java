@@ -21,10 +21,12 @@ public class AppConfig {
 	// PollTimer Consts
 	public static final int    POLLTIMER_CYCLE_PASS = 1;
 	public static final int    POLLTIMER_RESULT     = 2;
-	public static final String POLLTIMER_SVC_ACTION =
-			"edu.uoregon.casls.aris_android.ACTION_POLLTIMER_SVC";
-	public static final String COMMAND              = "command";
-	public static final String DATA                 = "data";
+	public static final String SERVER_POLLER_SVC_ACTION  =
+			"edu.uoregon.casls.aris_android.ACTION_SERVERPOLLER_SVC";
+	public static final String TRIGGER_POLLER_SVC_ACTION =
+			"edu.uoregon.casls.aris_android.ACTION_TRIGGERPOLLER_SVC";
+	public static final String COMMAND                   = "command";
+	public static final String DATA                      = "data";
 
 	public static final String TAG_SERVER_SUCCESS = "success";
 	public static final String SVR_RETURN_CODE    = "returnCode";

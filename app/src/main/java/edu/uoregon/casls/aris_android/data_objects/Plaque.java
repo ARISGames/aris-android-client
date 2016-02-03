@@ -3,7 +3,7 @@ package edu.uoregon.casls.aris_android.data_objects;
 /**
  * Created by smorison on 8/19/15.
  */
-public class Plaque {
+public class Plaque implements InstantiableProtocol {
 	public long   plaque_id           = 0;
 	public String name                = "Plaque";
 	public String desc                = "Text";

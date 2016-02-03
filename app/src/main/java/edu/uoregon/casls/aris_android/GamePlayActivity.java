@@ -1,7 +1,6 @@
 package edu.uoregon.casls.aris_android;
 
 import android.app.ActivityOptions;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
@@ -20,18 +19,29 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.Utilities.Dispatcher;
 import edu.uoregon.casls.aris_android.Utilities.ResponseHandler;
+import edu.uoregon.casls.aris_android.data_objects.Dialog;
+import edu.uoregon.casls.aris_android.data_objects.Factory;
 import edu.uoregon.casls.aris_android.data_objects.Game;
+import edu.uoregon.casls.aris_android.data_objects.Instance;
+import edu.uoregon.casls.aris_android.data_objects.InstantiableProtocol;
+import edu.uoregon.casls.aris_android.data_objects.Item;
 import edu.uoregon.casls.aris_android.data_objects.Media;
+import edu.uoregon.casls.aris_android.data_objects.Note;
+import edu.uoregon.casls.aris_android.data_objects.Plaque;
+import edu.uoregon.casls.aris_android.data_objects.Scene;
+import edu.uoregon.casls.aris_android.data_objects.Tab;
+import edu.uoregon.casls.aris_android.data_objects.Trigger;
 import edu.uoregon.casls.aris_android.data_objects.User;
-import edu.uoregon.casls.aris_android.models.GamesModel;
+import edu.uoregon.casls.aris_android.data_objects.WebPage;
 import edu.uoregon.casls.aris_android.models.MediaModel;
 import edu.uoregon.casls.aris_android.models.UsersModel;
 import edu.uoregon.casls.aris_android.services.AppServices;
@@ -132,7 +142,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			this.requestGameData(); // load all game data
 		else {
 			// todo:   Basically we'll sub in Android life cycle state save and restore (which means this needs to go in the onResume or onStart method
-			//[_MODEL_ restoreGameData]; // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restoreGameData
+			//[_MODEL_ restoreGameData); // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restoreGameData
 			this.gameDataLoaded(); //
 		}
 	}
@@ -148,7 +158,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			this.requestMaintenanceData();
 		else {
 			//skip maintenance step
-			//_MODEL_ restorePlayerData]; // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restorePlayerData
+			//_MODEL_ restorePlayerData); // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restorePlayerData
 			this.playerDataLoaded();
 		}
 
@@ -156,11 +166,11 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	// todo: implement Android version of these iOS methods:
 /*
-	public void gameFetchFailed { [self.view addSubview:gameRetryLoadButton]; }
+	public void gameFetchFailed { [self.view addSubview:gameRetryLoadButton); }
 	public void retryGameFetch
 	{
-		[gameRetryLoadButton removeFromSuperview];
-		this.requestGameData];
+		[gameRetryLoadButton removeFromSuperview);
+		this.requestGameData);
 	}
 */
 
@@ -174,26 +184,26 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		if (!mGame.hasLatestDownload() || !mGame.begin_fresh()) // fixme: ensure begin_game condition is being set meaningfully from server call, getPlayerPlayedGame
 			this.requestPlayerData();
 		else {
-			//_MODEL_ restorePlayerData]; // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restorePlayerData
+			//_MODEL_ restorePlayerData); // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restorePlayerData
 			this.playerDataLoaded();
 		}
 	}
 
 	// todo: implement Android version of these iOS methods:
 /*
-	public void maintenancePercentLoaded:(NSNotification *)notif { maintenanceProgressBar.progress = [notif.userInfo[@"percent"] floatValue]; }
-	public void maintenanceFetchFailed { [self.view addSubview:maintenanceRetryLoadButton]; }
+	public void maintenancePercentLoaded:(NSNotification *)notif { maintenanceProgressBar.progress = [notif.userInfo["percent") floatValue); }
+	public void maintenanceFetchFailed { [self.view addSubview:maintenanceRetryLoadButton); }
 	public void retryMaintenanceFetch
 	{
-		[maintenanceRetryLoadButton removeFromSuperview];
-		this.requestMaintenanceData];
+		[maintenanceRetryLoadButton removeFromSuperview);
+		this.requestMaintenanceData);
 	}
 */
 
 
 //Player Data
 	public void requestPlayerData() {
-//		[self.view addSubview:playerProgressLabel]; [self.view addSubview:playerProgressBar]; // todo progress bar
+//		[self.view addSubview:playerProgressLabel); [self.view addSubview:playerProgressBar); // todo progress bar
 		mGame.requestPlayerData();
 	}
 
@@ -202,26 +212,26 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			if (mGame.preload_media()) //fixme: preload_media not getting set?
 				this.requestMediaData(); // won't load until maintDataLoaded <-
 			else
-				this.beginGame(); //[_MODEL_ beginGame];
+				this.beginGame(); //[_MODEL_ beginGame);
 		}
 		else
-			this.beginGame();	//[_MODEL_ beginGame];
+			this.beginGame();	//[_MODEL_ beginGame);
 	}
 
 	// todo: implement Android version of these iOS methods:
 /*
-	public void playerPercentLoaded:(NSNotification *)notif { playerProgressBar.progress = [notif.userInfo[@"percent"] floatValue]; }
-	public void playerFetchFailed { [self.view addSubview:playerRetryLoadButton]; }
+	public void playerPercentLoaded:(NSNotification *)notif { playerProgressBar.progress = [notif.userInfo["percent") floatValue); }
+	public void playerFetchFailed { [self.view addSubview:playerRetryLoadButton); }
 	public void retryPlayerFetch
 	{
-		[playerRetryLoadButton removeFromSuperview];
-		this.requestPlayerData];
+		[playerRetryLoadButton removeFromSuperview);
+		this.requestPlayerData);
 	}
 */
 
 //Media Data
 	public void requestMediaData() {
-		//[self.view addSubview:mediaProgressLabel]; [self.view addSubview:mediaProgressBar]; // todo progress bar
+		//[self.view addSubview:mediaProgressLabel); [self.view addSubview:mediaProgressBar); // todo progress bar
 		mGame.requestMediaData();
 	}
 
@@ -233,19 +243,19 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	// todo: implement Android version of these iOS methods:
 /*
-	public void mediaPercentLoaded:(NSNotification *)notif { mediaProgressBar.progress = [notif.userInfo[@"percent"] floatValue]; }
-	public void mediaFetchFailed { [self.view addSubview:mediaRetryLoadButton]; }
+	public void mediaPercentLoaded:(NSNotification *)notif { mediaProgressBar.progress = [notif.userInfo["percent") floatValue); }
+	public void mediaFetchFailed { [self.view addSubview:mediaRetryLoadButton); }
 	public void retryMediaFetch {
-		[mediaRetryLoadButton removeFromSuperview];
-		this.requestMediaData];
+		[mediaRetryLoadButton removeFromSuperview);
+		this.requestMediaData);
 	}
 */
 
 	// Stubs from iOS RootViewController. May be unnecessary in Android vers. but included while developing App just in case they become useful.
 	public void gameBegan() { // stub for potential use later to duplicate RootViewController behaviours as exist in iOS vs.
 		// in iOS, initializes View Controller. Not much else.
-//		gamePlayViewController = [[GamePlayViewController alloc] initWithDelegate:self];
-//		[self displayContentController:gamePlayViewController];
+//		gamePlayViewController = new GamePlayViewController alloc] initWithDelegate:self);
+//		this.displayContentController:gamePlayViewController);
 	}
 	public void gameChosen() { // stub for potential use later to duplicate RootViewController behaviours as exist in iOS vs.
 		// in iOS, starts the game loading sequence.
@@ -263,15 +273,15 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		boolean debugThis = true; // dev debugging
 		if (debugThis) checkGameFile(); // dev debugging delete or disable after code is working.
 
-		mGame.logsModel.playerEnteredGame(); //		[_MODEL_LOGS_ playerEnteredGame];
-		mDispatch.game_began(); // calls mGame.gameBegan() and mGamePlayAct.gameBegan()
+		mGame.logsModel.playerEnteredGame(); //		mGame.logsModel.playerEnteredGame);
+		mDispatch.model_game_began(); // calls mGame.gameBegan() and mGamePlayAct.gameBegan()
 	}
 
 	private void storeGame() {
 
 		// serialize entire game to an app internal local file
 		Gson gson = new Gson();
-		String jsonGame = gson.toJson(mGame); // data = mGame.serialize] dataUsingEncoding:NSUTF8StringEncoding];
+		String jsonGame = gson.toJson(mGame); // data = mGame.serialize] dataUsingEncoding:NSUTF8StringEncoding);
 
 		File gameStorageFile = AppUtils.gameStorageFile(this, mGame.game_id);
 		AppUtils.writeToFileStream(this, gameStorageFile, jsonGame);
@@ -285,19 +295,19 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 //		ARISModel *m;
 //		for(long i = 0; i < _MODEL_GAME_.models.count; i++)
 //		{
-//			m = _MODEL_GAME_.models[i];
-//			data = [[m serializeGameData] dataUsingEncoding:NSUTF8StringEncoding];
-//			file = [folder stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_game.json",m.serializedName]];
-//			[data writeToFile:file atomically:YES];
-//			[[NSURL fileURLWithPath:file] setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+//			m = _MODEL_GAME_.modelsi);
+//			data = new m serializeGameData] dataUsingEncoding:NSUTF8StringEncoding);
+//			file = [folder stringByAppendingPathComponent:[NSString stringWithFormat:"%@_game.json",m.serializedName]);
+//			[data writeToFile:file atomically:YES);
+//			new NSURL fileURLWithPath:file] setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error);
 //		}
 //		for(long i = 0; i < _MODEL_GAME_.models.count; i++)
 //		{
-//			m = _MODEL_GAME_.models[i];
-//			data = [[m serializePlayerData] dataUsingEncoding:NSUTF8StringEncoding];
-//			file = [folder stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_player.json",m.serializedName]];
-//			[data writeToFile:file atomically:YES];
-//			[[NSURL fileURLWithPath:file] setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+//			m = _MODEL_GAME_.modelsi);
+//			data = new m serializePlayerData] dataUsingEncoding:NSUTF8StringEncoding);
+//			file = [folder stringByAppendingPathComponent:[NSString stringWithFormat:"%@_player.json",m.serializedName]);
+//			[data writeToFile:file atomically:YES);
+//			new NSURL fileURLWithPath:file] setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error);
 //		}
 		mGame.downloadedVersion = mGame.version;
 	}
@@ -558,5 +568,212 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mGame.initContext(this); // reset context
 		mGame.initModelContexts(); // re-initialize all the embedded objects' references to the Activity context.
 	}
+
+	/*
+	*
+	*  GamePlayViewController Section (Separate class in iOS)
+	*
+	*/
+
+	boolean viewingObject = false;
+	public List<Long> local_inst_queue = new ArrayList<>();
+
+	public void tryDequeue() {
+		//Doesn't currently have the view-heirarchy authority to display.
+		//if(!(self.isViewLoaded && self.view.window)) //should work but apple's timing is terrible
+		if (viewingObject) return;
+		Object o;
+		if ((o = mGame.displayQueueModel.dequeue()) != null) {
+			if (o.getClass().isInstance(Trigger.class)) this.displayTrigger((Trigger) o);
+			else if (o.getClass().isInstance(Instance.class)) this.displayInstance((Instance) o);
+			else if (o.getClass().isInstance(Tab.class)) this.displayTab((Tab) o);
+//			else if(o.getClass().isInstance(InstantiableProtocol.class)) this.displayObject(Object <InstantiableProtocol> o);
+			else if (o.getClass().isAssignableFrom(InstantiableProtocol.class))
+				this.displayObject((InstantiableProtocol) o);
+//			else if(o instanceof InstantiableProtocol ) this.displayObject(Object <InstantiableProtocol>*)o);
+//			else if([o conformsToProtocol:@protocol(InstantiableProtocol)]) this.displayObject:(NSObject <InstantiableProtocol>*)o);
+			// conformsToProtocol is similar to isKindOfClass (or isInstance() in Java), but
+		}
+	}
+
+	public void flushBufferQueuedInstances() {
+		for (int i = 0; i < local_inst_queue.size(); i++) {
+			Instance inst = mGame.instancesModel.instanceForId(local_inst_queue.get(i)); //_MODEL_INSTANCES_ instanceForId:((NSNumber *)local_inst_queuei]).longValue);
+			if (inst.instance_id > 0) {
+				mGame.displayQueueModel.enqueueInstance(inst);
+				local_inst_queue.remove(i); // removeObjectAtIndex(i);
+				i--;
+			}
+		}
+	}
+
+	public void displayTrigger(Trigger t)
+	{
+		Instance i = mGame.instancesModel.instanceForId(t.instance_id);
+		if(i.instance_id < 1)
+		{
+			//this is bad and points to a need for a non-global service architecture.
+			//see notes by 'local_inst_queue'
+			local_inst_queue.add(t.instance_id); // addObject:[NSNumber numberWithLong:t.instance_id]);
+		}
+		else
+		{
+			mDispatch.game_play_display_triggered(t); //_ARIS_NOTIF_SEND_("GAME_PLAY_DISPLAYED_TRIGGER",nil,@{"trigger":t});
+			this.displayInstance(i);
+			mGame.logsModel.playerTriggeredTriggerId(t.trigger_id);
+		}
+	}
+
+
+	public void displayInstance(Instance i)
+	{
+//		ARISViewController *vc;
+		if(i.object_type.contentEquals("PLAQUE"))
+			// todo: this is a plaque. Display it. (on this activities layout? or on a fragment?)
+			// fixme: this is a plaque. Display it. (on this activities layout? or on a fragment?)
+//		vc = new PlaqueViewController(i delegate:self);
+		if(i.object_type.contentEquals("ITEM"))
+//		vc = new ItemViewController(i delegate:self);
+		if(i.object_type.contentEquals("DIALOG"))
+//		vc = new DialogViewController(i delegate:self);
+		if(i.object_type.contentEquals("WEB_PAGE"))
+//		vc = new WebPageViewController(i delegate:self);
+		if(i.object_type.contentEquals("NOTE"))
+//		vc = new NoteViewController(i delegate:self);
+		if(i.object_type.contentEquals("EVENT_PACKAGE")) //Special case (don't actually display anything)
+		{
+			mGame.eventsModel.runEventPackageId(i.object_id); //will take care of log
+			//Hack 'dequeue' as simulation for normally inevitable request dismissal of VC we didn't put up...
+			this.performSelector.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					tryDequeue();
+				}
+			}, 1000); //:@selector(tryDequeue) withObject:nil afterDelay:1);
+			return;
+		}
+		if(i.object_type.contentEquals("SCENE")) //Special case (don't actually display anything)
+		{
+			mGame.scenesModel.setPlayerScene((Scene)i.object());
+			mGame.logsModel.playerViewedInstanceId(i.instance_id);
+			//Hack 'dequeue' as simulation for normally inevitable request dismissal of VC we didn't put up...
+			this.performSelector.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					tryDequeue();
+				}
+			}, 1000); //:@selector(tryDequeue) withObject:nil afterDelay:1);
+			return;
+		}
+		if(i.object_type.contentEquals("EVENT_PACKAGE")) //Special case (don't actually display anything)
+		{
+			mGame.eventsModel.runEventPackageId(i.object_id);
+			mGame.logsModel.playerViewedInstanceId(i.instance_id);
+			//Hack 'dequeue' as simulation for normally inevitable request dismissal of VC we didn't put up...
+			this.performSelector.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					tryDequeue();
+				}
+			}, 1000); //:@selector(tryDequeue) withObject:nil afterDelay:1);
+			return;
+		}
+		if(i.object_type.contentEquals("FACTORY")) //Special case (don't actually display anything)
+		{
+			//Hack 'dequeue' as simulation for normally inevitable request dismissal of VC we didn't put up...
+			this.performSelector.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					tryDequeue();
+				}
+			}, 1000); //:@selector(tryDequeue) withObject:nil afterDelay:1);
+			return;
+		}
+		mGame.logsModel.playerViewedInstanceId(i.instance_id);
+		mDispatch.game_play_displayed_instance(i); //_ARIS_NOTIF_SEND_("GAME_PLAY_DISPLAYED_INSTANCE",nil,@{"instance"(i});
+		if(i.factory_id > 0)
+		{
+			Factory f = mGame.factoriesModel.factoryForId(i.factory_id);
+			if(f.produce_expire_on_view == 1)
+				 mGame.triggersModel.expireTriggersForInstanceId(i.instance_id);
+		}
+
+//		ARISNavigationController *nav = new ARISNavigationController alloc] initWithRootViewController:vc);
+//		this.presentDisplay(nav);
+		// todo: update the the display with the instance determined above, if it wasn't done directly in the conditional
+	}
+
+
+	public void displayObject(Object o) // - (void) displayObject:(NSObject <InstantiableProtocol>*)o
+	{
+//		ARISViewController *vc;
+		Instance i = mGame.instancesModel.instanceForId(0);
+		if(o.getClass().isInstance(Plaque.class))
+		{
+			Plaque p = (Plaque)o;
+			i.object_type = "PLAQUE";
+			i.object_id = p.plaque_id;
+			// todo: this is a plaque. Display it. (on this activities layout? or on a fragment?)
+			// fixme: this is a plaque. Display it. (on this activities layout? or on a fragment?)
+//			vc = new PlaqueViewController(i delegate:self);
+		}
+		else if(o.getClass().isInstance(Item.class))
+		{
+			Item it = (Item)o;
+			i.object_type = "ITEM";
+			i.object_id = it.item_id;
+//			vc = new ItemViewController(i delegate:self);
+		}
+		else if(o.getClass().isInstance(Dialog.class))
+		{
+			Dialog d = (Dialog)o;
+			i.object_type = "DIALOG";
+			i.object_id = d.dialog_id;
+//			vc = new DialogViewController(i delegate:self);
+		}
+		else if(o.getClass().isInstance(WebPage.class))
+		{
+			WebPage w = (WebPage)o;
+			if(w.web_page_id == 0) //assume ad hoc (created from some webview href maybe?)
+			{
+//				vc = new WebPageViewController alloc] initWithWebPage:w delegate:self);
+			}
+			else
+			{
+				i.object_type = "WEB_PAGE";
+				i.object_id = w.web_page_id;
+//				vc = new WebPageViewController(i delegate:self);
+			}
+		}
+		else if(o.getClass().isInstance(Note.class))
+		{
+			Note n = (Note)o;
+			i.object_type = "NOTE";
+			i.object_id = n.note_id;
+//			vc = new NoteViewController(i delegate:self);
+		}
+
+		//todo: these next two
+//		ARISNavigationController *nav = new ARISNavigationController alloc] initWithRootViewController:vc);
+//		this.presentDisplay:nav);
+	}
+
+	public void displayTab(Tab t) {
+//todo:		gamePlayTabSelectorController.requestDisplayTab(t);
+		this.tryDequeue(); //no 'closing event' for tab
+	}
+
+	public void displayScannerWithPrompt(String p) {
+//todo:		gamePlayTabSelectorController.requestDisplayScannerWithPrompt(p);
+	}
+
+//	public void presentDisplay(UIViewController vc)
+//	{
+//		this.presentViewController:vc animated:NO completion:nil);
+//		viewingObject = YES;
+//
+//		this.reSetOverlayControllersInVC:vc atYDelta:20);
+//	}
+
 
 }

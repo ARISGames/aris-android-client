@@ -3,7 +3,7 @@ package edu.uoregon.casls.aris_android.data_objects;
 /**
  * Created by smorison on 8/19/15.
  */
-public class Dialog {
+public class Dialog implements InstantiableProtocol {
 	public long   dialog_id              = 0;
 	public String name                   = "Dialog";
 	public String desc                   = "";

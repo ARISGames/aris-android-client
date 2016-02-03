@@ -3,7 +3,7 @@ package edu.uoregon.casls.aris_android.data_objects;
 /**
  * Created by smorison on 9/29/15.
  */
-public class Group {
+public class Group implements InstantiableProtocol {
 	public long   group_id = 0;
 	public String name     = "";
 
