@@ -134,19 +134,14 @@ public class TriggersModel extends ARISModel {
 		List<Trigger> removedTriggers = new ArrayList<>();
 
 		//find added
-		boolean flag;
-		int isize = newTriggers.size();
-		int jsize = playerTriggers.size();
-
+		boolean flagNew;
 		for (Trigger newTrigger : newTriggers) {
-			flag = true;
-			for (Trigger oldTrigger : playerTriggers)
-			for (int j = 0; j < jsize; j++) {
-				if (newTrigger.trigger_id == oldTrigger.trigger_id) {
-					flag = false;
-				}
+			flagNew = true;
+			for (Trigger oldTrigger : playerTriggers) {
+				if (newTrigger.trigger_id == oldTrigger.trigger_id)
+					flagNew = false;
 			}
-			if (flag) {
+			if (flagNew) {
 				addedTriggers.add(newTrigger);
 			}
 		}

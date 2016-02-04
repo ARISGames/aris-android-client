@@ -418,7 +418,7 @@ public class Game {
 		tabsModel = new TabsModel();                       models.add(tabsModel);
 		logsModel = new LogsModel();                       models.add(logsModel);
 		questsModel = new QuestsModel();                   models.add(questsModel);
-		displayQueueModel = new DisplayQueueModel();       models.add(displayQueueModel);
+		displayQueueModel = new DisplayQueueModel(mGamePlayAct);       models.add(displayQueueModel);
 		//@formatter:on
 		models.add(mGamePlayAct.mUsersModel); //		[models addObject:_MODEL_USERS_];
 		models.add(mGamePlayAct.mMediaModel); //		[models addObject:_MODEL_MEDIA_];

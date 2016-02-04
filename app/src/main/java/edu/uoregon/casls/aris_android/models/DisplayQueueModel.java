@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,31 +25,33 @@ import edu.uoregon.casls.aris_android.services.PollTriggerService;
  * Created by smorison on 8/20/15.
  */
 public class DisplayQueueModel extends ARISModel {
-	public List<Trigger> displayQueue = new LinkedList<>(); //NSMutableArray *displayQueue;
 
 	public int listen_model_triggers_new_available  = 1;
 	public int listen_model_triggers_less_available = 1;
 	public int listen_model_triggers_invalidated    = 1;
 	public int listen_user_moved                    = 1;
 
+	public List<Object> displayQueue = new ArrayList<>(); //NSMutableArray *displayQueue;
 	//blacklist triggered triggers from auto-enqueue until they become unavailable for at least one refresh
 	//(prevents constant triggering if someone has bad requirements)
-	public List<Trigger> displayBlacklist = new LinkedList<>(); //NSMutableArray *displayBlacklist;
+	public List<Trigger> displayBlacklist = new ArrayList<>(); //NSMutableArray *displayBlacklist;
 //	NSTimer *timerPoller;
 
 	public transient GamePlayActivity mGamePlayAct;
-	private Intent pollTriggerTimerSvcIntent = null;
-	private boolean isTriggerPollerRunning = false;
+	private Intent  pollTriggerTimerSvcIntent = null;
+	private boolean isTriggerPollerRunning    = false;
 
 	public void initContext(GamePlayActivity gamePlayAct) {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
 	}
 
 
-	public DisplayQueueModel() {
+	public DisplayQueueModel(GamePlayActivity gamePlayAct) {
 //		timerPoller = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(tickAndEnqueueAvailableTimers) userInfo:nil repeats:true];
+		this.initContext(gamePlayAct); // must be called immediately to enable the poller to start.
 		startTriggerPoller();
 		this.clearPlayerData();
+		displayBlacklist = new ArrayList<>();
 //			_ARIS_NOTIF_LISTEN_(@"MODEL_TRIGGERS_NEW_AVAILABLE",self,@selector(reevaluateAutoTriggers),nil);
 //			_ARIS_NOTIF_LISTEN_(@"MODEL_TRIGGERS_LESS_AVAILABLE",self,@selector(reevaluateAutoTriggers),nil);
 //			_ARIS_NOTIF_LISTEN_(@"MODEL_TRIGGERS_INVALIDATED",self,@selector(reevaluateAutoTriggers),nil);
@@ -54,6 +59,8 @@ public class DisplayQueueModel extends ARISModel {
 	}
 
 	private void startTriggerPoller() {
+		Context c = mGamePlayAct;
+		BroadcastReceiver bcr = mMessageReceiver;
 		// register receiver
 		LocalBroadcastManager.getInstance(mGamePlayAct).registerReceiver(mMessageReceiver, new IntentFilter(AppConfig.TRIGGER_POLLER_SVC_ACTION));
 		if (!isTriggerPollerRunning) {
@@ -67,7 +74,7 @@ public class DisplayQueueModel extends ARISModel {
 	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-//			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Trigger Timer has Cycled  - - - - - - - - TRIGG!");
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Trigger Timer has Cycled  - - - - - - - - TRIGG!");
 			handleTriggerPollerMessage(intent);
 		}
 	};
@@ -100,17 +107,22 @@ public class DisplayQueueModel extends ARISModel {
 	}
 
 	public void enqueue(Object i) {
-		if (!this.displayInQueue(i))
-			displayQueue.add((Trigger) i); // addObject(i);
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Enqueue the following: " + i.getClass().getName());
+		if (!this.displayInQueue(i)) {
+			if (displayQueue == null) displayQueue = new ArrayList<>();
+			displayQueue.add(i); // addObject(i);
+		}
 		mGamePlayAct.mDispatch.model_display_new_enqueued(); //_ARIS_NOTIF_SEND_(@"MODEL_DISPLAY_NEW_ENQUEUED", nil, nil);
 	}
 
 	public void enqueueTrigger(Trigger t) { this.enqueue(t); }
 
+	/* injectTrigger is never called */
 	public void injectTrigger(Trigger t) { this.inject(t); }
 
 	public void enqueueInstance(Instance i) { this.enqueue(i); }
 
+	/* injectInstance is never called */
 	public void injectInstance(Instance i) { this.inject(i); }
 
 	public void enqueueObject(InstantiableProtocol o) { this.enqueue(o); }
@@ -128,21 +140,24 @@ public class DisplayQueueModel extends ARISModel {
 			o = displayQueue.get(0);
 			displayQueue.remove(o); //removeObject(o);
 
-			if (o.getClass().isInstance(Trigger.class) && ((Trigger) o).trigger_id != 0)
-				displayBlacklist.add((Trigger) o);// addObject(o);
+			if (o instanceof Trigger && ((Trigger)o).trigger_id != 0)
+				displayBlacklist.add((Trigger)o);// addObject(o);
 		}
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Dequeue the following: " + o.getClass().getName());
 		return o;
 	}
 
 	public boolean displayInQueue(Object d) {
-		for (Trigger t : displayQueue)
-			if (d == t) return true; // == tests to see that d and t are references to the SAME object
+		if (displayQueue != null)
+			for (Object o : displayQueue)
+				if (d == o) return true; // == tests to see that d and t are references to the SAME object
 		return false;
 	}
 
 	public boolean displayBlacklisted(Object d) {
-		for (Trigger t : displayBlacklist)
-			if (d == t) return true;
+		if (displayBlacklist != null)
+			for (Trigger t : displayBlacklist)
+				if (d == t) return true;
 		return false;
 	}
 
@@ -157,60 +172,64 @@ public class DisplayQueueModel extends ARISModel {
 		Trigger t = null;
 
 		//if trigger in queue no longer available, remove from queue
-		for (int i = 0; i < displayQueue.size(); i++) {
-			boolean valid = false;
-			if (!displayQueue.get(i).getClass().isInstance(Trigger.class))
-				continue; // isKindOfClass:[Trigger class]]) continue; //only triggers are blacklisted
-			t = displayQueue.get(i);
-//			for (int j = 0; j < pt.size(); j++)
-			for (Trigger  jt : pt)
-				if (t.trigger_id == 0 || t.trigger_id == ((Trigger) jt).trigger_id)
-					valid = true; //allow artificial triggers to stay in queue
-			if (!valid) displayQueue.remove(t);
-		}
+//		for (int i = 0; i < displayQueue.size(); i++) {
+		if (displayQueue != null) // hold off until there's something in the List. NPE otherwise.
+//			for (Object o : displayQueue) {
+			for (Iterator<Object> iter = displayQueue.iterator(); iter.hasNext(); ) {// for (Iterator<String> iterator = list.iterator(); iterator.hasNext(); ) {
+				Object o = iter.next(); //String value = iterator.next();
+				boolean valid = false;
+				if (!(o instanceof Trigger)) // (!o instanceof Trigger) <- is this more efficient/appropriate/logically correct?
+					continue; // isKindOfClass:[Trigger class]]) continue; //only triggers are blacklisted
+				t = (Trigger)o; // cast to Trigger
+				for (Trigger  jt : pt)
+					if (t.trigger_id == 0 || t.trigger_id == ((Trigger) jt).trigger_id)
+						valid = true; //allow artificial triggers to stay in queue
+//				if (!valid) displayQueue.remove(o);
+				if (!valid) iter.remove();
+			}
 
 		//if trigger in blacklist no longer available/within range, remove from blacklist
-		for (int i = 0; i < displayBlacklist.size(); i++) {
-			boolean valid = false;
-			if (displayBlacklist.get(i).getClass().isInstance(Trigger.class)) //only triggers are blacklisted
-			{
-				//@formatter:off
-				t = displayBlacklist.get(i);
-//				for (int j = 0; j < pt.size(); j++)
-				for (Trigger  jt : pt) {
-					if ( t == jt
-						 && (t.type.contentEquals("IMMEDIATE")
-							 || ( t.type.contentEquals("LOCATION")
-								  && t.trigger_on_enter == 1
-								  && ( t.infinite_distance == 1
-									   || t.location.distanceTo(mGamePlayAct.mPlayer.location) < t.distance
+//		for (int i = 0; i < displayBlacklist.size(); i++) {
+		if (displayBlacklist != null)
+			for (Object o : displayBlacklist) { // could probably just be cast to Trigger instead of Object here - sem
+				boolean valid = false;
+				if (o instanceof Trigger) { //only triggers are blacklisted - sem: so why are we testing here?
+					t = (Trigger)o;
+	//@formatter:off
+					for (Trigger  jt : pt) {
+						if (t == jt
+							&& (t.type.contentEquals("IMMEDIATE")
+								|| (t.type.contentEquals("LOCATION")
+								&& t.trigger_on_enter == 1
+								&& (t.infinite_distance == 1
+										|| t.location.distanceTo(mGamePlayAct.mPlayer.location) < t.distance
+									)
 								)
 							)
 						)
-					)
-					valid = true;
+						valid = true;
+					}
+	//@formatter:on
 				}
-				//@formatter:on
+				if (!valid) displayBlacklist.remove(t);// removeObject(t);
 			}
-			if (!valid) displayBlacklist.remove(t);// removeObject(t);
-		}
 	}
 
 	public void tickAndEnqueueAvailableTimers() {
 		List<Trigger> pt = mGamePlayAct.mGame.triggersModel.playerTriggers;
 
-		for (Trigger it : pt) {
-			if (it.type.contentEquals("TIMER")) {
+		for (Trigger t : pt) {
+			if (t.type.contentEquals("TIMER")) {
 				boolean inQueue = false;
-				for (Trigger jt : displayQueue) {
-					if (jt == it) inQueue = true;
+				for (Object o : displayQueue) {
+					if (o == t) inQueue = true;
 				}
-				if (!inQueue && it.time_left > 0)
-					it.time_left--;
+				if (!inQueue && t.time_left > 0)
+					t.time_left--;
 
-				if (it.time_left <= 0 && it.seconds > 0) {
-					it.time_left = it.seconds;
-					this.enqueueTrigger(it); //will auto verify not already in queue
+				if (t.time_left <= 0 && t.seconds > 0) {
+					t.time_left = t.seconds;
+					this.enqueueTrigger(t); //will auto verify not already in queue
 				}
 			}
 		}
@@ -218,24 +237,25 @@ public class DisplayQueueModel extends ARISModel {
 
 	public void enqueueNewImmediates() {
 		List<Trigger> pt = mGamePlayAct.mGame.triggersModel.playerTriggers;
-		for (Trigger t : pt) {
-			//@formatter:off
-			if (
-					( t.type.contentEquals("IMMEDIATE")
-					  || ( t.type.contentEquals("LOCATION")
-						   && t.trigger_on_enter == 1
-						   && ( t.infinite_distance == 1
-							    || t.location.distanceTo(mGamePlayAct.mPlayer.location) < t.distance
-							  )
-						 )
-					)
-					&& !this.displayBlacklisted(t)
-			)
-			{
-				this.enqueueTrigger(t); //will auto verify not already in queue
+		if (pt != null)
+			for (Trigger t : pt) {
+				//@formatter:off
+				if (
+						( t.type.contentEquals("IMMEDIATE")
+						  || ( t.type.contentEquals("LOCATION")
+							   && t.trigger_on_enter == 1
+							   && ( t.infinite_distance == 1
+								    || t.location.distanceTo(mGamePlayAct.mPlayer.location) < t.distance
+								  )
+							 )
+						)
+						&& !this.displayBlacklisted(t)
+				)
+				{
+					this.enqueueTrigger(t); //will auto verify not already in queue
+				}
+				//@formatter:on
 			}
-			//@formatter:on
-		}
 	}
 
 	public void endPlay() {

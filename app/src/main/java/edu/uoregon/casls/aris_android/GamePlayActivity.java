@@ -3,12 +3,13 @@ package edu.uoregon.casls.aris_android;
 import android.app.ActivityOptions;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -579,17 +580,25 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	public List<Long> local_inst_queue = new ArrayList<>();
 
 	public void tryDequeue() {
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Try Dequeue: " );
 		//Doesn't currently have the view-heirarchy authority to display.
 		//if(!(self.isViewLoaded && self.view.window)) //should work but apple's timing is terrible
 		if (viewingObject) return;
 		Object o;
 		if ((o = mGame.displayQueueModel.dequeue()) != null) {
-			if (o.getClass().isInstance(Trigger.class)) this.displayTrigger((Trigger) o);
-			else if (o.getClass().isInstance(Instance.class)) this.displayInstance((Instance) o);
-			else if (o.getClass().isInstance(Tab.class)) this.displayTab((Tab) o);
-//			else if(o.getClass().isInstance(InstantiableProtocol.class)) this.displayObject(Object <InstantiableProtocol> o);
-			else if (o.getClass().isAssignableFrom(InstantiableProtocol.class))
-				this.displayObject((InstantiableProtocol) o);
+			if (o instanceof Trigger) this.displayTrigger((Trigger) o);
+			else if (o instanceof Instance) this.displayInstance((Instance) o);
+			else if (o instanceof Tab) this.displayTab((Tab) o);
+			else if (InstantiableProtocol.class.isInstance(o))
+				this.displayObject(o);
+//			else if (o.getClass().isAssignableFrom(InstantiableProtocol.class))
+//				this.displayObject((InstantiableProtocol) o);
+
+//			if (o.getClass().isInstance(Trigger.class)) this.displayTrigger((Trigger) o); // (o instanceof Trigger) ??
+//			else if (o.getClass().isInstance(Instance.class)) this.displayInstance((Instance) o);
+//			else if (o.getClass().isInstance(Tab.class)) this.displayTab((Tab) o);
+//			else if (o.getClass().isAssignableFrom(InstantiableProtocol.class))
+//				this.displayObject((InstantiableProtocol) o);
 //			else if(o instanceof InstantiableProtocol ) this.displayObject(Object <InstantiableProtocol>*)o);
 //			else if([o conformsToProtocol:@protocol(InstantiableProtocol)]) this.displayObject:(NSObject <InstantiableProtocol>*)o);
 			// conformsToProtocol is similar to isKindOfClass (or isInstance() in Java), but
@@ -610,6 +619,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	public void displayTrigger(Trigger t)
 	{
 		Instance i = mGame.instancesModel.instanceForId(t.instance_id);
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Entering displayTrigger triggerid: " + t.trigger_id + ", instanceid: " + i.instance_id);
 		if(i.instance_id < 1)
 		{
 			//this is bad and points to a need for a non-global service architecture.
@@ -625,23 +635,28 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	}
 
 
-	public void displayInstance(Instance i)
-	{
+	public void displayInstance(Instance i) {
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Entering displayInstance instanceType: " + i.object_type);
 //		ARISViewController *vc;
-		if(i.object_type.contentEquals("PLAQUE"))
+		if (i.object_type.contentEquals("PLAQUE"))
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 			// todo: this is a plaque. Display it. (on this activities layout? or on a fragment?)
 			// fixme: this is a plaque. Display it. (on this activities layout? or on a fragment?)
 //		vc = new PlaqueViewController(i delegate:self);
-		if(i.object_type.contentEquals("ITEM"))
+		if (i.object_type.contentEquals("ITEM"))
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 //		vc = new ItemViewController(i delegate:self);
-		if(i.object_type.contentEquals("DIALOG"))
+		if (i.object_type.contentEquals("DIALOG"))
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 //		vc = new DialogViewController(i delegate:self);
-		if(i.object_type.contentEquals("WEB_PAGE"))
+		if (i.object_type.contentEquals("WEB_PAGE"))
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 //		vc = new WebPageViewController(i delegate:self);
-		if(i.object_type.contentEquals("NOTE"))
+		if (i.object_type.contentEquals("NOTE"))
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 //		vc = new NoteViewController(i delegate:self);
-		if(i.object_type.contentEquals("EVENT_PACKAGE")) //Special case (don't actually display anything)
-		{
+		if (i.object_type.contentEquals("EVENT_PACKAGE")) { //Special case (don't actually display anything)
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 			mGame.eventsModel.runEventPackageId(i.object_id); //will take care of log
 			//Hack 'dequeue' as simulation for normally inevitable request dismissal of VC we didn't put up...
 			this.performSelector.postDelayed(new Runnable() {
@@ -652,8 +667,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			}, 1000); //:@selector(tryDequeue) withObject:nil afterDelay:1);
 			return;
 		}
-		if(i.object_type.contentEquals("SCENE")) //Special case (don't actually display anything)
-		{
+		if (i.object_type.contentEquals("SCENE")) { //Special case (don't actually display anything)
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 			mGame.scenesModel.setPlayerScene((Scene)i.object());
 			mGame.logsModel.playerViewedInstanceId(i.instance_id);
 			//Hack 'dequeue' as simulation for normally inevitable request dismissal of VC we didn't put up...
@@ -665,8 +680,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			}, 1000); //:@selector(tryDequeue) withObject:nil afterDelay:1);
 			return;
 		}
-		if(i.object_type.contentEquals("EVENT_PACKAGE")) //Special case (don't actually display anything)
-		{
+		if (i.object_type.contentEquals("EVENT_PACKAGE")) { //Special case (don't actually display anything)
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 			mGame.eventsModel.runEventPackageId(i.object_id);
 			mGame.logsModel.playerViewedInstanceId(i.instance_id);
 			//Hack 'dequeue' as simulation for normally inevitable request dismissal of VC we didn't put up...
@@ -678,8 +693,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			}, 1000); //:@selector(tryDequeue) withObject:nil afterDelay:1);
 			return;
 		}
-		if(i.object_type.contentEquals("FACTORY")) //Special case (don't actually display anything)
-		{
+		if (i.object_type.contentEquals("FACTORY")) { //Special case (don't actually display anything)
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 			//Hack 'dequeue' as simulation for normally inevitable request dismissal of VC we didn't put up...
 			this.performSelector.postDelayed(new Runnable() {
 				@Override
@@ -691,8 +706,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		}
 		mGame.logsModel.playerViewedInstanceId(i.instance_id);
 		mDispatch.game_play_displayed_instance(i); //_ARIS_NOTIF_SEND_("GAME_PLAY_DISPLAYED_INSTANCE",nil,@{"instance"(i});
-		if(i.factory_id > 0)
-		{
+		if (i.factory_id > 0) {
 			Factory f = mGame.factoriesModel.factoryForId(i.factory_id);
 			if(f.produce_expire_on_view == 1)
 				 mGame.triggersModel.expireTriggersForInstanceId(i.instance_id);
@@ -706,48 +720,44 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	public void displayObject(Object o) // - (void) displayObject:(NSObject <InstantiableProtocol>*)o
 	{
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Entering displayObject instanceType: " + o.getClass().getName());
 //		ARISViewController *vc;
 		Instance i = mGame.instancesModel.instanceForId(0);
-		if(o.getClass().isInstance(Plaque.class))
-		{
-			Plaque p = (Plaque)o;
+//		if(Plaque.class.isInstance(o)) // <- better, worse, same, different?
+		if (o instanceof Plaque) {
+			Plaque p = (Plaque) o;
 			i.object_type = "PLAQUE";
 			i.object_id = p.plaque_id;
 			// todo: this is a plaque. Display it. (on this activities layout? or on a fragment?)
 			// fixme: this is a plaque. Display it. (on this activities layout? or on a fragment?)
 //			vc = new PlaqueViewController(i delegate:self);
 		}
-		else if(o.getClass().isInstance(Item.class))
-		{
-			Item it = (Item)o;
+		else if (o instanceof Item) {
+			Item it = (Item) o;
 			i.object_type = "ITEM";
 			i.object_id = it.item_id;
 //			vc = new ItemViewController(i delegate:self);
 		}
-		else if(o.getClass().isInstance(Dialog.class))
-		{
-			Dialog d = (Dialog)o;
+		else if (o instanceof Dialog) {
+			Dialog d = (Dialog) o;
 			i.object_type = "DIALOG";
 			i.object_id = d.dialog_id;
 //			vc = new DialogViewController(i delegate:self);
 		}
-		else if(o.getClass().isInstance(WebPage.class))
-		{
-			WebPage w = (WebPage)o;
-			if(w.web_page_id == 0) //assume ad hoc (created from some webview href maybe?)
+		else if (o instanceof WebPage) {
+			WebPage w = (WebPage) o;
+			if (w.web_page_id == 0) //assume ad hoc (created from some webview href maybe?)
 			{
 //				vc = new WebPageViewController alloc] initWithWebPage:w delegate:self);
 			}
-			else
-			{
+			else {
 				i.object_type = "WEB_PAGE";
 				i.object_id = w.web_page_id;
 //				vc = new WebPageViewController(i delegate:self);
 			}
 		}
-		else if(o.getClass().isInstance(Note.class))
-		{
-			Note n = (Note)o;
+		else if (o instanceof Note) {
+			Note n = (Note) o;
 			i.object_type = "NOTE";
 			i.object_id = n.note_id;
 //			vc = new NoteViewController(i delegate:self);
@@ -759,6 +769,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	}
 
 	public void displayTab(Tab t) {
+		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Entering displayTab tabid: " + t.tab_id);
 //todo:		gamePlayTabSelectorController.requestDisplayTab(t);
 		this.tryDequeue(); //no 'closing event' for tab
 	}

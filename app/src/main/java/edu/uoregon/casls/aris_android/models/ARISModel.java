@@ -76,14 +76,14 @@ public class ARISModel {
 		long nPlayerDataToRcv = this.nPlayerDataToReceive();
 		long n_player_data_rcvd = n_player_data_received;
 
-		if ( n_player_data_received >= this.nPlayerDataToReceive()) {
-			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "    PLAYERDATACYCLE  - - - - playerDataReceived. return " + n_player_data_rcvd + " >= " + nPlayerDataToRcv + " TRUE TRUE");
-//			return true;
-		}
-		else {
-			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "    PLAYERDATACYCLE  - - - - playerDataReceived. return " + n_player_data_rcvd + " >= " + nPlayerDataToRcv + " FALSE FALSE");
-//			return false;
-		}
+//		if ( n_player_data_received >= this.nPlayerDataToReceive()) {
+//			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "    PLAYERDATACYCLE  - - - - playerDataReceived. return " + n_player_data_rcvd + " >= " + nPlayerDataToRcv + " TRUE TRUE");
+////			return true;
+//		}
+//		else {
+//			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "    PLAYERDATACYCLE  - - - - playerDataReceived. return " + n_player_data_rcvd + " >= " + nPlayerDataToRcv + " FALSE FALSE");
+////			return false;
+//		}
 
 		return n_player_data_received >= this.nPlayerDataToReceive();
 	}
