@@ -467,11 +467,11 @@ public class Dispatcher {
 		mGamePlayAct.mGame.dialogsModel.dialogOptionsReceived(dialogOptions);
 	}
 
-	//	SERVICES_DIALOG_RECEIVED", nil, @{@"dialog_character":dialogCharacter});
-//	SERVICES_DIALOG_RECEIVED", nil, @{@"dialog_option":dialogOption});
-//	SERVICES_DIALOG_RECEIVED", nil, @{@"dialog_script":dialogScript});
-//	SERVICES_DIALOG_RECEIVED", nil, @{@"dialog":dialog});
-//	SERVICES_DIALOG_SCRIPTS_RECEIVED", nil, @{@"dialogScripts":dialogScripts});
+	//	SERVICES_DIALOG_RECEIVED", nil, @{@"dialog_character":dialogCharacter}); // unused call
+//	SERVICES_DIALOG_RECEIVED", nil, @{@"dialog_option":dialogOption}); // unused call
+//	SERVICES_DIALOG_RECEIVED", nil, @{@"dialog_script":dialogScript}); // unused call
+//	SERVICES_DIALOG_RECEIVED", nil, @{@"dialog":dialog}); // unused call
+//	SERVICES_DIALOG_SCRIPTS_RECEIVED", nil, @{@"dialogScripts":dialogScripts}); // unused call
 	public void services_dialog_scipts_received(List<DialogScript> dialogScripts) {
 		mGamePlayAct.mGame.dialogsModel.dialogScriptsReceived(dialogScripts);
 	}
@@ -487,7 +487,7 @@ public class Dispatcher {
 		// also GamesModel, we're removing this middleman.
 	}
 
-//	SERVICES_EVENT_RECEIVED", nil, @{@"event":event});
+//	SERVICES_EVENT_RECEIVED", nil, @{@"event":event}); // unused call
 //	SERVICES_EVENTS_RECEIVED", nil, @{@"events":events});
 	public void services_events_received(List<Event> events) {
 		mGamePlayAct.mGame.eventsModel.eventsReceived(events);
@@ -498,7 +498,7 @@ public class Dispatcher {
 		mGamePlayAct.mGame.factoriesModel.factoriesReceived(factories);
 	}
 
-	//	SERVICES_FACTORY_RECEIVED", nil, @{@"factory":factory});
+	//	SERVICES_FACTORY_RECEIVED", nil, @{@"factory":factory});  // unused call
 //	SERVICES_GAME_FETCH_FAILED", nil, nil); }
 //	SERVICES_GAME_INSTANCES_TOUCHED", nil, nil);
 	public void services_game_instances_touched() {

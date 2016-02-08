@@ -353,6 +353,22 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	}
 
+	/*Todo: I will want to use show hide instead below:
+	*
+	* "You should consider what you plan to do with the fragment to decide which path to follow.
+	* If you use a FragmentTransaction to hide the fragment, then it can still be in the running
+	* state of its lifecycle, but its UI has been detached from the window so it's no longer
+	* visible. So you could technically still interact with the fragment and reattach its UI later
+	* you need to. If you replace the fragment, the you are actually pulling it out of the container
+	* and it will go through all of the teardown events in the lifecycle (onPause, onStop, etc) and
+	* if for some reason you need that fragment again you would have to insert it back into the
+	* container and let it run through all of its initialization again.
+	*
+	* If there is a high probability that you will need that fragment again, then just hide it
+	* because it's a less expensive operation to redraw it's layout than to completely reinitialize
+	* it.
+	* */
+
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
 		// update the main content by replacing fragments

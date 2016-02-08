@@ -357,6 +357,22 @@ public class AppServices {
 	public void logPlayerRanEventPackageId(long event_package_id) { // todo:
 	}
 
+	public void fetchDialog(long dialogId) { // unused call
+		pollServer(Calls.HTTP_GET_DIALOG, longToJSONReqParam("dialog_id", dialogId));
+	}
+
+	public void fetchDialogCharacter(long dialogCharacterId) { // unused call
+		pollServer(Calls.HTTP_GET_DIALOG_CHARACTER, longToJSONReqParam("dialog_character_id", dialogCharacterId));
+	}
+
+	public void fetchDialogOption(long dialogOptionId) { // unused call
+		pollServer(Calls.HTTP_GET_DIALOG_OPTION, longToJSONReqParam("dialog_option_id", dialogOptionId));
+	}
+
+	public void fetchDialogScript(long dialogScriptId) { // unused call
+		pollServer(Calls.HTTP_GET_DIALOG_SCRIPT, longToJSONReqParam("dialog_script_id", dialogScriptId));
+	}
+
 	public void fetchDialogs() {
 		pollServer(Calls.HTTP_GET_DIALOGS_4_GAME, jsonGameId());
 	}
