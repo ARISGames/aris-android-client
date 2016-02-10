@@ -1,6 +1,8 @@
 package edu.uoregon.casls.aris_android.services;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
@@ -14,6 +16,7 @@ import org.apache.http.entity.StringEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
@@ -148,7 +151,6 @@ public class AppServices {
 			e.printStackTrace();
 		}
 		pollServer(Calls.HTTP_LOG_PLAYER_MOVED, jsonArgs);
-
 	}
 
 	public void logPlayerViewedTabId(long tab_id) {
@@ -414,78 +416,78 @@ public class AppServices {
 	}
 
 	public void createNote(Note n, Tag t, Media m, Trigger tr) {
-		// todo: Make me work
-		/*    NSMutableDictionary *args =
-    [@{
-      @"game_id":[NSNumber numberWithLong:_MODEL_GAME_.game_id],
-      @"user_id":[NSNumber numberWithLong:_MODEL_PLAYER_.user_id],
-      @"name":n.name,
-      @"description":n.desc,
-     } mutableCopy];
-    if(m)
-    {
-      args[@"media"] =
-        @{
-           @"game_id":[NSNumber numberWithLong:_MODEL_GAME_.game_id],
-           @"file_name":[m.localURL absoluteString],
-          @"data":[m.data base64EncodedStringWithOptions:0]
-        };
-    }
-    if(t)
-    {
-        args[@"tag_id"] = [NSNumber numberWithLong:t.tag_id];
-    }
-    if(tr)
-    {
-      args[@"trigger"] =
-        @{
-           @"game_id":[NSNumber numberWithLong:_MODEL_GAME_.game_id],
-           @"latitude":[NSNumber numberWithDouble:tr.location.coordinate.latitude],
-           @"longitude":[NSNumber numberWithDouble:tr.location.coordinate.longitude]
-        };
-    }
-    [connection performAsynchronousRequestWithService:@"notes" method:@"createNote" arguments:args handler:self successSelector:@selector(parseCreateNote:) failSelector:nil retryOnFail:YES humanDesc:@"Creating Note..." userInfo:nil];
-*/
+		JSONObject jsonArgs = jsonGameId();
+		try {
+			jsonArgs.put("user_id", mGamePlayAct.mPlayer.user_id);
+			jsonArgs.put("name", n.name);
+			jsonArgs.put("description", n.desc);
+			if (m != null) {
+				// convert to base64 string
+				// Note may crash some devices. If so perhaps consider converting the local media file
+				// as suggested here: http://stackoverflow.com/questions/9224056/android-bitmap-to-base64-string
+				ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+				m.data.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+				byte[] byteArray = byteArrayOutputStream .toByteArray();
+				JSONObject media = new JSONObject();
+				media.put("game_id", mGamePlayAct.mGame.game_id);
+				media.put("file_name", m.localURL.toString());
+				media.put("data", Base64.encodeToString(byteArray, Base64.DEFAULT));
+				jsonArgs.put("media", media);
+			}
+			if (t != null) {
+				jsonArgs.put("tag_id", t.tag_id);
+			}
+			if (tr != null) {
+				JSONObject trigger = new JSONObject();
+				trigger.put("game_id", mGamePlayAct.mGame.game_id);
+				trigger.put("latitude", tr.latitude);
+				trigger.put("longitude", tr.location);
+				jsonArgs.put("trigger", trigger);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		pollServer(Calls.HTTP_CREATE_NOTE, jsonArgs);
+
 	}
 
 	public void updateNote(Note n, Tag t, Media m, Trigger tr) {
-		// todo: Make me work
-	/*    NSMutableDictionary *args =
-    [@{
-      @"game_id":[NSNumber numberWithLong:_MODEL_GAME_.game_id],
-      @"note_id":[NSNumber numberWithLong:n.note_id],
-      @"user_id":[NSNumber numberWithLong:n.user_id],
-      @"name":n.name,
-      @"description":n.desc,
-     } mutableCopy];
-    if(m)
-    {
-      args[@"media"] =
-        @{
-           @"game_id":[NSNumber numberWithLong:_MODEL_GAME_.game_id],
-           @"file_name":[m.localURL absoluteString],
-           @"data":[m.data base64EncodedStringWithOptions:0]
-        };
-    }
-    if(t)
-    {
-        args[@"tag_id"] = [NSNumber numberWithLong:t.tag_id];
-    }
-    else
-    {
-        args[@"tag_id"] = [NSNumber numberWithLong:0];
-    }
-    if(tr)
-    {
-      args[@"trigger"] =
-        @{
-           @"game_id":[NSNumber numberWithLong:_MODEL_GAME_.game_id],
-           @"latitude":[NSNumber numberWithDouble:tr.location.coordinate.latitude],
-           @"longitude":[NSNumber numberWithDouble:tr.location.coordinate.longitude]
-        };
-    }
-    [connection performAsynchronousRequestWithService:@"notes" method:@"updateNote" arguments:args handler:self successSelector:@selector(parseUpdateNote:) failSelector:nil retryOnFail:NO humanDesc:@"Updating Note..." userInfo:nil];
-*/
+		JSONObject jsonArgs = jsonGameId();
+		try {
+			jsonArgs.put("note_id", n.note_id);
+			jsonArgs.put("user_id", mGamePlayAct.mPlayer.user_id);
+			jsonArgs.put("name", n.name);
+			jsonArgs.put("description", n.desc);
+			if (m != null) {
+				// convert to base64 string
+				// Note may crash some devices. If so perhaps consider converting the local media file
+				// as suggested here: http://stackoverflow.com/questions/9224056/android-bitmap-to-base64-string
+				ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+				m.data.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+				byte[] byteArray = byteArrayOutputStream .toByteArray();
+				JSONObject media = new JSONObject();
+				media.put("game_id", mGamePlayAct.mGame.game_id);
+				media.put("file_name", m.localURL.toString());
+				media.put("data", Base64.encodeToString(byteArray, Base64.DEFAULT));
+				jsonArgs.put("media", media);
+			}
+			if (t != null)
+				jsonArgs.put("tag_id", t.tag_id);
+			else
+				jsonArgs.put("tag_id", 0);
+			if (tr != null) {
+				JSONObject trigger = new JSONObject();
+				trigger.put("game_id", mGamePlayAct.mGame.game_id);
+				trigger.put("latitude", tr.latitude);
+				trigger.put("longitude", tr.location);
+				jsonArgs.put("trigger", trigger);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		pollServer(Calls.HTTP_UPDATE_NOTE, jsonArgs);
 	}
 
 	public void deleteNoteId(long note_id) {
@@ -643,12 +645,6 @@ public class AppServices {
 			e.printStackTrace();
 		}
 		pollServer(Calls.HTTP_SET_PLAYER_SCENE, jsonArgs);
-//		@{
-//			@"game_id":[NSNumber numberWithLong:_MODEL_GAME_.game_id],
-//			@"scene_id":[NSNumber numberWithLong:scene_id]
-//		};
-//		[connection performAsynchronousRequestWithService:@"client" method:@"setPlayerScene" arguments:args handler:self successSelector:@selector(parseSetPlayerScene:) failSelector:nil retryOnFail:NO humanDesc:@"Updating Scene..." userInfo:nil];
-
 	}
 	public JSONObject mJsonAuth;
 
@@ -662,16 +658,16 @@ public class AppServices {
 		return jsonGameID;
 	}
 
-	public JSONObject getJsonGameIDAndOwnerId() {
-		JSONObject jsonAddlData = new JSONObject();
-		try {
-			jsonAddlData.put("game_id", mGamePlayAct.mGame.game_id);
-			jsonAddlData.put("owner_id", 0); // todo: is this always zero for getInstanceForGame?
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return jsonAddlData;
-	}
+//	public JSONObject getJsonGameIDAndOwnerId() {
+//		JSONObject jsonAddlData = new JSONObject();
+//		try {
+//			jsonAddlData.put("game_id", mGamePlayAct.mGame.game_id);
+//			jsonAddlData.put("owner_id", 0); //  is this always zero for getInstanceForGame?
+//		} catch (JSONException e) {
+//			e.printStackTrace();
+//		}
+//		return jsonAddlData;
+//	}
 
 	public void pollServer(final String requestApi, JSONObject jsonMain) {
 //		showProgress(true);

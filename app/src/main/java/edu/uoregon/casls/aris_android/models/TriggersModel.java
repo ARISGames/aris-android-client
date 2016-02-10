@@ -62,12 +62,10 @@ public class TriggersModel extends ARISModel {
 	}
 
 	public void triggersReceived(List<Trigger> newTriggers) {
-
 		this.updateTriggers(newTriggers);
 	}
 
 	public void triggerReceived(Trigger newTrigger) {
-
 		List<Trigger> newTrigs = new ArrayList<>();
 		newTrigs.add(newTrigger);
 		this.updateTriggers(newTrigs);
@@ -77,8 +75,7 @@ public class TriggersModel extends ARISModel {
 		Long newTriggerId;
 		List<Trigger> invalidatedTriggers = new ArrayList<>();
 
-		for (Trigger newTrigger : newTriggers)
-		{
+		for (Trigger newTrigger : newTriggers) {
 			newTriggerId = newTrigger.trigger_id;
 
 			if (!triggers.containsKey(newTriggerId)) {

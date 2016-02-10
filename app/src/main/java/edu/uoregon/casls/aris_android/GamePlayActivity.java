@@ -607,6 +607,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			else if (o instanceof Tab) this.displayTab((Tab) o);
 			else if (InstantiableProtocol.class.isInstance(o))
 				this.displayObject(o);
+
+			// SEM: the following is variations on some of the instance comarison calls above. Delete when
+			// code complete.
 //			else if (o.getClass().isAssignableFrom(InstantiableProtocol.class))
 //				this.displayObject((InstantiableProtocol) o);
 
@@ -654,23 +657,27 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	public void displayInstance(Instance i) {
 		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Entering displayInstance instanceType: " + i.object_type);
 //		ARISViewController *vc;
-		if (i.object_type.contentEquals("PLAQUE"))
+		if (i.object_type.contentEquals("PLAQUE")) {
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
-			// todo: this is a plaque. Display it. (on this activities layout? or on a fragment?)
-			// fixme: this is a plaque. Display it. (on this activities layout? or on a fragment?)
 //		vc = new PlaqueViewController(i delegate:self);
-		if (i.object_type.contentEquals("ITEM"))
+		}
+		if (i.object_type.contentEquals("ITEM")) {
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 //		vc = new ItemViewController(i delegate:self);
-		if (i.object_type.contentEquals("DIALOG"))
+		}
+		if (i.object_type.contentEquals("DIALOG")) {
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
+			if (1==1) {}
 //		vc = new DialogViewController(i delegate:self);
-		if (i.object_type.contentEquals("WEB_PAGE"))
+		}
+		if (i.object_type.contentEquals("WEB_PAGE")) {
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 //		vc = new WebPageViewController(i delegate:self);
-		if (i.object_type.contentEquals("NOTE"))
+		}
+		if (i.object_type.contentEquals("NOTE")) {
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 //		vc = new NoteViewController(i delegate:self);
+		}
 		if (i.object_type.contentEquals("EVENT_PACKAGE")) { //Special case (don't actually display anything)
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 			mGame.eventsModel.runEventPackageId(i.object_id); //will take care of log
