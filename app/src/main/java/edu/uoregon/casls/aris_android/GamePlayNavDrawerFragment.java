@@ -84,8 +84,9 @@ public class GamePlayNavDrawerFragment extends Fragment {
 			mFromSavedInstanceState = true;
 		}
 
-		// Select either the default item (0) or the last selected item.
-		selectItem(mCurrentSelectedPosition, mCurrentSelectedItemName);
+		// disable this default. We want the game to pick the first fragment.
+		// Select either the default item (0) or the last selected item. -sem
+//		selectItem(mCurrentSelectedPosition, mCurrentSelectedItemName);
 	}
 
 	@Override
@@ -111,7 +112,7 @@ public class GamePlayNavDrawerFragment extends Fragment {
 
 
 		// add nav list items
-		// Todo: these can come in from the server in a custom order and with custom icons and names.
+		// Todo: these will come in from the server in a custom order and with custom icons and names.
 		// todo: Will need to check server resp data for this list and override these defaults if it exists.
 		String iconURL;
 		mDrawerListItems = getResources().getStringArray(R.array.game_drawer_list_items); // temp. get fixed array from strings.xml

@@ -72,7 +72,13 @@ public class AppServices {
 
 
 	public void fetchInstancesForPlayer() {
-		pollServer(Calls.HTTP_GET_INSTANCES_4_PLAYER, jsonGameId());
+		JSONObject jsonArgs = jsonGameId();
+		try {
+			jsonArgs.put("owner_id", mGamePlayAct.mPlayer.user_id);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_GET_INSTANCES_4_PLAYER, jsonArgs);
 	}
 
 	public void fetchPlayerPlayedGame() {
@@ -588,7 +594,13 @@ public class AppServices {
 	}
 
 	public void fetchTriggersForPlayer() {
-		pollServer(Calls.HTTP_GET_TRIGGERS_4_PLAYER, jsonGameId());
+		JSONObject jsonParams = jsonGameId();
+		try {
+			jsonParams.put("tick_factories", 1);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_GET_TRIGGERS_4_PLAYER, jsonParams);
 	}
 
 	public void fetchOverlays() {

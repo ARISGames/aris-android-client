@@ -2,12 +2,12 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="edu.uoregon.casls.aris_android.GamePlayNotebookFragment">
+             tools:context="edu.uoregon.casls.aris_android.GamePlayWebPageFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Game Play Notebook Fragment"/>
+        android:text="@string/hello_blank_fragment"/>
 
 </FrameLayout>

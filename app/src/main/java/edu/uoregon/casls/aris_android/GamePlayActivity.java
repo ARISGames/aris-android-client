@@ -1,11 +1,13 @@
 package edu.uoregon.casls.aris_android;
 
 import android.app.ActivityOptions;
+import android.support.v4.app.Fragment;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +23,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +56,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 // Todo 9.29.15: Need to see what happens now when the game tries to load, and then set about setting up the cyclic app status calls
 
 	private final static String TAG_SERVER_SUCCESS = "success";
+	private static final String FRAGMENT_VISIBILITY_MAP = "FRAGMENT_VISIBILITY_MAP";
 	public static SharedPreferences appPrefs;
 
 	public  Bundle          mTransitionAnimationBndl;
@@ -63,11 +67,25 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	public  ResponseHandler mResposeHandler;
 	public  MediaModel      mMediaModel;
 	public  UsersModel      mUsersModel;
-//	public  GamesModel      mGamesModel; // needed to store multiple games on device for future retrieval.
+	//	public  GamesModel      mGamesModel; // needed to store multiple games on device for future retrieval.
 	private View            mProgressView; // todo: install a progress spinner for server delays
 	public  JSONObject      mJsonAuth;
 	public Map<Long, Media>  mGameMedia = new LinkedHashMap<>();
 	public Map<String, User> mGameUsers = new LinkedHashMap<>();
+
+	// fragment views for game. Acting in place of DisplayViewController classes in iOS.
+	// (may want to centralize these in a Navigation Controller)
+	public GamePlayDecoderFragment   decoderViewFragment;
+	public GamePlayDialogFragment    dialogViewFragment;
+	public GamePlayInventoryFragment inventoryViewFragment;
+	public GamePlayMapFragment       mapViewFragment;
+	public GamePlayNoteFragment      noteViewFragment;
+	public GamePlayPlayerFragment    playerViewFragment;
+	public GamePlayQuestsFragment    questsViewFragment;
+	public GamePlayScannerFragment   scannerViewFragment;
+	public GamePlayWebPageFragment   webPageViewFragment;
+	public HashMap<String, Boolean> fragVisible = new HashMap<>();
+	public String currentFragVisible;
 
 	public Handler performSelector = new Handler(); // used for time deferred method invocation similar to iOS "performSelector"
 	/**
@@ -108,6 +126,12 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			}
 		}
 
+		// check for savedInstanceState here instead of overiding onRestoreInstance because it won't
+		// get called until after onStart (too late)
+		if (savedInstanceState != null) { // there was a saved instance. we must be reawakening from being stopped by OS
+			restoreFromSavedInstance(savedInstanceState);
+		}
+
 		// tell transitioning activities how to slide. eg: makeCustomAnimation(ctx, howNewMovesIn, howThisMovesOut) -sem
 		mTransitionAnimationBndl = ActivityOptions.makeCustomAnimation(getApplicationContext(),
 				R.animator.slide_in_from_right, R.animator.slide_out_to_left).toBundle();
@@ -129,6 +153,45 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		// Start barrage of game related server requests
 	}
 
+	private void restoreFromSavedInstance(Bundle savedInstanceState) {
+		if (fragVisible == null || fragVisible.isEmpty())
+			fragVisible = (HashMap<String, Boolean>) savedInstanceState.getSerializable(FRAGMENT_VISIBILITY_MAP);
+		// thaw out frozen fragments.
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		for (Map.Entry<String, Boolean> fragEntry : fragVisible.entrySet()) {
+			String fragTag = fragEntry.getKey();
+			Log.i("TAG", "Looking through fragVisible Hash, fragTag: " + fragTag);
+			Log.i("TAG", "Its visibility is " + fragEntry.getValue().toString());
+			// rebirth fragment
+			android.support.v4.app.Fragment fragment = getSupportFragmentManager().findFragmentByTag(fragTag);
+			// sanity check. Find a way to fail gracefully or just restart activity perhaps.
+			if (fragment == null)
+				Log.i("TAG", "Trying to restore this fragment failed fragment is null");
+			else
+				Log.i("TAG", "Fragment was recreated using tag.");
+			//@formatter:off
+			// reconstitute as specific fragment class objects.
+			if      (fragment instanceof GamePlayDecoderFragment)   decoderViewFragment = (GamePlayDecoderFragment) fragment;
+			else if (fragment instanceof GamePlayDialogFragment)    dialogViewFragment = (GamePlayDialogFragment) fragment;
+			else if (fragment instanceof GamePlayInventoryFragment) inventoryViewFragment = (GamePlayInventoryFragment) fragment;
+			else if (fragment instanceof GamePlayMapFragment)       mapViewFragment = (GamePlayMapFragment) fragment;
+			else if (fragment instanceof GamePlayNoteFragment)      noteViewFragment = (GamePlayNoteFragment) fragment;
+			else if (fragment instanceof GamePlayPlayerFragment)    playerViewFragment = (GamePlayPlayerFragment) fragment;
+			else if (fragment instanceof GamePlayQuestsFragment)    questsViewFragment = (GamePlayQuestsFragment) fragment;
+			else if (fragment instanceof GamePlayScannerFragment)   scannerViewFragment = (GamePlayScannerFragment) fragment;
+			else if (fragment instanceof GamePlayWebPageFragment)   webPageViewFragment = (GamePlayWebPageFragment) fragment;
+			//@formatter:on
+			// hide them all to start
+			ft.hide(fragment);
+			// find the visible fragment from previous life cycle
+			if (fragEntry.getValue()) currentFragVisible = fragTag;
+		}
+		ft.commit();
+		getSupportFragmentManager().executePendingTransactions(); // flush its queue before attempting to show fragments
+		showFragment(currentFragVisible);
+
+	}
+
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -146,6 +209,28 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			//[_MODEL_ restoreGameData); // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restoreGameData
 			this.gameDataLoaded(); //
 		}
+	}
+	private void showFragment(String fragTag) {
+
+		if (fragTag.contentEquals(currentFragVisible)) return;
+		if (currentFragVisible == null || currentFragVisible.isEmpty())
+			currentFragVisible = fragTag;
+		FragmentManager fm = getSupportFragmentManager();
+		FragmentTransaction ft = fm.beginTransaction();
+		// can combine the following two lines into the two that follow them. I broke them out for debugging reasons
+		Log.i("TAG", "in showFragment fragTag is: " + fragTag);
+		Fragment currentVisibleFrag = fm.findFragmentByTag(currentFragVisible);
+		Fragment fragToDisplay = fm.findFragmentByTag(fragTag);
+		// could add some fancy transition here...
+		ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+		ft.hide(currentVisibleFrag);
+		ft.show(fragToDisplay);
+		ft.commit();
+
+		fragVisible.put(currentFragVisible, false);
+		fragVisible.put(fragTag, true);
+		currentFragVisible = fragTag;
+
 	}
 
 	public void requestGameData() {
@@ -378,37 +463,37 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		switch (position) {
 			case 0:
 				fragmentManager.beginTransaction()
-						.replace(R.id.container, GamePlayQuestsFragment.newInstance(position + 1))
+						.replace(R.id.fragment_view_container, GamePlayQuestsFragment.newInstance(position + 1))
 						.commit();
 				break;
 			case 1:
 				fragmentManager.beginTransaction()
-						.replace(R.id.container, GamePlayMapFragment.newInstance(position + 1))
+						.replace(R.id.fragment_view_container, GamePlayMapFragment.newInstance(position + 1))
 						.commit();
 				break;
 			case 2:
 				fragmentManager.beginTransaction()
-						.replace(R.id.container, GamePlayInventoryFragment.newInstance(position + 1))
+						.replace(R.id.fragment_view_container, GamePlayInventoryFragment.newInstance(position + 1))
 						.commit();
 				break;
 			case 3:
 				fragmentManager.beginTransaction()
-						.replace(R.id.container, GamePlayScannerFragment.newInstance(position + 1))
+						.replace(R.id.fragment_view_container, GamePlayScannerFragment.newInstance(position + 1))
 						.commit();
 				break;
 			case 4:
 				fragmentManager.beginTransaction()
-						.replace(R.id.container, GamePlayDecoderFragment.newInstance(position + 1))
+						.replace(R.id.fragment_view_container, GamePlayDecoderFragment.newInstance(position + 1))
 						.commit();
 				break;
 			case 5:
 				fragmentManager.beginTransaction()
-						.replace(R.id.container, GamePlayPlayerFragment.newInstance(position + 1))
+						.replace(R.id.fragment_view_container, GamePlayPlayerFragment.newInstance(position + 1))
 						.commit();
 				break;
 			case 6:
 				fragmentManager.beginTransaction()
-						.replace(R.id.container, GamePlayNotebookFragment.newInstance(position + 1))
+						.replace(R.id.fragment_view_container, GamePlayNoteFragment.newInstance(position + 1))
 						.commit();
 				break;
 		}
@@ -421,37 +506,37 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 		if (itemName.equals("Quests")) {
 			fragmentManager.beginTransaction()
-					.replace(R.id.container, GamePlayQuestsFragment.newInstance(itemName))
+					.replace(R.id.fragment_view_container, GamePlayQuestsFragment.newInstance(itemName))
 					.commit();
 		}
 		else if (itemName.equals("Map")) {
 				fragmentManager.beginTransaction()
-						.replace(R.id.container, GamePlayMapFragment.newInstance(itemName))
+						.replace(R.id.fragment_view_container, GamePlayMapFragment.newInstance(itemName))
 						.commit();
 		}
 		else if (itemName.equals("Inventory")) {
 				fragmentManager.beginTransaction()
-						.replace(R.id.container, GamePlayInventoryFragment.newInstance(itemName))
+						.replace(R.id.fragment_view_container, GamePlayInventoryFragment.newInstance(itemName))
 						.commit();
 		}
 		else if (itemName.equals("Scanner")) {
 				fragmentManager.beginTransaction()
-						.replace(R.id.container, GamePlayScannerFragment.newInstance(itemName))
+						.replace(R.id.fragment_view_container, GamePlayScannerFragment.newInstance(itemName))
 						.commit();
 		}
 		else if (itemName.equals("Decoder")) {
 				fragmentManager.beginTransaction()
-						.replace(R.id.container, GamePlayDecoderFragment.newInstance(itemName))
+						.replace(R.id.fragment_view_container, GamePlayDecoderFragment.newInstance(itemName))
 						.commit();
 		}
 		else if (itemName.equals("Player")) {
 				fragmentManager.beginTransaction()
-						.replace(R.id.container, GamePlayPlayerFragment.newInstance(itemName))
+						.replace(R.id.fragment_view_container, GamePlayPlayerFragment.newInstance(itemName))
 						.commit();
 		}
 		else if (itemName.equals("Notebook")) {
 				fragmentManager.beginTransaction()
-						.replace(R.id.container, GamePlayNotebookFragment.newInstance(itemName))
+						.replace(R.id.fragment_view_container, GamePlayNoteFragment.newInstance(itemName))
 						.commit();
 		}
 	}
@@ -567,13 +652,14 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
-		super.onSaveInstanceState(savedInstanceState);
 		// Save UI state changes to the savedInstanceState.
 		// This bundle will be passed to onCreate if the process is
 		// killed and restarted.
 		Gson gson = new Gson();
 		String jsonGame = gson.toJson(mGame);
 		savedInstanceState.putString("mGame", jsonGame);
+		savedInstanceState.putSerializable(FRAGMENT_VISIBILITY_MAP, fragVisible);
+		super.onSaveInstanceState(savedInstanceState);
 	}
 
 	@Override
@@ -640,7 +726,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	public void displayTrigger(Trigger t) {
 		Instance i = mGame.instancesModel.instanceForId(t.instance_id);
 		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Entering displayTrigger triggerid: " + t.trigger_id + ", instanceid: " + i.instance_id);
-		if (i.instance_id < 1) { // FIXME: I'm always 0 so we never get past this.
+		if (i.instance_id < 1) {
 			//this is bad and points to a need for a non-global service architecture.
 			//see notes by 'local_inst_queue'
 			local_inst_queue.add(t.instance_id); // addObject:[NSNumber numberWithLong:t.instance_id]);
@@ -666,7 +752,24 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		}
 		if (i.object_type.contentEquals("DIALOG")) {
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
-			if ( 1==1) {}
+			String tag = "";
+			if (dialogViewFragment == null) {
+				dialogViewFragment = new GamePlayDialogFragment();
+				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+				ft.add(R.id.fragment_view_container, dialogViewFragment, dialogViewFragment.toString()); //set tag.
+				ft.addToBackStack(dialogViewFragment.getTag());
+				if (dialogViewFragment.isAdded())
+					Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Fragment added ");
+				tag = dialogViewFragment.getTag();
+				ft.show(dialogViewFragment);
+				ft.commit();
+				getSupportFragmentManager().executePendingTransactions();
+			}
+			else if (currentFragVisible != null) if ( dialogViewFragment.isVisible()
+					&& dialogViewFragment.getTag().contentEquals(currentFragVisible))
+				return;
+			else
+				showFragment(dialogViewFragment.getTag());
 //		vc = new DialogViewController(i delegate:self);
 		}
 		if (i.object_type.contentEquals("WEB_PAGE")) {

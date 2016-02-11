@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-public class GamePlayNotebookFragment extends Fragment {
+public class GamePlayNoteFragment extends Fragment {
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_SECTION_NUMBER = "section_number";
@@ -20,16 +20,16 @@ public class GamePlayNotebookFragment extends Fragment {
 
 //	private OnFragmentInteractionListener mListener;
 
-	public static GamePlayNotebookFragment newInstance(int sectionNumber) {
-		GamePlayNotebookFragment fragment = new GamePlayNotebookFragment();
+	public static GamePlayNoteFragment newInstance(int sectionNumber) {
+		GamePlayNoteFragment fragment = new GamePlayNoteFragment();
 		Bundle args = new Bundle();
 		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 		fragment.setArguments(args);
 		return fragment;
 	}
 
-	public static GamePlayNotebookFragment newInstance(String sectionName) {
-		GamePlayNotebookFragment fragment = new GamePlayNotebookFragment();
+	public static GamePlayNoteFragment newInstance(String sectionName) {
+		GamePlayNoteFragment fragment = new GamePlayNoteFragment();
 		Bundle args = new Bundle();
 		args.putString(ARG_SECTION_NUMBER, sectionName);
 		fragment.setArguments(args);
@@ -37,7 +37,7 @@ public class GamePlayNotebookFragment extends Fragment {
 	}
 
 
-	public GamePlayNotebookFragment() {
+	public GamePlayNoteFragment() {
 		// Required empty public constructor
 	}
 
@@ -54,7 +54,7 @@ public class GamePlayNotebookFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		View rootView = inflater.inflate(R.layout.fragment_notebook_view, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_note_view, container, false);
 		return rootView;
 	}
 
