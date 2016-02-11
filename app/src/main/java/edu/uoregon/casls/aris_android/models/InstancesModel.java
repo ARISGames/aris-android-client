@@ -207,7 +207,7 @@ public class InstancesModel extends ARISModel {
 
 	// null instance (id == 0) NOT flyweight!!! (to allow for temporary customization safety)
 	public Instance instanceForId(long instance_id) {
-		if (instance_id != 0) return new Instance();
+		if (instance_id == 0) return new Instance();
 		Instance i = instances.get(instance_id);
 		if (i == null) {
 			blacklist.put(instance_id, "true"); //setObject:@"true" forKey:NSNumber numberWithLong:instance_id;

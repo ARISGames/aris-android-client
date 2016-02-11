@@ -1,7 +1,6 @@
 package edu.uoregon.casls.aris_android;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -45,7 +44,7 @@ public class GamePlayQuestsFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_game_play_quests, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_quests_view, container, false);
 		return rootView;
 	}
 

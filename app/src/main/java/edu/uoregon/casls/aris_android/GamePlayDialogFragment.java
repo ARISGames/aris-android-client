@@ -1,27 +1,24 @@
 package edu.uoregon.casls.aris_android;
 
-import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link GamePlayMapFragment.OnFragmentInteractionListener} interface
+ * {@link GamePlayDialogFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link GamePlayMapFragment#newInstance} factory method to
+ * Use the {@link GamePlayDialogFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GamePlayMapFragment extends Fragment {
+public class GamePlayDialogFragment extends Fragment {
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-	private static final String ARG_SECTION_NUMBER = "section_number";
 	private static final String ARG_PARAM1 = "param1";
 	private static final String ARG_PARAM2 = "param2";
 
@@ -37,39 +34,17 @@ public class GamePlayMapFragment extends Fragment {
 	 *
 	 * @param param1 Parameter 1.
 	 * @param param2 Parameter 2.
-	 * @return A new instance of fragment GamePlayMapFragment.
+	 * @return A new instance of fragment GamePlayDialogFragment.
 	 */
 	// TODO: Rename and change types and number of parameters
-//	public static GamePlayMapFragment newInstance(String param1, String param2) {
-//		GamePlayMapFragment fragment = new GamePlayMapFragment();
-//		Bundle args = new Bundle();
-//		args.putString(ARG_PARAM1, param1);
-//		args.putString(ARG_PARAM2, param2);
-//		fragment.setArguments(args);
-//		return fragment;
-//	}
-
-	/**
-	 * Returns a new instance of this fragment for the given section
-	 * number.
-	 */
-	public static GamePlayMapFragment newInstance(int sectionNumber) {
-		GamePlayMapFragment fragment = new GamePlayMapFragment();
+	public static GamePlayDialogFragment newInstance(String param1, String param2) {
+		GamePlayDialogFragment fragment = new GamePlayDialogFragment();
 		Bundle args = new Bundle();
-		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+		args.putString(ARG_PARAM1, param1);
+		args.putString(ARG_PARAM2, param2);
 		fragment.setArguments(args);
 		return fragment;
-	}
-
-	public static GamePlayMapFragment newInstance(String sectionName) {
-		GamePlayMapFragment fragment = new GamePlayMapFragment();
-		Bundle args = new Bundle();
-		args.putString(ARG_SECTION_NUMBER, sectionName);
-		fragment.setArguments(args);
-		return fragment;
-	}
-
-	public GamePlayMapFragment() {
+	}	public GamePlayDialogFragment() {
 		// Required empty public constructor
 	}
 
@@ -84,20 +59,9 @@ public class GamePlayMapFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-							 Bundle savedInstanceState) {
+	                         Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-
-		View v = inflater.inflate(R.layout.fragment_map_view, container, false);
-
-		Button b = (Button) v.findViewById(R.id.button);
-		b.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				mListener.onSecondFragButtonClick("This is the message sent when I clicked on the button in Second Fragment");
-
-			}
-		});
-		return v;
+		return inflater.inflate(R.layout.fragment_dialog_view, container, false);
 	}
 
 	// TODO: Rename method, update argument and hook method into UI event
@@ -107,14 +71,14 @@ public class GamePlayMapFragment extends Fragment {
 		}
 	}
 
-
 	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		try {
-			mListener = (OnFragmentInteractionListener) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		if (context instanceof OnFragmentInteractionListener) {
+			mListener = (OnFragmentInteractionListener) context;
+		}
+		else {
+			throw new RuntimeException(context.toString()
 					+ " must implement OnFragmentInteractionListener");
 		}
 	}
@@ -137,8 +101,6 @@ public class GamePlayMapFragment extends Fragment {
 	 */
 	public interface OnFragmentInteractionListener {
 		// TODO: Update argument type and name
-		public void onFragmentInteraction(Uri uri);
-		public void onSecondFragButtonClick(String message);
+		void onFragmentInteraction(Uri uri);
 	}
-
 }

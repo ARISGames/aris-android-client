@@ -26,7 +26,7 @@
           android:layout_height="match_parent"
           android:layout_gravity="start"
           android:name="edu.uoregon.casls.aris_android.GamePlayNavDrawerFragment"
-          tools:layout="@layout/fragment_game_play_nav_drawer"
+          tools:layout="@layout/fragment_nav_drawer_view"
         />
 
 </android.support.v4.widget.DrawerLayout>

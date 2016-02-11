@@ -262,6 +262,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		// in iOS, starts the game loading sequence.
 	}
 	public void gameLeft() {
+//		mGame.displayQueueModel.endPlay(); // tell displayQueue we're leaving called via Game.gameLeft()
 		// in iOS RootViewController, nulls all values kills current gameplayview and returns view to GamesList.
 		// pretty much default behaviour in Android Activity stack "back" action. Not needed here;
 	}
@@ -345,6 +346,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	@Override
 	public void onDestroy() {
+		this.gameLeft();
 		mGame.gameLeft();
 		super.onDestroy();
 	}
@@ -635,18 +637,15 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		}
 	}
 
-	public void displayTrigger(Trigger t)
-	{
+	public void displayTrigger(Trigger t) {
 		Instance i = mGame.instancesModel.instanceForId(t.instance_id);
 		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Entering displayTrigger triggerid: " + t.trigger_id + ", instanceid: " + i.instance_id);
-		if(i.instance_id < 1)
-		{
+		if (i.instance_id < 1) { // FIXME: I'm always 0 so we never get past this.
 			//this is bad and points to a need for a non-global service architecture.
 			//see notes by 'local_inst_queue'
 			local_inst_queue.add(t.instance_id); // addObject:[NSNumber numberWithLong:t.instance_id]);
 		}
-		else
-		{
+		else {
 			mDispatch.game_play_display_triggered(t); //_ARIS_NOTIF_SEND_("GAME_PLAY_DISPLAYED_TRIGGER",nil,@{"trigger":t});
 			this.displayInstance(i);
 			mGame.logsModel.playerTriggeredTriggerId(t.trigger_id);
@@ -667,7 +666,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		}
 		if (i.object_type.contentEquals("DIALOG")) {
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
-			if (1==1) {}
+			if ( 1==1) {}
 //		vc = new DialogViewController(i delegate:self);
 		}
 		if (i.object_type.contentEquals("WEB_PAGE")) {

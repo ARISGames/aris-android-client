@@ -573,6 +573,7 @@ public class Game {
 			mGamePlayAct.stopService(pollServerSvcIntent);
 			isServerPollerRunning = false;
 		}
+		displayQueueModel.endPlay();
 	}
 
 	public boolean allGameDataReceived() {

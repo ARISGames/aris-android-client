@@ -99,7 +99,7 @@ public class GamePlayNavDrawerFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		mDrawerListView = (ListView) inflater.inflate(
-				R.layout.fragment_game_play_nav_drawer, container, false);
+				R.layout.fragment_nav_drawer_view, container, false);
 		mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
