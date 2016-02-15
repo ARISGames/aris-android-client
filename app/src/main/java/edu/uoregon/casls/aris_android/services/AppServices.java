@@ -670,17 +670,6 @@ public class AppServices {
 		return jsonGameID;
 	}
 
-//	public JSONObject getJsonGameIDAndOwnerId() {
-//		JSONObject jsonAddlData = new JSONObject();
-//		try {
-//			jsonAddlData.put("game_id", mGamePlayAct.mGame.game_id);
-//			jsonAddlData.put("owner_id", 0); //  is this always zero for getInstanceForGame?
-//		} catch (JSONException e) {
-//			e.printStackTrace();
-//		}
-//		return jsonAddlData;
-//	}
-
 	public void pollServer(final String requestApi, JSONObject jsonMain) {
 //		showProgress(true);
 //		JSONObject jsonMain = new JSONObject();
@@ -699,24 +688,6 @@ public class AppServices {
 		try {
 			// place the auth block.
 			jsonMain.put("auth", mGamePlayAct.mJsonAuth);
-			//place additional required params
-//			switch (requestApi) {
-//				case (HTTP_GET_NEARBY_GAMES_REQ_API):
-//					break;
-//				case (HTTP_GET_POPULAR_GAMES_REQ_API):
-//					//sample: {"interval":"WEEK","longitude":"-89.409260","user_id":"1","latitude":"43.073128","page":0,"auth":{"user_id":1,"key":"F7...X4"}}
-//					break;
-//				case (HTTP_GET_PLAYER_GAMES_REQ_API):
-//				case (HTTP_GET_RECENT_GAMES_REQ_API): // get player and get recent use the same Req param set.
-//					break;
-//				case (HTTP_GET_SEARCH_GAMES_REQ_API):
-//					break;
-//				case (HTTP_GET_FULL_GAME_REQ_API):
-//					break;
-//				default:
-//					break;
-//			}
-
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -725,7 +696,6 @@ public class AppServices {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-
 
 		// Post the request
 		// 	post data should look like this: {"auth":{"user_id":1,"key":"F7...yzX4"},"game_id":"6"}
