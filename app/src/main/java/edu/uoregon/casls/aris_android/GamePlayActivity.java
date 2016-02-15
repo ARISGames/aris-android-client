@@ -211,26 +211,25 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		}
 	}
 	private void showFragment(String fragTag) {
-
+		// if somehow we tried to transition to the fragment already showing, bail.
 		if (fragTag.contentEquals(currentFragVisible)) return;
+		// if there is no currently visible fragment, set incoming one to current.
 		if (currentFragVisible == null || currentFragVisible.isEmpty())
 			currentFragVisible = fragTag;
 		FragmentManager fm = getSupportFragmentManager();
 		FragmentTransaction ft = fm.beginTransaction();
-		// can combine the following two lines into the two that follow them. I broke them out for debugging reasons
-		Log.i("TAG", "in showFragment fragTag is: " + fragTag);
+		// get specific fragments involved in transition
 		Fragment currentVisibleFrag = fm.findFragmentByTag(currentFragVisible);
 		Fragment fragToDisplay = fm.findFragmentByTag(fragTag);
-		// could add some fancy transition here...
+		// set transition
 		ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-		ft.hide(currentVisibleFrag);
-		ft.show(fragToDisplay);
+		ft.hide(currentVisibleFrag); // hide old fragment view
+		ft.show(fragToDisplay); // show new fragment
 		ft.commit();
-
+		// set visibility tracking vars
 		fragVisible.put(currentFragVisible, false);
 		fragVisible.put(fragTag, true);
 		currentFragVisible = fragTag;
-
 	}
 
 	public void requestGameData() {
