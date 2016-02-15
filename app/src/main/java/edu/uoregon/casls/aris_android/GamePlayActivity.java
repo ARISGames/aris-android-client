@@ -210,6 +210,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			this.gameDataLoaded(); //
 		}
 	}
+
 	private void showFragment(String fragTag) {
 		// if somehow we tried to transition to the fragment already showing, bail.
 		if (fragTag.contentEquals(currentFragVisible)) return;
@@ -342,6 +343,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 //		gamePlayViewController = new GamePlayViewController alloc] initWithDelegate:self);
 //		this.displayContentController:gamePlayViewController);
 	}
+
 	public void gameChosen() { // stub for potential use later to duplicate RootViewController behaviours as exist in iOS vs.
 		// in iOS, starts the game loading sequence.
 	}
