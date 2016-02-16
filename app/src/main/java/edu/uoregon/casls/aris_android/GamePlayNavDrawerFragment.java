@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 
@@ -59,6 +60,8 @@ public class GamePlayNavDrawerFragment extends Fragment {
 	private ListView mDrawerListView;
 	private View mFragmentContainerView;
 
+	GamePlayActivity mGamePlayActivity;
+
 	private int mCurrentSelectedPosition = 0;
 	private String mCurrentSelectedItemName;
 	private boolean mFromSavedInstanceState;
@@ -68,6 +71,11 @@ public class GamePlayNavDrawerFragment extends Fragment {
 
 	public GamePlayNavDrawerFragment() {
 	}
+
+	public void initContext(GamePlayActivity gamePlayActivity) {
+		mGamePlayActivity = gamePlayActivity;
+	}
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -114,23 +122,25 @@ public class GamePlayNavDrawerFragment extends Fragment {
 		// add nav list items
 		// Todo: these will come in from the server in a custom order and with custom icons and names.
 		// todo: Will need to check server resp data for this list and override these defaults if it exists.
-		String iconURL;
-		mDrawerListItems = getResources().getStringArray(R.array.game_drawer_list_items); // temp. get fixed array from strings.xml
-
-		for (int i=0; i < mDrawerListItems.length; i++) {
-			iconURL = "http://dummy.fillinlater.com/media.png";
-			mNavItems.add(new NavItem(mDrawerListItems[i], "Nosubtitle", AppConfig.gameDrawerItemIconByName.get(mDrawerListItems[i]), iconURL));
-
-		}
+		// The specific tabs that will be available in a given game will be listed in TabsModel.playerTabs
+		//  and will have a sort index. Use this list to populate the drawer options.
+//		mDrawerListItems = getResources().getStringArray(R.array.game_drawer_list_items); // temp. get fixed array from strings.xml
+//		String iconURL;
+//		mGamePlayActivity.mGame.tabsModel.playerTabNames().toArray(mDrawerListItems);
+//		for (int i=0; i < mDrawerListItems.length; i++) {
+//			iconURL = "http://dummy.fillinlater.com/media.png";
+//			mNavItems.add(new NavItem(mDrawerListItems[i], "Nosubtitle", AppConfig.gameDrawerItemIconByName.get(mDrawerListItems[i]), iconURL));
+//
+//		}
 		// todo: this default action bar is white on black, the opposite of the previous pages with the custom actionbar. Find a way to match the custom style.
 		// note about built in action bar and drawer:
 		// the login and game picker activities use custom toolbars (xml based) and need to have a "NoActionBar" theme to work.
 		// To use the native actionbar stuff as we do here, you need to set the activity's theme to an action bar friendly theme
 		// E.g.: android:theme="Theme.AppCompat.Light.DarkActionBar"
-		DrawerListAdapter adapter = new DrawerListAdapter(getActivity(), mNavItems);
-		mDrawerListView.setAdapter(adapter);
-
-		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+//		DrawerListAdapter adapter = new DrawerListAdapter(getActivity(), mNavItems);
+//		mDrawerListView.setAdapter(adapter);
+//
+//		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
 
 		return mDrawerListView;
@@ -302,6 +312,25 @@ public class GamePlayNavDrawerFragment extends Fragment {
 	private ActionBar getActionBar() {
 //		return ((ActionBarActivity) getActivity()).getSupportActionBar();
 		return ((AppCompatActivity) getActivity()).getSupportActionBar();
+	}
+
+	public void addItems(List<String> playerTabNames) {
+		String iconURL;
+		for (String tabName : playerTabNames) {
+			iconURL = "http://dummy.fillinlater.com/media.png";
+			mNavItems.add(new NavItem(tabName, "Nosubtitle", AppConfig.gameDrawerItemIconByName.get(tabName), iconURL));
+		}
+//		playerTabNames.toArray(mDrawerListItems);
+//		for (int i=0; i < mDrawerListItems.length; i++) {
+//			iconURL = "http://dummy.fillinlater.com/media.png";
+//			mNavItems.add(new NavItem(mDrawerListItems[i], "Nosubtitle", AppConfig.gameDrawerItemIconByName.get(mDrawerListItems[i]), iconURL));
+//		}
+
+		DrawerListAdapter adapter = new DrawerListAdapter(getActivity(), mNavItems);
+		mDrawerListView.setAdapter(adapter);
+
+		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
 	}
 
 	/**

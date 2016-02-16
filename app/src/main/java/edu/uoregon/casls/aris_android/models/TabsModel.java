@@ -166,8 +166,15 @@ public class TabsModel extends ARISModel {
 		return tabs.get(tab_id);// objectForKey:[NSNumber numberWithLong:tab_id]];
 	}
 
-	public List<Tab> playerTabs() {
-		return playerTabs;
-	}
+//	public List<Tab> playerTabs() {
+//		return playerTabs;
+//	}
 
+	public List<String> playerTabNames() {
+		List<String> playerTabNames = new ArrayList<>(playerTabs.size());
+		for (Tab pTab : playerTabs) {
+			playerTabNames.add(pTab.name);
+		}
+		return playerTabNames;
+	}
 }

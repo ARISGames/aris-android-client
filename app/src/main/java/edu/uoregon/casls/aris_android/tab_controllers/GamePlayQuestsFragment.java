@@ -1,4 +1,4 @@
-package edu.uoregon.casls.aris_android;
+package edu.uoregon.casls.aris_android.tab_controllers;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import edu.uoregon.casls.aris_android.GamePlayActivity;
+import edu.uoregon.casls.aris_android.R;
 
 
 public class GamePlayQuestsFragment extends Fragment {

@@ -1,15 +1,17 @@
-package edu.uoregon.casls.aris_android;
+package edu.uoregon.casls.aris_android.tab_controllers;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import edu.uoregon.casls.aris_android.GamePlayActivity;
+import edu.uoregon.casls.aris_android.R;
 
-public class GamePlayInventoryFragment extends Fragment {
+
+public class GamePlayScannerFragment extends Fragment {
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_SECTION_NUMBER = "section_number";
@@ -21,16 +23,16 @@ public class GamePlayInventoryFragment extends Fragment {
 
 //	private OnFragmentInteractionListener mListener;
 
-	public static GamePlayInventoryFragment newInstance(int sectionNumber) {
-		GamePlayInventoryFragment fragment = new GamePlayInventoryFragment();
+	public static GamePlayScannerFragment newInstance(int sectionNumber) {
+		GamePlayScannerFragment fragment = new GamePlayScannerFragment();
 		Bundle args = new Bundle();
 		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 		fragment.setArguments(args);
 		return fragment;
 	}
 
-	public static GamePlayInventoryFragment newInstance(String sectionName) {
-		GamePlayInventoryFragment fragment = new GamePlayInventoryFragment();
+	public static GamePlayScannerFragment newInstance(String sectionName) {
+		GamePlayScannerFragment fragment = new GamePlayScannerFragment();
 		Bundle args = new Bundle();
 		args.putString(ARG_SECTION_NUMBER, sectionName);
 		fragment.setArguments(args);
@@ -38,7 +40,7 @@ public class GamePlayInventoryFragment extends Fragment {
 	}
 
 
-	public GamePlayInventoryFragment() {
+	public GamePlayScannerFragment() {
 		// Required empty public constructor
 	}
 
@@ -55,7 +57,7 @@ public class GamePlayInventoryFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		View rootView = inflater.inflate(R.layout.fragment_inventory_view, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_scanner_view, container, false);
 		return rootView;
 	}
 

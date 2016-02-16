@@ -48,7 +48,15 @@ import edu.uoregon.casls.aris_android.data_objects.User;
 import edu.uoregon.casls.aris_android.data_objects.WebPage;
 import edu.uoregon.casls.aris_android.models.MediaModel;
 import edu.uoregon.casls.aris_android.models.UsersModel;
+import edu.uoregon.casls.aris_android.object_controllers.GamePlayDialogFragment;
+import edu.uoregon.casls.aris_android.object_controllers.GamePlayNoteFragment;
+import edu.uoregon.casls.aris_android.object_controllers.GamePlayWebPageFragment;
 import edu.uoregon.casls.aris_android.services.AppServices;
+import edu.uoregon.casls.aris_android.tab_controllers.GamePlayDecoderFragment;
+import edu.uoregon.casls.aris_android.tab_controllers.GamePlayInventoryFragment;
+import edu.uoregon.casls.aris_android.tab_controllers.GamePlayMapFragment;
+import edu.uoregon.casls.aris_android.tab_controllers.GamePlayQuestsFragment;
+import edu.uoregon.casls.aris_android.tab_controllers.GamePlayScannerFragment;
 
 public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActivity
 		implements GamePlayNavDrawerFragment.NavigationDrawerCallbacks, GamePlayMapFragment.OnFragmentInteractionListener {
@@ -75,15 +83,18 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	// fragment views for game. Acting in place of DisplayViewController classes in iOS.
 	// (may want to centralize these in a Navigation Controller)
+	public GamePlayPlayerFragment    playerViewFragment;
+	// tab_controllers
 	public GamePlayDecoderFragment   decoderViewFragment;
-	public GamePlayDialogFragment    dialogViewFragment;
 	public GamePlayInventoryFragment inventoryViewFragment;
 	public GamePlayMapFragment       mapViewFragment;
-	public GamePlayNoteFragment      noteViewFragment;
-	public GamePlayPlayerFragment    playerViewFragment;
 	public GamePlayQuestsFragment    questsViewFragment;
 	public GamePlayScannerFragment   scannerViewFragment;
-	public GamePlayWebPageFragment   webPageViewFragment;
+	// object_controllers
+	public GamePlayDialogFragment  dialogViewFragment;
+	public GamePlayNoteFragment    noteViewFragment;
+	public GamePlayWebPageFragment webPageViewFragment;
+
 	public HashMap<String, Boolean> fragVisible = new HashMap<>();
 	public String currentFragVisible;
 
@@ -142,10 +153,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mMediaModel = new MediaModel(this);
 		mUsersModel = new UsersModel(this);
 
-		mNavigationDrawerFragment.setUp(
-				R.id.navigation_drawer,
-				(DrawerLayout) findViewById(R.id.drawer_layout));
-
 		// Having arrived here in this activity is tantamount to the
 		//   "LoadingViewController.gameChosen->RootViewController.startLoading" call hierarchy as in iOS
 		//   the game has implicitly been "Chosen" so we can "startLoading" straight away
@@ -201,6 +208,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mAppServices.initContext(this);
 		mGame.initContext(this);
 		mResposeHandler.initContext(this);
+		mNavigationDrawerFragment.initContext(this);
+
 
 		if (!mGame.hasLatestDownload() || mGame.network_level.contentEquals("REMOTE")) // loadingViewController.startLoading equivalent in iOS
 			this.requestGameData(); // load all game data
@@ -209,28 +218,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			//[_MODEL_ restoreGameData); // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restoreGameData
 			this.gameDataLoaded(); //
 		}
-	}
 
-	private void showFragment(String fragTag) {
-		// if somehow we tried to transition to the fragment already showing, bail.
-		if (fragTag.contentEquals(currentFragVisible)) return;
-		// if there is no currently visible fragment, set incoming one to current.
-		if (currentFragVisible == null || currentFragVisible.isEmpty())
-			currentFragVisible = fragTag;
-		FragmentManager fm = getSupportFragmentManager();
-		FragmentTransaction ft = fm.beginTransaction();
-		// get specific fragments involved in transition
-		Fragment currentVisibleFrag = fm.findFragmentByTag(currentFragVisible);
-		Fragment fragToDisplay = fm.findFragmentByTag(fragTag);
-		// set transition
-		ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-		ft.hide(currentVisibleFrag); // hide old fragment view
-		ft.show(fragToDisplay); // show new fragment
-		ft.commit();
-		// set visibility tracking vars
-		fragVisible.put(currentFragVisible, false);
-		fragVisible.put(fragTag, true);
-		currentFragVisible = fragTag;
 	}
 
 	public void requestGameData() {
@@ -358,11 +346,46 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		if (mGame.begin_fresh())
 			this.storeGame(); //we loaded fresh, so can store player data
 
+		// Game data should now be loaded. Populate the NavDrawer tabs.
+		mNavigationDrawerFragment.addItems(mGame.tabsModel.playerTabNames());
+		mNavigationDrawerFragment.setUp(
+				R.id.navigation_drawer,
+				(DrawerLayout) findViewById(R.id.drawer_layout));
+
 		boolean debugThis = true; // dev debugging
 		if (debugThis) checkGameFile(); // dev debugging delete or disable after code is working.
 
 		mGame.logsModel.playerEnteredGame(); //		mGame.logsModel.playerEnteredGame);
 		mDispatch.model_game_began(); // calls mGame.gameBegan() and mGamePlayAct.gameBegan()
+	}
+
+	private void showFragment(String fragTag) {
+		// if somehow we tried to transition to the fragment already showing, bail.
+		if (fragTag.contentEquals(currentFragVisible)) return;
+		// settle any outstanding fragment tasks
+		getSupportFragmentManager().executePendingTransactions();
+		// if there is no currently visible fragment, set incoming one to current.
+		if (currentFragVisible == null || currentFragVisible.isEmpty())
+			currentFragVisible = fragTag;
+		FragmentManager fm = getSupportFragmentManager();
+		FragmentTransaction ft = fm.beginTransaction();
+		// get specific fragments involved in transition
+		Fragment currentVisibleFrag = fm.findFragmentByTag(currentFragVisible);
+		Fragment fragToDisplay = fm.findFragmentByTag(fragTag);
+		// set transition
+		ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+		ft.hide(currentVisibleFrag); // hide old fragment view
+		ft.show(fragToDisplay); // show new fragment
+		ft.commit();
+
+		setAsFrontmostFragment(fragTag);
+	}
+
+	private void setAsFrontmostFragment(String fragTag) {
+		// set visibility tracking vars
+		fragVisible.put(currentFragVisible, false);
+		fragVisible.put(fragTag, true);
+		currentFragVisible = fragTag;
 	}
 
 	private void storeGame() {
@@ -742,45 +765,69 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	public void displayInstance(Instance i) {
 		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Entering displayInstance instanceType: " + i.object_type);
+		String tag = "";
+		String fragViewToDisplay = null;
 //		ARISViewController *vc;
 		if (i.object_type.contentEquals("PLAQUE")) {
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
+//			if (plaqueViewFragment == null) {
+//				plaqueViewFragment = new GamePlayDialogFragment();
+//				tag = dialogViewFragment.toString();
+//				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//				ft.add(R.id.fragment_view_container, dialogViewFragment, tag); //set tag.
+//				ft.addToBackStack(tag);
+//				if (dialogViewFragment.isAdded())
+//					Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Fragment added ");
+//				ft.attach(dialogViewFragment); // was .show()
+//				ft.commit();
+//				getSupportFragmentManager().executePendingTransactions();
+//				setAsFrontmostFragment(tag);
+//			}
+//			// if it's already visible and the frontmost fragment... bail, no further action here
+//			else if (currentFragVisible != null) if ( dialogViewFragment.isVisible()
+//					&& dialogViewFragment.getTag().contentEquals(currentFragVisible))
+//				return;
+
+			fragViewToDisplay = dialogViewFragment.getTag(); // same end result as vc var in iOS
 //		vc = new PlaqueViewController(i delegate:self);
 		}
-		if (i.object_type.contentEquals("ITEM")) {
+		else if (i.object_type.contentEquals("ITEM")) {
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 //		vc = new ItemViewController(i delegate:self);
 		}
-		if (i.object_type.contentEquals("DIALOG")) {
+		else if (i.object_type.contentEquals("DIALOG")) {
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
-			String tag = "";
 			if (dialogViewFragment == null) {
 				dialogViewFragment = new GamePlayDialogFragment();
+				tag = dialogViewFragment.toString();
 				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-				ft.add(R.id.fragment_view_container, dialogViewFragment, dialogViewFragment.toString()); //set tag.
-				ft.addToBackStack(dialogViewFragment.getTag());
+				ft.add(R.id.fragment_view_container, dialogViewFragment, tag); //set tag.
+				ft.addToBackStack(tag);
 				if (dialogViewFragment.isAdded())
 					Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Fragment added ");
-				tag = dialogViewFragment.getTag();
-				ft.show(dialogViewFragment);
+				ft.attach(dialogViewFragment); // was .show()
 				ft.commit();
 				getSupportFragmentManager().executePendingTransactions();
+				setAsFrontmostFragment(tag);
 			}
+			// if it's already visible and the frontmost fragment... bail, no further action here
 			else if (currentFragVisible != null) if ( dialogViewFragment.isVisible()
 					&& dialogViewFragment.getTag().contentEquals(currentFragVisible))
 				return;
-			else
-				showFragment(dialogViewFragment.getTag());
-//		vc = new DialogViewController(i delegate:self);
+
+			fragViewToDisplay = dialogViewFragment.getTag(); // same end result as vc var in iOS
+//		    vc = new DialogViewController(i delegate:self);
 		}
-		if (i.object_type.contentEquals("WEB_PAGE")) {
+		else if (i.object_type.contentEquals("WEB_PAGE")) {
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 //		vc = new WebPageViewController(i delegate:self);
 		}
-		if (i.object_type.contentEquals("NOTE")) {
+		else if (i.object_type.contentEquals("NOTE")) {
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 //		vc = new NoteViewController(i delegate:self);
 		}
+
+		// Special Cases which do not "actually display anything"
 		if (i.object_type.contentEquals("EVENT_PACKAGE")) { //Special case (don't actually display anything)
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 			mGame.eventsModel.runEventPackageId(i.object_id); //will take care of log
@@ -837,7 +884,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			if(f.produce_expire_on_view == 1)
 				 mGame.triggersModel.expireTriggersForInstanceId(i.instance_id);
 		}
-
+		showFragment(fragViewToDisplay);
 //		ARISNavigationController *nav = new ARISNavigationController alloc] initWithRootViewController:vc);
 //		this.presentDisplay(nav);
 		// todo: update the the display with the instance determined above, if it wasn't done directly in the conditional

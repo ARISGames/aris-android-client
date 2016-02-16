@@ -1,4 +1,4 @@
-package edu.uoregon.casls.aris_android;
+package edu.uoregon.casls.aris_android.tab_controllers;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import edu.uoregon.casls.aris_android.R;
 
 
 /**
