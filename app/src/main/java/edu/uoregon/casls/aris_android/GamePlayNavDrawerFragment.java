@@ -238,8 +238,8 @@ public class GamePlayNavDrawerFragment extends Fragment {
 			mDrawerLayout.closeDrawer(mFragmentContainerView);
 		}
 		if (mCallbacks != null) {
-//			mCallbacks.onNavigationDrawerItemSelected(itemName);
-			mCallbacks.onNavigationDrawerItemSelected(position);
+			mCallbacks.onNavigationDrawerItemSelected(itemName);
+//			mCallbacks.onNavigationDrawerItemSelected(position);
 		}
 	}
 
@@ -340,7 +340,7 @@ public class GamePlayNavDrawerFragment extends Fragment {
 		/**
 		 * Called when an item in the navigation drawer is selected.
 		 */
-		void onNavigationDrawerItemSelected(int position);
+//		void onNavigationDrawerItemSelected(int position);
 		void onNavigationDrawerItemSelected(String itemName);
 	}
 

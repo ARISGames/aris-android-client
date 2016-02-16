@@ -15,6 +15,7 @@ public class GamePlayScannerFragment extends Fragment {
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_SECTION_NUMBER = "section_number";
+	private static final String ARG_SECTION_NAME = "section_name";
 	private static final String ARG_PARAM2 = "param2";
 
 	// TODO: Rename and change types of parameters
@@ -23,18 +24,11 @@ public class GamePlayScannerFragment extends Fragment {
 
 //	private OnFragmentInteractionListener mListener;
 
-	public static GamePlayScannerFragment newInstance(int sectionNumber) {
-		GamePlayScannerFragment fragment = new GamePlayScannerFragment();
-		Bundle args = new Bundle();
-		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-		fragment.setArguments(args);
-		return fragment;
-	}
 
 	public static GamePlayScannerFragment newInstance(String sectionName) {
 		GamePlayScannerFragment fragment = new GamePlayScannerFragment();
 		Bundle args = new Bundle();
-		args.putString(ARG_SECTION_NUMBER, sectionName);
+		args.putString(ARG_SECTION_NAME, sectionName);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -65,7 +59,7 @@ public class GamePlayScannerFragment extends Fragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		((GamePlayActivity) activity).onSectionAttached(
-				getArguments().getInt(ARG_SECTION_NUMBER));
+				getArguments().getInt(ARG_SECTION_NAME));
 //		try {
 //			mListener = (OnFragmentInteractionListener) activity;
 //		} catch (ClassCastException e) {

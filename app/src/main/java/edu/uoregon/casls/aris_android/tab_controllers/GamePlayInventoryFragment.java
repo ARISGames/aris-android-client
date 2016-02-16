@@ -15,6 +15,7 @@ public class GamePlayInventoryFragment extends Fragment {
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_SECTION_NUMBER = "section_number";
+	private static final String ARG_SECTION_NAME = "section_name";
 	private static final String ARG_PARAM2 = "param2";
 
 	// TODO: Rename and change types of parameters
@@ -22,19 +23,19 @@ public class GamePlayInventoryFragment extends Fragment {
 	private String mParam2;
 
 //	private OnFragmentInteractionListener mListener;
-
-	public static GamePlayInventoryFragment newInstance(int sectionNumber) {
-		GamePlayInventoryFragment fragment = new GamePlayInventoryFragment();
-		Bundle args = new Bundle();
-		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-		fragment.setArguments(args);
-		return fragment;
-	}
+//
+//	public static GamePlayInventoryFragment newInstance(int sectionNumber) {
+//		GamePlayInventoryFragment fragment = new GamePlayInventoryFragment();
+//		Bundle args = new Bundle();
+//		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+//		fragment.setArguments(args);
+//		return fragment;
+//	}
 
 	public static GamePlayInventoryFragment newInstance(String sectionName) {
 		GamePlayInventoryFragment fragment = new GamePlayInventoryFragment();
 		Bundle args = new Bundle();
-		args.putString(ARG_SECTION_NUMBER, sectionName);
+		args.putString(ARG_SECTION_NAME, sectionName);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -44,14 +45,14 @@ public class GamePlayInventoryFragment extends Fragment {
 		// Required empty public constructor
 	}
 
-//	@Override
-//	public void onCreate(Bundle savedInstanceState) {
-//		super.onCreate(savedInstanceState);
-//		if (getArguments() != null) {
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		if (getArguments() != null) {
 //			mParam1 = getArguments().getString(ARG_PARAM1);
 //			mParam2 = getArguments().getString(ARG_PARAM2);
-//		}
-//	}
+		}
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,7 +66,7 @@ public class GamePlayInventoryFragment extends Fragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		((GamePlayActivity) activity).onSectionAttached(
-				getArguments().getInt(ARG_SECTION_NUMBER));
+				getArguments().getString(ARG_SECTION_NAME));
 //		try {
 //			mListener = (OnFragmentInteractionListener) activity;
 //		} catch (ClassCastException e) {
