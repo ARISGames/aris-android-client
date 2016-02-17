@@ -184,15 +184,33 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				Log.i("TAG", "Fragment was recreated using tag.");
 			//@formatter:off
 			// reconstitute as specific fragment class objects.
-			if      (fragment instanceof GamePlayDecoderFragment)   decoderViewFragment = (GamePlayDecoderFragment) fragment;
-			else if (fragment instanceof GamePlayDialogFragment)    dialogViewFragment = (GamePlayDialogFragment) fragment;
-			else if (fragment instanceof GamePlayInventoryFragment) inventoryViewFragment = (GamePlayInventoryFragment) fragment;
-			else if (fragment instanceof GamePlayMapFragment)       mapViewFragment = (GamePlayMapFragment) fragment;
-			else if (fragment instanceof GamePlayNoteFragment)      noteViewFragment = (GamePlayNoteFragment) fragment;
-			else if (fragment instanceof GamePlayPlayerFragment)    playerViewFragment = (GamePlayPlayerFragment) fragment;
-			else if (fragment instanceof GamePlayQuestsFragment)    questsViewFragment = (GamePlayQuestsFragment) fragment;
-			else if (fragment instanceof GamePlayScannerFragment)   scannerViewFragment = (GamePlayScannerFragment) fragment;
-			else if (fragment instanceof GamePlayWebPageFragment)   webPageViewFragment = (GamePlayWebPageFragment) fragment;
+			if      (fragment instanceof GamePlayDecoderFragment) {
+				decoderViewFragment = (GamePlayDecoderFragment) fragment;
+			}
+			else if (fragment instanceof GamePlayDialogFragment) {
+				dialogViewFragment = (GamePlayDialogFragment) fragment;
+			}
+			else if (fragment instanceof GamePlayInventoryFragment) {
+				inventoryViewFragment = (GamePlayInventoryFragment) fragment;
+			}
+			else if (fragment instanceof GamePlayMapFragment) {
+				mapViewFragment = (GamePlayMapFragment) fragment;
+			}
+			else if (fragment instanceof GamePlayNoteFragment) {
+				noteViewFragment = (GamePlayNoteFragment) fragment;
+			}
+			else if (fragment instanceof GamePlayPlayerFragment) {
+				playerViewFragment = (GamePlayPlayerFragment) fragment;
+			}
+			else if (fragment instanceof GamePlayQuestsFragment) {
+				questsViewFragment = (GamePlayQuestsFragment) fragment;
+			}
+			else if (fragment instanceof GamePlayScannerFragment) {
+				scannerViewFragment = (GamePlayScannerFragment) fragment;
+			}
+			else if (fragment instanceof GamePlayWebPageFragment) {
+				webPageViewFragment = (GamePlayWebPageFragment) fragment;
+			}
 			//@formatter:on
 			// hide them all to start
 			ft.hide(fragment);
@@ -201,7 +219,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		}
 		ft.commit();
 		getSupportFragmentManager().executePendingTransactions(); // flush its queue before attempting to show fragments
-		showFragment(currentFragVisible);
+		showFragment(currentFragVisible, null);
 
 	}
 
@@ -365,7 +383,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mDispatch.model_game_began(); // calls mGame.gameBegan() and mGamePlayAct.gameBegan()
 	}
 
-	private void showFragment(String fragTag) {
+	private void showFragment(String fragTag, Instance i) {
 		// if somehow we tried to transition to the fragment already showing, bail.
 		if (fragTag.contentEquals(currentFragVisible)) return;
 		// settle any outstanding fragment tasks
@@ -827,6 +845,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 					&& plaqueViewFragment.getTag().contentEquals(currentFragVisible))
 				return;
 
+			plaqueViewFragment.initWithInstance(i);
 			fragViewToDisplay = plaqueViewFragment.getTag(); // same end result as vc var in iOS
 //		vc = new PlaqueViewController(i delegate:self);
 		}
@@ -848,6 +867,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 					&& itemViewFragment.getTag().contentEquals(currentFragVisible))
 				return;
 
+			itemViewFragment.initWithInstance(i);
 			fragViewToDisplay = itemViewFragment.getTag(); // same end result as vc var in iOS
 //		vc = new ItemViewController(i delegate:self);
 		}
@@ -869,6 +889,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 					&& dialogViewFragment.getTag().contentEquals(currentFragVisible))
 				return;
 
+			dialogViewFragment.initWithInstance(i);
 			fragViewToDisplay = dialogViewFragment.getTag(); // same end result as vc var in iOS
 //		    vc = new DialogViewController(i delegate:self);
 		}
@@ -890,6 +911,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 					&& webPageViewFragment.getTag().contentEquals(currentFragVisible))
 				return;
 
+			webPageViewFragment.initWithInstance(i);
 			fragViewToDisplay = webPageViewFragment.getTag(); // same end result as vc var in iOS
 //		vc = new WebPageViewController(i delegate:self);
 		}
@@ -911,6 +933,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 					&& noteViewFragment.getTag().contentEquals(currentFragVisible))
 				return;
 
+			noteViewFragment.initWithInstance(i);
 			fragViewToDisplay = noteViewFragment.getTag(); // same end result as vc var in iOS
 //		vc = new NoteViewController(i delegate:self);
 		}
@@ -972,7 +995,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			if(f.produce_expire_on_view == 1)
 				 mGame.triggersModel.expireTriggersForInstanceId(i.instance_id);
 		}
-		showFragment(fragViewToDisplay);
+		showFragment(fragViewToDisplay, i);
 //		ARISNavigationController *nav = new ARISNavigationController alloc] initWithRootViewController:vc);
 //		this.presentDisplay(nav);
 	}
@@ -989,6 +1012,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			Plaque p = (Plaque) o;
 			i.object_type = "PLAQUE";
 			i.object_id = p.plaque_id;
+			plaqueViewFragment.initWithInstance(i);
 			fragViewToDisplay = plaqueViewFragment.getTag(); // same end result as vc var in iOS
 //			vc = new PlaqueViewController(i delegate:self);
 		}
@@ -996,6 +1020,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			Item it = (Item) o;
 			i.object_type = "ITEM";
 			i.object_id = it.item_id;
+			itemViewFragment.initWithInstance(i);
 			fragViewToDisplay = itemViewFragment.getTag(); // same end result as vc var in iOS
 //			vc = new ItemViewController(i delegate:self);
 		}
@@ -1003,6 +1028,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			Dialog d = (Dialog) o;
 			i.object_type = "DIALOG";
 			i.object_id = d.dialog_id;
+			dialogViewFragment.initWithInstance(i);
 			fragViewToDisplay = dialogViewFragment.getTag(); // same end result as vc var in iOS
 //			vc = new DialogViewController(i delegate:self);
 		}
@@ -1010,12 +1036,14 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			WebPage w = (WebPage) o;
 			//todo: realize difference in the two condition here
 			if (w.web_page_id == 0) { //assume ad hoc (created from some webview href maybe?)
+				webPageViewFragment.initWithInstance(i);
 				fragViewToDisplay = webPageViewFragment.getTag(); // same end result as vc var in iOS
 //				vc = new WebPageViewController alloc] initWithWebPage:w delegate:self);
 			}
 			else {
 				i.object_type = "WEB_PAGE";
 				i.object_id = w.web_page_id;
+				webPageViewFragment.initWithInstance(i);
 				fragViewToDisplay = webPageViewFragment.getTag(); // same end result as vc var in iOS
 //				vc = new WebPageViewController(i delegate:self);
 			}
@@ -1024,11 +1052,12 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			Note n = (Note) o;
 			i.object_type = "NOTE";
 			i.object_id = n.note_id;
+			noteViewFragment.initWithInstance(i);
 			fragViewToDisplay = noteViewFragment.getTag(); // same end result as vc var in iOS
 //			vc = new NoteViewController(i delegate:self);
 		}
 
-		showFragment(fragViewToDisplay);
+		showFragment(fragViewToDisplay, i);
 //		ARISNavigationController *nav = new ARISNavigationController alloc] initWithRootViewController:vc);
 //		this.presentDisplay:nav);
 	}

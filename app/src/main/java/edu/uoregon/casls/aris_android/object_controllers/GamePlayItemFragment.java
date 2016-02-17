@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import edu.uoregon.casls.aris_android.R;
+import edu.uoregon.casls.aris_android.data_objects.Instance;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -73,6 +74,10 @@ public class GamePlayItemFragment extends Fragment {
 	public void onDetach() {
 		super.onDetach();
 		mListener = null;
+	}
+
+	public void initWithInstance(Instance i) {
+
 	}
 
 	/**

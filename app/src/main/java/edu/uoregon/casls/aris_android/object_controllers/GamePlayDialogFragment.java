@@ -8,33 +8,48 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
+import edu.uoregon.casls.aris_android.data_objects.Dialog;
+import edu.uoregon.casls.aris_android.data_objects.Instance;
+import edu.uoregon.casls.aris_android.data_objects.Tab;
 
 /**
 
  */
 public class GamePlayDialogFragment extends Fragment {
-	// TODO: Rename parameter arguments, choose names that match
-	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-	private static final String ARG_PARAM1 = "param1";
-	private static final String ARG_PARAM2 = "param2";
 
-	// TODO: Rename and change types of parameters
-	private String mParam1;
-	private String mParam2;
-
+	Dialog dialog;
+	Instance instance;
+	Tab tab;
+	GamePlayActivity mGamePlayActivity;
 //	private OnFragmentInteractionListener mListener;
 
 	public GamePlayDialogFragment() {
-		// Required empty public constructor
+		// local convenience reference to Parent activity
+		mGamePlayActivity = (GamePlayActivity)getActivity();
+	}
+
+	public void initWithInstance(Instance i) {
+		instance = i;
+		dialog = mGamePlayActivity.mGame.dialogsModel.dialogForId(i.object_id);
+//		delegate = d;
+	}
+
+	public void initWithTab(Tab tab) {
+		instance = mGamePlayActivity.mGame.instancesModel.instanceForId(0);
+		instance.object_type = tab.type;
+		instance.object_id = tab.content_id;
+		dialog = mGamePlayActivity.mGame.dialogsModel.dialogForId(instance.object_id);
+//		delegate = d;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null) {
-			mParam1 = getArguments().getString(ARG_PARAM1);
-			mParam2 = getArguments().getString(ARG_PARAM2);
+//			mParam1 = getArguments().getString(ARG_PARAM1);
+//			mParam2 = getArguments().getString(ARG_PARAM2);
 		}
 	}
 
@@ -42,7 +57,12 @@ public class GamePlayDialogFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_dialog_view, container, false);
+		View view = inflater.inflate(R.layout.fragment_dialog_view, container, false);
+
+		// set up the various elements of the layout
+
+
+		return view;
 	}
 
 

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import edu.uoregon.casls.aris_android.R;
+import edu.uoregon.casls.aris_android.data_objects.Instance;
 
 public class GamePlayPlaqueFragment extends Fragment {
 	// TODO: Rename parameter arguments, choose names that match
@@ -65,6 +66,10 @@ public class GamePlayPlaqueFragment extends Fragment {
 	public void onDetach() {
 		super.onDetach();
 		mListener = null;
+	}
+
+	public void initWithInstance(Instance i) {
+
 	}
 
 	/**
