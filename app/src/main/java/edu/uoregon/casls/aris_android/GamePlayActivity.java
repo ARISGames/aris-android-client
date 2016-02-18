@@ -841,9 +841,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				setAsFrontmostFragment(tag);
 			}
 			// if it's already visible and the frontmost fragment... bail, no further action here
-			else if (currentFragVisible != null) if ( plaqueViewFragment.isVisible()
-					&& plaqueViewFragment.getTag().contentEquals(currentFragVisible))
-				return;
+			else if (currentFragVisible != null)
+				if ( plaqueViewFragment.isVisible() && plaqueViewFragment.getTag().contentEquals(currentFragVisible))
+					return;
 
 			plaqueViewFragment.initWithInstance(i);
 			fragViewToDisplay = plaqueViewFragment.getTag(); // same end result as vc var in iOS

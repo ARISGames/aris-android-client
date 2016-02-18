@@ -60,7 +60,7 @@ public class GamePlayDialogFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_dialog_view, container, false);
 
 		// set up the various elements of the layout
-
+		// todo: populate the mofo.
 
 		return view;
 	}
