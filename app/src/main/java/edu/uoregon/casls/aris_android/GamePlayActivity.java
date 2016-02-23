@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.gson.Gson;
 
@@ -118,6 +120,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game_play);
 
@@ -371,10 +374,12 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			this.storeGame(); //we loaded fresh, so can store player data
 
 		// Game data should now be loaded. Populate the NavDrawer tabs.
-		mNavigationDrawerFragment.addItems(mGame.tabsModel.playerTabNames());
+		mNavigationDrawerFragment.addItems(mGame.tabsModel.playerTabTypes());
 		mNavigationDrawerFragment.setUp(
 				R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
+//		mNavigationDrawerFragment.setMenuVisibility(false); // no workie
+//		mNavigationDrawerFragment.setHasOptionsMenu(false);
 
 		boolean debugThis = true; // dev debugging
 		if (debugThis) checkGameFile(); // dev debugging delete or disable after code is working.

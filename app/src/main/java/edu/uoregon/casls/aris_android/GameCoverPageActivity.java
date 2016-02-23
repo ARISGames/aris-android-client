@@ -10,7 +10,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -230,8 +232,15 @@ public class GameCoverPageActivity extends AppCompatActivity {
 //			wvGamePic.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
 			wvGamePic.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
 			wvGamePic.getSettings().setUseWideViewPort(true); // constrain the image horizontally
-//			wvGamePic
-			wvGamePic.loadUrl(mGame.media.remoteURL.toString());
+//			wvGamePic.loadUrl(mGame.media.remoteURL.toString()); // orig. sometime image is smallified over to the left and doesn't fill screen
+			// attempt to fit image to whole screen width
+			DisplayMetrics displaymetrics = new DisplayMetrics();
+			this.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+			int screenWidth = displaymetrics.widthPixels;
+			int screenHeight = displaymetrics.heightPixels;
+			// from: http://stackoverflow.com/a/10395972
+			String data="<html><head><body><center><img width="+screenWidth+" src=\""+mGame.media.remoteURL.toString()+"\" /></center></body></html>";
+			wvGamePic.loadData(data, "text/html", null);
 		}
 
 		if (mHasPlayed) {
@@ -253,6 +262,7 @@ public class GameCoverPageActivity extends AppCompatActivity {
 		game.begin_fresh = YES;
 		[self refreshFromGame];
 */
+		// todo: need a confirmation dialog for this action
 		pollServer(HTTP_LOG_PLAYER_RESET_GAME); // covers the actions of [_MODEL_GAMES_ playerResetGame:game.game_id];
 		mGame.begin_fresh = 1;
 		//[self refreshFromGame]; in Android this happens after server return call in rcv'd via updateAllViews()

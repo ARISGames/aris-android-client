@@ -177,4 +177,12 @@ public class TabsModel extends ARISModel {
 		}
 		return playerTabNames;
 	}
+
+	public List<String> playerTabTypes() {
+		List<String> playerTabTypes = new ArrayList<>(playerTabs.size());
+		for (Tab pTab : playerTabs) {
+			playerTabTypes.add(pTab.type);
+		}
+		return playerTabTypes;
+	}
 }

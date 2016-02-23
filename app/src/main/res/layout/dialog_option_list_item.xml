@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fffefefe"
+                android:alpha=".9">
+
+    <!-- Dialog Option HTML (text) -->
+    <LinearLayout
+        android:id="@+id/ll_dialog_option"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:alpha=".9"
+        android:background="#fffefefe"
+        android:layout_toLeftOf="@+id/iv_game_item_right_arrow"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+        <WebView
+            android:id="@+id/wv_dialog_option_prompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="#fffefefe"
+            android:alpha=".9"/>
+    </LinearLayout>
+
+    <!-- Right end arrow  -->
+    <ImageView
+        android:id="@+id/iv_game_item_right_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/arrow_forward_2x"
+        android:layout_alignParentBottom="false"
+        android:paddingBottom="5dp"
+        android:layout_marginBottom="5dp"/>
+
+
+</RelativeLayout>

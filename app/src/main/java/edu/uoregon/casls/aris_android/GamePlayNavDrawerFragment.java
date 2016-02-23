@@ -167,6 +167,7 @@ public class GamePlayNavDrawerFragment extends Fragment {
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
+		actionBar.hide();
 
 		// ActionBarDrawerToggle ties together the the proper interactions
 		// between the navigation drawer and the action bar app icon.
@@ -318,7 +319,8 @@ public class GamePlayNavDrawerFragment extends Fragment {
 		String iconURL;
 		for (String tabName : playerTabNames) {
 			iconURL = "http://dummy.fillinlater.com/media.png";
-			mNavItems.add(new NavItem(tabName, "Nosubtitle", AppConfig.gameDrawerItemIconByName.get(tabName), iconURL));
+			if (AppConfig.gameDrawerItemIconByName.get(tabName) != null)
+				mNavItems.add(new NavItem(tabName, "Nosubtitle", AppConfig.gameDrawerItemIconByName.get(tabName), iconURL));
 		}
 //		playerTabNames.toArray(mDrawerListItems);
 //		for (int i=0; i < mDrawerListItems.length; i++) {

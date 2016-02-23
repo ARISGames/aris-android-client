@@ -42,14 +42,14 @@ public class AppConfig {
 	// Must have the same list of elements as the string array in strings.xml and must also have a valid drawable resource.
 	public static Map<String, Integer> gameDrawerItemIconByName = new LinkedHashMap<String, Integer>() {{
 
-		put("Quests", R.drawable.game_play_todo_2x);
-		put("Map", R.drawable.game_play_map_2x);
-		put("Inventory", R.drawable.game_play_toolbox_2x);
-		put("Scanner", R.drawable.game_play_qr_icon_2x);
-		put("Decoder", R.drawable.game_play_qr_icon_2x);
-		put("Player", R.drawable.game_play_id_card_2x);
-		put("Notebook", R.drawable.game_play_notebook_2x);
-		put("Inventory", R.drawable.game_play_toolbox_2x);
+		put("QUESTS", R.drawable.game_play_todo_2x);
+		put("MAP", R.drawable.game_play_map_2x);
+		put("INVENTORY", R.drawable.game_play_toolbox_2x);
+		put("SCANNER", R.drawable.game_play_qr_icon_2x);
+		put("DECODER", R.drawable.game_play_qr_icon_2x);
+		put("PLAYER", R.drawable.game_play_id_card_2x);
+		put("NOTEBOOK", R.drawable.game_play_notebook_2x);
+		put("INVENTORY", R.drawable.game_play_toolbox_2x);
 
 	}};
 }

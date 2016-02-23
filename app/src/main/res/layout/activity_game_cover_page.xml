@@ -62,6 +62,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Medium Text"
+                android:background="#fffefefe"
                 android:id="@+id/tv_game_desc"
                 android:layout_below="@+id/iv_game_designer_logo"
                 android:layout_centerHorizontal="true"/>
