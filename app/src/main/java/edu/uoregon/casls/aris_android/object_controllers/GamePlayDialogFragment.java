@@ -1,7 +1,6 @@
 package edu.uoregon.casls.aris_android.object_controllers;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
@@ -19,11 +18,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.List;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
@@ -55,7 +50,7 @@ public class GamePlayDialogFragment extends Fragment {
 	ScrollView slideUpDialogScriptAndOptionsPanel;
 	View       fragView;
 
-//	private OnFragmentInteractionListener mListener;
+	private OnFragmentInteractionListener mListener;
 
 	public GamePlayDialogFragment() {
 		// local convenience reference to Parent activity
@@ -67,7 +62,7 @@ public class GamePlayDialogFragment extends Fragment {
 		dialog = mGamePlayActivity.mGame.dialogsModel.dialogForId(i.object_id);
 		dialogsModel = mGamePlayActivity.mGame.dialogsModel; // convenience ref
 //		delegate = d;
-		loadViewElements();
+		loadViewElements(dialog.intro_dialog_script_id);
 	}
 
 	public void initWithTab(Tab tab) {
@@ -77,7 +72,7 @@ public class GamePlayDialogFragment extends Fragment {
 		dialogsModel = mGamePlayActivity.mGame.dialogsModel; // convenience ref
 		dialog = mGamePlayActivity.mGame.dialogsModel.dialogForId(instance.object_id);
 //		delegate = d;
-		loadViewElements();
+		loadViewElements(dialog.intro_dialog_script_id);
 	}
 
 	public void initContext() {
@@ -102,9 +97,10 @@ public class GamePlayDialogFragment extends Fragment {
 		return fragView;
 	}
 
-
-	private void loadViewElements() {
-		dialogScript = dialogsModel.scriptForId(dialog.intro_dialog_script_id); // get Script
+	// expects that the dialog Script
+	private void loadViewElements(long dialogScriptId) {
+		dialogScript = dialogsModel.scriptForId(dialogScriptId); // get Script To Display
+		if (dialog.intro_dialog_script_id == 0) dialogScript.dialog_id = dialog.dialog_id; //the 'null script'
 		dialogCharacter = dialogsModel.characterForId(dialogScript.dialog_character_id); // get character
 		// get mediaCD (from database)
 		// todo: the media might already be loaded on the device. if it is, use it instead of downloading from remote URL
@@ -175,25 +171,61 @@ public class GamePlayDialogFragment extends Fragment {
 				String dialogOptionHtml = "<html><body>" + dialogOption.prompt + "</body></html>";
 				wvDialogOptionPrompt.loadData(dialogOptionHtml, "text/html", null);
 
-				dialogOptionItemView.setId((int)dialogOption.dialog_option_id);
-				dialogOptionItemView.setTag(dialogOption.dialog_option_id);
-
-				// forward button:
+				final int dialogOptionId = (int)dialogOption.dialog_option_id;
+				dialogOptionItemView.setId(dialogOptionId);
+				dialogOptionItemView.setTag(dialogOptionId); // redundant but I might find a use for this later.
+				// set up forward button:
 				ImageView dialogFwdButton = (ImageView) dialogOptionItemView.findViewById(R.id.iv_game_item_right_arrow);
-				final int ii = (int)dialogOption.dialog_option_id;
 				dialogFwdButton.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						Toast t = Toast.makeText(getActivity(), "You selected item #" + ii,
+						Toast t = Toast.makeText(getActivity(), "You selected item #" + dialogOptionId,
 								Toast.LENGTH_SHORT);
 						t.setGravity(Gravity.CENTER, 0, 0);
 						t.show();
+						dialogOptionSelected(dialogOptionId);
 					}
 				});
 				// add this dialog option item to the list layout
 				llDialogOptionsListLayout.addView(dialogOptionItemView, listPosition++);
 
 			}
+		}
+	}
+
+	private void dialogOptionSelected(long dialogOptionId) {
+		// if the option is another dialog script, just move.
+		DialogOption op = mGamePlayActivity.mGame.dialogsModel.dialogOptions.get(dialogOptionId);
+		if (op.link_type.contentEquals("DIALOG_SCRIPT")) {
+			this.dialogScriptChosen(mGamePlayActivity.mGame.dialogsModel.scriptForId((long)op.link_id));
+		}
+		else
+			mListener.onDialogOptionSelected(dialogOptionId);
+	}
+
+	private void dialogScriptChosen(DialogScript chosenScript) {
+		// switch dialogs if necessary
+		if (chosenScript.dialog_id != dialog.dialog_id) {
+			// since Android doesn't have a separate DialogScriptViewController we will just repurpose the view elements
+			// here to the new dialog.
+			dialog = mGamePlayActivity.mGame.dialogsModel.dialogForId(chosenScript.dialog_id);
+		}
+
+		if (chosenScript.event_package_id > 0)
+			mGamePlayActivity.mGame.eventsModel.runEventPackageId(chosenScript.event_package_id);
+		// Tell server dialog was viewed; response will trigger UI update;
+		mGamePlayActivity.mGame.logsModel.playerViewedContent("DIALOG_SCRIPT", chosenScript.dialog_script_id);
+		if (chosenScript.dialog_character_id == 0) { // "0" indicated this is "you" speaking
+			// todo: consider callback to Activity to create whole new DialogFragment
+			loadViewElements(chosenScript.dialog_script_id); // more like a "reload..." in this case.
+			// note that the character image for "you" is the player Pic. that was presumable taken upon entry.
+			//    todo: Do we do that in Android?  if not
+			// since Android doesn't have a separate DialogScriptViewController we will just repurpose the view elements
+			// here to the new dialog.
+			// ignoring you/them distinction in Android for now.
+		}
+		else { // this is a "them" character speaking (in iOS this really just changes the scroll animation from r-l vs l-r
+			loadViewElements(chosenScript.dialog_script_id); // more like a "reload..." in this case.
 		}
 	}
 
@@ -222,15 +254,20 @@ public class GamePlayDialogFragment extends Fragment {
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
-//		if (context instanceof OnFragmentInteractionListener) {
-//			mListener = (OnFragmentInteractionListener) context;
-//		}
-//		else {
-//			throw new RuntimeException(context.toString()
-//					+ " must implement OnFragmentInteractionListener");
-//		}
+		if (context instanceof OnFragmentInteractionListener) {
+			mListener = (OnFragmentInteractionListener) context;
+		}
+		else {
+			throw new RuntimeException(context.toString()
+					+ " must implement OnFragmentInteractionListener");
+		}
 	}
 
+	public interface OnFragmentInteractionListener {
+		// TODO: Update argument type and name
+//		public void onFragmentInteraction(Uri uri);
+		public void onDialogOptionSelected(long dialogOptionId);
+	}
 	@Override
 	public void onDetach() {
 		super.onDetach();

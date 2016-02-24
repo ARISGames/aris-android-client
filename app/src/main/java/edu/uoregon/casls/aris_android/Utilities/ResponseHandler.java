@@ -69,6 +69,11 @@ public class ResponseHandler { // for now only handles responses with respect to
 			if (Calls.FIRE_AND_FORGET_CALLS.contains(callingReq)) {
 				// do nothing.
 			}
+			/* All calls that will trigger an immediate game update. */
+			else if (Calls.TRIGGER_GAME_UPDATE_CALLS.contains(callingReq)) {
+				// cause game to update.
+				mGamePlayAct.mGame.requestPlayerData();
+			}
 			/* parseCreateNote*/
 			else if (callingReq.equals(Calls.HTTP_CREATE_NOTE)) { // todo: may add update note here handler here too
 				if (jsonReturn.has("data")) {

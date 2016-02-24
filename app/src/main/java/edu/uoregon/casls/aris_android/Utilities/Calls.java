@@ -105,27 +105,34 @@ public class Calls {
 	public static final String HTTP_GET_TRIGGER = "v2.triggers.getTrigger/";
 	public static final String HTTP_GET_USER    = "v2.users.getUser/";
 
+	// calls who's responses will call triggerGameUpdateForLogEvent().
+	public static final Set<String> TRIGGER_GAME_UPDATE_CALLS = new HashSet<String>(Arrays.asList(
+			new String[]{
+					HTTP_LOG_PLAYER_TRIGGERED_TRIGGER,
+					HTTP_LOG_PLAYER_VIEWED_CONTENT,
+					HTTP_LOG_PLAYER_VIEWED_INSTANCE
+			}
+	));
 	// calls who's responses can be ignored.
 	public static final Set<String> FIRE_AND_FORGET_CALLS = new HashSet<String>(Arrays.asList(
 			new String[]{
 					HTTP_DELETE_NOTE,
 					HTTP_DELETE_NOTE_COMMENT,
 					HTTP_DROP_ITEM,
-					HTTP_LOG_PLAYER_BEGAN_GAME,
-					HTTP_LOG_PLAYER_RESET_GAME,
-					HTTP_LOG_PLAYER_MOVED,
-					HTTP_LOG_PLAYER_VIEWED_TAB,
-					HTTP_LOG_PLAYER_VIEWED_CONTENT,
-					HTTP_LOG_PLAYER_RECEIVED_ITEM,
-					HTTP_LOG_PLAYER_LOST_ITEM,
 					HTTP_LOG_GAME_RECEIVED_ITEM,
 					HTTP_LOG_GAME_LOST_ITEM,
 					HTTP_LOG_GROUP_RECEIVED_ITEM,
 					HTTP_LOG_GROUP_LOST_ITEM,
-					HTTP_LOG_PLAYER_SET_SCENE,
+					HTTP_LOG_PLAYER_BEGAN_GAME,
+					HTTP_LOG_PLAYER_COMPLATED_QUEST,
 					HTTP_LOG_PLAYER_JOINED_GROUP,
+					HTTP_LOG_PLAYER_LOST_ITEM,
+					HTTP_LOG_PLAYER_MOVED,
 					HTTP_LOG_PLAYER_RAN_EVENT_PKG,
-					HTTP_LOG_PLAYER_COMPLATED_QUEST
+					HTTP_LOG_PLAYER_RECEIVED_ITEM,
+					HTTP_LOG_PLAYER_RESET_GAME,
+					HTTP_LOG_PLAYER_SET_SCENE,
+					HTTP_LOG_PLAYER_VIEWED_TAB
 			}
 	));
 }

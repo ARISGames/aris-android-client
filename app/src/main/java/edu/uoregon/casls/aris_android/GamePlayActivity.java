@@ -15,8 +15,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.google.gson.Gson;
 
@@ -35,6 +33,7 @@ import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.Utilities.Dispatcher;
 import edu.uoregon.casls.aris_android.Utilities.ResponseHandler;
 import edu.uoregon.casls.aris_android.data_objects.Dialog;
+import edu.uoregon.casls.aris_android.data_objects.DialogOption;
 import edu.uoregon.casls.aris_android.data_objects.Factory;
 import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
@@ -64,7 +63,10 @@ import edu.uoregon.casls.aris_android.tab_controllers.GamePlayQuestsFragment;
 import edu.uoregon.casls.aris_android.tab_controllers.GamePlayScannerFragment;
 
 public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActivity
-		implements GamePlayNavDrawerFragment.NavigationDrawerCallbacks, GamePlayMapFragment.OnFragmentInteractionListener {
+		implements GamePlayNavDrawerFragment.NavigationDrawerCallbacks,
+		GamePlayMapFragment.OnFragmentInteractionListener,
+		GamePlayPlaqueFragment.OnFragmentInteractionListener,
+		GamePlayDialogFragment.OnFragmentInteractionListener {
 
 // Todo 9.29.15: Need to see what happens now when the game tries to load, and then set about setting up the cyclic app status calls
 
@@ -1076,6 +1078,39 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	public void displayScannerWithPrompt(String p) {
 //todo:		gamePlayTabSelectorController.requestDisplayScannerWithPrompt(p);
+	}
+
+	// dialog option was selected; determine desired course of action
+	@Override
+	public void onDialogOptionSelected(long dialogOptionId) {
+		DialogOption dlogOptn = mGame.dialogsModel.dialogOptions.get(dialogOptionId);
+		FragmentManager fragmentManager = getSupportFragmentManager();
+
+		if (dlogOptn.link_type.contentEquals("DIALOG_SCRIPT")) {
+//		[delegate dialogScriptChosen:[_MODEL_DIALOGS_ scriptForId:op.link_id]];
+
+		}
+		else if (dlogOptn.link_type.contentEquals("EXIT")) {
+//			[delegate exitRequested];
+		}
+		else if (dlogOptn.link_type.contentEquals("EXIT_TO_PLAQUE")) {
+//			[_MODEL_DISPLAY_QUEUE_ enqueueObject:[_MODEL_PLAQUES_ plaqueForId:op.link_id]];    [delegate exitRequested];
+		}
+		else if (dlogOptn.link_type.contentEquals("EXIT_TO_ITEM")) {
+//				[_MODEL_DISPLAY_QUEUE_ enqueueObject:[_MODEL_ITEMS_ itemForId:op.link_id]];
+//				[delegate exitRequested];
+		}
+		else if (dlogOptn.link_type.contentEquals("EXIT_TO_WEB_PAGE")) {
+//				[_MODEL_DISPLAY_QUEUE_ enqueueObject:[_MODEL_WEB_PAGES_ webPageForId:op.link_id]]; [delegate exitRequested];
+		}
+		else if (dlogOptn.link_type.contentEquals("EXIT_TO_DIALOG")) {
+			// Optimized: reuse the same controllers, just switch it to a new dialog
+//			[delegate dialogScriptChosen:[_MODEL_DIALOGS_ scriptForId:[_MODEL_DIALOGS_ dialogForId:op.link_id].intro_dialog_script_id]];
+		}
+		else if (dlogOptn.link_type.contentEquals("EXIT_TO_TAB")) {
+//			[_MODEL_DISPLAY_QUEUE_ enqueueTab:[_MODEL_TABS_ tabForId:op.link_id]];             [delegate exitRequested];
+
+		}
 	}
 
 //	public void presentDisplay(UIViewController vc)
