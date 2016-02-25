@@ -1,4 +1,4 @@
-package edu.uoregon.casls.aris_android.object_controllers;
+package edu.uoregon.casls.aris_android.tab_controllers;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,13 +9,13 @@ import android.view.ViewGroup;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
-import edu.uoregon.casls.aris_android.data_objects.Instance;
 
 
-public class GamePlayNoteFragment extends Fragment {
+public class ScannerViewFragment extends Fragment {
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_SECTION_NUMBER = "section_number";
+	private static final String ARG_SECTION_NAME = "section_name";
 	private static final String ARG_PARAM2 = "param2";
 
 	// TODO: Rename and change types of parameters
@@ -24,24 +24,17 @@ public class GamePlayNoteFragment extends Fragment {
 
 //	private OnFragmentInteractionListener mListener;
 
-	public static GamePlayNoteFragment newInstance(int sectionNumber) {
-		GamePlayNoteFragment fragment = new GamePlayNoteFragment();
-		Bundle args = new Bundle();
-		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-		fragment.setArguments(args);
-		return fragment;
-	}
 
-	public static GamePlayNoteFragment newInstance(String sectionName) {
-		GamePlayNoteFragment fragment = new GamePlayNoteFragment();
+	public static ScannerViewFragment newInstance(String sectionName) {
+		ScannerViewFragment fragment = new ScannerViewFragment();
 		Bundle args = new Bundle();
-		args.putString(ARG_SECTION_NUMBER, sectionName);
+		args.putString(ARG_SECTION_NAME, sectionName);
 		fragment.setArguments(args);
 		return fragment;
 	}
 
 
-	public GamePlayNoteFragment() {
+	public ScannerViewFragment() {
 		// Required empty public constructor
 	}
 
@@ -58,7 +51,7 @@ public class GamePlayNoteFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		View rootView = inflater.inflate(R.layout.fragment_note_view, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_scanner_view, container, false);
 		return rootView;
 	}
 
@@ -66,7 +59,7 @@ public class GamePlayNoteFragment extends Fragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		((GamePlayActivity) activity).onSectionAttached(
-				getArguments().getInt(ARG_SECTION_NUMBER));
+				getArguments().getInt(ARG_SECTION_NAME));
 //		try {
 //			mListener = (OnFragmentInteractionListener) activity;
 //		} catch (ClassCastException e) {
@@ -79,10 +72,6 @@ public class GamePlayNoteFragment extends Fragment {
 	public void onDetach() {
 		super.onDetach();
 //		mListener = null;
-	}
-
-	public void initWithInstance(Instance i) {
-
 	}
 
 	/**

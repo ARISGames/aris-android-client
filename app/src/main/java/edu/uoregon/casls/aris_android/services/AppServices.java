@@ -94,15 +94,15 @@ public class AppServices {
 	}
 
 	public void fetchRequirementAtoms() {
-		pollServer(Calls.HTTP_GET_REQ_ATOMS_4_GAME, jsonGameId());
+		pollServer(Calls.HTTP_GET_REQMNT_ATOMS_4_GAME, jsonGameId());
 	}
 
 	public void fetchRequirementAnds() {
-		pollServer(Calls.HTTP_GET_REQ_AND_PKGS_4_GAME, jsonGameId());
+		pollServer(Calls.HTTP_GET_REQMNT_AND_PKGS_4_GAME, jsonGameId());
 	}
 
 	public void fetchRequirementRoots() {
-		pollServer(Calls.HTTP_GET_REQ_ROOT_PKGS_4_GAME, jsonGameId());
+		pollServer(Calls.HTTP_GET_REQMNT_ROOT_PKGS_4_GAME, jsonGameId());
 	}
 
 	public void touchItemsForGame() {
@@ -515,7 +515,7 @@ public class AppServices {
 	}
 
 	public void fetchNoteComments() {
-		pollServer(Calls.HTTP_GET_NOTE_COMMNTS_4_GAME, jsonGameId());
+		pollServer(Calls.HTTP_GET_NOTE_COMMENTS_4_GAME, jsonGameId());
 	}
 
 	public void createNoteComment(NoteComment noteComment) {

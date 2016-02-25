@@ -11,11 +11,10 @@ import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
 
 
-public class GamePlayScannerFragment extends Fragment {
+public class DecoderViewFragment extends Fragment {
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_SECTION_NUMBER = "section_number";
-	private static final String ARG_SECTION_NAME = "section_name";
 	private static final String ARG_PARAM2 = "param2";
 
 	// TODO: Rename and change types of parameters
@@ -24,17 +23,24 @@ public class GamePlayScannerFragment extends Fragment {
 
 //	private OnFragmentInteractionListener mListener;
 
-
-	public static GamePlayScannerFragment newInstance(String sectionName) {
-		GamePlayScannerFragment fragment = new GamePlayScannerFragment();
+	public static DecoderViewFragment newInstance(int sectionNumber) {
+		DecoderViewFragment fragment = new DecoderViewFragment();
 		Bundle args = new Bundle();
-		args.putString(ARG_SECTION_NAME, sectionName);
+		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+		fragment.setArguments(args);
+		return fragment;
+	}
+
+	public static DecoderViewFragment newInstance(String sectionName) {
+		DecoderViewFragment fragment = new DecoderViewFragment();
+		Bundle args = new Bundle();
+		args.putString(ARG_SECTION_NUMBER, sectionName);
 		fragment.setArguments(args);
 		return fragment;
 	}
 
 
-	public GamePlayScannerFragment() {
+	public DecoderViewFragment() {
 		// Required empty public constructor
 	}
 
@@ -51,7 +57,7 @@ public class GamePlayScannerFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		View rootView = inflater.inflate(R.layout.fragment_scanner_view, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_decoder_view, container, false);
 		return rootView;
 	}
 
@@ -59,7 +65,7 @@ public class GamePlayScannerFragment extends Fragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		((GamePlayActivity) activity).onSectionAttached(
-				getArguments().getInt(ARG_SECTION_NAME));
+				getArguments().getInt(ARG_SECTION_NUMBER));
 //		try {
 //			mListener = (OnFragmentInteractionListener) activity;
 //		} catch (ClassCastException e) {

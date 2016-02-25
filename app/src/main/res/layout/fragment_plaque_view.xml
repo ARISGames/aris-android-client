@@ -1,13 +1,42 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="edu.uoregon.casls.aris_android.object_controllers.GamePlayPlaqueFragment">
+             tools:context=".object_controllers.PlaqueViewFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text = "Plaque Fragment"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text = "Plaque"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/tv_plaque_title"/>
 
-</FrameLayout>
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView"
+        android:layout_below="@+id/tv_plaque_title"
+        android:layout_centerHorizontal="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <WebView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/webView"/>
+
+            <VideoView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/videoView"/>
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

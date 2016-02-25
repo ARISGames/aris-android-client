@@ -15,12 +15,12 @@ import edu.uoregon.casls.aris_android.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link GamePlayMapFragment.OnFragmentInteractionListener} interface
+ * {@link MapViewFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link GamePlayMapFragment#newInstance} factory method to
+ * Use the {@link MapViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GamePlayMapFragment extends Fragment {
+public class MapViewFragment extends Fragment {
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_SECTION_NUMBER = "section_number";
@@ -55,23 +55,23 @@ public class GamePlayMapFragment extends Fragment {
 	 * Returns a new instance of this fragment for the given section
 	 * number.
 	 */
-	public static GamePlayMapFragment newInstance(int sectionNumber) {
-		GamePlayMapFragment fragment = new GamePlayMapFragment();
+	public static MapViewFragment newInstance(int sectionNumber) {
+		MapViewFragment fragment = new MapViewFragment();
 		Bundle args = new Bundle();
 		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 		fragment.setArguments(args);
 		return fragment;
 	}
 
-	public static GamePlayMapFragment newInstance(String sectionName) {
-		GamePlayMapFragment fragment = new GamePlayMapFragment();
+	public static MapViewFragment newInstance(String sectionName) {
+		MapViewFragment fragment = new MapViewFragment();
 		Bundle args = new Bundle();
 		args.putString(ARG_SECTION_NUMBER, sectionName);
 		fragment.setArguments(args);
 		return fragment;
 	}
 
-	public GamePlayMapFragment() {
+	public MapViewFragment() {
 		// Required empty public constructor
 	}
 

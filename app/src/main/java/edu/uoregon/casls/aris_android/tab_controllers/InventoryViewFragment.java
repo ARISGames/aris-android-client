@@ -11,7 +11,7 @@ import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
 
 
-public class GamePlayInventoryFragment extends Fragment {
+public class InventoryViewFragment extends Fragment {
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_SECTION_NUMBER = "section_number";
@@ -32,8 +32,8 @@ public class GamePlayInventoryFragment extends Fragment {
 //		return fragment;
 //	}
 
-	public static GamePlayInventoryFragment newInstance(String sectionName) {
-		GamePlayInventoryFragment fragment = new GamePlayInventoryFragment();
+	public static InventoryViewFragment newInstance(String sectionName) {
+		InventoryViewFragment fragment = new InventoryViewFragment();
 		Bundle args = new Bundle();
 		args.putString(ARG_SECTION_NAME, sectionName);
 		fragment.setArguments(args);
@@ -41,7 +41,7 @@ public class GamePlayInventoryFragment extends Fragment {
 	}
 
 
-	public GamePlayInventoryFragment() {
+	public InventoryViewFragment() {
 		// Required empty public constructor
 	}
 

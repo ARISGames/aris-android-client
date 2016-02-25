@@ -35,7 +35,7 @@ import edu.uoregon.casls.aris_android.models.MediaModel;
 /**
 
  */
-public class GamePlayDialogFragment extends Fragment {
+public class DialogViewFragment extends Fragment {
 
 	public Dialog dialog;
 	public DialogsModel dialogsModel;
@@ -52,7 +52,7 @@ public class GamePlayDialogFragment extends Fragment {
 
 	private OnFragmentInteractionListener mListener;
 
-	public GamePlayDialogFragment() {
+	public DialogViewFragment() {
 		// local convenience reference to Parent activity
 		initContext();
 	}
@@ -153,7 +153,7 @@ public class GamePlayDialogFragment extends Fragment {
 		String[] tempText = {"This is the first dialog option, but it is a really long one <i>with some tags also</i>. This will help me align the web layout so long stuff <b>fits properly</b>.",
 				"This is the <b>second</b> diolog option",
 				"<font color=\"red\">This is the third diolog option</font>"};
-		Collection<DialogOption> dialogOptions =  mGamePlayActivity.mGame.dialogsModel.dialogOptions.values();
+		Collection<DialogOption> dialogOptions =  dialogsModel.dialogOptions.values();
 		// loop through set of all dialog options for this dialog; add them to list.
 
 		int listPosition = 0;
@@ -194,13 +194,19 @@ public class GamePlayDialogFragment extends Fragment {
 	}
 
 	private void dialogOptionSelected(long dialogOptionId) {
-		// if the option is another dialog script, just move.
-		DialogOption op = mGamePlayActivity.mGame.dialogsModel.dialogOptions.get(dialogOptionId);
+		// if the option is another dialog script, just repave .
+		DialogOption op = dialogsModel.dialogOptions.get(dialogOptionId);
 		if (op.link_type.contentEquals("DIALOG_SCRIPT")) {
-			this.dialogScriptChosen(mGamePlayActivity.mGame.dialogsModel.scriptForId((long)op.link_id));
+			this.dialogScriptChosen(dialogsModel.scriptForId((long)op.link_id));
+		}
+		else if (op.link_type.contentEquals("EXIT_TO_DIALOG")) {
+			// Optimized: reuse the same controllers, just switch it to a new dialog
+//			[delegate dialogScriptChosen:[_MODEL_DIALOGS_ scriptForId:[_MODEL_DIALOGS_ dialogForId:op.link_id].intro_dialog_script_id]];
+			Dialog d = mGamePlayActivity.mGame.dialogsModel.dialogForId(op.link_id);
+			this.dialogScriptChosen(dialogsModel.scriptForId(d.intro_dialog_script_id));
 		}
 		else
-			mListener.onDialogOptionSelected(dialogOptionId);
+			mListener.onOtherDialogOptionSelected(dialogOptionId);
 	}
 
 	private void dialogScriptChosen(DialogScript chosenScript) {
@@ -208,7 +214,7 @@ public class GamePlayDialogFragment extends Fragment {
 		if (chosenScript.dialog_id != dialog.dialog_id) {
 			// since Android doesn't have a separate DialogScriptViewController we will just repurpose the view elements
 			// here to the new dialog.
-			dialog = mGamePlayActivity.mGame.dialogsModel.dialogForId(chosenScript.dialog_id);
+			dialog = dialogsModel.dialogForId(chosenScript.dialog_id);
 		}
 
 		if (chosenScript.event_package_id > 0)
@@ -266,7 +272,7 @@ public class GamePlayDialogFragment extends Fragment {
 	public interface OnFragmentInteractionListener {
 		// TODO: Update argument type and name
 //		public void onFragmentInteraction(Uri uri);
-		public void onDialogOptionSelected(long dialogOptionId);
+		public void onOtherDialogOptionSelected(long dialogOptionId);
 	}
 	@Override
 	public void onDetach() {

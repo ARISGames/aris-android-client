@@ -2,7 +2,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="edu.uoregon.casls.aris_android.object_controllers.GamePlayItemFragment">
+             tools:context=".object_controllers.ItemViewFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

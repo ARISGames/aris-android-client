@@ -42,7 +42,7 @@ public class Calls {
 	public static final String HTTP_TOUCH_ITEMS_4_GAME           = "v2.client.touchItemsForGame/";
 	public static final String HTTP_TOUCH_ITEMS_4_GROUPS         = "v2.client.touchItemsForGroups/";
 	public static final String HTTP_GET_NOTES_4_GAME             = "v2.notes.getNotesForGame/";
-	public static final String HTTP_GET_NOTE_COMMNTS_4_GAME      = "v2.note_comments.getNoteCommentsForGame/";
+	public static final String HTTP_GET_NOTE_COMMENTS_4_GAME     = "v2.note_comments.getNoteCommentsForGame/";
 	public static final String HTTP_GET_OBJ_TAGS_4_GAME          = "v2.tags.getObjectTagsForGame/";
 	public static final String HTTP_GET_PLAQUES_4_GAME           = "v2.plaques.getPlaquesForGame/";
 	public static final String HTTP_GET_QUESTS_4_GAME            = "v2.quests.getQuestsForGame/";
@@ -54,9 +54,9 @@ public class Calls {
 	public static final String HTTP_GET_OVERLAYS_4_GAME          = "v2.overlays.getOverlaysForGame/";
 	public static final String HTTP_GET_MEDIA_4_GAME             = "v2.media.getMediaForGame/";
 	public static final String HTTP_GET_USERS_4_GAME             = "v2.users.getUsersForGame/";
-	public static final String HTTP_GET_REQ_ROOT_PKGS_4_GAME     = "v2.requirements.getRequirementRootPackagesForGame/";
-	public static final String HTTP_GET_REQ_AND_PKGS_4_GAME      = "v2.requirements.getRequirementAndPackagesForGame/";
-	public static final String HTTP_GET_REQ_ATOMS_4_GAME         = "v2.requirements.getRequirementAtomsForGame/";
+	public static final String HTTP_GET_REQMNT_ROOT_PKGS_4_GAME  = "v2.requirements.getRequirementRootPackagesForGame/";
+	public static final String HTTP_GET_REQMNT_AND_PKGS_4_GAME   = "v2.requirements.getRequirementAndPackagesForGame/";
+	public static final String HTTP_GET_REQMNT_ATOMS_4_GAME      = "v2.requirements.getRequirementAtomsForGame/";
 	public static final String HTTP_GET_WEB_PAGES_4_GAME         = "v2.web_pages.getWebPagesForGame/";
 	// Game cyclical update calls
 	public static final String HTTP_GET_INSTANCES_4_PLAYER       = "v2.client.getInstancesForPlayer/"; // Needs game_id, owner_id
@@ -92,18 +92,18 @@ public class Calls {
 	public static final String HTTP_SET_PLAYER_SCENE = "v2.client.setPlayerScene/"; // "game_id","scene_id"
 
 	// update things
-	public static final String HTTP_UPDATE_NOTE = "v2.notes.updateNote/";
+	public static final String HTTP_UPDATE_NOTE         = "v2.notes.updateNote/";
 	public static final String HTTP_UPDATE_NOTE_COMMENT = "v2.note_comments.updateNoteComment/";
 
 	// Client utility calls
 	public static final String HTTP_USER_LOGIN_REQ_API     = "v2.users.logIn/";
 	public static final String HTTP_USER_REQ_FORGOT_PASSWD = "v2.users.requestForgotPasswordEmail/";
 
-	public static final String HTTP_GET_MEDIA   = "v2.media.getMedia/";
-	public static final String HTTP_GET_NOTE    = "v2.notes.getNote/"; // todo check this call syntax and server prefix paths
+	public static final String HTTP_GET_MEDIA              = "v2.media.getMedia/";
+	public static final String HTTP_GET_NOTE               = "v2.notes.getNote/"; // todo check this call syntax and server prefix paths
 	public static final String HTTP_GET_PLAYER_PLAYED_GAME = "v2.client.getPlayerPlayedGame/";
-	public static final String HTTP_GET_TRIGGER = "v2.triggers.getTrigger/";
-	public static final String HTTP_GET_USER    = "v2.users.getUser/";
+	public static final String HTTP_GET_TRIGGER            = "v2.triggers.getTrigger/";
+	public static final String HTTP_GET_USER               = "v2.users.getUser/";
 
 	// calls who's responses will call triggerGameUpdateForLogEvent().
 	public static final Set<String> TRIGGER_GAME_UPDATE_CALLS = new HashSet<String>(Arrays.asList(
@@ -113,6 +113,7 @@ public class Calls {
 					HTTP_LOG_PLAYER_VIEWED_INSTANCE
 			}
 	));
+
 	// calls who's responses can be ignored.
 	public static final Set<String> FIRE_AND_FORGET_CALLS = new HashSet<String>(Arrays.asList(
 			new String[]{
@@ -132,7 +133,9 @@ public class Calls {
 					HTTP_LOG_PLAYER_RECEIVED_ITEM,
 					HTTP_LOG_PLAYER_RESET_GAME,
 					HTTP_LOG_PLAYER_SET_SCENE,
-					HTTP_LOG_PLAYER_VIEWED_TAB
+					HTTP_LOG_PLAYER_VIEWED_TAB,
+					HTTP_SET_PLAYER_SCENE,
+					HTTP_SET_PLAYER_GROUP
 			}
 	));
 }

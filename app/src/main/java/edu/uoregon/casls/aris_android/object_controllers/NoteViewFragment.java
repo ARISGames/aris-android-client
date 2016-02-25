@@ -1,4 +1,4 @@
-package edu.uoregon.casls.aris_android.tab_controllers;
+package edu.uoregon.casls.aris_android.object_controllers;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,9 +9,10 @@ import android.view.ViewGroup;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
+import edu.uoregon.casls.aris_android.data_objects.Instance;
 
 
-public class GamePlayDecoderFragment extends Fragment {
+public class NoteViewFragment extends Fragment {
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_SECTION_NUMBER = "section_number";
@@ -23,16 +24,16 @@ public class GamePlayDecoderFragment extends Fragment {
 
 //	private OnFragmentInteractionListener mListener;
 
-	public static GamePlayDecoderFragment newInstance(int sectionNumber) {
-		GamePlayDecoderFragment fragment = new GamePlayDecoderFragment();
+	public static NoteViewFragment newInstance(int sectionNumber) {
+		NoteViewFragment fragment = new NoteViewFragment();
 		Bundle args = new Bundle();
 		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 		fragment.setArguments(args);
 		return fragment;
 	}
 
-	public static GamePlayDecoderFragment newInstance(String sectionName) {
-		GamePlayDecoderFragment fragment = new GamePlayDecoderFragment();
+	public static NoteViewFragment newInstance(String sectionName) {
+		NoteViewFragment fragment = new NoteViewFragment();
 		Bundle args = new Bundle();
 		args.putString(ARG_SECTION_NUMBER, sectionName);
 		fragment.setArguments(args);
@@ -40,7 +41,7 @@ public class GamePlayDecoderFragment extends Fragment {
 	}
 
 
-	public GamePlayDecoderFragment() {
+	public NoteViewFragment() {
 		// Required empty public constructor
 	}
 
@@ -57,7 +58,7 @@ public class GamePlayDecoderFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		View rootView = inflater.inflate(R.layout.fragment_decoder_view, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_note_view, container, false);
 		return rootView;
 	}
 
@@ -78,6 +79,10 @@ public class GamePlayDecoderFragment extends Fragment {
 	public void onDetach() {
 		super.onDetach();
 //		mListener = null;
+	}
+
+	public void initWithInstance(Instance i) {
+
 	}
 
 	/**

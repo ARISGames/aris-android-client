@@ -25,7 +25,6 @@ import edu.uoregon.casls.aris_android.data_objects.DialogOption;
 import edu.uoregon.casls.aris_android.data_objects.DialogScript;
 import edu.uoregon.casls.aris_android.data_objects.Event;
 import edu.uoregon.casls.aris_android.data_objects.Factory;
-import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Group;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
 import edu.uoregon.casls.aris_android.data_objects.Item;
@@ -312,7 +311,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 				}
 			}
 			/* parseNoteComments */
-			else if (callingReq.equals(Calls.HTTP_GET_NOTE_COMMNTS_4_GAME)) {
+			else if (callingReq.equals(Calls.HTTP_GET_NOTE_COMMENTS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
@@ -460,7 +459,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 				}
 			}
 			/* parseRequirementAndPackages */
-			else if (callingReq.equals(Calls.HTTP_GET_REQ_AND_PKGS_4_GAME)) {
+			else if (callingReq.equals(Calls.HTTP_GET_REQMNT_AND_PKGS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
@@ -475,7 +474,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 				}
 			}
 			/* parseRequirementAtoms */
-			else if (callingReq.equals(Calls.HTTP_GET_REQ_ATOMS_4_GAME)) {
+			else if (callingReq.equals(Calls.HTTP_GET_REQMNT_ATOMS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();
@@ -490,7 +489,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 				}
 			}
 			/* parseRequirementRootPackages */
-			else if (callingReq.equals(Calls.HTTP_GET_REQ_ROOT_PKGS_4_GAME)) {
+			else if (callingReq.equals(Calls.HTTP_GET_REQMNT_ROOT_PKGS_4_GAME)) {
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();

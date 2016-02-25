@@ -11,7 +11,7 @@ import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
 
 
-public class GamePlayQuestsFragment extends Fragment {
+public class QuestsViewFragment extends Fragment {
 	/**
 	 *  The fragment argument representing the section number for this
 	* fragment.
@@ -23,16 +23,16 @@ public class GamePlayQuestsFragment extends Fragment {
 	 * Returns a new instance of this fragment for the given section
 	 * number.
 	 */
-	public static GamePlayQuestsFragment newInstance(int sectionNumber) {
-		GamePlayQuestsFragment fragment = new GamePlayQuestsFragment();
+	public static QuestsViewFragment newInstance(int sectionNumber) {
+		QuestsViewFragment fragment = new QuestsViewFragment();
 		Bundle args = new Bundle();
 		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 		fragment.setArguments(args);
 		return fragment;
 	}
 
-	public static GamePlayQuestsFragment newInstance(String sectionName) {
-		GamePlayQuestsFragment fragment = new GamePlayQuestsFragment();
+	public static QuestsViewFragment newInstance(String sectionName) {
+		QuestsViewFragment fragment = new QuestsViewFragment();
 		Bundle args = new Bundle();
 		args.putString(ARG_SECTION_NUMBER, sectionName);
 		fragment.setArguments(args);
@@ -40,7 +40,7 @@ public class GamePlayQuestsFragment extends Fragment {
 	}
 
 
-	public GamePlayQuestsFragment() {
+	public QuestsViewFragment() {
 	}
 
 	@Override

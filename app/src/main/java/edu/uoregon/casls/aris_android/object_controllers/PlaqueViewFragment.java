@@ -8,18 +8,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
+import edu.uoregon.casls.aris_android.data_objects.Plaque;
+import edu.uoregon.casls.aris_android.data_objects.Tab;
+import edu.uoregon.casls.aris_android.models.InstancesModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link GamePlayItemFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link GamePlayItemFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class GamePlayItemFragment extends Fragment {
+public class PlaqueViewFragment extends Fragment {
+
+	public Plaque plaque;
+	public Instance instance;
+	public InstancesModel instancesModel;
+	public Tab tab;
+
+	public GamePlayActivity mGamePlayActivity;
+
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_PARAM1 = "param1";
@@ -31,8 +35,13 @@ public class GamePlayItemFragment extends Fragment {
 
 	private OnFragmentInteractionListener mListener;
 
-	public GamePlayItemFragment() {
+	public PlaqueViewFragment() {
 		// Required empty public constructor
+		initContext();
+	}
+
+	public void initContext() {
+		mGamePlayActivity = (GamePlayActivity) getActivity();
 	}
 
 	@Override
@@ -48,7 +57,27 @@ public class GamePlayItemFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_item_view, container, false);
+		return inflater.inflate(R.layout.fragment_plaque_view, container, false);
+	}
+
+
+	public void initWithInstance(Instance i) {
+//		delegate = d; // Android app eschews the delegates (for now, anyway)
+		instance = i;
+		plaque = mGamePlayActivity.mGame.plaquesModel.plaqueForId(instance.object_id);
+		if (plaque.event_package_id > 0)
+			mGamePlayActivity.mGame.eventsModel.runEventPackageId(plaque.event_package_id);
+//		this.title = this.tabTitle; // iOS IU stuff.
+	}
+
+	public void initWithTab(Tab t) {
+//		delegate = d;
+		tab = t;
+		instance = mGamePlayActivity.mGame.instancesModel.instanceForId(0); //get null inst
+		instance.object_type = tab.type;
+		instance.object_id = tab.content_id;
+		plaque = mGamePlayActivity.mGame.plaquesModel.plaqueForId(instance.object_id);
+//		self.title = plaque.name; // iOS
 	}
 
 	// TODO: Rename method, update argument and hook method into UI event
@@ -74,10 +103,6 @@ public class GamePlayItemFragment extends Fragment {
 	public void onDetach() {
 		super.onDetach();
 		mListener = null;
-	}
-
-	public void initWithInstance(Instance i) {
-
 	}
 
 	/**

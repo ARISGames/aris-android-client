@@ -13,12 +13,12 @@ import edu.uoregon.casls.aris_android.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link GamePlayAttributesFragment.OnFragmentInteractionListener} interface
+ * {@link AttributesViewFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link GamePlayAttributesFragment#newInstance} factory method to
+ * Use the {@link AttributesViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GamePlayAttributesFragment extends Fragment {
+public class AttributesViewFragment extends Fragment {
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_PARAM1 = "param1";
@@ -30,7 +30,7 @@ public class GamePlayAttributesFragment extends Fragment {
 
 	private OnFragmentInteractionListener mListener;
 
-	public GamePlayAttributesFragment() {
+	public AttributesViewFragment() {
 		// Required empty public constructor
 	}
 
