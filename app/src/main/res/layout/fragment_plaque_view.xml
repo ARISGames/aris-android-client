@@ -19,23 +19,21 @@
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/scrollView"
+        android:id="@+id/scrlv_plaque_desc_and_media"
         android:layout_below="@+id/tv_plaque_title"
         android:layout_centerHorizontal="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:id="@+id/rl_plaque_desc_and_media">
 
             <WebView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/webView"/>
+                android:id="@+id/wv_plaque_desc"
+                android:layout_centerHorizontal="true"/>
 
-            <VideoView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/videoView"/>
         </RelativeLayout>
     </ScrollView>
 
