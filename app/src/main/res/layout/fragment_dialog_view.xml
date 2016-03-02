@@ -65,10 +65,9 @@
                 android:layout_height="wrap_content"
                 android:text="I have a layout hidden from the view. On a button click I want it to slide up from the bottom covering over the existing layout, very similar to how whatsapp shows emoticons panel in chat screen."
                 android:id="@+id/tv_dialog_script_text"
-                android:background="#fffefefe"
                 android:alpha=".9"
                 android:padding="10dp"
-                android:textSize="16dp"/>
+                />
             <!-- Dialog Options List -->
             <LinearLayout
                 android:id="@+id/ll_dialog_options_list"

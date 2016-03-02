@@ -28,13 +28,56 @@
             android:layout_height="match_parent"
             android:id="@+id/rl_plaque_desc_and_media">
 
+            <ViewStub
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/vwstub_plaque_media_view"/>
+
+            <!--<include-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--layout="@layout/fragment_arismedia_view"-->
+                <!--android:id="@+id/include_arismedia_frag"/>-->
+
             <WebView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/wv_plaque_desc"
-                android:layout_centerHorizontal="true"/>
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/vwstub_plaque_media_view"/>
 
         </RelativeLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/rl_plaque_footer">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Continue"
+            android:id="@+id/tv_plaque_continue"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/iv_game_item_right_arrow"
+            android:layout_toStartOf="@+id/iv_game_item_right_arrow"
+            android:background="#fffefefe"
+            android:textSize="@dimen/textsize_large"/>
+        <!-- Right end arrow  -->
+        <ImageView
+            android:id="@+id/iv_game_item_right_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/arrow_forward_2x"
+            android:layout_alignParentBottom="false"
+            android:paddingBottom="5dp"
+            android:layout_marginBottom="5dp"/>
+    </RelativeLayout>
 
 </RelativeLayout>

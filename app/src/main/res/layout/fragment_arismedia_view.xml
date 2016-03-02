@@ -20,4 +20,10 @@
         android:id="@+id/vidvw_media_video"
         android:layout_gravity="center"
         android:visibility="invisible"/>
+
+    <WebView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/wv_media_gif"
+        android:layout_gravity="center"/>
 </FrameLayout>

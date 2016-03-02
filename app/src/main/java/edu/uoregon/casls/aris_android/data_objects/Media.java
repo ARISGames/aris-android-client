@@ -35,7 +35,8 @@ public class Media {
 	public URL    url; // this is the field that comes in on the json form server\
 	public URL    remoteURL; // was: url; // are both url and thumb_url always the same?
 	public URL    localThumbURL;
-	public Bitmap data; // todo: need to flesh out how this would hold the data across serialization.
+	// todo: why store the data if the file is already downloaded and can be piped in to whatever view we need via its URI?
+	public Bitmap data; // todo: need to flesh out how this would hold the data across serialization. (see above before fleshing)
 	public Bitmap thumb;
 
 	// Not sure if we need this ability. Delete block later if clearly unneeded. -sem

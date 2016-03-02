@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import edu.uoregon.casls.aris_android.R;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
 import edu.uoregon.casls.aris_android.data_objects.Plaque;
 import edu.uoregon.casls.aris_android.data_objects.Tab;
+import edu.uoregon.casls.aris_android.media.ARISMediaView;
 import edu.uoregon.casls.aris_android.models.InstancesModel;
 
 public class PlaqueViewFragment extends Fragment {
@@ -21,6 +23,7 @@ public class PlaqueViewFragment extends Fragment {
 	public Instance instance;
 	public InstancesModel instancesModel;
 	public Tab tab;
+	public Fragment mediaViewFrag = new ARISMediaView();
 
 	public GamePlayActivity mGamePlayActivity;
 
@@ -56,8 +59,13 @@ public class PlaqueViewFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
-		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_plaque_view, container, false);
+		View view = inflater.inflate(R.layout.fragment_plaque_view, container, false);
+
+		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+		transaction.add(R.id.vwstub_plaque_media_view, mediaViewFrag).commit();
+
+		return view;
+
 	}
 
 
