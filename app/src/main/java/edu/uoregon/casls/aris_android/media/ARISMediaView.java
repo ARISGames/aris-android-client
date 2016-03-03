@@ -122,8 +122,7 @@ public class ARISMediaView extends Fragment {
 
 
 
-	public void setMedia(Media m)
-	{
+	public void setMedia(Media m) {
 		if(m.data == null)
 		{
 			this.clear();
@@ -132,7 +131,8 @@ public class ARISMediaView extends Fragment {
 //			if(selfDelegateHandle) [selfDelegateHandle invalidate];
 //			selfDelegateHandle = [[ARISDelegateHandle alloc] initWithDelegate:self];
 			ARISMediaLoader mediaLoader = new ARISMediaLoader(mGamePlayAct);
-			mediaLoader.loadMedia(m, null);
+			mediaLoader.loadMedia(m);
+//			mediaLoader.loadMedia(m, null);
 //			[_SERVICES_MEDIA_ loadMedia:m delegateHandle:selfDelegateHandle]; //calls 'mediaLoaded' upon complete
 			return;
 		}

@@ -242,6 +242,7 @@ public class MediaModel extends ARISModel {
 	public void deferedLoadMedia() {
 		for (Media media : mediaDataLoadMedia) {
 			//[_SERVICES_MEDIA_ loadMedia:mediaDataLoadMedia[i] delegateHandle:mediaDataLoadDelegateHandles[i]]; //calls 'mediaLoaded' upon complete
+			mGamePlayAct.mAppServices.mMediaLoader.loadMedia(media);
 		}
 	}
 

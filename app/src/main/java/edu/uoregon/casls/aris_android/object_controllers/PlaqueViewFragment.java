@@ -4,14 +4,16 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.RelativeLayout;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
+import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.data_objects.Plaque;
 import edu.uoregon.casls.aris_android.data_objects.Tab;
 import edu.uoregon.casls.aris_android.media.ARISMediaView;
@@ -23,7 +25,8 @@ public class PlaqueViewFragment extends Fragment {
 	public Instance instance;
 	public InstancesModel instancesModel;
 	public Tab tab;
-	public Fragment mediaViewFrag = new ARISMediaView();
+	public ARISMediaView mediaViewFrag;
+	public View mPlaqueView;
 
 	public GamePlayActivity mGamePlayActivity;
 
@@ -40,15 +43,16 @@ public class PlaqueViewFragment extends Fragment {
 
 	public PlaqueViewFragment() {
 		// Required empty public constructor
-		initContext();
+//		initContext();
 	}
 
-	public void initContext() {
-		mGamePlayActivity = (GamePlayActivity) getActivity();
+	public void initContext(GamePlayActivity gamePlayAct) {
+		mGamePlayActivity = gamePlayAct;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		mGamePlayActivity = (GamePlayActivity)getActivity();
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null) {
 			mParam1 = getArguments().getString(ARG_PARAM1);
@@ -59,12 +63,11 @@ public class PlaqueViewFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_plaque_view, container, false);
-
-		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-		transaction.add(R.id.vwstub_plaque_media_view, mediaViewFrag).commit();
-
-		return view;
+		mPlaqueView = inflater.inflate(R.layout.fragment_plaque_view, container, false);
+		mediaViewFrag = new ARISMediaView();
+		mediaViewFrag.initContext(mGamePlayActivity);
+		this.loadView();
+		return mPlaqueView;
 
 	}
 
@@ -88,12 +91,56 @@ public class PlaqueViewFragment extends Fragment {
 //		self.title = plaque.name; // iOS
 	}
 
-	// TODO: Rename method, update argument and hook method into UI event
-	public void onButtonPressed(Uri uri) {
-		if (mListener != null) {
-			mListener.onFragmentInteraction(uri);
+	// todo: call from onCreateView?
+	public void loadView()
+	{
+
+//		mediaView = [[ARISMediaView alloc] initWithDelegate:self];
+//		[mediaView setDisplayMode:ARISMediaDisplayModeTopAlignAspectFitWidthAutoResizeHeight];
+
+//		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+//		transaction.add(R.id.ll_plaque_media_view_container, mediaViewFrag).commit();
+		// add a frag inside another (this) frag.
+		getChildFragmentManager().beginTransaction().add(R.id.fl_plaque_media_view_container, mediaViewFrag).commit();
+		getChildFragmentManager().executePendingTransactions();
+
+		// Show Continue text and forward button if continue_function != NONE
+		// In Android: Hide these features if continue_function == NONE
+		if (plaque.continue_function.contentEquals("NONE")) {
+			RelativeLayout continueFooter = (RelativeLayout) mPlaqueView.findViewById(R.id.rl_plaque_footer);
+			continueFooter.setVisibility(View.INVISIBLE);
+		}
+
+		this.loadPlaque();
+	}
+
+	public void loadPlaque()
+	{
+		if (!plaque.desc.contentEquals("")) { // load the description webview
+//			[scrollView addSubview:webView];
+//			webView.frame = CGRectMake(0, 0, self.view.bounds.size.width, 10);//Needs correct width to calc height
+//			[webView loadHTMLString:[NSString stringWithFormat:[ARISTemplate ARISHtmlTemplate], plaque.desc] baseURL:nil];
+			WebView wvDialogOptionPrompt = (WebView) mPlaqueView.findViewById(R.id.wv_plaque_desc);
+			wvDialogOptionPrompt.getSettings().setJavaScriptEnabled(true);
+			wvDialogOptionPrompt.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
+			wvDialogOptionPrompt.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
+//		    	wvDialogOptionPrompt.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+			String dialogOptionHtml = "<html><body>" + plaque.desc + "</body></html>";
+			wvDialogOptionPrompt.loadData(dialogOptionHtml, "text/html", null);
+		}
+
+		// load associated media into media fragment todo: may just want to put fragment into includable view with ordinary class?
+		Media media = mGamePlayActivity.mMediaModel.mediaForId(plaque.media_id);
+		if (media != null) {
+			mediaViewFrag.setMedia(media);
+//			[mediaView setMedia:media];
 		}
 	}
+
+	public void onClickContinue(View v) {
+		// todo: may need to set this as an actual onClickListener, because of the way Fragments work.
+	}
+
 
 	@Override
 	public void onAttach(Context context) {

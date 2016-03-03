@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
 
@@ -30,6 +31,7 @@ public class ItemViewFragment extends Fragment {
 	private String mParam2;
 
 	private OnFragmentInteractionListener mListener;
+	public GamePlayActivity mGamePlayActivity;
 
 	public ItemViewFragment() {
 		// Required empty public constructor
@@ -37,12 +39,22 @@ public class ItemViewFragment extends Fragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		mGamePlayActivity = (GamePlayActivity)getActivity();
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null) {
 			mParam1 = getArguments().getString(ARG_PARAM1);
 			mParam2 = getArguments().getString(ARG_PARAM2);
 		}
 	}
+
+	public void initWithInstance(Instance i) {
+
+	}
+
+	public void initContext(GamePlayActivity gamePlayActivity) {
+		mGamePlayActivity = gamePlayActivity;
+	}
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,10 +86,6 @@ public class ItemViewFragment extends Fragment {
 	public void onDetach() {
 		super.onDetach();
 		mListener = null;
-	}
-
-	public void initWithInstance(Instance i) {
-
 	}
 
 	/**

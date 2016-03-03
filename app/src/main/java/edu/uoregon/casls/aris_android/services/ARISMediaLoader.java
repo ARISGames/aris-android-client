@@ -60,12 +60,13 @@ public class ARISMediaLoader {
 		mGamePlayAct = gamePlayActivity;
 	}
 
-	public void loadMedia(Media m, ARISDelegateHandle dh) {
+//	public void loadMedia(Media m, ARISDelegateHandle dh) {
+	public void loadMedia(Media m) {
 		if (m == null) return;
 
 		MediaResult mr = new MediaResult();
 		mr.media = m;
-		mr.delegateHandles.add(dh);
+//		mr.delegateHandles.add(dh); // Android: avoiding this concept
 
 		this.loadMediaFromMR(mr);
 	}
@@ -73,7 +74,7 @@ public class ARISMediaLoader {
 	public void loadMediaFromMR(MediaResult mr) {
 		if (mr.media.thumb != null)      { this.mediaLoadedForMR(mr); }
 		else if (mr.media.data != null)       { this.deriveThumbForMR(mr); }
-		else if (mr.media.localURL != null)   {
+		else if (mr.media.localURL != null)   { // get from the file if it already has been loaded
 //			mr.media.data = dataWithContentsOfURL:mr.media.localURL;
 			mr.media.data = BitmapFactory.decodeFile(mr.media.localURL.getPath());//.decodeStream(mr.media.localURL.openConnection().getInputStream());
 		}
@@ -104,7 +105,25 @@ public class ARISMediaLoader {
 			if (existingMR.media.media_id == mr.media.media_id) {
 				// If mediaresult already exists, merge delegates to notify rather than 1.Throwing new request out (need to keep delegate) or 2.Redundantly requesting
 //				existingMR.delegateHandles = existingMR.delegateHandles arrayByAddingObjectsFromArray:mr.delegateHandles;
-				existingMR.delegateHandles.addAll(mr.delegateHandles);
+				vvvvv fixme vvvvv;
+				existingMR.delegateHandles.addAll(mr.delegateHandles); //FIXME: make this work w/o delegates please. NPE here.
+				/* 03-03 14:13:30.424 edu.uoregon.casls.aris_android E/AndroidRuntime: FATAL EXCEPTION: main
+                                                                    Process: edu.uoregon.casls.aris_android, PID: 11838
+                                                                    java.lang.NullPointerException
+                                                                        at edu.uoregon.casls.aris_android.services.ARISMediaLoader.loadMetaDataForMR(ARISMediaLoader.java:108)
+                                                                        at edu.uoregon.casls.aris_android.services.ARISMediaLoader.loadMediaFromMR(ARISMediaLoader.java:97)
+                                                                        at edu.uoregon.casls.aris_android.services.ARISMediaLoader.loadMedia(ARISMediaLoader.java:71)
+                                                                        at edu.uoregon.casls.aris_android.models.MediaModel.deferedLoadMedia(MediaModel.java:245)
+                                                                        at edu.uoregon.casls.aris_android.models.MediaModel$1.run(MediaModel.java:236)
+                                                                        at android.os.Handler.handleCallback(Handler.java:733)
+                                                                        at android.os.Handler.dispatchMessage(Handler.java:95)
+                                                                        at android.os.Looper.loop(Looper.java:146)
+                                                                        at android.app.ActivityThread.main(ActivityThread.java:5694)
+                                                                        at java.lang.reflect.Method.invokeNative(Native Method)
+                                                                        at java.lang.reflect.Method.invoke(Method.java:515)
+                                                                        at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:1291)
+                                                                        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1107)
+                                                                        at dalvik.system.NativeStart.main(Native Method)*/
 				return;
 			}
 		}

@@ -47,6 +47,7 @@ import edu.uoregon.casls.aris_android.data_objects.Tab;
 import edu.uoregon.casls.aris_android.data_objects.Trigger;
 import edu.uoregon.casls.aris_android.data_objects.User;
 import edu.uoregon.casls.aris_android.data_objects.WebPage;
+import edu.uoregon.casls.aris_android.media.ARISMediaView;
 import edu.uoregon.casls.aris_android.models.MediaModel;
 import edu.uoregon.casls.aris_android.models.UsersModel;
 import edu.uoregon.casls.aris_android.object_controllers.DialogViewFragment;
@@ -67,9 +68,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		GamePlayNavDrawerFragment.NavigationDrawerCallbacks,
 		MapViewFragment.OnFragmentInteractionListener,
 		PlaqueViewFragment.OnFragmentInteractionListener,
-		DialogViewFragment.OnFragmentInteractionListener {
+		DialogViewFragment.OnFragmentInteractionListener,
+		ARISMediaView.OnFragmentInteractionListener {
 
-// Todo 9.29.15: Need to see what happens now when the game tries to load, and then set about setting up the cyclic app status calls
+
 
 	private final static String TAG_SERVER_SUCCESS      = "success";
 	private static final String FRAGMENT_VISIBILITY_MAP = "FRAGMENT_VISIBILITY_MAP";
@@ -313,7 +315,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	public void playerDataLoaded() { // gets called only after all game, player and maint data loaded
 		if (!mGame.hasLatestDownload()) {
-			if (mGame.preload_media()) //fixme: preload_media not getting set?
+			if (mGame.preload_media())
 				this.requestMediaData(); // won't load until maintDataLoaded <-
 			else
 				this.beginGame(); //[_MODEL_ beginGame);
@@ -839,6 +841,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 			if (plaqueViewFragment == null) {
 				plaqueViewFragment = new PlaqueViewFragment();
+				plaqueViewFragment.initContext(this);
+				plaqueViewFragment.initWithInstance(i);
 				tag = plaqueViewFragment.toString();
 				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 				ft.add(R.id.fragment_view_container, plaqueViewFragment, tag); //set tag.
@@ -855,7 +859,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				if (plaqueViewFragment.isVisible() && plaqueViewFragment.getTag().contentEquals(currentFragVisible))
 					return;
 
-			plaqueViewFragment.initWithInstance(i);
 			fragViewToDisplay = plaqueViewFragment.getTag(); // same end result as vc var in iOS
 //		vc = new PlaqueViewController(i delegate:self);
 		}
@@ -863,6 +866,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 			if (itemViewFragment == null) {
 				itemViewFragment = new ItemViewFragment();
+				itemViewFragment.initContext(this);
+				itemViewFragment.initWithInstance(i);
 				tag = itemViewFragment.toString();
 				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 				ft.add(R.id.fragment_view_container, itemViewFragment, tag); //set tag.
@@ -877,7 +882,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 					&& itemViewFragment.getTag().contentEquals(currentFragVisible))
 				return;
 
-			itemViewFragment.initWithInstance(i);
 			fragViewToDisplay = itemViewFragment.getTag(); // same end result as vc var in iOS
 //		vc = new ItemViewController(i delegate:self);
 		}
@@ -885,6 +889,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 			if (dialogViewFragment == null) {
 				dialogViewFragment = new DialogViewFragment();
+				dialogViewFragment.initWithInstance(i);
 				tag = dialogViewFragment.toString();
 				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 				ft.add(R.id.fragment_view_container, dialogViewFragment, tag); //set tag.
@@ -899,7 +904,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 					&& dialogViewFragment.getTag().contentEquals(currentFragVisible))
 				return;
 
-			dialogViewFragment.initWithInstance(i);
 			fragViewToDisplay = dialogViewFragment.getTag(); // same end result as vc var in iOS
 //		    vc = new DialogViewController(i delegate:self);
 		}
@@ -907,6 +911,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 			if (webPageViewFragment == null) {
 				webPageViewFragment = new WebPageViewFragment();
+				webPageViewFragment.initWithInstance(i);
 				tag = webPageViewFragment.toString();
 				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 				ft.add(R.id.fragment_view_container, webPageViewFragment, tag); //set tag.
@@ -921,7 +926,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 					&& webPageViewFragment.getTag().contentEquals(currentFragVisible))
 				return;
 
-			webPageViewFragment.initWithInstance(i);
 			fragViewToDisplay = webPageViewFragment.getTag(); // same end result as vc var in iOS
 //		vc = new WebPageViewController(i delegate:self);
 		}
@@ -929,6 +933,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 			if (noteViewFragment == null) {
 				noteViewFragment = new NoteViewFragment();
+				noteViewFragment.initWithInstance(i);
 				tag = noteViewFragment.toString();
 				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 				ft.add(R.id.fragment_view_container, noteViewFragment, tag); //set tag.
@@ -943,7 +948,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 					&& noteViewFragment.getTag().contentEquals(currentFragVisible))
 				return;
 
-			noteViewFragment.initWithInstance(i);
 			fragViewToDisplay = noteViewFragment.getTag(); // same end result as vc var in iOS
 //		vc = new NoteViewController(i delegate:self);
 		}

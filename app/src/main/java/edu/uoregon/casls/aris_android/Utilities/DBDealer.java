@@ -32,7 +32,7 @@ public class DBDealer extends SQLiteOpenHelper {
 	// creation SQLite statement
 	private static final String DATABASE_CREATE = "create table " + MEDIA
 			+ "("
-			+ MEDIA_ID + " integer primary key autoincrement, "
+			+ MEDIA_ID + " integer primary key, "
 			+ GAME_ID + " integer not null, "
 			+ USER_ID + " integer, "
 			+ LOCAL_URL + " text, "
