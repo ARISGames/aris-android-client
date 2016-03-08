@@ -59,38 +59,38 @@ public class DBDealer extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 
-	public boolean addMediaCD(MediaCD newMedia) {
+	public boolean addMediaCD(MediaCD newMediaCD) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues contentValues = new ContentValues();
-		contentValues.put(MEDIA_ID, newMedia.media_id);
-		contentValues.put(GAME_ID, newMedia.game_id);
+		contentValues.put(MEDIA_ID, newMediaCD.media_id);
+		contentValues.put(GAME_ID, newMediaCD.game_id);
 		contentValues.put(USER_ID, 0); // todo real value here. stubbed in 0 for testing
-		contentValues.put(LOCAL_URL, newMedia.localURL);
-		contentValues.put(REMOTE_URL, newMedia.remoteURL);
+		contentValues.put(LOCAL_URL, newMediaCD.localURL);
+		contentValues.put(REMOTE_URL, newMediaCD.remoteURL);
 		long res = db.insert(MEDIA, null, contentValues);
 		if (res == -1) return false;
 		return true;
 	}
 
 	// same as addMedia, but with update if record exists
-	public boolean addOrUpdateMediaCD(MediaCD newMedia) {
+	public boolean addOrUpdateMediaCD(MediaCD newMediaCD) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues contentValues = new ContentValues();
-		contentValues.put(MEDIA_ID, newMedia.media_id);
-		contentValues.put(GAME_ID, newMedia.game_id);
+		contentValues.put(MEDIA_ID, newMediaCD.media_id);
+		contentValues.put(GAME_ID, newMediaCD.game_id);
 		contentValues.put(USER_ID, 0); // todo real value here. stubbed in 0 for testing
-		contentValues.put(LOCAL_URL, newMedia.localURL);
-		contentValues.put(REMOTE_URL, newMedia.remoteURL);
+		contentValues.put(LOCAL_URL, newMediaCD.localURL);
+		contentValues.put(REMOTE_URL, newMediaCD.remoteURL);
 		long res = 0;
 		try {
 			res = db.insertOrThrow(MEDIA, null, contentValues);
 		}
 		catch (SQLiteConstraintException constraintViolation) {
 			ContentValues updateContentValues = new ContentValues();
-			updateContentValues.put(LOCAL_URL, newMedia.localURL);
-			updateContentValues.put(REMOTE_URL, newMedia.remoteURL);
+			updateContentValues.put(LOCAL_URL, newMediaCD.localURL);
+			updateContentValues.put(REMOTE_URL, newMediaCD.remoteURL);
 
-			String[] args = new String[]{String.valueOf(newMedia.media_id), String.valueOf(newMedia.game_id)};
+			String[] args = new String[]{String.valueOf(newMediaCD.media_id), String.valueOf(newMediaCD.game_id)};
 			res = db.update(MEDIA, updateContentValues, MEDIA_ID + "=? AND " + GAME_ID + "=?", args);
 		}
 		if (res < 1) return false;

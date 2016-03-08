@@ -61,7 +61,7 @@ public class ARISMediaLoader {
 	}
 
 //	public void loadMedia(Media m, ARISDelegateHandle dh) {
-	public void loadMedia(Media m) {
+	public void loadMedia(Media m) { // fixme: media base values not getting set. mediaCD =is= though. Find this missing step.
 		if (m == null) return;
 
 		MediaResult mr = new MediaResult();
@@ -74,11 +74,11 @@ public class ARISMediaLoader {
 	public void loadMediaFromMR(MediaResult mr) {
 		if (mr.media.thumb != null)      { this.mediaLoadedForMR(mr); }
 		else if (mr.media.data != null)       { this.deriveThumbForMR(mr); }
-		else if (mr.media.localURL != null)   { // get from the file if it already has been loaded
+		else if (mr.media.localURL() != null)   { // get from the file if it already has been loaded
 //			mr.media.data = dataWithContentsOfURL:mr.media.localURL;
-			mr.media.data = BitmapFactory.decodeFile(mr.media.localURL.getPath());//.decodeStream(mr.media.localURL.openConnection().getInputStream());
+			mr.media.data = BitmapFactory.decodeFile(mr.media.localURL().getPath());//.decodeStream(mr.media.localURL.openConnection().getInputStream());
 		}
-		else if (mr.media.remoteURL != null) { // todo: call a pollServer type method to get media data, but one that can handle load failure and schedule to reload.
+		else if (mr.media.remoteURL() != null) { // todo: call a pollServer type method to get media data, but one that can handle load failure and schedule to reload.
 			// set upa a server request for the call to get Media data
 //			NSURLRequest request = NSURLRequest requestWithURL:mr.media.remoteURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0;
 //			if (mr.connection) mr.connection cancel; // if it's already defined, bail.
@@ -88,13 +88,13 @@ public class ARISMediaLoader {
 //			dataConnections setObject:mr forKey:mr.connection.description; // add this connection to the array (of currently active connections)
 			// todo: may need to make this an async req. otherwise it might bog down the main thread -sem
 			try {
-				mr.media.data = BitmapFactory.decodeStream(mr.media.localURL.openConnection().getInputStream()); // for server retrieval of local file
+				mr.media.data = BitmapFactory.decodeStream(mr.media.localURL().openConnection().getInputStream()); // for server retrieval of local file
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			this.loadMediaFromMR(mr);
 		}
-		else if (mr.media.remoteURL == null) { this.loadMetaDataForMR(mr); }
+		else if (mr.media.remoteURL() == null) { this.loadMetaDataForMR(mr); }
 	}
 
 	public void loadMetaDataForMR(MediaResult mr)
@@ -102,10 +102,10 @@ public class ARISMediaLoader {
 		for (int i = 0; i < metaConnections.size(); i++) {
 //		for (MediaResult existingMR : metaConnections) { //not sure if this iteration style will allow proper referencing to original MR objects or spin off new one's that will dissolve after the loop.
 			MediaResult existingMR = metaConnections.get(i);
-			if (existingMR.media.media_id == mr.media.media_id) {
+			if (existingMR.media.media_id() == mr.media.media_id()) { // this makes the bold assumption that mediaid is not 0.
 				// If mediaresult already exists, merge delegates to notify rather than 1.Throwing new request out (need to keep delegate) or 2.Redundantly requesting
 //				existingMR.delegateHandles = existingMR.delegateHandles arrayByAddingObjectsFromArray:mr.delegateHandles;
-				vvvvv fixme vvvvv;
+//				vvvvv fixme vvvvv;
 				existingMR.delegateHandles.addAll(mr.delegateHandles); //FIXME: make this work w/o delegates please. NPE here.
 				/* 03-03 14:13:30.424 edu.uoregon.casls.aris_android E/AndroidRuntime: FATAL EXCEPTION: main
                                                                     Process: edu.uoregon.casls.aris_android, PID: 11838
@@ -128,7 +128,7 @@ public class ARISMediaLoader {
 			}
 		}
 		metaConnections.add(mr);// addObject:mr;
-		mGamePlayAct.mAppServices.fetchMediaById(mr.media.media_id); //_SERVICES_ fetchMediaById:mr.media.media_id;
+		mGamePlayAct.mAppServices.fetchMediaById(mr.media.media_id()); //_SERVICES_ fetchMediaById:mr.media.media_id;
 	}
 
 	// calling stack as formed at start of game or continue game:

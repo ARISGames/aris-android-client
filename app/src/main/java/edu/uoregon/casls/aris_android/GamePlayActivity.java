@@ -699,6 +699,11 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	}
 
 	@Override
+	public void fragmentPlaqueExit() {
+
+	}
+
+	@Override
 	public void onFragmentInteraction(Uri uri) {
 		Uri u = uri;
 	}
@@ -889,6 +894,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 			if (dialogViewFragment == null) {
 				dialogViewFragment = new DialogViewFragment();
+				dialogViewFragment.initContext(this);
 				dialogViewFragment.initWithInstance(i);
 				tag = dialogViewFragment.toString();
 				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

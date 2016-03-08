@@ -32,14 +32,14 @@ public class PlayerInstancesModel extends ARISModel {
 //	public InstancesModel mInstancesModel;
 //	public transient Game mGame;
 //	private Context mContext;
-//	private GamePlayActivity mGamePlayActivity;
+//	private GamePlayActivity mGamePlayAct;
 //	private LogsModel mLogsModel;
 	public transient GamePlayActivity mGamePlayAct;
 
 	// todo - reform the constructor into the initContext version.
 	public void PlayerInstancesModel(Context context, User player, ItemsModel items, Game game, InstancesModel instancesModel) { // todo: does player want to be of type playerModel instead of Player?
 //		mContext = context;
-//		mGamePlayActivity = (GamePlayActivity) mContext;
+//		mGamePlayAct = (GamePlayActivity) mContext;
 //		mPlayer = player; // remember: Java passes objects by reference, so mPlayer IS the same object passed in.
 //		mItemsModel = items;
 //		mInstancesModel = instancesModel;

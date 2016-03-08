@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
@@ -68,7 +69,6 @@ public class PlaqueViewFragment extends Fragment {
 		mediaViewFrag.initContext(mGamePlayActivity);
 		this.loadView();
 		return mPlaqueView;
-
 	}
 
 
@@ -110,22 +110,31 @@ public class PlaqueViewFragment extends Fragment {
 			RelativeLayout continueFooter = (RelativeLayout) mPlaqueView.findViewById(R.id.rl_plaque_footer);
 			continueFooter.setVisibility(View.INVISIBLE);
 		}
+		else {
+			ImageView ivContinueArrow = (ImageView) mPlaqueView.findViewById(R.id.iv_plaque_footer_right_arrow);
+			ivContinueArrow.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					continueButtonTouched(v);
+				}
+			});
+		}
 
 		this.loadPlaque();
 	}
 
 	public void loadPlaque()
 	{
-		if (!plaque.desc.contentEquals("")) { // load the description webview
+		if (!plaque.description.contentEquals("")) { // load the description webview
 //			[scrollView addSubview:webView];
 //			webView.frame = CGRectMake(0, 0, self.view.bounds.size.width, 10);//Needs correct width to calc height
-//			[webView loadHTMLString:[NSString stringWithFormat:[ARISTemplate ARISHtmlTemplate], plaque.desc] baseURL:nil];
+//			[webView loadHTMLString:[NSString stringWithFormat:[ARISTemplate ARISHtmlTemplate], plaque.description] baseURL:nil];
 			WebView wvDialogOptionPrompt = (WebView) mPlaqueView.findViewById(R.id.wv_plaque_desc);
 			wvDialogOptionPrompt.getSettings().setJavaScriptEnabled(true);
 			wvDialogOptionPrompt.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
 			wvDialogOptionPrompt.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
 //		    	wvDialogOptionPrompt.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-			String dialogOptionHtml = "<html><body>" + plaque.desc + "</body></html>";
+			String dialogOptionHtml = "<html><body>" + plaque.description + "</body></html>";
 			wvDialogOptionPrompt.loadData(dialogOptionHtml, "text/html", null);
 		}
 
@@ -137,8 +146,14 @@ public class PlaqueViewFragment extends Fragment {
 		}
 	}
 
-	public void onClickContinue(View v) {
-		// todo: may need to set this as an actual onClickListener, because of the way Fragments work.
+	public void continueButtonTouched(View v) {
+		if (plaque.continue_function.contentEquals("JAVASCRIPT")) {
+			// todo: [webView hookWithParams:@""];
+		} else if (plaque.continue_function.contentEquals("EXIT")) {
+			if (mListener != null) {
+				mListener.fragmentPlaqueExit();
+			}
+		}
 	}
 
 
@@ -172,6 +187,7 @@ public class PlaqueViewFragment extends Fragment {
 	 */
 	public interface OnFragmentInteractionListener {
 		// TODO: Update argument type and name
+		void fragmentPlaqueExit();
 		void onFragmentInteraction(Uri uri);
 	}
 }

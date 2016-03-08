@@ -45,7 +45,7 @@ public class DialogViewFragment extends Fragment {
 
 	public Instance instance;
 	public Tab tab;
-	public GamePlayActivity mGamePlayActivity;
+	public GamePlayActivity mGamePlayAct;
 
 	ScrollView slideUpDialogScriptAndOptionsPanel;
 	View       fragView;
@@ -54,36 +54,35 @@ public class DialogViewFragment extends Fragment {
 
 	public DialogViewFragment() {
 		// local convenience reference to Parent activity
-		initContext();
 	}
 
 	public void initWithInstance(Instance i) {
 		instance = i;
-		dialog = mGamePlayActivity.mGame.dialogsModel.dialogForId(i.object_id);
-		dialogsModel = mGamePlayActivity.mGame.dialogsModel; // convenience ref
+		dialog = mGamePlayAct.mGame.dialogsModel.dialogForId(i.object_id);
+		dialogsModel = mGamePlayAct.mGame.dialogsModel; // convenience ref
 //		delegate = d;
-		loadViewElements(dialog.intro_dialog_script_id);
+//		loadViewElements(dialog.intro_dialog_script_id); // move into onCreateView. Fragment isn't inflated here, so it will die.
 	}
 
 	public void initWithTab(Tab tab) {
-		instance = mGamePlayActivity.mGame.instancesModel.instanceForId(0);
+		instance = mGamePlayAct.mGame.instancesModel.instanceForId(0);
 		instance.object_type = tab.type;
 		instance.object_id = tab.content_id;
-		dialogsModel = mGamePlayActivity.mGame.dialogsModel; // convenience ref
-		dialog = mGamePlayActivity.mGame.dialogsModel.dialogForId(instance.object_id);
+		dialogsModel = mGamePlayAct.mGame.dialogsModel; // convenience ref
+		dialog = mGamePlayAct.mGame.dialogsModel.dialogForId(instance.object_id);
 //		delegate = d;
 		loadViewElements(dialog.intro_dialog_script_id);
 	}
 
-	public void initContext() {
-		mGamePlayActivity = (GamePlayActivity) getActivity();
+	public void initContext(GamePlayActivity gamePlayActivity) {
+		mGamePlayAct = gamePlayActivity;
 
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mGamePlayActivity = (GamePlayActivity)getActivity();
+		mGamePlayAct = (GamePlayActivity) getActivity();
 		if (getArguments() != null) {
 //			mParam1 = getArguments().getString(ARG_PARAM1);
 //			mParam2 = getArguments().getString(ARG_PARAM2);
@@ -94,6 +93,7 @@ public class DialogViewFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		fragView = inflater.inflate(R.layout.fragment_dialog_view, container, false);
+		loadViewElements(dialog.intro_dialog_script_id);
 		return fragView;
 	}
 
@@ -104,7 +104,7 @@ public class DialogViewFragment extends Fragment {
 		dialogCharacter = dialogsModel.characterForId(dialogScript.dialog_character_id); // get character
 		// get mediaCD (from database)
 		// todo: the media might already be loaded on the device. if it is, use it instead of downloading from remote URL
-		MediaModel mm = new MediaModel(mGamePlayActivity);
+		MediaModel mm = new MediaModel(mGamePlayAct);
 		dialogCharMedia = mm.mediaForId(dialogCharacter.media_id);
 
 		// set title
@@ -119,7 +119,7 @@ public class DialogViewFragment extends Fragment {
 		wvCharImage.getSettings().setUseWideViewPort(true); // constrain the image horizontally
 		// attempt to fit image to whole screen width
 		DisplayMetrics displaymetrics = new DisplayMetrics();
-		mGamePlayActivity.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		mGamePlayAct.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 		int screenWidth = displaymetrics.widthPixels;
 		int screenHeight = displaymetrics.heightPixels;
 		// from: http://stackoverflow.com/a/10395972
@@ -202,7 +202,7 @@ public class DialogViewFragment extends Fragment {
 		else if (op.link_type.contentEquals("EXIT_TO_DIALOG")) {
 			// Optimized: reuse the same controllers, just switch it to a new dialog
 //			[delegate dialogScriptChosen:[_MODEL_DIALOGS_ scriptForId:[_MODEL_DIALOGS_ dialogForId:op.link_id].intro_dialog_script_id]];
-			Dialog d = mGamePlayActivity.mGame.dialogsModel.dialogForId(op.link_id);
+			Dialog d = mGamePlayAct.mGame.dialogsModel.dialogForId(op.link_id);
 			this.dialogScriptChosen(dialogsModel.scriptForId(d.intro_dialog_script_id));
 		}
 		else
@@ -218,9 +218,9 @@ public class DialogViewFragment extends Fragment {
 		}
 
 		if (chosenScript.event_package_id > 0)
-			mGamePlayActivity.mGame.eventsModel.runEventPackageId(chosenScript.event_package_id);
+			mGamePlayAct.mGame.eventsModel.runEventPackageId(chosenScript.event_package_id);
 		// Tell server dialog was viewed; response will trigger UI update;
-		mGamePlayActivity.mGame.logsModel.playerViewedContent("DIALOG_SCRIPT", chosenScript.dialog_script_id);
+		mGamePlayAct.mGame.logsModel.playerViewedContent("DIALOG_SCRIPT", chosenScript.dialog_script_id);
 		if (chosenScript.dialog_character_id == 0) { // "0" indicated this is "you" speaking
 			// todo: consider callback to Activity to create whole new DialogFragment
 			loadViewElements(chosenScript.dialog_script_id); // more like a "reload..." in this case.

@@ -126,7 +126,7 @@ public class GamePlayNavDrawerFragment extends Fragment {
 		//  and will have a sort index. Use this list to populate the drawer options.
 //		mDrawerListItems = getResources().getStringArray(R.array.game_drawer_list_items); // temp. get fixed array from strings.xml
 //		String iconURL;
-//		mGamePlayActivity.mGame.tabsModel.playerTabNames().toArray(mDrawerListItems);
+//		mGamePlayAct.mGame.tabsModel.playerTabNames().toArray(mDrawerListItems);
 //		for (int i=0; i < mDrawerListItems.length; i++) {
 //			iconURL = "http://dummy.fillinlater.com/media.png";
 //			mNavItems.add(new NavItem(mDrawerListItems[i], "Nosubtitle", AppConfig.gameDrawerItemIconByName.get(mDrawerListItems[i]), iconURL));

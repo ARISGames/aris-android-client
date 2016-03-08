@@ -191,10 +191,14 @@ public class DisplayQueueModel extends ARISModel {
 		//if trigger in blacklist no longer available/within range, remove from blacklist
 //		for (int i = 0; i < displayBlacklist.size(); i++) {
 		if (displayBlacklist != null)
-			for (Object o : displayBlacklist) { // could probably just be cast to Trigger instead of Object here - sem
+//			for (Object o : displayBlacklist) { // could probably just be cast to Trigger instead of Object here - sem
+//			for (Iterator<Trigger> iter = displayBlacklist.iterator(); iter.hasNext(); ) { // could probably just be cast to Trigger instead of Object here - sem
+			for (int i = displayBlacklist.size() - 1; i > -1; i--) { // could probably just be cast to Trigger instead of Object here - sem
 				boolean valid = false;
-				if (o instanceof Trigger) { //only triggers are blacklisted - sem: so why are we testing here?
-					t = (Trigger)o;
+//				if (o instanceof Trigger) { //only triggers are blacklisted - sem: so why are we testing here?
+//					t = (Trigger)o;
+//					t = iter.next();
+					t = displayBlacklist.get(i);
 	//@formatter:off
 					for (Trigger  jt : pt) {
 						if (t == jt
@@ -210,8 +214,9 @@ public class DisplayQueueModel extends ARISModel {
 						valid = true;
 					}
 	//@formatter:on
-				}
+//				}
 				if (!valid) displayBlacklist.remove(t);// removeObject(t);
+//				if (!valid) displayBlacklist.remove(i);// removeObject(t);
 			}
 	}
 

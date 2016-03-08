@@ -6,7 +6,7 @@ package edu.uoregon.casls.aris_android.data_objects;
 public class Plaque implements InstantiableProtocol {
 	public long   plaque_id           = 0;
 	public String name                = "Plaque";
-	public String desc                = "Text";
+	public String description         = "Text";
 	public long   icon_media_id       = 0;
 	public long   media_id            = 0;
 	public long   event_package_id    = 0;
@@ -19,7 +19,22 @@ public class Plaque implements InstantiableProtocol {
 	}
 
 	public String description() {
-		return "Plaque- Id:" + this.plaque_id + "\tName:" + this.name + "\tDesc:" + this.desc + "\t";
+		return "Plaque- Id:" + this.plaque_id + "\tName:" + this.name + "\tDesc:" + this.description + "\t";
 	}
 
 }
+
+/*[
+    {
+        "back_button_enabled": "1",
+        "continue_function": "EXIT",
+        "description": "This Plaque should show up as the very first thing in the game.",
+        "event_package_id": "71433",
+        "game_id": "15907",
+        "icon_media_id": "0",
+        "media_id": "0",
+        "name": "The Main Plaque",
+        "plaque_id": "61879"
+    }
+]
+*/
