@@ -104,6 +104,7 @@ public class QuestsModel extends ARISModel {
 			}
 			mGamePlayAct.mDispatch.services_player_quests_received(pquests); // _ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_QUESTS_RECEIVED",nil,pquests);
 		}
+		// for now treat every game as HYBRID, since that's really all we need to worry about in v1.0 of Android
 		if (!this.playerDataReceived() ||
 				mGame.network_level.contentEquals("HYBRID") ||
 				mGame.network_level.contentEquals("REMOTE"))

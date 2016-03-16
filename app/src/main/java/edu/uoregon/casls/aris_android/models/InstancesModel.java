@@ -164,6 +164,7 @@ public class InstancesModel extends ARISModel {
 			Collection<Instance> pinsts = instances.values();
 			mGamePlayAct.mDispatch.services_player_instances_received(pinsts); // ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_INSTANCES_RECEIVED",nil,@{@"instances":pinsts});
 		}
+		// for now treat every game as HYBRID, since that's really all we need to worry about in v1.0 of Android
 		if (!this.playerDataReceived() ||
 				mGamePlayAct.mGame.network_level.contentEquals("HYBRID") ||
 				mGamePlayAct.mGame.network_level.contentEquals("REMOTE"))

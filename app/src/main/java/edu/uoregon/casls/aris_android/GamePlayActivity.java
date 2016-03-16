@@ -110,6 +110,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	public HashMap<String, Boolean> fragVisible = new HashMap<>();
 	public String currentFragVisible;
+	public String currentFragVisibl2e;
 
 	public Handler performSelector = new Handler(); // used for time deferred method invocation similar to iOS "performSelector"
 	/**
@@ -394,9 +395,17 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mDispatch.model_game_began(); // calls mGame.gameBegan() and mGamePlayAct.gameBegan()
 	}
 
+	//
+	//
+	// TODO: Need to replace this mode of fragment swapping with the more taditional create/dispose version
+	// TODO: will also need to rememeber to reset the boolean viewingObject to false when disposing of any frangment
+	// TODO: perhaps that should happen in the fragment's onDestroyView()/onDestroy()/onDetatch()
+	//
+	//
+
 	private void showFragment(String fragTag, Instance i) {
 		// if somehow we tried to transition to the fragment already showing, bail.
-		if (fragTag.contentEquals(currentFragVisible)) return;
+		if (fragTag.contentEquals(currentFragVisible)) return; // fixme: NPE on back button here from a dialogViewFrag.
 		// settle any outstanding fragment tasks
 		getSupportFragmentManager().executePendingTransactions();
 		// if there is no currently visible fragment, set incoming one to current.
@@ -838,7 +847,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 
 	public void displayInstance(Instance i) {
-		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Entering displayInstance instanceType: " + i.object_type);
+		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Entering displayInstance instanceType: " + i.object_type);
 		String tag = "";
 		String fragViewToDisplay = "";
 //		ARISViewController *vc;
@@ -1018,6 +1027,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		showFragment(fragViewToDisplay, i);
 //		ARISNavigationController *nav = new ARISNavigationController alloc] initWithRootViewController:vc);
 //		this.presentDisplay(nav);
+		viewingObject = true; // iOS happens in presentDisplay
 	}
 
 
@@ -1102,6 +1112,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		showFragment(fragViewToDisplay, i);
 //		ARISNavigationController *nav = new ARISNavigationController alloc] initWithRootViewController:vc);
 //		this.presentDisplay:nav);
+		viewingObject = true; // iOS happens in presentDisplay
+
 	}
 
 	// This (I'm guessing) is handling a selection in what we are calling the Nav Drawer

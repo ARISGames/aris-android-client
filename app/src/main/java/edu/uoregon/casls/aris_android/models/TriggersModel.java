@@ -116,6 +116,7 @@ public class TriggersModel extends ARISModel {
 			}
 		}
 		if (!invalidatedTriggers.isEmpty()) {
+			Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " model_triggers_invalidated() ");
 			mGamePlayAct.mDispatch.model_triggers_invalidated(invalidatedTriggers); //_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_INVALIDATED", null, @{@"invalidated_triggers":invalidatedTriggers});
 		}
 		return conformingTriggers;
@@ -162,9 +163,11 @@ public class TriggersModel extends ARISModel {
 		n_player_data_received++;
 
 		if (!addedTriggers.isEmpty()) {
+			Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " model_triggers_less_available() ");
 			mGamePlayAct.mDispatch.model_triggers_new_available(addedTriggers);//_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_NEW_AVAILABLE", null, @{@"added":addedTriggers});
 		}
 		if (!removedTriggers.isEmpty()) {
+			Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " model_triggers_less_available() ");
 			mGamePlayAct.mDispatch.model_triggers_less_available(removedTriggers);//_ARIS_NOTIF_SEND_("MODEL_TRIGGERS_LESS_AVAILABLE", null, @{@"removed":removedTriggers});
 		}
 		mGamePlayAct.mDispatch.model_player_triggers_available(); //_ARIS_NOTIF_SEND_("MODEL_PLAYER_TRIGGERS_AVAILABLE", null, null);
@@ -210,7 +213,7 @@ public class TriggersModel extends ARISModel {
 			}
 			Log.i(AppConfig.LOGTAG, getClass().getSimpleName() + "Accepted: " + ptrigs.size() + ", Rejected: " + rejected.size());
 			mGamePlayAct.mDispatch.services_player_triggers_received(ptrigs); //("SERVICES_PLAYER_TRIGGERS_RECEIVED", null, @{@"triggers":ptrigs});
-		}
+		} // for now treat every game as HYBRID, since that's really all we need to worry about in v1.0 of Android
 		if (!this.playerDataReceived() || mGame.network_level.equals("HYBRID") || mGame.network_level.equals("REMOTE")) {
 			mGamePlayAct.mAppServices.fetchTriggersForPlayer();
 		}

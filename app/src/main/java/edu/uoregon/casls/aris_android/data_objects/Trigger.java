@@ -62,4 +62,13 @@ public class Trigger {
 		return e;
 	}
 
+	public String title() { // is trigger.title ever used anywhere meaningfully?
+//		Instance i;
+		if (title != null && !title.isEmpty()) return title;
+		else if(!name.isEmpty()) return name;
+//		else if((i = [_MODEL_INSTANCES_ instanceForId:instance_id]) && i.name) return i.name;
+		return "";
+	}
+
+
 }

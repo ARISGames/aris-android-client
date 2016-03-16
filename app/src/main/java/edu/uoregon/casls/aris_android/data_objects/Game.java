@@ -632,7 +632,7 @@ public class Game {
 	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " PollTimer has Cycled  - - - - - - - - DING!");
+			Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " PollTimer has Cycled  - - - - - - - - DING!");
 			handleServerPollerMessage(intent);
 		}
 	};

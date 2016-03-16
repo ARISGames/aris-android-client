@@ -38,7 +38,7 @@ public class PollServerService extends IntentService {
 	}
 
 	private void sendUpdateMessage(int pct) {
-		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Broadcasting update message: " + pct);
+//		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Broadcasting update message: " + pct);
 		Intent intent = new Intent(AppConfig.SERVER_POLLER_SVC_ACTION);
 		intent.putExtra(AppConfig.COMMAND, AppConfig.POLLTIMER_CYCLE_PASS);
 		intent.putExtra(AppConfig.DATA, pct);
@@ -46,7 +46,7 @@ public class PollServerService extends IntentService {
 	}
 
 	private void sendResultMessage(String data) {
-		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Broadcasting result message: " + data);
+//		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Broadcasting result message: " + data);
 		Intent intent = new Intent(AppConfig.SERVER_POLLER_SVC_ACTION);
 		intent.putExtra(AppConfig.COMMAND, AppConfig.POLLTIMER_RESULT);
 		intent.putExtra(AppConfig.DATA, data);

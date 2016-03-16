@@ -137,6 +137,7 @@ public class OverlaysModel extends ARISModel {
 			// not so sure what the intention is here; code under construction? -sem
 			mGamePlayAct.mDispatch.services_player_overlays_received(overlays); //_ARIS_NOTIF_SEND_(@"SERVICES_PLAYER_OVERLAYS_RECEIVED",nil,@{@"triggers":ptrigs});
 		}
+		// for now treat every game as HYBRID, since that's really all we need to worry about in v1.0 of Android
 		if (!this.playerDataReceived() ||
 				mGame.network_level.contentEquals("HYBRID") ||
 				mGame.network_level.contentEquals("REMOTE"))

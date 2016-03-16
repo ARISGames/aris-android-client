@@ -112,6 +112,7 @@ public class GroupsModel extends ARISModel {
 		if (this.playerDataReceived() && !mGamePlayAct.mGame.network_level.equals("REMOTE")) {
 			mGamePlayAct.mDispatch.services_player_group_received(playerGroup); //_ARIS_NOTIF_SEND_("SERVICES_PLAYER_GROUP_RECEIVED", null, @{@"group":playerGroup}); //just return current
 		}
+		// for now treat every game as HYBRID, since that's really all we need to worry about in v1.0 of Android
 		if (!this.playerDataReceived() ||
 				mGamePlayAct.mGame.network_level.equals("HYBRID") ||
 				mGamePlayAct.mGame.network_level.equals("REMOTE")) {

@@ -49,7 +49,7 @@ public class DisplayQueueModel extends ARISModel {
 	public DisplayQueueModel(GamePlayActivity gamePlayAct) {
 //		timerPoller = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(tickAndEnqueueAvailableTimers) userInfo:nil repeats:true];
 		this.initContext(gamePlayAct); // must be called immediately to enable the poller to start.
-		startTriggerPoller();
+//		startTriggerPoller(); // FIXME: Turn back on after debugging trigger runaway cycle
 		this.clearPlayerData();
 		displayBlacklist = new ArrayList<>();
 //			_ARIS_NOTIF_LISTEN_(@"MODEL_TRIGGERS_NEW_AVAILABLE",self,@selector(reevaluateAutoTriggers),nil);
@@ -74,7 +74,7 @@ public class DisplayQueueModel extends ARISModel {
 	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Trigger Timer has Cycled  - - - - - - - - TRIGG!");
+			Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Trigger Timer has Cycled  - - - - - - - - TRIGG!");
 			handleTriggerPollerMessage(intent);
 		}
 	};
@@ -107,7 +107,7 @@ public class DisplayQueueModel extends ARISModel {
 	}
 
 	public void enqueue(Object i) {
-		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Enqueue the following: " + i.getClass().getName());
+		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Enqueue the following: " + i.getClass().getName());
 		if (!this.displayInQueue(i)) {
 			if (displayQueue == null) displayQueue = new ArrayList<>();
 			displayQueue.add(i); // addObject(i);
@@ -115,17 +115,23 @@ public class DisplayQueueModel extends ARISModel {
 		mGamePlayAct.mDispatch.model_display_new_enqueued(); //_ARIS_NOTIF_SEND_(@"MODEL_DISPLAY_NEW_ENQUEUED", nil, nil);
 	}
 
-	public void enqueueTrigger(Trigger t) { this.enqueue(t); }
+	public void enqueueTrigger(Trigger t) {
+		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " enqueueTrigger() ");
+		this.enqueue(t); }
 
 	/* injectTrigger is never called */
 	public void injectTrigger(Trigger t) { this.inject(t); }
 
-	public void enqueueInstance(Instance i) { this.enqueue(i); }
+	public void enqueueInstance(Instance i) {
+		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " enqueueInstance() ");
+		this.enqueue(i); }
 
 	/* injectInstance is never called */
 	public void injectInstance(Instance i) { this.inject(i); }
 
-	public void enqueueObject(InstantiableProtocol o) { this.enqueue(o); }
+	public void enqueueObject(InstantiableProtocol o) {
+		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " enqueueObject() ");
+		this.enqueue(o); }
 
 	public void injectObject(InstantiableProtocol o) { this.inject(o); }
 
@@ -162,6 +168,8 @@ public class DisplayQueueModel extends ARISModel {
 	}
 
 	public void reevaluateAutoTriggers() {
+		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " reevaluateAutoTriggers() ");
+
 		this.purgeInvalidFromQueue();
 		//this.tickAndEnqueueAvailableTimers]; //will be called by poller
 		this.enqueueNewImmediates();
@@ -257,6 +265,7 @@ public class DisplayQueueModel extends ARISModel {
 						&& !this.displayBlacklisted(t)
 				)
 				{
+					Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " enqueueNewImmediates() ");
 					this.enqueueTrigger(t); //will auto verify not already in queue
 				}
 				//@formatter:on

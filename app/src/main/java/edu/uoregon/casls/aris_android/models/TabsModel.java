@@ -82,6 +82,7 @@ public class TabsModel extends ARISModel {
 			}
 			mGamePlayAct.mDispatch.services_player_tabs_received(ptabs); //_ARIS_falseTIF_SEND_(@"SERVICES_PLAYER_TABS_RECEIVED",nil,@{@"tabs":ptabs});
 		}
+		// for now treat every game as HYBRID, since that's really all we need to worry about in v1.0 of Android
 		if (!this.playerDataReceived() ||
 				mGame.network_level.contentEquals("HYBRID") ||
 				mGame.network_level.contentEquals("REMOTE"))
