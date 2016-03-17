@@ -648,7 +648,7 @@ public class GamesListActivity extends AppCompatActivity {
 			JSONObject jsonFullGameData = jsonFullGameHTTPReturnSet.getJSONObject("data");
 			String game_id = jsonFullGameData.getString("game_id"); // get game id from json block
 			Game game = mListedGamesMap.get(game_id); // get game instance
-			game.initContext(this); // FIXME: NPE here if game selected by user before game list is completely populated.
+			game.initContext(this); // FIXME: NPE here if game selected by user before game list is completely populated. Solution: delay setting onClickListener until full pg load.
 			game.initFullGameDetailsWithJson(jsonFullGameHTTPReturnSet);
 		}
 		else { //json "data" block was null

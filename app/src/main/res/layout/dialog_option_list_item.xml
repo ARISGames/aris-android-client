@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:background="#fffefefe"
-            android:alpha=".9"/>
+            android:alpha=".98"/>
     </LinearLayout>
 
     <!-- Right end arrow  -->

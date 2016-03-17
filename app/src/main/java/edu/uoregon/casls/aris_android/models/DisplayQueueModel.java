@@ -49,7 +49,7 @@ public class DisplayQueueModel extends ARISModel {
 	public DisplayQueueModel(GamePlayActivity gamePlayAct) {
 //		timerPoller = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(tickAndEnqueueAvailableTimers) userInfo:nil repeats:true];
 		this.initContext(gamePlayAct); // must be called immediately to enable the poller to start.
-//		startTriggerPoller(); // FIXME: Turn back on after debugging trigger runaway cycle
+		startTriggerPoller();
 		this.clearPlayerData();
 		displayBlacklist = new ArrayList<>();
 //			_ARIS_NOTIF_LISTEN_(@"MODEL_TRIGGERS_NEW_AVAILABLE",self,@selector(reevaluateAutoTriggers),nil);

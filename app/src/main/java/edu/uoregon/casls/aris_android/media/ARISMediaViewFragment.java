@@ -27,21 +27,21 @@ import edu.uoregon.casls.aris_android.services.ARISMediaLoader;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ARISMediaView.OnFragmentInteractionListener} interface
+ * {@link ARISMediaViewFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ARISMediaView#newInstance} factory method to
+ * Use the {@link ARISMediaViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ARISMediaView extends Fragment {
+public class ARISMediaViewFragment extends Fragment {
 
-	public Media media;
-	private Bitmap image;
+	public  Media          media;
+	private Bitmap         image;
 	public  VideoView      videoView;
 	public  ImageView      imageView;
 	private MediaPlayer    mediaPlayer;
 	private Bitmap         bitmap;
 	private ProgressDialog pDialog;
-	public View fragView;
+	public  View           fragView;
 
 	public transient GamePlayActivity mGamePlayAct;
 
@@ -53,6 +53,7 @@ public class ARISMediaView extends Fragment {
 		ARISMediaDisplayModeTopAlignAspectFitWidth,
 		ARISMediaDisplayModeTopAlignAspectFitWidthAutoResizeHeight
 	}
+
 	ARISMediaDisplayMode displayMode;
 
 	public enum ARISMediaContentType {
@@ -60,7 +61,9 @@ public class ARISMediaView extends Fragment {
 		ARISMediaContentTypeFull,
 		ARISMediaContentTypeThumb
 	}
-	ARISMediaContentType contentType;
+
+	// set to default to start.
+	public ARISMediaContentType contentType = ARISMediaContentType.ARISMediaContentTypeDefault;
 
 	private static final String ARG_PARAM1 = "param1";
 	private static final String ARG_PARAM2 = "param2";
@@ -80,8 +83,8 @@ public class ARISMediaView extends Fragment {
 	 * @return A new instance of fragment ARISMediaView.
 	 */
 	// TODO: Rename and change types and number of parameters
-	public static ARISMediaView newInstance(String param1, String param2) {
-		ARISMediaView fragment = new ARISMediaView();
+	public static ARISMediaViewFragment newInstance(String param1, String param2) {
+		ARISMediaViewFragment fragment = new ARISMediaViewFragment();
 		Bundle args = new Bundle();
 		args.putString(ARG_PARAM1, param1);
 		args.putString(ARG_PARAM2, param2);
@@ -89,7 +92,7 @@ public class ARISMediaView extends Fragment {
 		return fragment;
 	}
 
-	public ARISMediaView() {
+	public ARISMediaViewFragment() {
 		// Required empty public constructor
 	}
 
@@ -121,99 +124,96 @@ public class ARISMediaView extends Fragment {
 	}
 
 
-
 	public void setMedia(Media m) {
-		if(m.data == null)
-		{
-			this.clear();
-			media = m;
-//			this.addSpinner();
-//			if(selfDelegateHandle) [selfDelegateHandle invalidate];
-//			selfDelegateHandle = [[ARISDelegateHandle alloc] initWithDelegate:self];
-			ARISMediaLoader mediaLoader = new ARISMediaLoader(mGamePlayAct);
-			mediaLoader.loadMedia(m);
-//			mediaLoader.loadMedia(m, null);
-//			[_SERVICES_MEDIA_ loadMedia:m delegateHandle:selfDelegateHandle]; //calls 'mediaLoaded' upon complete
-			return;
-		}
+		// make sure we have this view inflated
+//		if (fragView == null) fragView = inflater.inflate(R.layout.fragment_arismedia_view, container, false);
+		// in iOS they seem to want to pass the raw binary data for the media from place to place.
+		// I think in Android it'll be much easier to just point UI elements at the LocalURL (assuming it's avalailable.)
+		// todo: check that we have a valid mediaCD.localURL. if not look for remoteURL and load it (to device?).
+		// todo: if no remoteURL? well uhm...
+//		if (m.data == null) {
+//			this.clear();
+//			media = m;
+////			this.addSpinner();
+////			if(selfDelegateHandle) [selfDelegateHandle invalidate];
+////			selfDelegateHandle = [[ARISDelegateHandle alloc] initWithDelegate:self];
+//			ARISMediaLoader mediaLoader = new ARISMediaLoader(mGamePlayAct);
+//			mediaLoader.loadMedia(m);
+////			mediaLoader.loadMedia(m, null);
+////			[_SERVICES_MEDIA_ loadMedia:m delegateHandle:selfDelegateHandle]; //calls 'mediaLoaded' upon complete
+//			return;
+//		}
 		this.clear();
 		media = m;
 		this.displayMedia();
 	}
 
-	public void mediaLoaded(Media m)
-	{
+	public void mediaLoaded(Media m) {
 		this.setMedia(m);
 	}
 
-	public void setImage(Bitmap i)
-	{
+	public void setImage(Bitmap i) {
 		this.clear();
 		image = i;
 		this.displayImage();
 	}
 
-	public void clear()
-	{
+	public void clear() {
 //		if(selfDelegateHandle) { [selfDelegateHandle invalidate]; selfDelegateHandle = null; }
 		image = null;
 		media = null;
 //	todo	this.removeSpinner();
 //	todo	this.removePlayIcon();
-		if(videoView != null) {
+		if (videoView != null) {
 			videoView.suspend();
 			videoView.setVisibility(View.INVISIBLE);
 //			avVC.view removeFromSuperview(); avVC = null;
 		}
-		if(imageView != null) {
+		if (imageView != null) {
 			imageView.setVisibility(View.INVISIBLE); // GONE?
 //			imageView removeFromSuperview(); imageView = null;
 		}
 	}
 
-	public void displayMedia() //simply routes to displayImage, displayVideo, or displayAudio
-	{
+	public void displayMedia() { //simply routes to displayImage, displayVideo, or displayAudio
+
 		String type = media.type();
-		switch (contentType)
-		{
+		if (contentType == null) contentType = ARISMediaContentType.ARISMediaContentTypeDefault;
+		switch (contentType) {
 			case ARISMediaContentTypeThumb:
-				if (type.contentEquals("IMAGE"))
-			{
-				String dataType = this.getMimeTypeOfFile(media.localURL.toString());
-				// if that couldn't find the MIME type try this
+				if (type.contentEquals("IMAGE")) {
+					String dataType = this.getMimeTypeOfFile(media.mediaCD.localURL.toString());
+					// if that couldn't find the MIME type try this
 //				if (dataType == null)
 //					dataType = this.contentTypeForImageData(media.data);
 
-				if (dataType.contentEquals("image/gif")) { // do a gif diaplay
+					if (dataType.contentEquals("image/gif")) { // do a gif diaplay
 //					image = UIImage animatedImageWithAnimatedGIFData:media.data);
 //					this.displayImage];
-					this.displayGif();
-				}
-				else if(dataType.contentEquals("image/jpeg") ||
-				dataType.contentEquals("image/png"))
-				{
+						this.displayGif();
+					}
+					else if (dataType.contentEquals("image/jpeg") ||
+							dataType.contentEquals("image/png")) {
 //					image = UIImage imageWithData:media.thumb];
-					this.displayImage();
+						this.displayImage();
+					}
 				}
-			}
-			else if(type.contentEquals("VIDEO"))
-			{
+				else if (type.contentEquals("VIDEO")) {
 //				image = UIImage imageWithData:media.thumb];
 //				this.displayImage];
-				displayVideo();
-			}
-			else if(type.contentEquals("AUDIO"))
-			{
+					displayVideo();
+				}
+				else if (type.contentEquals("AUDIO")) {
 //				image = UIImage imageWithData:media.thumb];
 //				this.displayImage];
-				displayAudio();
-			}
-			break;
+					displayAudio();
+				}
+				break;
 			case ARISMediaContentTypeFull:
 			case ARISMediaContentTypeDefault:
 			default:
 				if (type.contentEquals("IMAGE")) {
-					String dataType = this.getMimeTypeOfFile(media.localURL.toString());
+					String dataType = this.getMimeTypeOfFile(media.mediaCD.localURL.toString());
 //				    String dataType = this.contentTypeForImageData:media.data];
 					if (dataType.contentEquals("image/gif")) { // do a gif display
 //					    image = UIImage animatedImageWithAnimatedGIFData:media.data);
@@ -236,7 +236,7 @@ public class ARISMediaView extends Fragment {
 //				    this.displayImage];
 					displayAudio();
 				}
-			break;
+				break;
 		}
 	}
 
@@ -250,9 +250,9 @@ public class ARISMediaView extends Fragment {
 		DisplayMetrics displaymetrics = new DisplayMetrics();
 		mGamePlayAct.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 		int screenWidth = displaymetrics.widthPixels;
-		String mediaUrl = media.localURL.toString();
+		String mediaUrl = media.mediaCD.localURL.toString();
 //		String mediaUrl = "file:///android_res/drawable/dancing_peaks.gif";
-		String data = "<html><head></head><body><img width="+screenWidth+" src=\""+mediaUrl+"\" /></body></html>";
+		String data = "<html><head></head><body><img width=" + screenWidth + " src=\"" + mediaUrl + "\" /></body></html>";
 		webView.loadDataWithBaseURL(null, data, "text/html", "UTF-8", null);
 
 		webView.setVisibility(View.VISIBLE);
@@ -267,17 +267,17 @@ public class ARISMediaView extends Fragment {
 //		imageView setImage:image];
 //		this.conformFrameToMode];
 
+//		imageView = (ImageView) mGamePlayAct.findViewById(R.id.imgvw_media_image);
 		imageView = (ImageView) fragView.findViewById(R.id.imgvw_media_image);
 		// show an image file from interal storage...
 		//preview.setImageURI(Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Echo/Images/"+file_name));
 //		imageView.setImageDrawable(getResources().getDrawable(R.drawable.raw_image_sample));
-		imageView.setImageURI(Uri.parse(media.localURL.toString()));
+		imageView.setImageURI(Uri.parse(media.mediaCD.localURL.toString()));
 		imageView.setVisibility(View.VISIBLE);
 
 	}
 
-	public void displayVideo()
-	{
+	public void displayVideo() {
 //		this.addPlayIcon();
 //
 //		videoView = (VideoView) fragView.findViewById(R.id.videoView);
@@ -302,7 +302,7 @@ public class ARISMediaView extends Fragment {
 		// sample URIs one local, one www
 //		videoView.setVideoURI(Uri.parse("https://linguafolio.uoregon.edu/uploads/video/201510/16/61712_20151016-071909_732.mp4"));
 //		videoView.setVideoURI(Uri.parse("android.resource://" + mGamePlayAct.getPackageName() + "/" + R.raw.raw_video_sample));
-		videoView.setVideoURI(Uri.parse(media.localURL.toString()));
+		videoView.setVideoURI(Uri.parse(media.mediaCD.localURL.toString()));
 		videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 			@Override
 			public void onPrepared(MediaPlayer mp) {
@@ -319,8 +319,7 @@ public class ARISMediaView extends Fragment {
 
 	}
 
-	public void displayAudio()
-	{
+	public void displayAudio() {
 		// todo: looks like audio has a potential image component, so I'll need to send the image to the image view
 //		this.addPlayIcon();
 //
@@ -335,7 +334,7 @@ public class ARISMediaView extends Fragment {
 //		}
 
 //		mediaPlayer = MediaPlayer.create(mGamePlayAct, Uri.parse("https://linguafolio.uoregon.edu/uploads/mp3/201510/16/59678_20151016-000531_888.mp3"));
-		mediaPlayer = MediaPlayer.create(mGamePlayAct, Uri.parse(media.localURL.toString()));
+		mediaPlayer = MediaPlayer.create(mGamePlayAct, Uri.parse(media.mediaCD.localURL.toString()));
 		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 			@Override
@@ -346,8 +345,7 @@ public class ARISMediaView extends Fragment {
 
 	}
 
-	public void playbackFinished()
-	{
+	public void playbackFinished() {
 //		this.stop];
 //		if(n.userInfo objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] intValue] == MPMovieFinishReasonUserExited)
 //		if(delegate && (NSObject )delegate respondsToSelector:@selector(ARISMediaViewFinishedPlayback:)])
@@ -382,8 +380,7 @@ public class ARISMediaView extends Fragment {
 
 //		d getBytes:&c length:1];
 
-		switch(c)
-		{
+		switch (c) {
 			case 0xFF:
 				return "image/jpeg";
 			case 0x89:

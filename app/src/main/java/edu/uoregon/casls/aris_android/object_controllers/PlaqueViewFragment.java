@@ -4,12 +4,14 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
@@ -17,7 +19,7 @@ import edu.uoregon.casls.aris_android.data_objects.Instance;
 import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.data_objects.Plaque;
 import edu.uoregon.casls.aris_android.data_objects.Tab;
-import edu.uoregon.casls.aris_android.media.ARISMediaView;
+import edu.uoregon.casls.aris_android.media.ARISMediaViewFragment;
 import edu.uoregon.casls.aris_android.models.InstancesModel;
 
 public class PlaqueViewFragment extends Fragment {
@@ -26,8 +28,8 @@ public class PlaqueViewFragment extends Fragment {
 	public Instance instance;
 	public InstancesModel instancesModel;
 	public Tab tab;
-	public ARISMediaView mediaViewFrag;
-	public View mPlaqueView;
+	public ARISMediaViewFragment mediaViewFrag;
+	public View                  mPlaqueView;
 
 	public GamePlayActivity mGamePlayActivity;
 
@@ -43,8 +45,7 @@ public class PlaqueViewFragment extends Fragment {
 	private OnFragmentInteractionListener mListener;
 
 	public PlaqueViewFragment() {
-		// Required empty public constructor
-//		initContext();
+
 	}
 
 	public void initContext(GamePlayActivity gamePlayAct) {
@@ -53,7 +54,7 @@ public class PlaqueViewFragment extends Fragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		mGamePlayActivity = (GamePlayActivity)getActivity();
+		mGamePlayActivity = (GamePlayActivity) getActivity(); //??
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null) {
 			mParam1 = getArguments().getString(ARG_PARAM1);
@@ -64,13 +65,26 @@ public class PlaqueViewFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
+		// Inflate the layout for this fragment
 		mPlaqueView = inflater.inflate(R.layout.fragment_plaque_view, container, false);
-		mediaViewFrag = new ARISMediaView();
+		FragmentTransaction ft = mGamePlayActivity.getSupportFragmentManager().beginTransaction();
+		// Init fragment
+		mediaViewFrag = new ARISMediaViewFragment();
 		mediaViewFrag.initContext(mGamePlayActivity);
-		this.loadView();
+		// add a frag inside another (this) frag.
+		getChildFragmentManager().beginTransaction().add(R.id.fl_plaque_media_view_container, mediaViewFrag).commit();
+		getChildFragmentManager().executePendingTransactions();
+
 		return mPlaqueView;
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		// presumably the media fragment has now loaded and passed initial lifecycle calls so we can
+		// tell it to load stuff.
+		this.loadView();
+	}
 
 	public void initWithInstance(Instance i) {
 //		delegate = d; // Android app eschews the delegates (for now, anyway)
@@ -100,9 +114,10 @@ public class PlaqueViewFragment extends Fragment {
 
 //		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
 //		transaction.add(R.id.ll_plaque_media_view_container, mediaViewFrag).commit();
+
 		// add a frag inside another (this) frag.
-		getChildFragmentManager().beginTransaction().add(R.id.fl_plaque_media_view_container, mediaViewFrag).commit();
-		getChildFragmentManager().executePendingTransactions();
+//		getChildFragmentManager().beginTransaction().add(R.id.fl_plaque_media_view_container, mediaViewFrag).commit();
+//		getChildFragmentManager().executePendingTransactions();
 
 		// Show Continue text and forward button if continue_function != NONE
 		// In Android: Hide these features if continue_function == NONE
@@ -118,6 +133,8 @@ public class PlaqueViewFragment extends Fragment {
 					continueButtonTouched(v);
 				}
 			});
+			ivContinueArrow.bringToFront();
+			ivContinueArrow.setClickable(true);
 		}
 
 		this.loadPlaque();
@@ -125,6 +142,10 @@ public class PlaqueViewFragment extends Fragment {
 
 	public void loadPlaque()
 	{
+		if (!plaque.name.isEmpty()) { // set plaqueue title
+			TextView tvPlaqueueTitle = (TextView) mPlaqueView.findViewById(R.id.tv_plaque_title);
+			tvPlaqueueTitle.setText(plaque.name);
+		}
 		if (!plaque.description.contentEquals("")) { // load the description webview
 //			[scrollView addSubview:webView];
 //			webView.frame = CGRectMake(0, 0, self.view.bounds.size.width, 10);//Needs correct width to calc height
@@ -167,6 +188,12 @@ public class PlaqueViewFragment extends Fragment {
 			throw new RuntimeException(context.toString()
 					+ " must implement OnFragmentInteractionListener");
 		}
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		mGamePlayActivity.viewingObject = false;
 	}
 
 	@Override

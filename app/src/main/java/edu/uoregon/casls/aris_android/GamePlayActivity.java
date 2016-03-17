@@ -47,7 +47,7 @@ import edu.uoregon.casls.aris_android.data_objects.Tab;
 import edu.uoregon.casls.aris_android.data_objects.Trigger;
 import edu.uoregon.casls.aris_android.data_objects.User;
 import edu.uoregon.casls.aris_android.data_objects.WebPage;
-import edu.uoregon.casls.aris_android.media.ARISMediaView;
+import edu.uoregon.casls.aris_android.media.ARISMediaViewFragment;
 import edu.uoregon.casls.aris_android.models.MediaModel;
 import edu.uoregon.casls.aris_android.models.UsersModel;
 import edu.uoregon.casls.aris_android.object_controllers.DialogViewFragment;
@@ -69,7 +69,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		MapViewFragment.OnFragmentInteractionListener,
 		PlaqueViewFragment.OnFragmentInteractionListener,
 		DialogViewFragment.OnFragmentInteractionListener,
-		ARISMediaView.OnFragmentInteractionListener {
+		ARISMediaViewFragment.OnFragmentInteractionListener {
 
 
 
@@ -111,6 +111,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	public HashMap<String, Boolean> fragVisible = new HashMap<>();
 	public String currentFragVisible;
 	public String currentFragVisibl2e;
+
+	public boolean viewingObject = false;
+	public List<Long> local_inst_queue = new ArrayList<>();
 
 	public Handler performSelector = new Handler(); // used for time deferred method invocation similar to iOS "performSelector"
 	/**
@@ -242,7 +245,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mGame.initContext(this);
 		mResposeHandler.initContext(this);
 		mNavigationDrawerFragment.initContext(this);
-
 
 		if (!mGame.hasLatestDownload() || mGame.network_level.contentEquals("REMOTE")) // loadingViewController.startLoading equivalent in iOS
 			this.requestGameData(); // load all game data
@@ -404,8 +406,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	//
 
 	private void showFragment(String fragTag, Instance i) {
+		if (fragTag == null) return; // todo: temporary fix
 		// if somehow we tried to transition to the fragment already showing, bail.
-		if (fragTag.contentEquals(currentFragVisible)) return; // fixme: NPE on back button here from a dialogViewFrag.
+//		if (fragTag.contentEquals(currentFragVisible)) return; // fixme: NPE on back button here from a dialogViewFrag.
 		// settle any outstanding fragment tasks
 		getSupportFragmentManager().executePendingTransactions();
 		// if there is no currently visible fragment, set incoming one to current.
@@ -418,18 +421,43 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		Fragment fragToDisplay = fm.findFragmentByTag(fragTag);
 		// set transition
 		ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-		ft.hide(currentVisibleFrag); // hide old fragment view
-		ft.show(fragToDisplay); // show new fragment
+		ft.replace(R.id.fragment_view_container, fragToDisplay);
 		ft.commit();
 
 		setAsFrontmostFragment(fragTag);
 	}
 
+//	private void showFragment(String fragTag, Instance i) {
+//		// if somehow we tried to transition to the fragment already showing, bail.
+//		if (fragTag.contentEquals(currentFragVisible)) return; // fixme: NPE on back button here from a dialogViewFrag.
+//		// settle any outstanding fragment tasks
+//		getSupportFragmentManager().executePendingTransactions();
+//		// if there is no currently visible fragment, set incoming one to current.
+//		if (currentFragVisible == null || currentFragVisible.isEmpty())
+//			currentFragVisible = fragTag;
+//		FragmentManager fm = getSupportFragmentManager();
+//		FragmentTransaction ft = fm.beginTransaction();
+//		// get specific fragments involved in transition
+//		Fragment currentVisibleFrag = fm.findFragmentByTag(currentFragVisible);
+//		Fragment fragToDisplay = fm.findFragmentByTag(fragTag);
+//		// set transition
+//		ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+//		ft.hide(currentVisibleFrag); // hide old fragment view
+//		ft.show(fragToDisplay); // show new fragment
+//		ft.commit();
+//
+//		setAsFrontmostFragment(fragTag);
+//	}
+//
 	private void setAsFrontmostFragment(String fragTag) {
 		// set visibility tracking vars
 		fragVisible.put(currentFragVisible, false);
 		fragVisible.put(fragTag, true);
 		currentFragVisible = fragTag;
+	}
+
+	public void dismissFragment() {
+
 	}
 
 	private void storeGame() {
@@ -609,50 +637,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		}
 	}
 
-	/*
-		@Override
-		public void onNavigationDrawerItemSelected(String itemName) {
-			// update the main content by replacing fragments
-			FragmentManager fragmentManager = getSupportFragmentManager();
 
-			if (itemName.equals("Quests")) {
-				fragmentManager.beginTransaction()
-						.replace(R.id.fragment_view_container, GamePlayQuestsFragment.newInstance(itemName))
-						.commit();
-			}
-			else if (itemName.equals("Map")) {
-					fragmentManager.beginTransaction()
-							.replace(R.id.fragment_view_container, GamePlayMapFragment.newInstance(itemName))
-							.commit();
-			}
-			else if (itemName.equals("Inventory")) {
-					fragmentManager.beginTransaction()
-							.replace(R.id.fragment_view_container, GamePlayInventoryFragment.newInstance(itemName))
-							.commit();
-			}
-			else if (itemName.equals("Scanner")) {
-					fragmentManager.beginTransaction()
-							.replace(R.id.fragment_view_container, GamePlayScannerFragment.newInstance(itemName))
-							.commit();
-			}
-			else if (itemName.equals("Decoder")) {
-					fragmentManager.beginTransaction()
-							.replace(R.id.fragment_view_container, GamePlayDecoderFragment.newInstance(itemName))
-							.commit();
-			}
-			else if (itemName.equals("Player")) {
-					fragmentManager.beginTransaction()
-							.replace(R.id.fragment_view_container, GamePlayPlayerFragment.newInstance(itemName))
-							.commit();
-			}
-			else if (itemName.equals("Notebook")) {
-					fragmentManager.beginTransaction()
-							.replace(R.id.fragment_view_container, GamePlayNoteFragment.newInstance(itemName))
-							.commit();
-			}
-		}
-
-	*/
 	public void onSectionAttached(int number) {
 		switch (number) {
 			case 1:
@@ -709,7 +694,14 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	@Override
 	public void fragmentPlaqueExit() {
-
+		this.onBackPressed();
+		// todo need to remove exiting plaque from the queue. It should be getting done but it's not. At least not here.
+		if (this.getFragmentManager().getBackStackEntryCount() == 0) {
+			this.showNavBar();
+			this.openNavDrawer();
+		}
+//		if (plaqueViewFragment != null)
+//			this.getFragmentManager().popBackStack();
 	}
 
 	@Override
@@ -720,6 +712,22 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	@Override
 	public void onSecondFragButtonClick(String message) {
 		String gotit = message;
+	}
+
+	public void showNavBar() {
+		mNavigationDrawerFragment.getActionBar().show();
+	}
+
+	public void hideNavBar() {
+		mNavigationDrawerFragment.getActionBar().hide();
+	}
+
+	public void openNavDrawer() {
+		mNavigationDrawerFragment.mDrawerLayout.openDrawer(mNavigationDrawerFragment.mFragmentContainerView);
+	}
+
+	public void closeNavDrawer() {
+		mNavigationDrawerFragment.mDrawerLayout.closeDrawer(mNavigationDrawerFragment.mFragmentContainerView);
 	}
 
 	public void fetchNoteById(long object_id) { // why is this here?? todo: get this out of here.
@@ -800,9 +808,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	*  GamePlayViewController Section (Separate class in iOS)
 	*
 	*/
-
-	boolean viewingObject = false;
-	public List<Long> local_inst_queue = new ArrayList<>();
 
 	public void tryDequeue() {
 		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Try Dequeue: ");
@@ -1166,6 +1171,11 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 //			[_MODEL_DISPLAY_QUEUE_ enqueueTab:[_MODEL_TABS_ tabForId:op.link_id]];             [delegate exitRequested];
 
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
 	}
 
 //	public void presentDisplay(UIViewController vc)

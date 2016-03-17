@@ -66,7 +66,11 @@
             android:layout_toLeftOf="@+id/iv_plaque_footer_right_arrow"
             android:layout_toStartOf="@+id/iv_plaque_footer_right_arrow"
             android:background="#fffefefe"
-            android:textSize="@dimen/textsize_large"/>
+            android:textSize="@dimen/textsize_large"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:paddingBottom="5dp"
+            android:paddingRight="10dp"/>
         <!-- Right end arrow  -->
         <ImageView
             android:id="@+id/iv_plaque_footer_right_arrow"

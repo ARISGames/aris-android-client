@@ -56,9 +56,10 @@ public class GamePlayNavDrawerFragment extends Fragment {
 	 */
 	private ActionBarDrawerToggle mDrawerToggle;
 
-	private DrawerLayout mDrawerLayout;
+	public DrawerLayout mDrawerLayout;
 	private ListView mDrawerListView;
-	private View mFragmentContainerView;
+	public View mFragmentContainerView;
+	public ActionBar mActionBar;
 
 	GamePlayActivity mGamePlayActivity;
 
@@ -310,7 +311,7 @@ public class GamePlayNavDrawerFragment extends Fragment {
 		actionBar.setTitle(R.string.app_name);
 	}
 
-	private ActionBar getActionBar() {
+	public ActionBar getActionBar() {
 //		return ((ActionBarActivity) getActivity()).getSupportActionBar();
 		return ((AppCompatActivity) getActivity()).getSupportActionBar();
 	}
