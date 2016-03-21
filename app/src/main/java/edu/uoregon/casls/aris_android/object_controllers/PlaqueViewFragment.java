@@ -171,10 +171,17 @@ public class PlaqueViewFragment extends Fragment {
 		if (plaque.continue_function.contentEquals("JAVASCRIPT")) {
 			// todo: [webView hookWithParams:@""];
 		} else if (plaque.continue_function.contentEquals("EXIT")) {
-			if (mListener != null) {
-				mListener.fragmentPlaqueExit();
-			}
+			this.dismissSelf();
 		}
+	}
+
+	private void dismissSelf() {
+		if (mListener != null) {
+			mListener.fragmentPlaqueDismiss();
+		}
+		// the following iOS logic wil happen in GamePlayActivity.fragmentPlaqueExit();
+//		if (tab != null)
+//			this.showNav();
 	}
 
 
@@ -214,7 +221,7 @@ public class PlaqueViewFragment extends Fragment {
 	 */
 	public interface OnFragmentInteractionListener {
 		// TODO: Update argument type and name
-		void fragmentPlaqueExit();
+		void fragmentPlaqueDismiss();
 		void onFragmentInteraction(Uri uri);
 	}
 }

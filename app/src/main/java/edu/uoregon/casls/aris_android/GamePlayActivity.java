@@ -693,15 +693,42 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	}
 
 	@Override
-	public void fragmentPlaqueExit() {
-		this.onBackPressed();
-		// todo need to remove exiting plaque from the queue. It should be getting done but it's not. At least not here.
-		if (this.getFragmentManager().getBackStackEntryCount() == 0) {
-			this.showNavBar();
-			this.openNavDrawer();
-		}
+	public void fragmentPlaqueDismiss() {
+//		this.onBackPressed(); // this is a sad way to tell the current fragment to quit.
+
 //		if (plaqueViewFragment != null)
 //			this.getFragmentManager().popBackStack();
+
+/* // iOS: GamePlayViewController.instantiableViewControllerRequestsDismissal
+		[((ARISViewController *)ivc).navigationController dismissViewControllerAnimated:NO completion:nil];
+		viewingObject = NO;
+
+		[self reSetOverlayControllersInVC:self atYDelta:-20];
+
+		[_MODEL_LOGS_ playerViewedContent:ivc.instance.object_type id:ivc.instance.object_id];
+		[self performSelector:@selector(tryDequeue) withObject:nil afterDelay:1];
+*/
+		// Android implementation of above:
+		// todo: make plaque fragment disband (quit) somewhere in here, but not before we're done referring to it.
+		viewingObject = false;
+		mGame.logsModel.playerViewedContent(plaqueViewFragment.instance.object_type, plaqueViewFragment.instance.object_id);
+		this.performSelector.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				tryDequeue();
+			}
+		}, 1000); //:@selector(tryDequeue) withObject:nil afterDelay:1);
+
+		if (plaqueViewFragment.tab != null) {
+			// Display the nav drawer at this point, until/unless the next UI view is triggered.
+			this.showNav();
+		}
+
+	}
+
+	private void showNav() {
+		this.showNavBar();
+		this.openNavDrawer();
 	}
 
 	@Override
