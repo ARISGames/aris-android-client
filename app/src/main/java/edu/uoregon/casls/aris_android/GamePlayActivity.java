@@ -695,23 +695,19 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	@Override
 	public void fragmentPlaqueDismiss() {
 //		this.onBackPressed(); // this is a sad way to tell the current fragment to quit.
-
 //		if (plaqueViewFragment != null)
 //			this.getFragmentManager().popBackStack();
 
-/* // iOS: GamePlayViewController.instantiableViewControllerRequestsDismissal
-		[((ARISViewController *)ivc).navigationController dismissViewControllerAnimated:NO completion:nil];
-		viewingObject = NO;
-
-		[self reSetOverlayControllersInVC:self atYDelta:-20];
-
-		[_MODEL_LOGS_ playerViewedContent:ivc.instance.object_type id:ivc.instance.object_id];
-		[self performSelector:@selector(tryDequeue) withObject:nil afterDelay:1];
-*/
-		// Android implementation of above:
-		// todo: make plaque fragment disband (quit) somewhere in here, but not before we're done referring to it.
+		// Android implementation of iOS GamePlayViewController.instantiableViewControllerRequestsDismissal:
+		// todo: make plaque fragment disband (stop) somewhere in here, but not before we're done referring to it.
+		// todo perhaps just hide it at this point and let it get replaced when the next view is enqueued. ?
+		// [((ARISViewController *)ivc).navigationController dismissViewControllerAnimated:NO completion:nil]; <-- I think this just the delegate. ?
 		viewingObject = false;
+		// [self reSetOverlayControllersInVC:self atYDelta:-20]; <-- Sets up a gameNotificationView.  Not sure what a gameNotificationView is.
+		// [_MODEL_LOGS_ playerViewedContent:ivc.instance.object_type id:ivc.instance.object_id];
 		mGame.logsModel.playerViewedContent(plaqueViewFragment.instance.object_type, plaqueViewFragment.instance.object_id);
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " fragmentPlaqueDismiss() called. about to call tryDequeue ");
+		// [self performSelector:@selector(tryDequeue) withObject:nil afterDelay:1];
 		this.performSelector.postDelayed(new Runnable() {
 			@Override
 			public void run() {
@@ -719,115 +715,23 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			}
 		}, 1000); //:@selector(tryDequeue) withObject:nil afterDelay:1);
 
+		// this happens in [*]ViewController.dismissSelf() in iOS; in Android we stuff them all in this method.
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " fragmentPlaqueDismiss(). looking at plaqueViewFragment.tab: " );
 		if (plaqueViewFragment.tab != null) {
+			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " fragmentPlaqueDismiss(). plaqueViewFragment.tab was not null so call showNav() " );
 			// Display the nav drawer at this point, until/unless the next UI view is triggered.
 			this.showNav();
 		}
-
+		// now tell this fragment to die? let's try...
+		if (plaqueViewFragment != null) {
+//			plaqueViewFragment.finish();  // nope.
+//			this.getFragmentManager().popBackStack(); // that didn't work.
+		}
 	}
 
 	private void showNav() {
 		this.showNavBar();
 		this.openNavDrawer();
-	}
-
-	@Override
-	public void onFragmentInteraction(Uri uri) {
-		Uri u = uri;
-	}
-
-	@Override
-	public void onSecondFragButtonClick(String message) {
-		String gotit = message;
-	}
-
-	public void showNavBar() {
-		mNavigationDrawerFragment.getActionBar().show();
-	}
-
-	public void hideNavBar() {
-		mNavigationDrawerFragment.getActionBar().hide();
-	}
-
-	public void openNavDrawer() {
-		mNavigationDrawerFragment.mDrawerLayout.openDrawer(mNavigationDrawerFragment.mFragmentContainerView);
-	}
-
-	public void closeNavDrawer() {
-		mNavigationDrawerFragment.mDrawerLayout.closeDrawer(mNavigationDrawerFragment.mFragmentContainerView);
-	}
-
-	public void fetchNoteById(long object_id) { // why is this here?? todo: get this out of here.
-		JSONObject jsonAddlData = new JSONObject();
-		try {
-			jsonAddlData.put("note_id", mGame.game_id);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-
-//		mServices.pollServer(Calls.HTTP_GET_NOTE, jsonAddlData);
-	}
-
-//	@Override
-//	public void onFragmentInteraction(Uri uri) {
-//		Uri u = uri;
-//	}
-
-//	@Override
-//	protected void onCreate(Bundle savedInstanceState) {
-//		super.onCreate(savedInstanceState);
-//		setContentView(R.layout.activity_game_play);
-//	}
-//
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//		// Inflate the menu; this adds items to the action bar if it is present.
-//		getMenuInflater().inflate(R.menu.menu_game_play, menu);
-//		return true;
-//	}
-//
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		// Handle action bar item clicks here. The action bar will
-//		// automatically handle clicks on the Home/Up button, so long
-//		// as you specify a parent activity in AndroidManifest.xml.
-//		int id = item.getItemId();
-//
-//		//noinspection SimplifiableIfStatement
-//		if (id == R.id.action_settings) {
-//			return true;
-//		}
-//
-//		return super.onOptionsItemSelected(item);
-//	}
-//
-//	@Override
-//	public void onNavigationDrawerItemSelected(int position) {
-//
-//	}
-
-	@Override
-	public void onSaveInstanceState(Bundle savedInstanceState) {
-		// Save UI state changes to the savedInstanceState.
-		// This bundle will be passed to onCreate if the process is
-		// killed and restarted.
-		Gson gson = new Gson();
-		String jsonGame = gson.toJson(mGame);
-		savedInstanceState.putString("mGame", jsonGame);
-		savedInstanceState.putSerializable(FRAGMENT_VISIBILITY_MAP, fragVisible);
-		super.onSaveInstanceState(savedInstanceState);
-	}
-
-	@Override
-	public void onRestoreInstanceState(Bundle savedInstanceState) {
-		super.onRestoreInstanceState(savedInstanceState);
-		// Restore UI state from the savedInstanceState.
-		// This bundle has also been passed to onCreate.
-		Gson gson = new Gson();
-
-		mGame = gson.fromJson(savedInstanceState.getString("mGame"), Game.class); // restore game from stored json in savedInstanceState
-		mGame.initContext(this); // reset context
-		mGame.initModelContexts(); // re-initialize all the embedded objects' references to the Activity context.
 	}
 
 	/*
@@ -837,12 +741,14 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	*/
 
 	public void tryDequeue() {
-		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Try Dequeue: ");
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Try Dequeue: viewingObject = " + viewingObject);
 		//Doesn't currently have the view-heirarchy authority to display.
 		//if(!(self.isViewLoaded && self.view.window)) //should work but apple's timing is terrible
 		if (viewingObject) return;
 		Object o;
-		if ((o = mGame.displayQueueModel.dequeue()) != null) {
+		o = mGame.displayQueueModel.dequeue(); // fixme: either the returned object didn't get removed from the Q or it got readded somewhere. See TriggersModel.updatePlayerTriggers for last breadcrumb on my trail
+		if (o != null) {
+			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " in tryDeQueue(): object is class " + o.getClass().getSimpleName());
 			if (o instanceof Trigger) this.displayTrigger((Trigger) o);
 			else if (o instanceof Instance) this.displayInstance((Instance) o);
 			else if (o instanceof Tab) this.displayTab((Tab) o);
@@ -1205,6 +1111,56 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		super.onBackPressed();
 	}
 
+	public void showNavBar() {
+		mNavigationDrawerFragment.getActionBar().show();
+	}
+
+	public void hideNavBar() {
+		mNavigationDrawerFragment.getActionBar().hide();
+	}
+
+	public void openNavDrawer() {
+		mNavigationDrawerFragment.mDrawerLayout.openDrawer(mNavigationDrawerFragment.mFragmentContainerView);
+	}
+
+	public void closeNavDrawer() {
+		mNavigationDrawerFragment.mDrawerLayout.closeDrawer(mNavigationDrawerFragment.mFragmentContainerView);
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		// Save UI state changes to the savedInstanceState.
+		// This bundle will be passed to onCreate if the process is
+		// killed and restarted.
+		Gson gson = new Gson();
+		String jsonGame = gson.toJson(mGame);
+		savedInstanceState.putString("mGame", jsonGame);
+		savedInstanceState.putSerializable(FRAGMENT_VISIBILITY_MAP, fragVisible);
+		super.onSaveInstanceState(savedInstanceState);
+	}
+
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		// Restore UI state from the savedInstanceState.
+		// This bundle has also been passed to onCreate.
+		Gson gson = new Gson();
+
+		mGame = gson.fromJson(savedInstanceState.getString("mGame"), Game.class); // restore game from stored json in savedInstanceState
+		mGame.initContext(this); // reset context
+		mGame.initModelContexts(); // re-initialize all the embedded objects' references to the Activity context.
+	}
+
+	@Override
+	public void onFragmentInteraction(Uri uri) {
+		Uri u = uri;
+	}
+
+	@Override
+	public void onSecondFragButtonClick(String message) {
+		String gotit = message;
+	}
+
 //	public void presentDisplay(UIViewController vc)
 //	{
 //		this.presentViewController:vc animated:NO completion:nil);
@@ -1213,5 +1169,43 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 //		this.reSetOverlayControllersInVC:vc atYDelta:20);
 //	}
 
+
+//	@Override
+//	public void onFragmentInteraction(Uri uri) {
+//		Uri u = uri;
+//	}
+
+//	@Override
+//	protected void onCreate(Bundle savedInstanceState) {
+//		super.onCreate(savedInstanceState);
+//		setContentView(R.layout.activity_game_play);
+//	}
+//
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		// Inflate the menu; this adds items to the action bar if it is present.
+//		getMenuInflater().inflate(R.menu.menu_game_play, menu);
+//		return true;
+//	}
+//
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		// Handle action bar item clicks here. The action bar will
+//		// automatically handle clicks on the Home/Up button, so long
+//		// as you specify a parent activity in AndroidManifest.xml.
+//		int id = item.getItemId();
+//
+//		//noinspection SimplifiableIfStatement
+//		if (id == R.id.action_settings) {
+//			return true;
+//		}
+//
+//		return super.onOptionsItemSelected(item);
+//	}
+//
+//	@Override
+//	public void onNavigationDrawerItemSelected(int position) {
+//
+//	}
 
 }

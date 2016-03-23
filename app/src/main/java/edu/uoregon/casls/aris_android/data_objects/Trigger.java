@@ -38,7 +38,8 @@ public class Trigger {
 
 	public Boolean mergeDataFromTrigger(Trigger t) //returns whether or not an update occurred
 	{
-		Boolean e = this.equals(t);//[self trigIsEqual:t];
+//		Boolean e = this.equals(t);//self trigIsEqual:t; // can't just use this.equals(t); instead use sutom compare method
+		Boolean e = this.trigIsEqual(t);
 		trigger_id = t.trigger_id;
 		requirement_root_package_id = t.requirement_root_package_id;
 		instance_id = t.instance_id;
@@ -62,11 +63,33 @@ public class Trigger {
 		return e;
 	}
 
+	private Boolean trigIsEqual(Trigger t) {
+		return
+				(trigger_id == t.trigger_id &&
+						requirement_root_package_id == t.requirement_root_package_id &&
+						instance_id == t.instance_id &&
+						scene_id == t.scene_id &&
+						type.contentEquals(t.type) &&
+						name.contentEquals(t.name) &&
+						title().contentEquals(t.title()) &&
+						this.icon_media_id == t.icon_media_id && //must use 'this' to parallel fallthrough to parent
+						location.getLatitude() == t.location.getLatitude() &&
+						location.getLongitude() == t.location.getLongitude() &&
+						distance == t.distance &&
+						infinite_distance == t.infinite_distance &&
+						wiggle == t.wiggle &&
+						show_title == t.show_title &&
+						hidden == t.hidden &&
+						trigger_on_enter == t.trigger_on_enter &&
+						qr_code.contentEquals(t.qr_code)) &&
+						seconds == t.seconds;
+	}
+
 	public String title() { // is trigger.title ever used anywhere meaningfully?
 //		Instance i;
 		if (title != null && !title.isEmpty()) return title;
-		else if(!name.isEmpty()) return name;
-//		else if((i = [_MODEL_INSTANCES_ instanceForId:instance_id]) && i.name) return i.name;
+		else if (!name.isEmpty()) return name;
+//		else if((i = _MODEL_INSTANCES_ instanceForId:instance_id) && i.name) return i.name;
 		return "";
 	}
 

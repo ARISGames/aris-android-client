@@ -128,12 +128,23 @@ public class RequirementsModel extends ARISModel {
 	}
 
 	public boolean evaluateRequirementRoot(long requirement_root_package_id) {
-		if (requirement_root_package_id == 0) return true; // 0 is true!?
-		List<RequirementAndPackage> ands = this.andPackagesForRootPackageId(requirement_root_package_id);
-		if (ands.size() == 0) return true;
-		for (RequirementAndPackage and : ands) {
-			if (this.evaluateRequirementAnd(and.requirement_and_package_id)) return true;
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " evaluateRequirementRoot() requirement_root_package_id = " + requirement_root_package_id);
+		if (requirement_root_package_id == 0) {
+//			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " evaluateRequirementRoot() (requirement_root_package_id == 0) returning === TRUE ");
+			return true; // 0 is true!?
 		}
+		List<RequirementAndPackage> ands = this.andPackagesForRootPackageId(requirement_root_package_id);
+		if (ands.size() == 0) {
+//			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " evaluateRequirementRoot() (ands.size() == 0) returning === TRUE ");
+			return true;
+		}
+		for (RequirementAndPackage and : ands) {
+			if (this.evaluateRequirementAnd(and.requirement_and_package_id)) {
+//				Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " evaluateRequirementRoot() (this.evaluateRequirementAnd() was true) returning === TRUE and.requirement_and_package_id = " + and.requirement_and_package_id);
+				return true;
+			}
+		}
+//		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " evaluateRequirementRoot() Fell through returning === FALSE ");
 		return false;
 	}
 
@@ -142,7 +153,7 @@ public class RequirementsModel extends ARISModel {
 		List<RequirementAtom> atoms = this.atomsForAndPackageId(requirement_and_package_id); //NSArray atoms = this.atomsForAndPackageId:requirement_and_package_id;
 		if (atoms.size() == 0) return false;
 		for (RequirementAtom atom : atoms) {
-			if (this.evaluateRequirementAtom(atom.requirement_atom_id)) return false;
+			if (!this.evaluateRequirementAtom(atom.requirement_atom_id)) return false;
 		}
 		return true;
 	}

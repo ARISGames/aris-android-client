@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
+import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
 import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.data_objects.Plaque;
@@ -168,6 +170,8 @@ public class PlaqueViewFragment extends Fragment {
 	}
 
 	public void continueButtonTouched(View v) {
+		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " continueButtonTouched. plaque.continue_function = " + plaque.continue_function);
+
 		if (plaque.continue_function.contentEquals("JAVASCRIPT")) {
 			// todo: [webView hookWithParams:@""];
 		} else if (plaque.continue_function.contentEquals("EXIT")) {

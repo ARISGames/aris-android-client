@@ -699,11 +699,13 @@ public class AppServices {
 
 		// Post the request
 		// 	post data should look like this: {"auth":{"user_id":1,"key":"F7...yzX4"},"game_id":"6"}
+		// fixme: OutOfMemoryError here occasionally during activiy loop. Some way to check and defer or cancel this Rq if memory too low?
 		if (AppUtils.isNetworkAvailable(mGamePlayAct.getApplicationContext())) {
 			AsyncHttpClient client = new AsyncHttpClient();
 //			static String reqCall
 //			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + "AsyncHttpClient Sending Req: " + request_url );
-			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + "AsyncHttpClient Sending Req: " + request_url + "Params: " + jsonMain.toString());
+//			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + "AsyncHttpClient Sending Req: " + request_url + "Params: " + jsonMain.toString());
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient Sending Req: " + request_url + "Params: " + jsonMain.toString());
 			client.post(context, request_url, entity, "application/json", new JsonHttpResponseHandler() {
 				@Override
 				public void onSuccess(int statusCode, Header[] headers, JSONObject jsonReturn) {

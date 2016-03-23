@@ -85,7 +85,7 @@ public class Instance {
 			return mGamePlayAct.mGame.scenesModel.sceneForId(this.object_id);
 		if (this.object_type.contentEquals("NOTE")) {
 			if (mGamePlayAct.mGame.notesModel.noteForId(this.object_id) == null) {
-				mGamePlayAct.fetchNoteById(this.object_id);
+				mGamePlayAct.mAppServices.fetchNoteById(this.object_id);
 			}
 			return mGamePlayAct.mGame.notesModel.noteForId(this.object_id);
 		}
@@ -107,7 +107,8 @@ public class Instance {
 			return mGamePlayAct.mGame.scenesModel.sceneForId(this.object_id).name;
 		if (this.object_type.contentEquals("NOTE")) {
 			if (mGamePlayAct.mGame.notesModel.noteForId(this.object_id) == null) {
-				mGamePlayAct.fetchNoteById(this.object_id);
+				mGamePlayAct.mAppServices.fetchNoteById(this.object_id);
+//				mGamePlayAct.fetchNoteById(this.object_id);
 			}
 			return mGamePlayAct.mGame.notesModel.noteForId(this.object_id).name;
 		}
@@ -129,7 +130,7 @@ public class Instance {
 			return mGamePlayAct.mGame.scenesModel.sceneForId(this.object_id).icon_media_id;
 		if (this.object_type.contentEquals("NOTE")) {
 			if (mGamePlayAct.mGame.notesModel.noteForId(this.object_id) == null) {
-				mGamePlayAct.fetchNoteById(this.object_id);
+				mGamePlayAct.mAppServices.fetchNoteById(this.object_id);
 			}
 			return mGamePlayAct.mGame.notesModel.noteForId(this.object_id).icon_media_id;
 		}

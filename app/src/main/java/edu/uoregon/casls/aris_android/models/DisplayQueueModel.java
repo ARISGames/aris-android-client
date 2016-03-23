@@ -74,7 +74,7 @@ public class DisplayQueueModel extends ARISModel {
 	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Trigger Timer has Cycled  - - - - - - - - TRIGG!");
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Trigger Timer has Cycled  - - - - - - - - TRIGG!");
 			handleTriggerPollerMessage(intent);
 		}
 	};
@@ -139,8 +139,8 @@ public class DisplayQueueModel extends ARISModel {
 
 	public void injectTab(Tab t) { this.inject(t); }
 
-	public Object dequeue() {
-		this.purgeInvalidFromQueue();
+	public Object dequeue() { // problem: after arriving at a (plaque in this case, the queue should be empty. It's not. It has the Plaque in it.
+		this.purgeInvalidFromQueue();// displayQueue should be size = 0 after continue in plaquetest game
 		Object o = null;
 		if (!displayQueue.isEmpty()) {
 			o = displayQueue.get(0);

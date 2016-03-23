@@ -624,7 +624,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 						//populate hashmap as trigger_id, Quest Obj>
 						triggers.add(trigger);
 					}
-					Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Sending mDispatch: services_player_triggers_received() ");
+					Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Sending mDispatch: services_player_triggers_received() Triggers size = " + triggers.size());
 							mGamePlayAct.mDispatch.services_player_triggers_received(triggers);
 				}
 			}

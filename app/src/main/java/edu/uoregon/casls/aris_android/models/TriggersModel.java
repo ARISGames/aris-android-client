@@ -102,13 +102,13 @@ public class TriggersModel extends ARISModel {
 		int size = newTriggers.size();
 		for (Trigger newt : newTriggers) {
 
-			Trigger exist = this.triggerForId(newt.trigger_id);
+			Trigger exist = this.triggerForId(newt.trigger_id); // iOS: exists = "LOCATION" trigger
 
 			if (exist != null) {
-				if (!exist.mergeDataFromTrigger(newt)) {
-					invalidatedTriggers.add(exist);
+				if (!exist.mergeDataFromTrigger(newt)) { // iOS: exist.mergeDataFromTrigger(newt) returns True (YES)
+					invalidatedTriggers.add(exist);        // iOS: should NOT get here
 				}
-				conformingTriggers.add(exist);
+				conformingTriggers.add(exist);              // get's here regardless.
 			}
 			else {
 				triggers.put(newt.trigger_id, newt);
@@ -123,29 +123,36 @@ public class TriggersModel extends ARISModel {
 	}
 
 	public void playerTriggersReceived(List<Trigger> newTriggers) {
-
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " About to call updatePlayerTriggers(). newTriggers size = " + newTriggers.size());
 		this.updatePlayerTriggers(this.conformTriggersListToFlyweight(newTriggers));
 	}
 
 	public void updatePlayerTriggers(List<Trigger> newTriggers) {
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Starting updatePlayerTriggers(). newTriggers size = " + newTriggers.size());
+		if (newTriggers.isEmpty() || newTriggers.size() < 1)
+			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " updateTriggers entered with EMPTY LIST of newTriggers. Size = " + newTriggers.size());
 		List<Trigger> addedTriggers = new ArrayList<>();
 		List<Trigger> removedTriggers = new ArrayList<>();
-
+		//
 		//find added
-		boolean flagNew;
+		//
+		// redundant flag initialization since we'll always enter this loop and
+		// isNew will get set, but here just for clarity, but we cannot assume we'll
+		// enter the 'find removed' loop since playerTriggers might be empty.
+		boolean isNew = false;
 		for (Trigger newTrigger : newTriggers) {
-			flagNew = true;
+			isNew = true;
 			for (Trigger oldTrigger : playerTriggers) {
 				if (newTrigger.trigger_id == oldTrigger.trigger_id)
-					flagNew = false;
+					isNew = false;
 			}
-			if (flagNew) {
+			if (isNew) { // FIXME: watch this spot and figure out why it gets different results than iOS.
 				addedTriggers.add(newTrigger);
 			}
 		}
 
 		//find removed
-		boolean removed;
+		boolean removed = false;
 		for (Trigger oldTrigger : playerTriggers) {
 			removed = true;
 
@@ -186,19 +193,23 @@ public class TriggersModel extends ARISModel {
 			List<Instance> rejected = new ArrayList<>();
 			List<Trigger> ptrigs = new ArrayList<>();
 			List<Trigger> ts = new ArrayList<>(triggers.values());
+			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Starting requestPlayerTriggers(). ts size = " + ts.size());
 
 			for (Trigger t : ts) {
 				if (t.scene_id != mGame.scenesModel.playerScene.scene_id  || !mGame.requirementsModel.evaluateRequirementRoot(t.requirement_root_package_id)) {
+					Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Starting requestPlayerTriggers(). Stopping Loop at pt 1. t.requirement_root_package_id = " + t.requirement_root_package_id);
 					continue;
 				}
 				Instance i = mGame.instancesModel.instanceForId(t.instance_id);
 
 				if (i == null) {
+					Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Starting requestPlayerTriggers(). Stopping Loop at pt 2 ");
 					continue;
 				}
 				if (i.factory_id != 0) {
 					Factory f = mGame.factoriesModel.factoryForId(i.factory_id);
 					if (f == null) {
+						Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Starting requestPlayerTriggers(). Stopping Loop at pt 3 ");
 						continue;
 					}
 					Date now = new Date(); // should be now.
@@ -206,12 +217,14 @@ public class TriggersModel extends ARISModel {
 //					NSLog(@"%d",time);
 					if (time > f.produce_expiration_time) {
 						rejected.add(i);
+						Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Starting requestPlayerTriggers(). Stopping Loop at pt 4 ");
 						continue;
 					}
 				}
 				ptrigs.add(t);
 			}
 			Log.i(AppConfig.LOGTAG, getClass().getSimpleName() + "Accepted: " + ptrigs.size() + ", Rejected: " + rejected.size());
+			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Finishing requestPlayerTriggers(). ptrigs size = " + ptrigs.size());
 			mGamePlayAct.mDispatch.services_player_triggers_received(ptrigs); //("SERVICES_PLAYER_TRIGGERS_RECEIVED", null, @{@"triggers":ptrigs});
 		} // for now treat every game as HYBRID, since that's really all we need to worry about in v1.0 of Android
 		if (!this.playerDataReceived() || mGame.network_level.equals("HYBRID") || mGame.network_level.equals("REMOTE")) {
@@ -221,7 +234,7 @@ public class TriggersModel extends ARISModel {
 
 	// null trigger (id == 0) NOT flyweight!!! (to allow for temporary customization safety)
 	public Trigger triggerForId(long trigger_id) {
-		if (trigger_id != 0) {
+		if (trigger_id == 0) {
 			return new Trigger();
 		}
 		Trigger t = triggers.get(trigger_id);

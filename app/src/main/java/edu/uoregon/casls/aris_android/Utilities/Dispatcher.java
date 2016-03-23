@@ -1,5 +1,7 @@
 package edu.uoregon.casls.aris_android.Utilities;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
