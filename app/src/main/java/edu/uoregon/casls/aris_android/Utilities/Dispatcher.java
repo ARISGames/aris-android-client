@@ -128,7 +128,7 @@ public class Dispatcher {
 //	MODEL_GAME_BEGAN",nil,nil); // Will be handled in GamePlayActivity -sem
 	public void model_game_began() {
 		mGamePlayAct.mGame.gameBegan();
-		mGamePlayAct.gameBegan(); // possibly not needed.
+		mGamePlayAct.gameBegan(); // possibly not needed. // or maybe this is where I need to load the tab fragment underneith the other views.
 	}
 
 	//	MODEL_GAME_CHOSEN",nil,nil); // Will be handled in GamePlayActivity -sem
@@ -394,12 +394,12 @@ public class Dispatcher {
 //	MODEL_TABS_LESS_AVAILABLE",nil,deltas);
 
 	public void model_tabs_less_available(Map<String, List<Tab>> deltas) {
-		// todo: GamePlayTabSelectorViewController.refreshFromModel()
+		mGamePlayAct.mGamePlayTabSelectorViewController.refreshFromModel();
 	}
 
 	//	MODEL_TABS_NEW_AVAILABLE",nil,deltas);
 	public void model_tabs_new_available(Map<String, List<Tab>> deltas) {
-		// todo: GamePlayTabSelectorViewController.refreshFromModel()
+		mGamePlayAct.mGamePlayTabSelectorViewController.refreshFromModel();
 	}
 
 	//	MODEL_TAGS_AVAILABLE",nil,nil);

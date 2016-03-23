@@ -90,6 +90,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	public  JSONObject      mJsonAuth;
 	public Map<Long, Media>  mGameMedia = new LinkedHashMap<>();
 	public Map<String, User> mGameUsers = new LinkedHashMap<>();
+	public GamePlayTabSelectorViewController mGamePlayTabSelectorViewController;
 
 	// fragment views for game. Acting in place of DisplayViewController classes in iOS.
 	// (may want to centralize these in a Navigation Controller)
@@ -170,6 +171,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mResposeHandler = new ResponseHandler(); // Where calls to server return for landing.
 		mMediaModel = new MediaModel(this);
 		mUsersModel = new UsersModel(this);
+		mGamePlayTabSelectorViewController = new GamePlayTabSelectorViewController();
+
+		viewingObject = false;
 
 		// Having arrived here in this activity is tantamount to the
 		//   "LoadingViewController.gameChosen->RootViewController.startLoading" call hierarchy as in iOS
@@ -363,7 +367,15 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	// Stubs from iOS RootViewController. May be unnecessary in Android vers. but included while developing App just in case they become useful.
 	public void gameBegan() { // stub for potential use later to duplicate RootViewController behaviours as exist in iOS vs.
 		// in iOS, initializes View Controller. Not much else.
-//		gamePlayViewController = new GamePlayViewController alloc] initWithDelegate:self);
+		// todo: excpet of course loading the tabViewController (load tab fragment first so that any
+		// todo: exiting fragment popped off the stack will wind up back here.)
+
+//		gamePlayViewController = new GamePlayViewController alloc] initWithDelegate:self); // this initializer happens to be where the tabs get presented
+		// (from GamePlayViewController.initWithDeligate)
+//		gamePlayTabSelectorController = [[GamePlayTabSelectorViewController alloc] initWithDelegate:self];
+		// set up tab appropriate tab fragment()
+		mGamePlayTabSelectorViewController.initContext(this); // also serves many of the functions of iOS GamePlayTabSelectorViewControllerinitWithDelegate
+
 //		this.displayContentController:gamePlayViewController);
 	}
 
@@ -399,9 +411,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	//
 	//
-	// TODO: Need to replace this mode of fragment swapping with the more taditional create/dispose version
-	// TODO: will also need to rememeber to reset the boolean viewingObject to false when disposing of any frangment
-	// TODO: perhaps that should happen in the fragment's onDestroyView()/onDestroy()/onDetatch()
+	// TODO: Need to replace this mode of fragment swapping with the more traditional create/dispose version
+	// TODO: will also need to remember to reset the boolean viewingObject to false when disposing of any fragment
+	// TODO: perhaps that should happen in the fragment's onDestroyView()/onDestroy()/onDetach()
 	//
 	//
 
@@ -429,7 +441,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 //	private void showFragment(String fragTag, Instance i) {
 //		// if somehow we tried to transition to the fragment already showing, bail.
-//		if (fragTag.contentEquals(currentFragVisible)) return; // fixme: NPE on back button here from a dialogViewFrag.
+//		if (fragTag.contentEquals(currentFragVisible)) return;
 //		// settle any outstanding fragment tasks
 //		getSupportFragmentManager().executePendingTransactions();
 //		// if there is no currently visible fragment, set incoming one to current.
@@ -724,10 +736,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		}
 		// now tell this fragment to die? let's try...
 		if (plaqueViewFragment != null) {
-			this.onBackPressed();
-//			if (!viewingObject) { // temporary
-//				this.showNav();
-//			}
+			this.onBackPressed(); // todo: is there not a more graceful way to tell a fragment to bail?
+			if (!viewingObject) { // temporary
+				this.showNavBar();
+			}
 
 //			plaqueViewFragment.finish();  // nope.
 //			this.getFragmentManager().popBackStack(); // that didn't work.
