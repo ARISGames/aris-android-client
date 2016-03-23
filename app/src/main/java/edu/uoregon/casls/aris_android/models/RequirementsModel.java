@@ -128,7 +128,7 @@ public class RequirementsModel extends ARISModel {
 	}
 
 	public boolean evaluateRequirementRoot(long requirement_root_package_id) {
-		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " evaluateRequirementRoot() requirement_root_package_id = " + requirement_root_package_id);
+//		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " evaluateRequirementRoot() requirement_root_package_id = " + requirement_root_package_id);
 		if (requirement_root_package_id == 0) {
 //			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " evaluateRequirementRoot() (requirement_root_package_id == 0) returning === TRUE ");
 			return true; // 0 is true!?

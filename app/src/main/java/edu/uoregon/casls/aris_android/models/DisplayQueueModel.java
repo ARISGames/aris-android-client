@@ -74,7 +74,7 @@ public class DisplayQueueModel extends ARISModel {
 	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Trigger Timer has Cycled  - - - - - - - - TRIGG!");
+//			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Trigger Timer has Cycled  - - - - - - - - TRIGG!");
 			handleTriggerPollerMessage(intent);
 		}
 	};

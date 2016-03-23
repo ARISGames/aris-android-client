@@ -95,7 +95,7 @@ public class LogsModel extends ARISModel {
 	}
 
 	public void playerViewedContent(String content, long content_id) {
-		if (mGame.network_level.contentEquals("LOCAL")) {
+		if (!mGame.network_level.contentEquals("LOCAL")) {
 			if (content.contentEquals("PLAQUE"))
 				mGamePlayAct.mAppServices.logPlayerViewedPlaqueId(content_id);
 			if (content.contentEquals("ITEM"))

@@ -716,7 +716,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		}, 1000); //:@selector(tryDequeue) withObject:nil afterDelay:1);
 
 		// this happens in [*]ViewController.dismissSelf() in iOS; in Android we stuff them all in this method.
-		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " fragmentPlaqueDismiss(). looking at plaqueViewFragment.tab: " );
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " fragmentPlaqueDismiss(). looking at plaqueViewFragment.tab: ");
 		if (plaqueViewFragment.tab != null) {
 			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " fragmentPlaqueDismiss(). plaqueViewFragment.tab was not null so call showNav() " );
 			// Display the nav drawer at this point, until/unless the next UI view is triggered.
@@ -724,6 +724,11 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		}
 		// now tell this fragment to die? let's try...
 		if (plaqueViewFragment != null) {
+			this.onBackPressed();
+//			if (!viewingObject) { // temporary
+//				this.showNav();
+//			}
+
 //			plaqueViewFragment.finish();  // nope.
 //			this.getFragmentManager().popBackStack(); // that didn't work.
 		}
@@ -746,7 +751,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		//if(!(self.isViewLoaded && self.view.window)) //should work but apple's timing is terrible
 		if (viewingObject) return;
 		Object o;
-		o = mGame.displayQueueModel.dequeue(); // fixme: either the returned object didn't get removed from the Q or it got readded somewhere. See TriggersModel.updatePlayerTriggers for last breadcrumb on my trail
+		o = mGame.displayQueueModel.dequeue();
 		if (o != null) {
 			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " in tryDeQueue(): object is class " + o.getClass().getSimpleName());
 			if (o instanceof Trigger) this.displayTrigger((Trigger) o);

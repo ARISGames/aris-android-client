@@ -146,7 +146,7 @@ public class TriggersModel extends ARISModel {
 				if (newTrigger.trigger_id == oldTrigger.trigger_id)
 					isNew = false;
 			}
-			if (isNew) { // FIXME: watch this spot and figure out why it gets different results than iOS.
+			if (isNew) {
 				addedTriggers.add(newTrigger);
 			}
 		}
