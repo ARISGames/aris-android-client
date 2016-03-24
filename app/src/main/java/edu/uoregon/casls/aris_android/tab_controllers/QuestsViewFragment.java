@@ -18,6 +18,7 @@ public class QuestsViewFragment extends Fragment {
 	*/
 
 	private static final String ARG_SECTION_NUMBER = "section_number";
+	private transient GamePlayActivity mGamePlayAct;
 
 	/**
 	 * Returns a new instance of this fragment for the given section
@@ -43,18 +44,22 @@ public class QuestsViewFragment extends Fragment {
 	public QuestsViewFragment() {
 	}
 
+	public void initContext(GamePlayActivity gamePlayAct) {
+		mGamePlayAct = gamePlayAct;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_quests_view, container, false);
+		mGamePlayAct.showNavBar();
 		return rootView;
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		((GamePlayActivity) activity).onSectionAttached(
-				getArguments().getInt(ARG_SECTION_NUMBER));
-	}
-
+//	@Override
+//	public void onAttach(Activity activity) {
+//		super.onAttach(activity);
+//		((GamePlayActivity) activity).onSectionAttached(
+//				getArguments().getInt(ARG_SECTION_NUMBER));
+//	}
 }

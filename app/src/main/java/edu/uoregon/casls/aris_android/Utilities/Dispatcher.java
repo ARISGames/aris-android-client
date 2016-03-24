@@ -188,6 +188,12 @@ public class Dispatcher {
 		// no listeners currently
 	}
 
+	//  MODEL_GAME_LEFT",nil,nil)
+	public void model_game_left() {
+		mGamePlayAct.mGame.gameLeft();
+		// RootViewController: _ARIS_NOTIF_LISTEN_(@"MODEL_GAME_LEFT",self,@selector(gameLeft),nil);
+	}
+
 	//	MODEL_GROUP_TOUCHED",nil,nil);
 	public void model_group_touched() {
 		// no listeners
@@ -717,6 +723,7 @@ public class Dispatcher {
 
 	public void player_percent_loaded(float v) {
 	}
+
 
 
 //	WIFI_CONNECTED",self,nil); break;

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
 
 
@@ -32,6 +33,7 @@ public class MapViewFragment extends Fragment {
 	private String mParam2;
 
 	private OnFragmentInteractionListener mListener;
+	private GamePlayActivity mGamePlayAct   ;
 
 	/**
 	 * Use this factory method to create a new instance of
@@ -117,6 +119,10 @@ public class MapViewFragment extends Fragment {
 	public void onDetach() {
 		super.onDetach();
 		mListener = null;
+	}
+
+	public void initContext(GamePlayActivity gamePlayAct) {
+		mGamePlayAct = gamePlayAct;
 	}
 
 	/**

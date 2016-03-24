@@ -2,6 +2,7 @@ package edu.uoregon.casls.aris_android.models;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.Map;
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Tab;
+import edu.uoregon.casls.aris_android.services.TabCompareBySortIndex;
 
 /**
  * Created by smorison on 8/20/15.
@@ -181,6 +183,9 @@ public class TabsModel extends ARISModel {
 
 	public List<String> playerTabTypes() {
 		List<String> playerTabTypes = new ArrayList<>(playerTabs.size());
+		// sort by sort index first.
+		Collections.sort(playerTabs, new TabCompareBySortIndex());
+
 		for (Tab pTab : playerTabs) {
 			playerTabTypes.add(pTab.type);
 		}

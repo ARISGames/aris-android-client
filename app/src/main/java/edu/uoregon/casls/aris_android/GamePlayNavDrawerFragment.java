@@ -316,6 +316,10 @@ public class GamePlayNavDrawerFragment extends Fragment {
 		return ((AppCompatActivity) getActivity()).getSupportActionBar();
 	}
 
+	public void refreshFromModel() {
+		this.addItems(mGamePlayActivity.mGame.tabsModel.playerTabTypes());
+	}
+
 	public void addItems(List<String> playerTabNames) {
 		String iconURL;
 		for (String tabName : playerTabNames) {

@@ -127,6 +127,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	 */
 	private CharSequence mTitle;
 	private long         preferred_game_id;
+	private boolean leave_game_enabled;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -374,7 +375,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		// (from GamePlayViewController.initWithDeligate)
 //		gamePlayTabSelectorController = [[GamePlayTabSelectorViewController alloc] initWithDelegate:self];
 		// set up tab appropriate tab fragment()
-		mGamePlayTabSelectorViewController.initContext(this); // also serves many of the functions of iOS GamePlayTabSelectorViewControllerinitWithDelegate
+//		mGamePlayTabSelectorViewController.initContext(this); // also serves many of the functions of iOS GamePlayTabSelectorViewControllerinitWithDelegate
+//		mGamePlayTabSelectorViewController.setupDefaultTab();
 
 //		this.displayContentController:gamePlayViewController);
 	}
@@ -399,11 +401,22 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mNavigationDrawerFragment.setUp(
 				R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
+
+		// set up background tab:
+		mGamePlayTabSelectorViewController.initContext(this); // also serves many of the functions of iOS GamePlayTabSelectorViewControllerinitWithDelegate
+		mGamePlayTabSelectorViewController.setupDefaultTab();
+
+		"Note for next week: tab fragment is overlaying with plaque fragment. " +
+				"Find a way to attach the tab before and have it get pushed into the backstack so " +
+				"that when the last play fragment quits, the stack will pop the tab back up. may " +
+				"need to just do all this programatically. i.e. check after fragment detaches to " +
+				"see what tab should be displayed. What does iOS do?";
+
 //		mNavigationDrawerFragment.setMenuVisibility(false); // no workie
 //		mNavigationDrawerFragment.setHasOptionsMenu(false);
 
-		boolean debugThis = true; // dev debugging
-		if (debugThis) checkGameFile(); // dev debugging delete or disable after code is working.
+		boolean debugThis = true; // todo: dev debugging
+		if (debugThis) checkGameFile(); // todo: dev debugging delete or disable after code is working.
 
 		mGame.logsModel.playerEnteredGame(); //		mGame.logsModel.playerEnteredGame);
 		mDispatch.model_game_began(); // calls mGame.gameBegan() and mGamePlayAct.gameBegan()
@@ -461,7 +474,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 //		setAsFrontmostFragment(fragTag);
 //	}
 //
-	private void setAsFrontmostFragment(String fragTag) {
+	public void setAsFrontmostFragment(String fragTag) {
 		// set visibility tracking vars
 		fragVisible.put(currentFragVisible, false);
 		fragVisible.put(fragTag, true);
@@ -1176,6 +1189,14 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	@Override
 	public void onSecondFragButtonClick(String message) {
 		String gotit = message;
+	}
+
+	public void leaveGame() {
+		mGame.endPlay();
+		mGame = null;
+		this.leave_game_enabled = true;
+//		[_DEFAULTS_ saveUserDefaults]; // <-- todo
+		mDispatch.model_game_left();
 	}
 
 //	public void presentDisplay(UIViewController vc)
