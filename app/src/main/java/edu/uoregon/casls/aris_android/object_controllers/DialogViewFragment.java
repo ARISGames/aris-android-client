@@ -234,6 +234,22 @@ public class DialogViewFragment extends Fragment {
 		DialogOption op = dialogsModel.dialogOptions.get(dialogOptionId);
 		if (op.link_type.contentEquals("DIALOG_SCRIPT")) {
 			this.dialogScriptChosen(dialogsModel.scriptForId((long)op.link_id));
+			this.dismissSelf();
+		}
+		else if (op.link_type.contentEquals("EXIT")) {
+			this.dismissSelf();
+		}
+		else if (op.link_type.contentEquals("EXIT_TO_PLAQUE")) {
+
+			this.dismissSelf();
+		}
+		else if (op.link_type.contentEquals("EXIT_TO_ITEM")) {
+
+			this.dismissSelf();
+		}
+		else if (op.link_type.contentEquals("EXIT_TO_WEB_PAGE")) {
+
+			this.dismissSelf();
 		}
 		else if (op.link_type.contentEquals("EXIT_TO_DIALOG")) {
 			// Optimized: reuse the same controllers, just switch it to a new dialog
@@ -241,8 +257,18 @@ public class DialogViewFragment extends Fragment {
 			Dialog d = mGamePlayAct.mGame.dialogsModel.dialogForId(op.link_id);
 			this.dialogScriptChosen(dialogsModel.scriptForId(d.intro_dialog_script_id));
 		}
+		else if (op.link_type.contentEquals("EXIT_TO_TAB")) {
+
+			this.dismissSelf();
+		}
 		else
 			mListener.onOtherDialogOptionSelected(dialogOptionId);
+	}
+
+	private void dismissSelf() {
+		if (mListener != null) {
+			mListener.fragmentDialogDismiss();
+		}
 	}
 
 	private void dialogScriptChosen(DialogScript chosenScript) {
@@ -309,6 +335,8 @@ public class DialogViewFragment extends Fragment {
 		// TODO: Update argument type and name
 //		public void onFragmentInteraction(Uri uri);
 		public void onOtherDialogOptionSelected(long dialogOptionId);
+
+		void fragmentDialogDismiss();
 	}
 	@Override
 	public void onDetach() {

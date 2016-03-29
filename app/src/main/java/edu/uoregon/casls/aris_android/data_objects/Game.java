@@ -114,6 +114,7 @@ public class Game {
 	public transient List<ARISModel> models = new ArrayList<>(); // List of all the models below for iteration convenience
 
 	// Game subcomponent classes
+	public TabsModel            tabsModel;
 	public ScenesModel          scenesModel;
 	public GroupsModel          groupsModel;
 	public PlaquesModel         plaquesModel;
@@ -124,18 +125,17 @@ public class Game {
 	public TagsModel            tagsModel;
 	public EventsModel          eventsModel;
 	public RequirementsModel    requirementsModel;
-	public TriggersModel        triggersModel;
 	public FactoriesModel       factoriesModel;
 	public OverlaysModel        overlaysModel;
 	public InstancesModel       instancesModel;
 	public PlayerInstancesModel playerInstancesModel;         //todo: is this where gameUsers go? Players == Users??
 	public GameInstancesModel   gameInstancesModel;
 	public GroupInstancesModel  groupInstancesModel;
-	public TabsModel            tabsModel;
 	public LogsModel            logsModel;
 	public QuestsModel          questsModel;
+	public TriggersModel        triggersModel;
 	public DisplayQueueModel 	displayQueueModel;
-	// medias (in GamePlayAct 		
+	// medias (in GamePlayAct
 
 	//local stuff
 	public long downloadedVersion   = 0;

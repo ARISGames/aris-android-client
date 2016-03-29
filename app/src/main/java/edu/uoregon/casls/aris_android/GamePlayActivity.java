@@ -128,6 +128,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	private CharSequence mTitle;
 	private long         preferred_game_id;
 	private boolean leave_game_enabled;
+	public boolean triggerQueueWaiting = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -402,15 +403,38 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
 
-		// set up background tab:
+		// set up background tab (see View Layer sermon below):
 		mGamePlayTabSelectorViewController.initContext(this); // also serves many of the functions of iOS GamePlayTabSelectorViewControllerinitWithDelegate
 		mGamePlayTabSelectorViewController.setupDefaultTab();
 
-		"Note for next week: tab fragment is overlaying with plaque fragment. " +
-				"Find a way to attach the tab before and have it get pushed into the backstack so " +
-				"that when the last play fragment quits, the stack will pop the tab back up. may " +
-				"need to just do all this programatically. i.e. check after fragment detaches to " +
-				"see what tab should be displayed. What does iOS do?";
+		mGame.displayQueueModel.listen_model_triggers_new_available = 1;
+		if (triggerQueueWaiting) {
+			// turn on triggerQueueWaiting flag and call again;
+			triggerQueueWaiting = false; // background tab fragment should now be in place, so allow Triggers to be evaluated
+			mGame.displayQueueModel.reevaluateAutoTriggers();
+		}
+/*      Gospel of ARIS View Layers from Phil D.:
+		The long story short is that, when in a game, the view hierarchy is topped by
+		"GamePlayViewController". It manages 3 layers  of views: At the back is the
+		"TabViewController" (or something along those lines). It contains one of the tabs as its
+		front viewcontroller (like "MapTab" or "QuestsTab" or whatever).
+
+		!!! At any time, something
+		might tell GamePlayViewController to display an "instantiable", in which case GPVC will
+		display said instantiable (a plaque, an item, a dialog, a quest, etc...) on top of whatever
+		tab view controller is behind it.
+
+		This can be dismissed/managed regardless of the
+		TabViewController behind it (when you dismiss the "plaque", for example, all that will
+		remain behind it is whatever tab viewcontroller was there before the plaque was
+		displayed in front of it).
+
+		Another implication of this is that there is a max of one
+		instantiable in the view heirarchy at a time (ditto for tabs). The final layer is the
+		"notification" layer- at any time a notification could pop up, and it will be displayed on
+		top of both the tab and the instantiable view controller (if there is no instantiable view
+		controller behind it, that's fine! it just gets displayed at the highest layer).
+*/
 
 //		mNavigationDrawerFragment.setMenuVisibility(false); // no workie
 //		mNavigationDrawerFragment.setHasOptionsMenu(false);
@@ -446,7 +470,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		Fragment fragToDisplay = fm.findFragmentByTag(fragTag);
 		// set transition
 		ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-		ft.replace(R.id.fragment_view_container, fragToDisplay);
+		if (!fragToDisplay.isAdded())
+			ft.addToBackStack(fragTag);
+			ft.replace(R.id.fragment_view_container, fragToDisplay);
 		ft.commit();
 
 		setAsFrontmostFragment(fragTag);
@@ -627,36 +653,43 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 		if (itemName.equals("Quests")) {
 			fragmentManager.beginTransaction()
+					.addToBackStack(itemName)
 					.replace(R.id.fragment_view_container, QuestsViewFragment.newInstance(itemName))
 					.commit();
 		}
 		else if (itemName.equals("Map")) {
 			fragmentManager.beginTransaction()
+					.addToBackStack(itemName)
 					.replace(R.id.fragment_view_container, MapViewFragment.newInstance(itemName))
 					.commit();
 		}
 		else if (itemName.equals("Inventory")) {
 			fragmentManager.beginTransaction()
+					.addToBackStack(itemName)
 					.replace(R.id.fragment_view_container, InventoryViewFragment.newInstance(itemName))
 					.commit();
 		}
 		else if (itemName.equals("Scanner")) {
 			fragmentManager.beginTransaction()
+					.addToBackStack(itemName)
 					.replace(R.id.fragment_view_container, ScannerViewFragment.newInstance(itemName))
 					.commit();
 		}
 		else if (itemName.equals("Decoder")) {
 			fragmentManager.beginTransaction()
+					.addToBackStack(itemName)
 					.replace(R.id.fragment_view_container, DecoderViewFragment.newInstance(itemName))
 					.commit();
 		}
 		else if (itemName.equals("Player")) { // todo: GamePlayPlayerFragment? What is this? Does it need to exists?
 			fragmentManager.beginTransaction()
+					.addToBackStack(itemName)
 					.replace(R.id.fragment_view_container, GamePlayPlayerFragment.newInstance(itemName))
 					.commit();
 		}
 		else if (itemName.equals("Notebook")) {
 			fragmentManager.beginTransaction()
+					.addToBackStack(itemName)
 					.replace(R.id.fragment_view_container, NoteViewFragment.newInstance(itemName))
 					.commit();
 		}
@@ -719,9 +752,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	@Override
 	public void fragmentPlaqueDismiss() {
-//		this.onBackPressed(); // this is a sad way to tell the current fragment to quit.
-//		if (plaqueViewFragment != null)
-//			this.getFragmentManager().popBackStack();
 
 		// Android implementation of iOS GamePlayViewController.instantiableViewControllerRequestsDismissal:
 		// todo: make plaque fragment disband (stop) somewhere in here, but not before we're done referring to it.
@@ -747,16 +777,19 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			// Display the nav drawer at this point, until/unless the next UI view is triggered.
 			this.showNav();
 		}
-		// now tell this fragment to die? let's try...
+		// now tell this fragment to die
 		if (plaqueViewFragment != null) {
-			this.onBackPressed(); // todo: is there not a more graceful way to tell a fragment to bail?
+			FragmentManager fm = getSupportFragmentManager();
+			fm.popBackStack();
 			if (!viewingObject) { // temporary
 				this.showNavBar();
 			}
-
-//			plaqueViewFragment.finish();  // nope.
-//			this.getFragmentManager().popBackStack(); // that didn't work.
 		}
+	}
+
+	@Override
+	public void fragmentDialogDismiss() {
+
 	}
 
 	private void showNav() {
@@ -827,12 +860,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				plaqueViewFragment.initWithInstance(i);
 				tag = plaqueViewFragment.toString();
 				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-				ft.add(R.id.fragment_view_container, plaqueViewFragment, tag); //set tag.
-				ft.addToBackStack(tag);
-				if (plaqueViewFragment.isAdded())
+					ft.addToBackStack(tag);
+					ft.replace(R.id.fragment_view_container, plaqueViewFragment, tag); //set tag.
 					Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Fragment added ");
-				ft.attach(plaqueViewFragment); // was .show()
-				ft.commit();
+					ft.commit();
 				getSupportFragmentManager().executePendingTransactions();
 				setAsFrontmostFragment(tag);
 			}
@@ -852,10 +883,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				itemViewFragment.initWithInstance(i);
 				tag = itemViewFragment.toString();
 				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-				ft.add(R.id.fragment_view_container, itemViewFragment, tag); //set tag.
-				ft.addToBackStack(tag);
-				ft.attach(itemViewFragment); // was .show()
-				ft.commit();
+					ft.replace(R.id.fragment_view_container, itemViewFragment, tag); //set tag.
+					ft.addToBackStack(tag);
+					ft.commit();
 				getSupportFragmentManager().executePendingTransactions();
 				setAsFrontmostFragment(tag);
 			}
@@ -875,10 +905,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				dialogViewFragment.initWithInstance(i);
 				tag = dialogViewFragment.toString();
 				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-				ft.add(R.id.fragment_view_container, dialogViewFragment, tag); //set tag.
-				ft.addToBackStack(tag);
-				ft.attach(dialogViewFragment); // was .show()
-				ft.commit();
+					ft.replace(R.id.fragment_view_container, dialogViewFragment, tag); //set tag. // was .add()
+					ft.addToBackStack(tag);
+//					ft.attach(dialogViewFragment); // was .show()
+					ft.commit();
 				getSupportFragmentManager().executePendingTransactions();
 				setAsFrontmostFragment(tag);
 			}
@@ -897,9 +927,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				webPageViewFragment.initWithInstance(i);
 				tag = webPageViewFragment.toString();
 				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-				ft.add(R.id.fragment_view_container, webPageViewFragment, tag); //set tag.
+				ft.replace(R.id.fragment_view_container, webPageViewFragment, tag); //set tag.
 				ft.addToBackStack(tag);
-				ft.attach(webPageViewFragment); // was .show()
 				ft.commit();
 				getSupportFragmentManager().executePendingTransactions();
 				setAsFrontmostFragment(tag);
@@ -919,9 +948,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				noteViewFragment.initWithInstance(i);
 				tag = noteViewFragment.toString();
 				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-				ft.add(R.id.fragment_view_container, noteViewFragment, tag); //set tag.
+				ft.replace(R.id.fragment_view_container, noteViewFragment, tag); //set tag.
 				ft.addToBackStack(tag);
-				ft.attach(noteViewFragment); // was .show()
 				ft.commit();
 				getSupportFragmentManager().executePendingTransactions();
 				setAsFrontmostFragment(tag);
@@ -1017,11 +1045,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				plaqueViewFragment = new PlaqueViewFragment();
 				tag = plaqueViewFragment.toString();
 				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-				ft.add(R.id.fragment_view_container, plaqueViewFragment, tag); //set tag.
+				ft.replace(R.id.fragment_view_container, plaqueViewFragment, tag); //set tag.
 				ft.addToBackStack(tag);
 				if (plaqueViewFragment.isAdded())
 					Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Fragment added ");
-				ft.attach(plaqueViewFragment); // was .show()
 				ft.commit();
 				getSupportFragmentManager().executePendingTransactions();
 				setAsFrontmostFragment(tag);
@@ -1139,6 +1166,11 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
+		android.app.FragmentManager fm = getFragmentManager();
+		if (fm.getBackStackEntryCount() == 0) { // if this is zero, we should have completely left the game.
+//			this.leaveGame(); // if this hasn't already been called, calling it here would be very bad.
+			this.finish();
+		}
 	}
 
 	public void showNavBar() {

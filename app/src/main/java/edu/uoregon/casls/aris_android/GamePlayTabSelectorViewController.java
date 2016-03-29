@@ -227,14 +227,15 @@ public class GamePlayTabSelectorViewController {
 				if (!tab.info.isEmpty() && !tab.info.contentEquals("")) { // todo: Android doesn't have icon view currently
 					if (mGamePlayAct.questsViewFragment == null) {
 						mGamePlayAct.questsViewFragment = new QuestsViewFragment();
+						if (mGamePlayAct.questsViewFragment.isAdded()) return;
 						mGamePlayAct.questsViewFragment.initContext(mGamePlayAct);
 						//						mGamePlayAct.questsViewFragment.initWithInstance(i);
 						tag = mGamePlayAct.questsViewFragment.toString();
 						FragmentTransaction ft = mGamePlayAct.getSupportFragmentManager().beginTransaction();
-						ft.add(R.id.fragment_view_container, mGamePlayAct.questsViewFragment, tag); //set tag.
+//						ft.add(R.id.fragment_view_container, mGamePlayAct.questsViewFragment, tag); //set tag.
 						ft.addToBackStack(tag);
 //						ft.attach(mGamePlayAct.questsViewFragment); // was .show()
-						ft.replace(R.id.fragment_view_container, mGamePlayAct.questsViewFragment);
+						ft.replace(R.id.fragment_view_container, mGamePlayAct.questsViewFragment, tag);
 						ft.commit();
 //						mGamePlayAct.getSupportFragmentManager().executePendingTransactions();
 //						mGamePlayAct.setAsFrontmostFragment(tag);
@@ -246,16 +247,17 @@ public class GamePlayTabSelectorViewController {
 //						vc = [[ARISNavigationController alloc] initWithRootViewController:questsViewController];
 					if (mGamePlayAct.questsViewFragment == null) {
 						mGamePlayAct.questsViewFragment = new QuestsViewFragment();
+						if (mGamePlayAct.questsViewFragment.isAdded()) return;
 						mGamePlayAct.questsViewFragment.initContext(mGamePlayAct);
 						//						mGamePlayAct.questsViewFragment.initWithInstance(i);
 						tag = mGamePlayAct.questsViewFragment.toString();
 						FragmentTransaction ft = mGamePlayAct.getSupportFragmentManager().beginTransaction();
-						ft.add(R.id.fragment_view_container, mGamePlayAct.questsViewFragment, tag); //set tag.
+//						ft.add(R.id.fragment_view_container, mGamePlayAct.questsViewFragment, tag); //set tag.
 						ft.addToBackStack(tag);
 //						ft.attach(mGamePlayAct.questsViewFragment); // was .show()
-						ft.replace(R.id.fragment_view_container, mGamePlayAct.questsViewFragment);
+						ft.replace(R.id.fragment_view_container, mGamePlayAct.questsViewFragment, tag);
 						ft.commit();
-//						mGamePlayAct.getSupportFragmentManager().executePendingTransactions();
+						mGamePlayAct.getSupportFragmentManager().executePendingTransactions();
 //						mGamePlayAct.setAsFrontmostFragment(tag);
 					}
 

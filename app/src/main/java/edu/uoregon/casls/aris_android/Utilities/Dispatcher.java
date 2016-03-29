@@ -435,6 +435,9 @@ public class Dispatcher {
 	public void model_triggers_new_available(List<Trigger> addedTriggers) {
 		if (mGamePlayAct.mGame.displayQueueModel.listen_model_triggers_new_available == 1)
 			mGamePlayAct.mGame.displayQueueModel.reevaluateAutoTriggers();
+		else {
+			mGamePlayAct.triggerQueueWaiting = true;
+		}
 	}
 
 	//	MODEL_USERS_AVAILABLE",nil,nil);

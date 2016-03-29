@@ -26,7 +26,7 @@ import edu.uoregon.casls.aris_android.services.PollTriggerService;
  */
 public class DisplayQueueModel extends ARISModel {
 
-	public int listen_model_triggers_new_available  = 1;
+	public int listen_model_triggers_new_available  = 0; // was 1. trying to delay getting this called before tab fragemtn is in place. - sem
 	public int listen_model_triggers_less_available = 1;
 	public int listen_model_triggers_invalidated    = 1;
 	public int listen_user_moved                    = 1;
