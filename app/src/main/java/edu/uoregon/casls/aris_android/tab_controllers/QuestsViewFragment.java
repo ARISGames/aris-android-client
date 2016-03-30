@@ -40,6 +40,20 @@ public class QuestsViewFragment extends Fragment {
 		return fragment;
 	}
 
+	// save the fragment's state vars. See: http://stackoverflow.com/a/17135346/1680968
+//	@Override
+//	public void onActivityCreated(Bundle savedInstanceState) {
+//		super.onActivityCreated(savedInstanceState);
+//		if (savedInstanceState != null) {
+//			//Restore the fragment's state here
+//		}
+//	}
+//
+//	@Override
+//	public void onSaveInstanceState(Bundle outState) {
+//		super.onSaveInstanceState(outState);
+//
+//	}
 
 	public QuestsViewFragment() {
 	}
@@ -52,7 +66,9 @@ public class QuestsViewFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_quests_view, container, false);
-		mGamePlayAct.showNavBar();
+		if (mGamePlayAct == null)
+			mGamePlayAct = (GamePlayActivity) getActivity();
+		mGamePlayAct.showNavBar(); // fixme: NPE here when cycling through random tabs in nav bar. is mGamePlay reference getting lost?
 		return rootView;
 	}
 
@@ -62,4 +78,12 @@ public class QuestsViewFragment extends Fragment {
 //		((GamePlayActivity) activity).onSectionAttached(
 //				getArguments().getInt(ARG_SECTION_NUMBER));
 //	}
+
+	public void onClickTabActiveQuests(View v) {
+		"see udateAllViews() in GamesListActivity for previously working code for list building"
+	}
+
+	public void onClickTabCompletedQuests(View v) {
+
+	}
 }

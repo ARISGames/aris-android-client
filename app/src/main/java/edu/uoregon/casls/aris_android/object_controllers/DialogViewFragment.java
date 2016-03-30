@@ -233,22 +233,21 @@ public class DialogViewFragment extends Fragment {
 		// if the option is another dialog script, just repave .
 		DialogOption op = dialogsModel.dialogOptions.get(dialogOptionId);
 		if (op.link_type.contentEquals("DIALOG_SCRIPT")) {
-			this.dialogScriptChosen(dialogsModel.scriptForId((long)op.link_id));
-			this.dismissSelf();
+			this.dialogScriptChosen(dialogsModel.scriptForId((long) op.link_id));
 		}
 		else if (op.link_type.contentEquals("EXIT")) {
 			this.dismissSelf();
 		}
 		else if (op.link_type.contentEquals("EXIT_TO_PLAQUE")) {
-
+			mGamePlayAct.mGame.displayQueueModel.enqueueObject(mGamePlayAct.mGame.plaquesModel.plaqueForId(op.link_id));
 			this.dismissSelf();
 		}
 		else if (op.link_type.contentEquals("EXIT_TO_ITEM")) {
-
+			mGamePlayAct.mGame.displayQueueModel.enqueueObject(mGamePlayAct.mGame.itemsModel.itemForId(op.link_id));
 			this.dismissSelf();
 		}
 		else if (op.link_type.contentEquals("EXIT_TO_WEB_PAGE")) {
-
+			mGamePlayAct.mGame.displayQueueModel.enqueueObject(mGamePlayAct.mGame.webPagesModel.webPageForId(op.link_id));
 			this.dismissSelf();
 		}
 		else if (op.link_type.contentEquals("EXIT_TO_DIALOG")) {
@@ -258,17 +257,23 @@ public class DialogViewFragment extends Fragment {
 			this.dialogScriptChosen(dialogsModel.scriptForId(d.intro_dialog_script_id));
 		}
 		else if (op.link_type.contentEquals("EXIT_TO_TAB")) {
-
+			mGamePlayAct.mGame.displayQueueModel.enqueueTab(mGamePlayAct.mGame.tabsModel.tabForId(op.link_id));
 			this.dismissSelf();
 		}
-		else
-			mListener.onOtherDialogOptionSelected(dialogOptionId);
+//		else
+//			mListener.onOtherDialogOptionSelected(dialogOptionId);
 	}
 
 	private void dismissSelf() {
+		if (tab != null) // todo: do we need this part to show the Nav Bar? It currently gets done in the dismiss routine.
+			this.showNav();
 		if (mListener != null) {
 			mListener.fragmentDialogDismiss();
 		}
+	}
+
+	private void showNav() {
+		mListener.gamePlayTabBarViewControllerRequestsNav();
 	}
 
 	private void dialogScriptChosen(DialogScript chosenScript) {
@@ -334,9 +339,10 @@ public class DialogViewFragment extends Fragment {
 	public interface OnFragmentInteractionListener {
 		// TODO: Update argument type and name
 //		public void onFragmentInteraction(Uri uri);
-		public void onOtherDialogOptionSelected(long dialogOptionId);
+		 void onOtherDialogOptionSelected(long dialogOptionId);
 
-		void fragmentDialogDismiss();
+		 void fragmentDialogDismiss();
+		 void gamePlayTabBarViewControllerRequestsNav();
 	}
 	@Override
 	public void onDetach() {

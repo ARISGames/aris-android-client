@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.uoregon.casls.aris_android.Utilities.AppConfig;
+import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 
 
 public class GamePlayNavDrawerFragment extends Fragment {
@@ -321,17 +322,16 @@ public class GamePlayNavDrawerFragment extends Fragment {
 	}
 
 	public void addItems(List<String> playerTabNames) {
-		String iconURL;
+		String iconURL = "http://dummy.fillinlater.com/media.png";
 		for (String tabName : playerTabNames) {
-			iconURL = "http://dummy.fillinlater.com/media.png";
 			if (AppConfig.gameDrawerItemIconByName.get(tabName) != null)
-				mNavItems.add(new NavItem(tabName, "Nosubtitle", AppConfig.gameDrawerItemIconByName.get(tabName), iconURL));
+				mNavItems.add(new NavItem(AppUtils.prettyName(tabName), "Nosubtitle", AppConfig.gameDrawerItemIconByName.get(tabName), iconURL));
 		}
-//		playerTabNames.toArray(mDrawerListItems);
-//		for (int i=0; i < mDrawerListItems.length; i++) {
-//			iconURL = "http://dummy.fillinlater.com/media.png";
-//			mNavItems.add(new NavItem(mDrawerListItems[i], "Nosubtitle", AppConfig.gameDrawerItemIconByName.get(mDrawerListItems[i]), iconURL));
-//		}
+
+		// add the leave game option
+		if (mGamePlayActivity.leave_game_enabled) {
+			mNavItems.add(new NavItem("Leave Game", "Exit", AppConfig.gameDrawerItemIconByName.get("EXIT"), iconURL));
+		}
 
 		DrawerListAdapter adapter = new DrawerListAdapter(getActivity(), mNavItems);
 		mDrawerListView.setAdapter(adapter);

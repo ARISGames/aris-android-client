@@ -51,6 +51,7 @@ public class AppConfig {
 		put("PLAYER", R.drawable.game_play_id_card_2x);
 		put("NOTEBOOK", R.drawable.game_play_notebook_2x);
 		put("INVENTORY", R.drawable.game_play_toolbox_2x);
+		put("EXIT", R.drawable.arrow_back_2x);
 
 	}};
 }

@@ -139,4 +139,13 @@ public class AppUtils {
 		return timeUnit.convert(diffInMillies, TimeUnit.MILLISECONDS);
 	}
 
+	/**
+	 * Convert string of unknown case to first char capitalized string.
+	 * @param uglyName String with unknown capitalization
+	 * @return String with first character capitalized, with remaining characters in lower case.
+	 */
+	public static String prettyName(String uglyName) {
+		return uglyName.substring(0, 1).toUpperCase() + uglyName.substring(1).toLowerCase();
+	}
+
 }

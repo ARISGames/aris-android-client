@@ -222,7 +222,7 @@ public class GamePlayTabSelectorViewController {
 
 		if (true) // todo: temp. do we have a need to check stuff here? nulls?
 		{
-			if (tab.type.contentEquals("QUESTS")) {
+			if (tab.type.equalsIgnoreCase("QUESTS")) {
 				//if uses icon quest view
 				if (!tab.info.isEmpty() && !tab.info.contentEquals("")) { // todo: Android doesn't have icon view currently
 					if (mGamePlayAct.questsViewFragment == null) {
@@ -263,7 +263,7 @@ public class GamePlayTabSelectorViewController {
 
 				}
 			}
-			else if (tab.type.contentEquals("MAP")) {
+			else if (tab.type.equalsIgnoreCase("MAP")) {
 //					MapViewController *mapViewController = [[MapViewController alloc] initWithTab:tab delegate:
 //					(id<MapViewControllerDelegate>)delegate];
 //					vc = [[ARISNavigationController alloc] initWithRootViewController:mapViewController];
@@ -282,50 +282,50 @@ public class GamePlayTabSelectorViewController {
 				}
 
 			}
-			else if (tab.type.contentEquals("INVENTORY")) {
+			else if (tab.type.equalsIgnoreCase("INVENTORY")) {
 //					InventoryViewController *inventoryViewController = [[InventoryViewController alloc] initWithTab:tab delegate:
 //					(id<InventoryViewControllerDelegate>)delegate];
 //					vc = [[ARISNavigationController alloc] initWithRootViewController:inventoryViewController];
 			}
-			else if (tab.type.contentEquals("DECODER")) //text only
+			else if (tab.type.equalsIgnoreCase("DECODER")) //text only
 			{
 //					DecoderViewController *decoderViewController = [[DecoderViewController alloc] initWithTab:tab delegate:
 //					(id<DecoderViewControllerDelegate>)delegate];
 //					vc = [[ARISNavigationController alloc] initWithRootViewController:decoderViewController];
 			}
-			else if (tab.type.contentEquals("SCANNER")) //will be scanner only- supports both for legacy
+			else if (tab.type.equalsIgnoreCase("SCANNER")) //will be scanner only- supports both for legacy
 			{
 //					ScannerViewController *scannerViewController = [[ScannerViewController alloc] initWithTab:tab delegate:
 //					(id<ScannerViewControllerDelegate>)delegate];
 //					vc = [[ARISNavigationController alloc] initWithRootViewController:scannerViewController];
 			}
-			else if (tab.type.contentEquals("PLAYER")) {
+			else if (tab.type.equalsIgnoreCase("PLAYER")) {
 //					AttributesViewController *attributesViewController = [[AttributesViewController alloc] initWithTab:tab delegate:
 //					(id<AttributesViewControllerDelegate>)delegate];
 //					vc = [[ARISNavigationController alloc] initWithRootViewController:attributesViewController];
 			}
-			else if (tab.type.contentEquals("NOTEBOOK")) {
+			else if (tab.type.equalsIgnoreCase("NOTEBOOK")) {
 //					NotebookViewController *notesViewController = [[NotebookViewController alloc] initWithTab:tab delegate:
 //					(id<NotebookViewControllerDelegate>)delegate];
 //					vc = [[ARISNavigationController alloc] initWithRootViewController:notesViewController];
 			}
 			//non-standard
-			else if (tab.type.contentEquals("DIALOG")) {
+			else if (tab.type.equalsIgnoreCase("DIALOG")) {
 //					DialogViewController *dialogViewController = [[DialogViewController alloc] initWithTab:tab delegate:
 //					(id<DialogViewControllerDelegate>)delegate];
 //					vc = [[ARISNavigationController alloc] initWithRootViewController:dialogViewController];
 			}
-			else if (tab.type.contentEquals("ITEM")) {
+			else if (tab.type.equalsIgnoreCase("ITEM")) {
 //					ItemViewController *itemViewController = [[ItemViewController alloc] initWithTab:tab delegate:
 //					(id<ItemViewControllerDelegate>)delegate];
 //					vc = [[ARISNavigationController alloc] initWithRootViewController:itemViewController];
 			}
-			else if (tab.type.contentEquals("PLAQUE")) {
+			else if (tab.type.equalsIgnoreCase("PLAQUE")) {
 //					PlaqueViewController *plaqueViewController = [[PlaqueViewController alloc] initWithTab:tab delegate:
 //					(id<PlaqueViewControllerDelegate>)delegate];
 //					vc = [[ARISNavigationController alloc] initWithRootViewController:plaqueViewController];
 			}
-			else if (tab.type.contentEquals("WEB_PAGE")) {
+			else if (tab.type.equalsIgnoreCase("WEB_PAGE")) {
 //					WebPageViewController *webPageViewController = [[WebPageViewController alloc] initWithTab:tab delegate:
 //					(id<WebPageViewControllerDelegate>)delegate];
 //					vc = [[ARISNavigationController alloc] initWithRootViewController:webPageViewController];

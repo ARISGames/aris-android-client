@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
+                android:layout_height="60dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
                 android:descendantFocusability="blocksDescendants"
     >
 <!--removed this from above Rel Layout:  android:clickable="true" -->
@@ -15,12 +15,16 @@
         android:layout_height="60dp"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="5dp"
-        android:padding="3dp" >
+        android:padding="4dp"
+        android:contextClickable="false"
+        android:focusable="true">
         <WebView
             android:id="@+id/wv_nav_item_icon"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/item_icon_120" />
+            android:src="@drawable/item_icon_120"
+            android:contextClickable="false"
+            android:focusable="true"/>
     </LinearLayout>
 
     <!--<ImageView-->

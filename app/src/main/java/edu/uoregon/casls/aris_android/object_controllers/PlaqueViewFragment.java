@@ -180,14 +180,17 @@ public class PlaqueViewFragment extends Fragment {
 	}
 
 	private void dismissSelf() {
+		if (tab != null)
+			this.showNav();
 		if (mListener != null) {
 			mListener.fragmentPlaqueDismiss();
 		}
 		// the following iOS logic wil happen in GamePlayActivity.fragmentPlaqueExit();
-//		if (tab != null)
-//			this.showNav();
 	}
 
+	private void showNav() {
+		mListener.gamePlayTabBarViewControllerRequestsNav();
+	}
 
 	@Override
 	public void onAttach(Context context) {
@@ -204,7 +207,7 @@ public class PlaqueViewFragment extends Fragment {
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		mGamePlayActivity.viewingObject = false;
+		mGamePlayActivity.viewingInstantiableObject = false;
 	}
 
 	@Override
@@ -227,5 +230,6 @@ public class PlaqueViewFragment extends Fragment {
 		// TODO: Update argument type and name
 		void fragmentPlaqueDismiss();
 		void onFragmentInteraction(Uri uri);
+		void gamePlayTabBarViewControllerRequestsNav();
 	}
 }

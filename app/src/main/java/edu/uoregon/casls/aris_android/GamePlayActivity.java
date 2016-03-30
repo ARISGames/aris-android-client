@@ -113,8 +113,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	public String currentFragVisible;
 	public String currentFragVisibl2e;
 
-	public boolean viewingObject = false;
-	public List<Long> local_inst_queue = new ArrayList<>();
+	public boolean    viewingInstantiableObject = false;
+	public List<Long> local_inst_queue          = new ArrayList<>();
 
 	public Handler performSelector = new Handler(); // used for time deferred method invocation similar to iOS "performSelector"
 	/**
@@ -127,7 +127,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	 */
 	private CharSequence mTitle;
 	private long         preferred_game_id;
-	private boolean leave_game_enabled;
+	public boolean leave_game_enabled  = true; // todo: this should get set somewhere in the login return data mashup. For now hardwire ON.
 	public boolean triggerQueueWaiting = false;
 
 	@Override
@@ -175,7 +175,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mUsersModel = new UsersModel(this);
 		mGamePlayTabSelectorViewController = new GamePlayTabSelectorViewController();
 
-		viewingObject = false;
+		viewingInstantiableObject = false;
 
 		// Having arrived here in this activity is tantamount to the
 		//   "LoadingViewController.gameChosen->RootViewController.startLoading" call hierarchy as in iOS
@@ -237,7 +237,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		}
 		ft.commit();
 		getSupportFragmentManager().executePendingTransactions(); // flush its queue before attempting to show fragments
-		showFragment(currentFragVisible, null);
+		showInstantiableFragment(currentFragVisible, null);
 
 	}
 
@@ -444,20 +444,11 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 		mGame.logsModel.playerEnteredGame(); //		mGame.logsModel.playerEnteredGame);
 		mDispatch.model_game_began(); // calls mGame.gameBegan() and mGamePlayAct.gameBegan()
+		this.showNavBar(); // make sure it's there to start and hide if there's an instantiable displayed on top.
 	}
 
-	//
-	//
-	// TODO: Need to replace this mode of fragment swapping with the more traditional create/dispose version
-	// TODO: will also need to remember to reset the boolean viewingObject to false when disposing of any fragment
-	// TODO: perhaps that should happen in the fragment's onDestroyView()/onDestroy()/onDetach()
-	//
-	//
-
-	private void showFragment(String fragTag, Instance i) {
+	private void showInstantiableFragment(String fragTag, Instance i) {
 		if (fragTag == null) return; // todo: temporary fix
-		// if somehow we tried to transition to the fragment already showing, bail.
-//		if (fragTag.contentEquals(currentFragVisible)) return; // fixme: NPE on back button here from a dialogViewFrag.
 		// settle any outstanding fragment tasks
 		getSupportFragmentManager().executePendingTransactions();
 		// if there is no currently visible fragment, set incoming one to current.
@@ -475,10 +466,11 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			ft.replace(R.id.fragment_view_container, fragToDisplay);
 		ft.commit();
 
+		hideNavBar();
 		setAsFrontmostFragment(fragTag);
 	}
 
-//	private void showFragment(String fragTag, Instance i) {
+//	private void showInstantiableFragment(String fragTag, Instance i) {
 //		// if somehow we tried to transition to the fragment already showing, bail.
 //		if (fragTag.contentEquals(currentFragVisible)) return;
 //		// settle any outstanding fragment tasks
@@ -499,7 +491,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 //
 //		setAsFrontmostFragment(fragTag);
 //	}
-//
+
 	public void setAsFrontmostFragment(String fragTag) {
 		// set visibility tracking vars
 		fragVisible.put(currentFragVisible, false);
@@ -693,6 +685,14 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 					.replace(R.id.fragment_view_container, NoteViewFragment.newInstance(itemName))
 					.commit();
 		}
+		else if (itemName.equals("Leave Game")) {
+			fragmentManager.popBackStack(); // leave this fragment
+			onBackPressed(); // leave GamePlayActivity
+
+		}
+
+//		setActionBarTitle(itemName);
+		onSectionAttached(itemName);
 	}
 
 
@@ -750,18 +750,13 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		return super.onOptionsItemSelected(item);
 	}
 
-	@Override
-	public void fragmentPlaqueDismiss() {
-
-		// Android implementation of iOS GamePlayViewController.instantiableViewControllerRequestsDismissal:
-		// todo: make plaque fragment disband (stop) somewhere in here, but not before we're done referring to it.
-		// todo perhaps just hide it at this point and let it get replaced when the next view is enqueued. ?
+	public void instantiableViewControllerRequestsDismissal(Instance ivc) {
 		// [((ARISViewController *)ivc).navigationController dismissViewControllerAnimated:NO completion:nil]; <-- I think this just the delegate. ?
-		viewingObject = false;
+		viewingInstantiableObject = false;
 		// [self reSetOverlayControllersInVC:self atYDelta:-20]; <-- Sets up a gameNotificationView.  Not sure what a gameNotificationView is.
 		// [_MODEL_LOGS_ playerViewedContent:ivc.instance.object_type id:ivc.instance.object_id];
-		mGame.logsModel.playerViewedContent(plaqueViewFragment.instance.object_type, plaqueViewFragment.instance.object_id);
-		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " fragmentPlaqueDismiss() called. about to call tryDequeue ");
+		mGame.logsModel.playerViewedContent(ivc.object_type, ivc.object_id);
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " instantiableViewControllerRequestsDismissal() called. about to call tryDequeue ");
 		// [self performSelector:@selector(tryDequeue) withObject:nil afterDelay:1];
 		this.performSelector.postDelayed(new Runnable() {
 			@Override
@@ -770,18 +765,23 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			}
 		}, 1000); //:@selector(tryDequeue) withObject:nil afterDelay:1);
 
+
+	}
+
+	@Override
+	public void fragmentPlaqueDismiss() {
+
+		// Android implementation of iOS GamePlayViewController.instantiableViewControllerRequestsDismissal:
+		// todo: make plaque fragment disband (stop) somewhere in here, but not before we're done referring to it.
+		// todo perhaps just hide it at this point and let it get replaced when the next view is enqueued. ?
 		// this happens in [*]ViewController.dismissSelf() in iOS; in Android we stuff them all in this method.
+		this.instantiableViewControllerRequestsDismissal(plaqueViewFragment.instance);
 		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " fragmentPlaqueDismiss(). looking at plaqueViewFragment.tab: ");
-		if (plaqueViewFragment.tab != null) {
-			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " fragmentPlaqueDismiss(). plaqueViewFragment.tab was not null so call showNav() " );
-			// Display the nav drawer at this point, until/unless the next UI view is triggered.
-			this.showNav();
-		}
 		// now tell this fragment to die
 		if (plaqueViewFragment != null) {
 			FragmentManager fm = getSupportFragmentManager();
 			fm.popBackStack();
-			if (!viewingObject) { // temporary
+			if (!viewingInstantiableObject) {  // todo: temporary in leu of showNav() call in fragment dismissSelf()
 				this.showNavBar();
 			}
 		}
@@ -789,7 +789,21 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	@Override
 	public void fragmentDialogDismiss() {
+		this.instantiableViewControllerRequestsDismissal(dialogViewFragment.instance);
+		// now tell this fragment to die
+		if (dialogViewFragment != null) {
+			FragmentManager fm = getSupportFragmentManager();
+			fm.popBackStack();
+			if (!viewingInstantiableObject) { // todo: temporary in leu of showNav() call in fragment dismissSelf()
+				this.showNavBar();
+			}
+		}
+	}
 
+	@Override
+	public void gamePlayTabBarViewControllerRequestsNav() {
+		// Display the nav drawer at this point, until/unless the next UI view is triggered.
+		this.showNav();
 	}
 
 	private void showNav() {
@@ -804,10 +818,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	*/
 
 	public void tryDequeue() {
-		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Try Dequeue: viewingObject = " + viewingObject);
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Try Dequeue: viewingInstantiableObject = " + viewingInstantiableObject);
 		//Doesn't currently have the view-heirarchy authority to display.
 		//if(!(self.isViewLoaded && self.view.window)) //should work but apple's timing is terrible
-		if (viewingObject) return;
+		if (viewingInstantiableObject) return;
 		Object o;
 		o = mGame.displayQueueModel.dequeue();
 		if (o != null) {
@@ -1020,10 +1034,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			if (f.produce_expire_on_view == 1)
 				mGame.triggersModel.expireTriggersForInstanceId(i.instance_id);
 		}
-		showFragment(fragViewToDisplay, i);
+		showInstantiableFragment(fragViewToDisplay, i);
 //		ARISNavigationController *nav = new ARISNavigationController alloc] initWithRootViewController:vc);
 //		this.presentDisplay(nav);
-		viewingObject = true; // iOS happens in presentDisplay
+		viewingInstantiableObject = true; // iOS happens in presentDisplay
 	}
 
 
@@ -1104,10 +1118,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 //			vc = new NoteViewController(i delegate:self);
 		}
 
-		showFragment(fragViewToDisplay, i);
+		showInstantiableFragment(fragViewToDisplay, i);
 //		ARISNavigationController *nav = new ARISNavigationController alloc] initWithRootViewController:vc);
 //		this.presentDisplay:nav);
-		viewingObject = true; // iOS happens in presentDisplay
+		viewingInstantiableObject = true; // iOS happens in presentDisplay
 
 	}
 
@@ -1234,7 +1248,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 //	public void presentDisplay(UIViewController vc)
 //	{
 //		this.presentViewController:vc animated:NO completion:nil);
-//		viewingObject = YES;
+//		viewingInstantiableObject = YES;
 //
 //		this.reSetOverlayControllersInVC:vc atYDelta:20);
 //	}
