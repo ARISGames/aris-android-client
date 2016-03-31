@@ -664,7 +664,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		else if (itemName.equals("Inventory")) {
 			fragmentManager.beginTransaction()
 					.addToBackStack(itemName)
-					.replace(R.id.fragment_view_container, InventoryViewFragment.newInstance(itemName))
+					.replace(R.id.fragment_view_container, new InventoryViewFragment())
 					.commit();
 		}
 		else if (itemName.equals("Scanner")) {

@@ -1,26 +1,31 @@
 package edu.uoregon.casls.aris_android.tab_controllers;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.util.Collection;
+import java.util.List;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
+import edu.uoregon.casls.aris_android.data_objects.Item;
+import edu.uoregon.casls.aris_android.data_objects.Quest;
 
 
 public class InventoryViewFragment extends Fragment {
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-	private static final String ARG_SECTION_NUMBER = "section_number";
-	private static final String ARG_SECTION_NAME = "section_name";
-	private static final String ARG_PARAM2 = "param2";
 
-	// TODO: Rename and change types of parameters
-	private String mParam1;
-	private String mParam2;
+	private transient GamePlayActivity mGamePlayAct;
+	public View mThisFragsView;
 
 //	private OnFragmentInteractionListener mListener;
 //
@@ -31,15 +36,6 @@ public class InventoryViewFragment extends Fragment {
 //		fragment.setArguments(args);
 //		return fragment;
 //	}
-
-	public static InventoryViewFragment newInstance(String sectionName) {
-		InventoryViewFragment fragment = new InventoryViewFragment();
-		Bundle args = new Bundle();
-		args.putString(ARG_SECTION_NAME, sectionName);
-		fragment.setArguments(args);
-		return fragment;
-	}
-
 
 	public InventoryViewFragment() {
 		// Required empty public constructor
@@ -58,22 +54,62 @@ public class InventoryViewFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		View rootView = inflater.inflate(R.layout.fragment_inventory_view, container, false);
-		return rootView;
+		 mThisFragsView = inflater.inflate(R.layout.fragment_inventory_view, container, false);
+		if (mGamePlayAct == null)
+			mGamePlayAct = (GamePlayActivity) getActivity();
+
+		this.updateList();
+		return mThisFragsView;
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		((GamePlayActivity) activity).onSectionAttached(
-				getArguments().getString(ARG_SECTION_NAME));
+	public void updateList() {
+		LinearLayout llInventoryList = (LinearLayout) mThisFragsView.findViewById(R.id.ll_inventory_list);
+		llInventoryList.removeAllViews(); // refresh visible views so they don't accumulate
+		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.MATCH_PARENT,
+				LinearLayout.LayoutParams.MATCH_PARENT);
+		layoutParams.setMargins(0, -1, 0, -1);
+
+		Collection<Item> listItem = mGamePlayAct.mGame.itemsModel.items().values();
+
+		if (listItem == null || listItem.size() < 1) {
+			TextView tvNoItemsMessage = new TextView(mGamePlayAct);
+			tvNoItemsMessage.setText("No Active Quests");
+			tvNoItemsMessage.setTextSize(getResources().getDimension(R.dimen.textsize_small));
+			tvNoItemsMessage.setGravity(Gravity.CENTER_HORIZONTAL);
+			tvNoItemsMessage.setPadding(0, 15, 0, 0);
+			tvNoItemsMessage.setLayoutParams(layoutParams);
+			llInventoryList.addView(tvNoItemsMessage);
+		}
+		// populate with active quests.
+		else {
+			for (Item item : listItem) {
+				LayoutInflater inflater = (LayoutInflater) mGamePlayAct.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				final View itemView = inflater.inflate(R.layout.inventory_list_item, null);
+				TextView tvItemName = (TextView) itemView.findViewById(R.id.tv_inventory_item_name);
+				tvItemName.setText(item.name);
+				TextView tvItemDesc = (TextView) itemView.findViewById(R.id.tv_inventory_item_desc);
+				tvItemDesc.setText(item.desc);
+				TextView tvItemQty = (TextView) itemView.findViewById(R.id.tv_inventory_item_desc);
+//				tvItemQty.setText(item.); // todo: fix this.
+				llInventoryList.addView(itemView);
+			}
+		}
+	}
+
+
+//	@Override
+//	public void onAttach(Activity activity) {
+//		super.onAttach(activity);
+//		((GamePlayActivity) activity).onSectionAttached(
+//				getArguments().getString(ARG_SECTION_NAME));
 //		try {
 //			mListener = (OnFragmentInteractionListener) activity;
 //		} catch (ClassCastException e) {
 //			throw new ClassCastException(activity.toString()
 //					+ " must implement OnFragmentInteractionListener");
 //		}
-	}
+//	}
 
 	@Override
 	public void onDetach() {

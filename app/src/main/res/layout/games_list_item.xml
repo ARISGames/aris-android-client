@@ -6,7 +6,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="5dp"
-                android:background="@drawable/bottom_border">
+    >
 
     <!-- Left side game icon -->
     <LinearLayout

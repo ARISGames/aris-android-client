@@ -3,9 +3,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:background="#FFFCFCFC"
-                android:paddingBottom="3dp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
+                android:paddingBottom="0dp"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
                 android:paddingTop="0dp"
                 tools:context=".tab_controllers.QuestsViewFragment">
 
@@ -98,23 +98,22 @@
     <!--quests list-->
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/fl_utility_bars"
-        android:layout_marginBottom="50dp"
-        android:layout_marginTop="12dp">
+        >
 
         <ScrollView
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@drawable/bottom_border_grey">
 
             <LinearLayout
                 android:id="@+id/ll_quests_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:showDividers="middle"
-                android:divider="@drawable/bottom_border_grey"
-                android:dividerPadding="20dp">
+                android:background="@drawable/bottom_border_grey"
+                >
 
             </LinearLayout>
         </ScrollView>
