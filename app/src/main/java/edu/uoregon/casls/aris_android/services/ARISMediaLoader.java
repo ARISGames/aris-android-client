@@ -92,7 +92,6 @@ public class ARISMediaLoader {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			this.loadMediaFromMR(mr);
 		}
 		else if (mr.media.remoteURL() == null) { this.loadMetaDataForMR(mr); }
 	}

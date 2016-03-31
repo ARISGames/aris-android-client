@@ -66,8 +66,9 @@ public class QuestsModel extends ARISModel {
 		long newQuestId;
 		for (Quest newQuest : newQuests) {
 			newQuestId = newQuest.quest_id;
-			if (quests.get(newQuestId) != null)
-				quests.put(newQuestId, newQuest); // setObject:newQuest forKey:newQuestId;
+			// if it isn't already in the list, add it
+			if (!quests.containsKey(newQuestId))
+				quests.put(newQuestId, newQuest);
 		}
 		n_game_data_received++;
 		mGamePlayAct.mDispatch.model_quests_available(); // _ARIS_NOTIF_SEND_(@"MODEL_QUESTS_AVAILABLE",nil,nil);

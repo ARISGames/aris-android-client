@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -113,11 +112,11 @@ public class GamesListActivity extends AppCompatActivity {
 		mProgressView = findViewById(R.id.network_req_progress);
 
 		// get time tab view elements.
-		mLlTimeTabBar = (LinearLayout) findViewById(R.id.ll_time_tab_bar);
+		mLlTimeTabBar = (LinearLayout) findViewById(R.id.ll_quests_tab_bar);
 		mLlSearchBar = (LinearLayout) findViewById(R.id.incl_search_bar);
 		mFlTimeTabDaily = (FrameLayout) findViewById(R.id.fl_time_tab_daily);
 		mFlTimeTabWeekly = (FrameLayout) findViewById(R.id.fl_time_tab_weekly);
-		mFlTimeTabMonthly = (FrameLayout) findViewById(R.id.fl_time_tab_monthly);
+		mFlTimeTabMonthly = (FrameLayout) findViewById(R.id.fl_completed_quests_tab);
 		mTvTimeTabDaily = (TextView) findViewById(R.id.tv_time_tab_txt_daily);
 		mTvTimeTabWeekly = (TextView) findViewById(R.id.tv_time_tab_txt_weekly);
 		mTvTimeTabMonthly = (TextView) findViewById(R.id.tv_time_tab_txt_monthly);

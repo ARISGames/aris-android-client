@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -56,6 +57,7 @@ import edu.uoregon.casls.aris_android.object_controllers.NoteViewFragment;
 import edu.uoregon.casls.aris_android.object_controllers.PlaqueViewFragment;
 import edu.uoregon.casls.aris_android.object_controllers.WebPageViewFragment;
 import edu.uoregon.casls.aris_android.services.AppServices;
+import edu.uoregon.casls.aris_android.services.TabCompareBySortIndex;
 import edu.uoregon.casls.aris_android.tab_controllers.AttributesViewFragment;
 import edu.uoregon.casls.aris_android.tab_controllers.DecoderViewFragment;
 import edu.uoregon.casls.aris_android.tab_controllers.InventoryViewFragment;
@@ -125,8 +127,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	/**
 	 * Used to store the last screen title. For use in {@link #restoreActionBar()}.
 	 */
-	private CharSequence mTitle;
-	private long         preferred_game_id;
+	private CharSequence mTitle = "ARIS"; // defualt.
+	public ActionBar mActionBar;
+	private long     preferred_game_id;
 	public boolean leave_game_enabled  = true; // todo: this should get set somewhere in the login return data mashup. For now hardwire ON.
 	public boolean triggerQueueWaiting = false;
 
@@ -406,6 +409,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		// set up background tab (see View Layer sermon below):
 		mGamePlayTabSelectorViewController.initContext(this); // also serves many of the functions of iOS GamePlayTabSelectorViewControllerinitWithDelegate
 		mGamePlayTabSelectorViewController.setupDefaultTab();
+		// set Title of action bar
+		mTitle = AppUtils.prettyName(mGame.tabsModel.playerTabs.get(0).type);
+		mActionBar.setTitle(mTitle);
 
 		mGame.displayQueueModel.listen_model_triggers_new_available = 1;
 		if (triggerQueueWaiting) {
@@ -715,10 +721,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	}
 
 	public void restoreActionBar() {
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.setTitle(mTitle);
+		mActionBar = getSupportActionBar();
+		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		mActionBar.setDisplayShowTitleEnabled(true);
+		mActionBar.setTitle(mTitle);
 	}
 
 
