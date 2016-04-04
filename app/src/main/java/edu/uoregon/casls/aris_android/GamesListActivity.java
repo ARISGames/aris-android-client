@@ -314,7 +314,6 @@ public class GamesListActivity extends AppCompatActivity {
 				})
 				.setNegativeButton("No", null)
 				.show();
-
 	}
 
 	private void selectTimeRangeTab(String tabSelected) {
@@ -477,7 +476,7 @@ public class GamesListActivity extends AppCompatActivity {
 					+ "|" + HTTP_GET_POPULAR_GAMES_REQ_API
 					+ "|" + HTTP_GET_RECENT_GAMES_REQ_API
 					+ "|" + HTTP_GET_SEARCH_GAMES_REQ_API
-					+ "|" + HTTP_GET_PLAYER_GAMES_REQ_API)) { // true = debug temp hall pass for all
+					+ "|" + HTTP_GET_PLAYER_GAMES_REQ_API)) {
 				mFullGamesUpdated = 0; // reset found game count
 				try {
 					// process incoming json data
@@ -488,7 +487,6 @@ public class GamesListActivity extends AppCompatActivity {
 //						JSONObject game = new JSONObject();
 						if (jsonGamesList.length() > 0) { // get games - Parse through here or send entire array to special method?
 							// send JSON gamesList object to parser method
-
 							mListedGamesMap = parseGamesToMap(jsonGamesList);
 							// do we get the full game now and add the extra bits to the Games List? I guess so.
 							// After all game basic blocks have loaded, poll for the additional (full) game data.
@@ -575,7 +573,7 @@ public class GamesListActivity extends AppCompatActivity {
 					wvGameIcon.setBackgroundResource(R.drawable.logo_icon); // set to static aris icon
 				}
 				else {
-					LinearLayout llIconViewParent = (LinearLayout) gameItemView.findViewById(R.id.ll_game_icon);
+//					LinearLayout llIconViewParent = (LinearLayout) gameItemView.findViewById(R.id.ll_game_icon);
 					wvGameIcon.getSettings().setJavaScriptEnabled(true);
 					wvGameIcon.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
 					wvGameIcon.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
@@ -630,7 +628,6 @@ public class GamesListActivity extends AppCompatActivity {
 						i.putExtra("user", user.toJsonStr());
 						i.putExtra("json_auth", mJsonAuth.toString());
 						startActivity(i, transitionAnimationBndl);
-
 					}
 				});
 
@@ -652,7 +649,6 @@ public class GamesListActivity extends AppCompatActivity {
 		}
 		else { //json "data" block was null
 			Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + " Json \"data\" block returned was null in fillInFullGameData(). This is bad. You should have never arrived here.");
-
 		}
 	}
 
@@ -662,10 +658,6 @@ public class GamesListActivity extends AppCompatActivity {
 			pollServer(HTTP_GET_FULL_GAME_REQ_API, game.getKey().toString()); // key is game_id
 		}
 	}
-
-//	public void populateAllViews() {
-//		// called after any data has been refreshed, usually after network return.
-//	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -735,21 +727,10 @@ public class GamesListActivity extends AppCompatActivity {
 			JSONObject jsonGame = gamesList.getJSONObject(i);
 			//populate hashmap as <game_id, Game Obj>
 			games.put(jsonGame.getString("game_id"), new Game(jsonGame, this)); // add to hashmap
-
 		}
 		return games;
 	}
-/* iOS:
-	- (NSArray *) parseGames:(NSArray *)gamesDicts
-	{
-		NSMutableArray *games= [[NSMutableArray alloc] init];
 
-		for(long i = 0; i < gamesDicts.count; i++)
-		[games addObject:[[Game alloc] initWithDictionary:gamesDicts[i]]];
-
-		return games;
-	}
-*/
 	@Override
 	public void onStop() {
 		showProgress(false);

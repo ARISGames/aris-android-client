@@ -1,6 +1,5 @@
 package edu.uoregon.casls.aris_android.tab_controllers;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,16 +7,16 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Collection;
-import java.util.List;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
 import edu.uoregon.casls.aris_android.data_objects.Item;
-import edu.uoregon.casls.aris_android.data_objects.Quest;
+import edu.uoregon.casls.aris_android.data_objects.Media;
 
 
 public class InventoryViewFragment extends Fragment {
@@ -28,14 +27,6 @@ public class InventoryViewFragment extends Fragment {
 	public View mThisFragsView;
 
 //	private OnFragmentInteractionListener mListener;
-//
-//	public static GamePlayInventoryFragment newInstance(int sectionNumber) {
-//		GamePlayInventoryFragment fragment = new GamePlayInventoryFragment();
-//		Bundle args = new Bundle();
-//		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//		fragment.setArguments(args);
-//		return fragment;
-//	}
 
 	public InventoryViewFragment() {
 		// Required empty public constructor
@@ -54,7 +45,7 @@ public class InventoryViewFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		 mThisFragsView = inflater.inflate(R.layout.fragment_inventory_view, container, false);
+		mThisFragsView = inflater.inflate(R.layout.fragment_inventory_view, container, false);
 		if (mGamePlayAct == null)
 			mGamePlayAct = (GamePlayActivity) getActivity();
 
@@ -86,11 +77,27 @@ public class InventoryViewFragment extends Fragment {
 			for (Item item : listItem) {
 				LayoutInflater inflater = (LayoutInflater) mGamePlayAct.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				final View itemView = inflater.inflate(R.layout.inventory_list_item, null);
+				// icon/graphic
+				WebView wvItemIcon = (WebView) itemView.findViewById(R.id.wv_inventory_item_icon);
+				if (item.icon_media_id == 0) {
+					wvItemIcon.setBackgroundColor(0x00000000);
+					wvItemIcon.setBackgroundResource(R.drawable.logo_icon); //todo: default item icon here.
+				}
+				else {
+					wvItemIcon.getSettings().setJavaScriptEnabled(false);
+					wvItemIcon.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
+					wvItemIcon.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
+					wvItemIcon.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+					Media itemIconMedia = mGamePlayAct.mGameMedia.get(item.icon_media_id);
+					String item_icon_URL = itemIconMedia.mediaCD.remoteURL;
+					String iconAsHtmlImg = "<html><body style=\"margin: 0; padding: 0\"><img src=\"" + item_icon_URL + "\" width=\"100%\" height=\"100%\"/></body></html>";
+					wvItemIcon.loadData(iconAsHtmlImg, "text/html", null);
+				}
 				TextView tvItemName = (TextView) itemView.findViewById(R.id.tv_inventory_item_name);
 				tvItemName.setText(item.name);
 				TextView tvItemDesc = (TextView) itemView.findViewById(R.id.tv_inventory_item_desc);
 				tvItemDesc.setText(item.desc);
-				TextView tvItemQty = (TextView) itemView.findViewById(R.id.tv_inventory_item_desc);
+				TextView tvItemQty = (TextView) itemView.findViewById(R.id.tv_inventory_item_qty);
 //				tvItemQty.setText(item.); // todo: fix this.
 				llInventoryList.addView(itemView);
 			}
