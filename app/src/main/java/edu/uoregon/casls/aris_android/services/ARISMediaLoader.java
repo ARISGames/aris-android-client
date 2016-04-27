@@ -8,26 +8,21 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Gravity;
-import android.widget.Toast;
+import android.webkit.URLUtil;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.BinaryHttpResponseHandler;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
-import org.apache.http.entity.StringEntity;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -60,8 +55,8 @@ public class ARISMediaLoader {
 		mGamePlayAct = gamePlayActivity;
 	}
 
-//	public void loadMedia(Media m, ARISDelegateHandle dh) {
-	public void loadMedia(Media m) { // fixme: media base values not getting set. mediaCD =is= though. Find this missing step.
+	//	public void loadMedia(Media m, ARISDelegateHandle dh) {
+	public void loadMedia(Media m) { // media base values not getting set. mediaCD =is= though. This is by design. See Phil's comments at bottom of this file
 		if (m == null) return;
 
 		MediaResult mr = new MediaResult();
@@ -72,9 +67,9 @@ public class ARISMediaLoader {
 	}
 
 	public void loadMediaFromMR(MediaResult mr) {
-		if (mr.media.thumb != null)      { this.mediaLoadedForMR(mr); }
-		else if (mr.media.data != null)       { this.deriveThumbForMR(mr); }
-		else if (mr.media.localURL() != null)   { // get from the file if it already has been loaded
+		if (mr.media.thumb != null) { this.mediaLoadedForMR(mr); }
+		else if (mr.media.data != null) { this.deriveThumbForMR(mr); }
+		else if (mr.media.localURL() != null) { // get from the file if it already has been loaded
 //			mr.media.data = dataWithContentsOfURL:mr.media.localURL;
 			mr.media.data = BitmapFactory.decodeFile(mr.media.localURL().getPath());//.decodeStream(mr.media.localURL.openConnection().getInputStream());
 		}
@@ -87,17 +82,87 @@ public class ARISMediaLoader {
 			// the key for this map is the media "url" itself, eg:"http://arisgames.org/server/gamedatav2/64/aris8e4de40283cdc5d1aefbbf93d7df82f3.jpg"
 //			dataConnections setObject:mr forKey:mr.connection.description; // add this connection to the array (of currently active connections)
 			// todo: may need to make this an async req. otherwise it might bog down the main thread -sem
-			try {
-				mr.media.data = BitmapFactory.decodeStream(mr.media.localURL().openConnection().getInputStream()); // for server retrieval of local file
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+				// fixme: NPE here when loading ECOPod.
+//			URL remoteURL = mr.media.remoteURL();
+			pollServerForMediaWithRemoteURL(mr.media);
+//				URLConnection connection = remoteURL.openConnection();
+//				connection.setConnectTimeout(6000);
+//				InputStream inputStream = new BufferedInputStream(connection.getInputStream()); // fixme NPE
+//				mr.media.data = BitmapFactory.decodeStream(inputStream); // for server retrieval of local file
+
 		}
 		else if (mr.media.remoteURL() == null) { this.loadMetaDataForMR(mr); }
 	}
 
-	public void loadMetaDataForMR(MediaResult mr)
-	{
+	private void pollServerForMediaWithRemoteURL(Media media) {
+		RequestParams rqParams = new RequestParams();
+		final Context context = mGamePlayAct;
+		final String remoteURL = media.remoteURL().toString();
+		String[] allowedContentTypes = new String[]{"image/png", "image/jpeg", "image/gif",
+				"audio/mp4", "audio/mpeg", "video/mov", "video/mpeg", "video/mp4", "video/JPEG"};
+		if (AppUtils.isNetworkAvailable(mGamePlayAct.getApplicationContext())) {
+			// todo: loading status bar here.
+			AsyncHttpClient client = new AsyncHttpClient();
+//			static String reqCall
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "pollServerForMediaWithRemoteURL AsyncHttpClient Sending Req for Media Data: " + media.remoteURL());
+			client.get(context, remoteURL, new BinaryHttpResponseHandler(allowedContentTypes /*, looper here? */) { // the looper might be able to handle failed attempts?
+				@Override
+				public void onSuccess(int statusCode, Header[] headers, byte[] mediaBytes) {
+					processLoadedBitmapForMedia(mediaBytes, media);
+				}
+
+				@Override
+				public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
+					processFailedMediaLoad(media);
+				}
+			});
+		}
+		else {
+			// booboo.
+			// todo: handle network unavailable.
+		}
+	}
+
+	private String processLoadedBitmapForMedia(byte[] mediaBytes, Media mediaToLoad) {
+		// save binary to a local file.
+		// enter this media data into database and a local URI to the file (Should there
+		// already be a row for this from prior entry or upstream empty placeholder stub?)
+		ContextWrapper cw = new ContextWrapper(mGamePlayAct);
+		// path to /data/data/appName/app_data/gameMedia_(game_id)
+		File directory = cw.getDir("gameMedia_" + mGamePlayAct.mGame.game_id, Context.MODE_PRIVATE);
+		// Create directory with file.
+		File mypath = new File(directory, mediaToLoad.media_id + "." + mediaToLoad.fileExtension());
+
+		FileOutputStream fos = null;
+
+		// TODO: We want to save the returned data directly into the media.data field.
+		try {
+			fos = new FileOutputStream(mypath);
+			fos.write(mediaBytes);
+			fos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		try {
+			mediaToLoad.localURL = new URL(mypath.getAbsolutePath());
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+
+
+
+		// update DB to reflect new local URL
+//		mGamePlayAct.mMediaModel.addOrUpdateMediaCD(mediaCDToLoad);
+
+		return mypath.getAbsolutePath();
+	}
+
+	private void processFailedMediaLoad(Media mediaToLoad) {
+		// todo: finish me
+	}
+
+	public void loadMetaDataForMR(MediaResult mr) {
 		for (int i = 0; i < metaConnections.size(); i++) {
 //		for (MediaResult existingMR : metaConnections) { //not sure if this iteration style will allow proper referencing to original MR objects or spin off new one's that will dissolve after the loop.
 			MediaResult existingMR = metaConnections.get(i);
@@ -148,13 +213,13 @@ public class ARISMediaLoader {
 		for (int mediaIdToLoad : mGamePlayAct.mMediaModel.mediaIDsToLoad) {
 			// dispatch an async service to try and load this data into a MediaResult obj
 			Media mediaToLoad = mGamePlayAct.mMediaModel.mediaForId(mediaIdToLoad);
-			this.pollServer(mediaToLoad.mediaCD.remoteURL, mediaToLoad.mediaCD);
-				// in that call: if call succeeds, add image to DB with it's data or just save as a file and put the rest in DB
-				//  if load failed, leave it in the queue to be retried.
+			this.pollServerWithMediaCD(mediaToLoad.mediaCD.remoteURL, mediaToLoad.mediaCD);
+			// in that call: if call succeeds, add image to DB with it's data or just save as a file and put the rest in DB
+			//  if load failed, leave it in the queue to be retried.
 		}
 	}
 
-//		//do the ol' switcheroo so we wont get into an infinite loop of adding, removing, readding, etc...
+	//		//do the ol' switcheroo so we wont get into an infinite loop of adding, removing, readding, etc...
 //		NSMutableArray oldMetaConnections = metaConnections;
 //		metaConnections = NSMutableArray alloc initWithCapacity:10;
 //
@@ -198,8 +263,7 @@ public class ARISMediaLoader {
 //		this.loadMediaFromMR:mr;
 //	}
 //
-	public void mediaLoadedForMR(MediaResult mr)
-	{
+	public void mediaLoadedForMR(MediaResult mr) {
 		//This is so ugly. See comments in ARISDelegateHandle.h for reasoning
 		for (int i = 0; i < mr.delegateHandles.size(); i++) {
 			ARISDelegateHandle dh = mr.delegateHandles.get(i);
@@ -209,20 +273,17 @@ public class ARISMediaLoader {
 		}
 	}
 
-	public void deriveThumbForMR(MediaResult mr)
-	{
+	public void deriveThumbForMR(MediaResult mr) {
 		Bitmap data = mr.media.data;
 		int h = 128;
 		int w = 128;
 
 		String type = mr.media.type();
-		if (type.contentEquals("IMAGE"))
-		{
+		if (type.contentEquals("IMAGE")) {
 			mr.media.thumb = ThumbnailUtils.extractThumbnail(data, h, w);
 //			i = UIImage imageWithData:data;
 		}
-		else if (type.contentEquals("VIDEO"))
-		{
+		else if (type.contentEquals("VIDEO")) {
 			mr.media.thumb = ThumbnailUtils.createVideoThumbnail(mr.media.localURL.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
 //			AVAsset asset = AVAsset assetWithURL:mr.media.localURL;
 //			AVAssetImageGenerator imageGenerator = AVAssetImageGenerator allocinitWithAsset:asset;
@@ -232,11 +293,10 @@ public class ARISMediaLoader {
 //			i = UIImage imageWithCGImage:imageRef;
 //			CGImageRelease(imageRef);  // CGImageRef won't be released by ARC
 		}
-		else if (type.contentEquals("AUDIO"))
-		{
+		else if (type.contentEquals("AUDIO")) {
 			Resources res = mGamePlayAct.getResources();
 			Drawable drawable = res.getDrawable(R.drawable.default_audio_icon);
-			mr.media.thumb = ((BitmapDrawable)drawable).getBitmap();
+			mr.media.thumb = ((BitmapDrawable) drawable).getBitmap();
 //			i = UIImage imageNamed("microphone"); //hack
 		}
 //		if (!i) i = UIImage imageNamed("logo_icon");
@@ -263,10 +323,10 @@ public class ARISMediaLoader {
 //		this.loadMediaFromMR(mr);
 //	}
 
-/**
-	retrieve media bitmap data from server
-*/
-	public void pollServer(final String requestURL, final MediaCD mediaCDToLoad) {
+	/**
+	 * retrieve media bitmap data from server
+	 */
+	public void pollServerWithMediaCD(final String requestURL, final MediaCD mediaCDToLoad) {
 //		showProgress(true);
 
 		RequestParams rqParams = new RequestParams();
@@ -286,12 +346,12 @@ public class ARISMediaLoader {
 			client.get(context, requestURL, new BinaryHttpResponseHandler(allowedContentTypes /*, looper here? */) { // the looper might be able to handle failed attempts?
 				@Override
 				public void onSuccess(int statusCode, Header[] headers, byte[] mediaBytes) {
-					processLoadedMedia(mediaBytes, mediaCDToLoad);
+					processLoadedMediaForCD(mediaBytes, mediaCDToLoad);
 				}
 
 				@Override
 				public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
-					processFailedMediaLoad(mediaCDToLoad);
+					processFailedMediaForCDLoad(mediaCDToLoad);
 				}
 			});
 
@@ -333,11 +393,11 @@ public class ARISMediaLoader {
 
 	}
 
-/*
-	 Android replacement of connectionDidFinishLoading();
-	 Save data to local file, and populate the localURL with file location
-*/
-	private String processLoadedMedia(byte[] mediaBytes, MediaCD mediaCDToLoad) {
+	/*
+	     Android replacement of connectionDidFinishLoading();
+	     Save data to local file, and populate the localURL with file location
+    */
+	private String processLoadedMediaForCD(byte[] mediaBytes, MediaCD mediaCDToLoad) {
 		// save binary to a local file.
 		// enter this media data into database and a local URI to the file (Should there
 		// already be a row for this from prior entry or upstream empty placeholder stub?)
@@ -365,8 +425,44 @@ public class ARISMediaLoader {
 		return mypath.getAbsolutePath();
 	}
 
-	private void processFailedMediaLoad(MediaCD mediaToLoad) {
+	private void processFailedMediaForCDLoad(MediaCD mediaToLoad) {
 		// todo: finish me
 	}
-
 }
+
+/*
+From Phil regarding the local storage of media and mediaCD.
+
+Ah. So, long story short, mediaCD is necessary to be able to use Core Data. Core Data is some
+abstraction on SQL Lite that Apple offers for maintaining a local database. The idea is that it's
+smart and can sync things for you and keep complex relationships without you worrying how that maps
+to a relational database (it "does all the work for you").
+
+The frustrating part for me is that, especially with simple objects, "storing them to and from a
+database" isn't a problem sufficiently complex as to require such a complicated layer of
+indirection. I would have much rather just done the darn serialization/deserialization myself
+(which I in fact did for the "offline" layer).
+
+Anyways. This was developed when we were first playing with the idea of local caching. In this case,
+media was the only thing we considered worthwhile to locally cache, and everyone was telling us to
+use Core Data for it. So we did. Now, Core Data has a ton of caveats that you're "just supposed to
+know" in order to use it effectively. One such caveat is "don't store binary data". Another is
+"don't store primitives". Another is "URLs need to be translated to this or that or blah". Another
+is "you're not allowed to create a media object unless it is related to some context and is to be
+synced" which meant that for any transient uses of the media object, we needed to do this complex
+handshake where we create a context, gen a media, do what we want with it, throw the context away,
+etc... The point is, it's all really oddly complex and was throwing unique restrictions on just one
+part of our codebase.
+
+So, the way I chose to handle it (which may or may not have been the best decision) was to add yet
+another layer of indirection. There was a media object where I could consider everything about is as
+naturally as any other object in the codebase. And it had a MediaCD object reference for the times
+it needed to interface with CoreData. And that's it.
+
+One other bit of info that might not be straightforward is this: we cache the MediaCD (which is
+essentially the metadata about a piece of media [its title, id, type, etc... not the binary content
+itself]) within coredata. But when we actually download the binary media, we just store that in a
+file in the local filesystem (because coredata is terribly unperformant loading/syncing/saving large
+swathes of binary data), and store something like "LocalURL" within the MediaCD.
+
+*/

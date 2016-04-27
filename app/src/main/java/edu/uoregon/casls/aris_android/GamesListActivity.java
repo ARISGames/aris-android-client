@@ -5,10 +5,12 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +25,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -78,6 +81,8 @@ public class GamesListActivity extends AppCompatActivity {
 	private TextView mTvTimeTabMonthly;
 	private EditText mEtSearchTxt;
 	private String mTimeTabSelected = TIME_TAB_WEEKLY; // default starting tab
+	private boolean mProgressIsShowing = false;
+	private int mProgressPages = 0;
 
 	public List<Game> mListedGames = new ArrayList<Game>();
 	public Map<String, Game> mListedGamesMap = new LinkedHashMap<String, Game>();
@@ -568,6 +573,8 @@ public class GamesListActivity extends AppCompatActivity {
 
 				// set webview to display remote icon
 				WebView wvGameIcon = (WebView) gameItemView.findViewById(R.id.wv_game_icon);
+				wvGameIcon.setWebViewClient(new AppWebViewClient());
+
 				if (gameItem.icon_media.media_id == 0) { // 0 = no custom icon
 					wvGameIcon.setBackgroundColor(0x00000000);
 					wvGameIcon.setBackgroundResource(R.drawable.logo_icon); // set to static aris icon
@@ -578,9 +585,8 @@ public class GamesListActivity extends AppCompatActivity {
 					wvGameIcon.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
 					wvGameIcon.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
 					wvGameIcon.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-					String iconAsHtmlImg = "<html><body style=\"margin: 0; padding: 0\"><img src=\"" + gameItem.icon_media.remoteURL.toString() + "\" width=\"100%\" height=\"100%\"/></body></html>";
+					final String iconAsHtmlImg = "<html><body style=\"margin: 0; padding: 0\"><img src=\"" + gameItem.icon_media.remoteURL.toString() + "\" width=\"100%\" height=\"100%\"/></body></html>";
 					wvGameIcon.loadData(iconAsHtmlImg, "text/html", null);
-//					wvGameIcon.loadUrl(gameItem.icon_media.remoteURL.toString());
 				}
 
 				gameItemView.setId(Integer.parseInt(game_id_key));
@@ -637,6 +643,30 @@ public class GamesListActivity extends AppCompatActivity {
 
 	}
 
+	public class AppWebViewClient extends WebViewClient {
+
+		@Override
+		public void onPageStarted(WebView view, String url, Bitmap favicon) {
+			// TODO Auto-generated method stub
+			super.onPageStarted(view, url, favicon);
+			showProgress(true);
+		}
+
+		@Override
+		public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//			view.loadUrl(url);
+			view.loadData(url, "text/html", null);
+			return true;
+		}
+
+		@Override
+		public void onPageFinished(WebView view, String url) {
+			//Page load finished
+			super.onPageFinished(view, url);
+			showProgress(false);
+		}
+	}
+
 	/* Called after GET_FULL_GAME_REQ_API returned */
 	private void fillInFullGameData(JSONObject jsonFullGameHTTPReturnSet) throws JSONException {
 		//get "data" block
@@ -683,25 +713,42 @@ public class GamesListActivity extends AppCompatActivity {
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 	public void showProgress(final boolean show) {
+		mProgressIsShowing = show;
+		if (show) mProgressPages++;
+		else mProgressPages--;
 		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
 		// for very easy animations. If available, use these APIs to fade-in
 		// the progress spinner.
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
 			int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-			mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-			mProgressView.animate().setDuration(shortAnimTime).alpha(
-					show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-				@Override
-				public void onAnimationEnd(Animator animation) {
-					mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-				}
-			});
+			if (show && mProgressPages == 1) { // only show when this is the first request;
+				mProgressView.setVisibility(View.VISIBLE);
+				mProgressView.animate().setDuration(shortAnimTime).alpha(1).setListener(new AnimatorListenerAdapter() {
+					@Override
+					public void onAnimationEnd(Animator animation) {
+						mProgressView.setVisibility(View.VISIBLE);
+					}
+				});
+				return;
+			}
+			if (!show && mProgressPages <= 0) { // only hide when this is the last request.
+				mProgressView.setVisibility(View.GONE);
+				mProgressView.animate().setDuration(shortAnimTime).alpha(0).setListener(new AnimatorListenerAdapter() {
+					@Override
+					public void onAnimationEnd(Animator animation) {
+						mProgressView.setVisibility(View.GONE);
+					}
+				});
+				return;
+			}
 		}
 		else {
 			// The ViewPropertyAnimator APIs are not available, so simply show
 			// and hide the relevant UI components.
-			mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+			if (show && mProgressPages == 1)
+				mProgressView.setVisibility(View.VISIBLE);
+			else if (!show && mProgressPages <= 0)
+				mProgressView.setVisibility(View.GONE);
 		}
 	}
 

@@ -1,11 +1,16 @@
 package edu.uoregon.casls.aris_android.Utilities;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
@@ -56,6 +61,11 @@ public class AppUtils {
 
 
 	public static Location getGeoLocation(Context context) {
+		if ( Build.VERSION.SDK_INT >= 23 &&
+				ContextCompat.checkSelfPermission( context, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED
+				&& ContextCompat.checkSelfPermission( context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+//				&& isLocationEnabled(context)
+				) {
 		// Get LocationManager object from System Service LOCATION_SERVICE
 		LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		// Create a criteria object to retrieve provider
@@ -64,8 +74,32 @@ public class AppUtils {
 		String provider = locationManager.getBestProvider(criteria, true);
 		// Return Current Location
 		return locationManager.getLastKnownLocation(provider);
+		}
+		// no permission return:
+		return new Location("0");
 	}
 
+	public static boolean isLocationEnabled(Context context) {
+		int locationMode = 0;
+		String locationProviders;
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+			try {
+				locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+
+			} catch (Settings.SettingNotFoundException e) {
+				e.printStackTrace();
+			}
+
+			return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+
+		}else{
+			locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+			return !TextUtils.isEmpty(locationProviders);
+		}
+
+
+	}
 	public class deltaMap {
 		Map<String, Map<String, Object>> deltas;
 	}

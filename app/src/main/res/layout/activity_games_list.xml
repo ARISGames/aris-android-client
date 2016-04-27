@@ -173,8 +173,9 @@
                 android:id="@+id/ll_games_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
+                android:orientation="vertical"
+                android:divider="@drawable/divider_lines"
+                android:dividerHeight="1dp">
             </LinearLayout>
         </ScrollView>
 

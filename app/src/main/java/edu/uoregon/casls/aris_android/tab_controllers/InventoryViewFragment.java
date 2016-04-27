@@ -61,9 +61,9 @@ public class InventoryViewFragment extends Fragment {
 				LinearLayout.LayoutParams.MATCH_PARENT);
 		layoutParams.setMargins(0, -1, 0, -1);
 
-		Collection<Item> listItem = mGamePlayAct.mGame.itemsModel.items().values();
+		Collection<Item> itemsList = mGamePlayAct.mGame.itemsModel.items().values();
 
-		if (listItem == null || listItem.size() < 1) {
+		if (itemsList == null || itemsList.size() < 1) {
 			TextView tvNoItemsMessage = new TextView(mGamePlayAct);
 			tvNoItemsMessage.setText("No Active Quests");
 			tvNoItemsMessage.setTextSize(getResources().getDimension(R.dimen.textsize_small));
@@ -72,9 +72,9 @@ public class InventoryViewFragment extends Fragment {
 			tvNoItemsMessage.setLayoutParams(layoutParams);
 			llInventoryList.addView(tvNoItemsMessage);
 		}
-		// populate with active quests.
+		// populate with inventory items.
 		else {
-			for (Item item : listItem) {
+			for (Item item : itemsList) {
 				LayoutInflater inflater = (LayoutInflater) mGamePlayAct.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				final View itemView = inflater.inflate(R.layout.inventory_list_item, null);
 				// icon/graphic
