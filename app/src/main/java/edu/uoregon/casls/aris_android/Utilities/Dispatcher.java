@@ -211,14 +211,17 @@ public class Dispatcher {
 
 	//	MODEL_INSTANCES_AVAILABLE",nil,gameDeltas);
 	public void model_instances_available(Map<String, Map<String, Object>> gameDeltas) {
+		// sent by IntancesModel; listend to by nobody.
 	}
 
 	//	MODEL_INSTANCES_GAINED",nil,gameDeltas);
 	public void model_instances_gained(Map<String, Map<String, Object>> gameDeltas) {
+		// sent by IntancesModel; listend to by nobody.
 	}
 
 	//	MODEL_INSTANCES_LOST",  nil,gameDeltas);
 	public void model_instances_lost(Map<String, Map<String, Object>> gameDeltas) {
+		// sent by IntancesModel; listend to by nobody.
 	}
 
 	//	MODEL_INSTANCES_PLAYER_AVAILABLE",nil,playerDeltas);
@@ -238,7 +241,7 @@ public class Dispatcher {
 
 	//	MODEL_ITEMS_AVAILABLE",nil,nil);
 	public void model_items_available() {
-		// todo: listeners?
+		// sent by ItemsModel; listend to by nobody.
 	}
 
 	//	MODEL_LOGGED_IN",nil,nil); // Handled in LoginActivity -sem
@@ -264,6 +267,8 @@ public class Dispatcher {
 	}
 
 	public void media_percent_loaded(float v) {
+		// todo: sent by Game when media loadining is initiated; listened to my
+		// todo: LoadingViewController to display progress bar.
 	}
 
 	public void media_piece_available() {
