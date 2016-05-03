@@ -4,17 +4,32 @@
              android:layout_height="match_parent"
              tools:context=".tab_controllers.MapViewFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Map fragment"/>
+        <fragment
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:id="@+id/inner_fragment_map"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button"
-        android:layout_gravity="center"/>
+        <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_gravity="center|top"-->
+        <!--android:text="Fragment 2: Map"-->
+        <!--android:textStyle="bold"-->
+        <!--android:layout_weight="1"-->
+        <!--android:textSize="24dp"/>-->
 
-</FrameLayout>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ib_drawer_icon"
+            android:layout_gravity="left|top"
+            android:onClick="onClickMapOpenDrawer"
+            android:src="@drawable/ic_menu_black_24dp"
+            android:layout_margin="10dp"
+            android:background="#ffffff"
+            android:padding="2dp"
+            android:alpha=".50"/>
+
+
+    </FrameLayout>

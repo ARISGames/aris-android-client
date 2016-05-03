@@ -38,6 +38,11 @@
         android:icon="@mipmap/logo_icon"
         android:label="@string/app_name"
         android:theme="@style/ArisClassic" >
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDwLE4hkD1SISrIazbxMuZPABkWJJnqVMI"/>
+
         <activity
             android:name=".LoginActivity"
             android:icon="@drawable/logo_text_nav"

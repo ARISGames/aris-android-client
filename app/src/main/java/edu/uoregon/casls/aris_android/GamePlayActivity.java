@@ -12,9 +12,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -450,7 +452,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 		mGame.logsModel.playerEnteredGame(); //		mGame.logsModel.playerEnteredGame);
 		mDispatch.model_game_began(); // calls mGame.gameBegan() and mGamePlayAct.gameBegan()
-		this.showNavBar(); // make sure it's there to start and hide if there's an instantiable displayed on top.
+//		this.showNavBar(); // make sure it's there to start and hide if there's an instantiable displayed on top.// fixme: temp dsabled
 	}
 
 	private void showInstantiableFragment(String fragTag, Instance i) {
@@ -787,9 +789,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		if (plaqueViewFragment != null) {
 			FragmentManager fm = getSupportFragmentManager();
 			fm.popBackStack();
-			if (!viewingInstantiableObject) {  // todo: temporary in leu of showNav() call in fragment dismissSelf()
-				this.showNavBar();
-			}
+//			if (!viewingInstantiableObject) {  // todo: temporary in leu of showNav() call in fragment dismissSelf()
+//				this.showNavBar();
+//			}
+			this.hideNavBar(); // fixme: test to see if I can get the nav bar to not show on maps, etc.
 		}
 	}
 
@@ -800,9 +803,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		if (dialogViewFragment != null) {
 			FragmentManager fm = getSupportFragmentManager();
 			fm.popBackStack();
-			if (!viewingInstantiableObject) { // todo: temporary in leu of showNav() call in fragment dismissSelf()
-				this.showNavBar();
-			}
+//			if (!viewingInstantiableObject) { // todo: temporary in leu of showNav() call in fragment dismissSelf()
+//				this.showNavBar();
+//			}
 		}
 	}
 
@@ -816,6 +819,16 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		this.showNavBar();
 		this.openNavDrawer();
 	}
+
+	public void onClickMapOpenDrawer(View v) {
+		Toast t = Toast.makeText(this, "This should cause the sliding navigation menu to appear.",
+				Toast.LENGTH_SHORT);
+		t.setGravity(Gravity.CENTER, 0, 0);
+		t.show();
+		this.openNavDrawer();
+
+	}
+
 
 	/*
 	*
