@@ -25,7 +25,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -59,7 +58,6 @@ import edu.uoregon.casls.aris_android.object_controllers.NoteViewFragment;
 import edu.uoregon.casls.aris_android.object_controllers.PlaqueViewFragment;
 import edu.uoregon.casls.aris_android.object_controllers.WebPageViewFragment;
 import edu.uoregon.casls.aris_android.services.AppServices;
-import edu.uoregon.casls.aris_android.services.TabCompareBySortIndex;
 import edu.uoregon.casls.aris_android.tab_controllers.AttributesViewFragment;
 import edu.uoregon.casls.aris_android.tab_controllers.DecoderViewFragment;
 import edu.uoregon.casls.aris_android.tab_controllers.InventoryViewFragment;
@@ -114,7 +112,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	public WebPageViewFragment webPageViewFragment;
 
 	public HashMap<String, Boolean> fragVisible = new HashMap<>();
-	public String currentFragVisible;
+	public String mCurrentFragVisible;
 	public String currentFragVisibl2e;
 
 	public boolean    viewingInstantiableObject = false;
@@ -238,11 +236,11 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			// hide them all to start
 			ft.hide(fragment);
 			// find the visible fragment from previous life cycle
-			if (fragEntry.getValue()) currentFragVisible = fragTag;
+			if (fragEntry.getValue()) mCurrentFragVisible = fragTag;
 		}
 		ft.commit();
 		getSupportFragmentManager().executePendingTransactions(); // flush its queue before attempting to show fragments
-		showInstantiableFragment(currentFragVisible, null);
+		showInstantiableFragment(mCurrentFragVisible, null);
 
 	}
 
@@ -460,12 +458,12 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		// settle any outstanding fragment tasks
 		getSupportFragmentManager().executePendingTransactions();
 		// if there is no currently visible fragment, set incoming one to current.
-		if (currentFragVisible == null || currentFragVisible.isEmpty())
-			currentFragVisible = fragTag;
+		if (mCurrentFragVisible == null || mCurrentFragVisible.isEmpty())
+			mCurrentFragVisible = fragTag;
 		FragmentManager fm = getSupportFragmentManager();
 		FragmentTransaction ft = fm.beginTransaction();
 		// get specific fragments involved in transition
-		Fragment currentVisibleFrag = fm.findFragmentByTag(currentFragVisible);
+		Fragment currentVisibleFrag = fm.findFragmentByTag(mCurrentFragVisible);
 		Fragment fragToDisplay = fm.findFragmentByTag(fragTag);
 		// set transition
 		ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
@@ -480,16 +478,16 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 //	private void showInstantiableFragment(String fragTag, Instance i) {
 //		// if somehow we tried to transition to the fragment already showing, bail.
-//		if (fragTag.contentEquals(currentFragVisible)) return;
+//		if (fragTag.contentEquals(mCurrentFragVisible)) return;
 //		// settle any outstanding fragment tasks
 //		getSupportFragmentManager().executePendingTransactions();
 //		// if there is no currently visible fragment, set incoming one to current.
-//		if (currentFragVisible == null || currentFragVisible.isEmpty())
-//			currentFragVisible = fragTag;
+//		if (mCurrentFragVisible == null || mCurrentFragVisible.isEmpty())
+//			mCurrentFragVisible = fragTag;
 //		FragmentManager fm = getSupportFragmentManager();
 //		FragmentTransaction ft = fm.beginTransaction();
 //		// get specific fragments involved in transition
-//		Fragment currentVisibleFrag = fm.findFragmentByTag(currentFragVisible);
+//		Fragment currentVisibleFrag = fm.findFragmentByTag(mCurrentFragVisible);
 //		Fragment fragToDisplay = fm.findFragmentByTag(fragTag);
 //		// set transition
 //		ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
@@ -502,9 +500,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	public void setAsFrontmostFragment(String fragTag) {
 		// set visibility tracking vars
-		fragVisible.put(currentFragVisible, false);
+		fragVisible.put(mCurrentFragVisible, false);
 		fragVisible.put(fragTag, true);
-		currentFragVisible = fragTag;
+		mCurrentFragVisible = fragTag;
 	}
 
 	public void dismissFragment() {
@@ -901,8 +899,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				setAsFrontmostFragment(tag);
 			}
 			// if it's already visible and the frontmost fragment... bail, no further action here
-			else if (currentFragVisible != null)
-				if (plaqueViewFragment.isVisible() && plaqueViewFragment.getTag().contentEquals(currentFragVisible))
+			else if (mCurrentFragVisible != null)
+				if (plaqueViewFragment.isVisible() && plaqueViewFragment.getTag().contentEquals(mCurrentFragVisible))
 					return;
 
 			fragViewToDisplay = plaqueViewFragment.getTag(); // same end result as vc var in iOS
@@ -923,8 +921,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				setAsFrontmostFragment(tag);
 			}
 			// if it's already visible and the frontmost fragment... bail, no further action here
-			else if (currentFragVisible != null) if (itemViewFragment.isVisible()
-					&& itemViewFragment.getTag().contentEquals(currentFragVisible))
+			else if (mCurrentFragVisible != null) if (itemViewFragment.isVisible()
+					&& itemViewFragment.getTag().contentEquals(mCurrentFragVisible))
 				return;
 
 			fragViewToDisplay = itemViewFragment.getTag(); // same end result as vc var in iOS
@@ -946,8 +944,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				setAsFrontmostFragment(tag);
 			}
 			// if it's already visible and the frontmost fragment... bail, no further action here
-			else if (currentFragVisible != null) if (dialogViewFragment.isVisible()
-					&& dialogViewFragment.getTag().contentEquals(currentFragVisible))
+			else if (mCurrentFragVisible != null) if (dialogViewFragment.isVisible()
+					&& dialogViewFragment.getTag().contentEquals(mCurrentFragVisible))
 				return;
 
 			fragViewToDisplay = dialogViewFragment.getTag(); // same end result as vc var in iOS
@@ -967,8 +965,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				setAsFrontmostFragment(tag);
 			}
 			// if it's already visible and the frontmost fragment... bail, no further action here
-			else if (currentFragVisible != null) if (webPageViewFragment.isVisible()
-					&& webPageViewFragment.getTag().contentEquals(currentFragVisible))
+			else if (mCurrentFragVisible != null) if (webPageViewFragment.isVisible()
+					&& webPageViewFragment.getTag().contentEquals(mCurrentFragVisible))
 				return;
 
 			fragViewToDisplay = webPageViewFragment.getTag(); // same end result as vc var in iOS
@@ -988,8 +986,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				setAsFrontmostFragment(tag);
 			}
 			// if it's already visible and the frontmost fragment... bail, no further action here
-			else if (currentFragVisible != null) if (noteViewFragment.isVisible()
-					&& noteViewFragment.getTag().contentEquals(currentFragVisible))
+			else if (mCurrentFragVisible != null) if (noteViewFragment.isVisible()
+					&& noteViewFragment.getTag().contentEquals(mCurrentFragVisible))
 				return;
 
 			fragViewToDisplay = noteViewFragment.getTag(); // same end result as vc var in iOS
@@ -1087,8 +1085,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				setAsFrontmostFragment(tag);
 			}
 			// if it's already visible and the frontmost fragment... bail, no further action here
-			else if (currentFragVisible != null)
-				if (plaqueViewFragment.isVisible() && plaqueViewFragment.getTag().contentEquals(currentFragVisible))
+			else if (mCurrentFragVisible != null)
+				if (plaqueViewFragment.isVisible() && plaqueViewFragment.getTag().contentEquals(mCurrentFragVisible))
 					return;
 
 			plaqueViewFragment.initWithInstance(i);

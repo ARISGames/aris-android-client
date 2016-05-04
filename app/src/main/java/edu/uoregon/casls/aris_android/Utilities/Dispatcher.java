@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
+import edu.uoregon.casls.aris_android.R;
 import edu.uoregon.casls.aris_android.data_objects.ArisLog;
 import edu.uoregon.casls.aris_android.data_objects.Dialog;
 import edu.uoregon.casls.aris_android.data_objects.DialogCharacter;
@@ -32,6 +33,7 @@ import edu.uoregon.casls.aris_android.data_objects.Tag;
 import edu.uoregon.casls.aris_android.data_objects.Trigger;
 import edu.uoregon.casls.aris_android.data_objects.User;
 import edu.uoregon.casls.aris_android.data_objects.WebPage;
+import edu.uoregon.casls.aris_android.tab_controllers.MapViewFragment;
 
 /**
  * Created by smorison on 10/6/15.
@@ -300,11 +302,15 @@ public class Dispatcher {
 	//	MODEL_OVERLAYS_LESS_AVAILABLE",nil,@{@"removed":removedOverlays});
 	public void model_overlays_less_available(List<Overlay> removedOverlays) {
 		// todo: MapViewController.refreshViewFromModel()
+		if (mGamePlayAct.mapViewFragment != null && mGamePlayAct.mapViewFragment.isVisible())
+			mGamePlayAct.mapViewFragment.refreshViewFromModel();
 	}
 
 	//	MODEL_OVERLAYS_NEW_AVAILABLE",nil,@{@"added":addedOverlays});
 	public void model_overlays_new_available(List<Overlay> addedOverlays) {
 		// todo: MapViewController.refreshViewFromModel()
+		if (mGamePlayAct.mapViewFragment != null && mGamePlayAct.mapViewFragment.isVisible())
+			mGamePlayAct.mapViewFragment.refreshViewFromModel();
 	}
 
 	//	MODEL_PLAQUES_AVAILABLE",nil,nil); // from plaquesModel; not listened to. -sem
@@ -330,7 +336,12 @@ public class Dispatcher {
 //	MODEL_PLAYER_TRIGGERS_AVAILABLE",nil,nil);
 	public void model_player_triggers_available() {
 		// todo: MapViewController.refreshViewFromModel()
+		if (mGamePlayAct.mapViewFragment != null && mGamePlayAct.mapViewFragment.isVisible())
+			mGamePlayAct.mapViewFragment.refreshViewFromModel();
 		// todo: NotebookNotesViewController.newNoteListAvailable()
+//		NotebookViewFragment notebookViewFragment = mGamePlayAct.getSupportFragmentManager().findFragmentById(R.id.fl_fragment_notebook_view)
+//		if (notebookViewFragment != null && mGamePlayAct.mCurrentFragVisible.equalsIgnoreCase(notebookViewFragment.getTag()))
+//			notebookViewFragment.refreshViewFromModel();
 		mGamePlayAct.mGame.notesModel.invalidateCaches();
 	}
 

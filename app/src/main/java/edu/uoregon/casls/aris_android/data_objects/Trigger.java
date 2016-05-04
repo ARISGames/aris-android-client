@@ -2,6 +2,10 @@ package edu.uoregon.casls.aris_android.data_objects;
 
 import android.location.Location;
 
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+
 /**
  * Created by smorison on 8/19/15.
  */
@@ -21,6 +25,9 @@ public class Trigger {
 	public long     seconds       = 0;
 	public long     time_left     = 0;
 
+	public Marker triggerMarker; // Google Marker - set when map is generated
+	public Circle triggerZoneCircle;
+
 	public long requirement_root_package_id = 0;
 
 	//Booleans (as longs for ARIS server json conformance)
@@ -34,6 +41,11 @@ public class Trigger {
 		// deserialize geocoords from discrete values.
 		location.setLatitude(latitude);
 		location.setLongitude(longitude);
+	}
+
+	public Trigger(LatLng marker_latlng2) {
+		location.setLatitude(marker_latlng2.latitude);
+		location.setLongitude(marker_latlng2.longitude);
 	}
 
 	public Boolean mergeDataFromTrigger(Trigger t) //returns whether or not an update occurred
@@ -59,6 +71,8 @@ public class Trigger {
 		trigger_on_enter = t.trigger_on_enter;
 		qr_code = t.qr_code;
 		seconds = t.seconds;
+		triggerMarker = t.triggerMarker == null ? null : t.triggerMarker;
+		triggerZoneCircle = t.triggerZoneCircle == null ? null : t.triggerZoneCircle;
 		if (time_left > seconds) time_left = seconds;
 		return e;
 	}

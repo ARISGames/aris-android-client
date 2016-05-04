@@ -1,8 +1,8 @@
 package edu.uoregon.casls.aris_android.tab_controllers;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,9 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
-import com.google.android.gms.games.Game;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,9 +23,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
@@ -152,11 +157,19 @@ public class MapViewFragment extends Fragment {
 		mGamePlayAct.hideNavBar();
 
 		setUpMap();
+//		refreshViewFromModel();
+//		refreshModels();
 		return v;
 	}
 
+	private void refreshModels() {
+		mGamePlayAct.mGame.triggersModel.requestPlayerTriggers();
+		mGamePlayAct.mGame.overlaysModel.requestPlayerOverlays();
+	}
+
+	public GoogleMap mMap;
+
 	private void setUpMap() {
-//		mSupportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fl_map_parent);
 		mSupportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.inner_fragment_map);
 		if (mSupportMapFragment == null) {
 			FragmentManager fragmentManager = getFragmentManager();
@@ -187,16 +200,24 @@ public class MapViewFragment extends Fragment {
 						googleMap.setPadding(0,0,0,0);
 						googleMap.setMyLocationEnabled(true);
 
+
 						CameraPosition cameraPosition = new CameraPosition.Builder().target(marker_latlng).zoom(17.0f).build();
 						CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
 						googleMap.moveCamera(cameraUpdate);
 
-						final Marker marker1 = googleMap.addMarker(new MarkerOptions()
+						mMap = googleMap; // globalize it (hopefully!)
+
+						// test putting marker on map:
+						Trigger trig = new Trigger(marker_latlng2);
+//						final Marker marker1 = googleMap.addMarker(new MarkerOptions()
+						trig.triggerMarker = googleMap.addMarker(new MarkerOptions()
 								.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_media_pause)) // first icon I found. really wanted to use a map oriented one.
 								.anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
 								.position(marker_latlng2)
 						);
-						marker1.setTitle("Marker One");
+//						marker1.setTitle("Marker One");
+						trig.triggerMarker.setTitle("Marker One");
+						final Marker marker1 = trig.triggerMarker;
 						googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 							@Override
 							public boolean onMarkerClick(Marker marker) {
@@ -216,6 +237,9 @@ public class MapViewFragment extends Fragment {
 								return false;
 							}
 						});
+						refreshViewFromModel();
+						refreshModels();
+
 					}
 				}
 			});
@@ -223,91 +247,115 @@ public class MapViewFragment extends Fragment {
 
 	}
 
-//	public void refreshViewFromModel()
-//	{
-//		if (mapView == null) return;
-//
-//		boolean shouldRemove;
-//		boolean shouldAdd;
-//		TriggersModel triggersModel = mGamePlayAct.mGame.triggersModel;
-//
-//		Trigger mapTrigger;
-//		Trigger modelTrigger;
-//		Instance modelInstance;
-//		Overlay mapOverlay;
-//		Overlay modelOverlay;
-//
-//		//
-//		//LOCATIONS
-//		//
-//
-//		//Remove locations
-//		for(long i = 0; i <  annotationOverlays.count; i++)
-//		{
-//			mapTrigger = [self mvaoAt:i].annotation;
-//			shouldRemove = true;
-//			for(long j = 0; j < _MODEL_TRIGGERS_.playerTriggers.count; j++)
-//			{
-//				modelTrigger = _MODEL_TRIGGERS_.playerTriggers[j];
-//				if(mapTrigger.trigger_id == modelTrigger.trigger_id &&
-//						(
-//								[_MODEL_INSTANCES_ instanceForId:mapTrigger.instance_id].infinite_qty ||
-//				[_MODEL_INSTANCES_ instanceForId:mapTrigger.instance_id].qty > 0 ||
-//					![[_MODEL_INSTANCES_ instanceForId:mapTrigger.instance_id].object_type isEqualToString:@"ITEM"]
-//				)
-//				) shouldRemove = false;
-//			}
-//			if(shouldRemove)
-//			{
-//				MapViewAnnotationOverlay *mvao = [self mvaoAt:i];
-//				[mapView removeAnnotation:mvao.annotation];
-//				[mapView removeOverlay:mvao.overlay];
-//				[annotationOverlays removeObject:mvao];
-//				i--;
-//			}
-//		}
-//		//Add locations
-//		for(long i = 0; i < _MODEL_TRIGGERS_.playerTriggers.count; i++)
-//		{
-//			modelTrigger = _MODEL_TRIGGERS_.playerTriggers[i];
-//			modelInstance = [_MODEL_INSTANCES_ instanceForId:modelTrigger.instance_id];
-//			if(modelInstance.instance_id == 0 || !modelInstance.object) continue;
-//
-//			if(
-//					( //trigger not eligible for map
-//							![modelTrigger.type isEqualToString:@"LOCATION"] || modelTrigger.hidden
-//			)
-//			||
-//			( //instance not eligible for map
-//					[modelInstance.object_type isEqualToString:@"ITEM"] &&
-//			!modelInstance.infinite_qty &&
-//					modelInstance.qty <= 0
-//			)
-//			) continue;
-//
-//			shouldAdd = YES;
-//			for(long j = 0; j < annotationOverlays.count; j++)
-//			{
-//				mapTrigger = [self mvaoAt:j].annotation;
-//				if(mapTrigger.trigger_id == modelTrigger.trigger_id) shouldAdd = NO;
-//			}
-//			if(shouldAdd)
-//			{
+	/*
+	Apple vs Google Map Reference notes:
+	Apple map "annotations" are "markers" in Google Maps. They specify a single point on the map.
+	Apple Overlays are like Google Circles, Polygons or Polylines but Aris only really uses them as circles
+	 where the circle represents the trigger distance radius.
+	  (not to be confused with Google Map GroundOverlays, which are literally images overlaid on a map area.)
+	  iOS Aris' annotationOverlays array therefor will be called markersAndCircles here.
+	 */
+
+	// store list of Trigger/Overlays pairs, or as is called in iOS triggers/circles.
+	public Map<String, Object>       markerPoly        = new HashMap<>();
+//	public List<Map<String, Object>> markersAndCircles = new ArrayList<>();
+	public List<Trigger> markersAndCircles = new ArrayList<>();
+
+	public void refreshViewFromModel() {
+		if (mMap == null) return;
+
+		boolean shouldRemove;
+		boolean shouldAdd;
+		TriggersModel triggersModel = mGamePlayAct.mGame.triggersModel;
+
+		List<Trigger> markersAndCirclesToRemove = new LinkedList<>();
+		Instance modelInstance;
+		Overlay mapOverlay;
+		Overlay modelOverlay;
+
+		//
+		//LOCATIONS
+		//
+
+		//Remove locations
+		for (Trigger mapTrigger : markersAndCircles) {
+			shouldRemove = true;
+			for (Trigger modelTrigger : mGamePlayAct.mGame.triggersModel.playerTriggers) {
+				//@formatter:off
+				if (mapTrigger.trigger_id == modelTrigger.trigger_id
+					&& (mGamePlayAct.mGame.instancesModel.instanceForId(mapTrigger.instance_id).infinite_qty != 0
+						|| mGamePlayAct.mGame.instancesModel.instanceForId(mapTrigger.instance_id).qty > 0
+						|| !mGamePlayAct.mGame.instancesModel.instanceForId(mapTrigger.instance_id).object_type.equals("ITEM")
+					)
+				) shouldRemove = false;
+				//@formatter:on
+			}
+			if (shouldRemove) { // remove the trigger point and its circle from the map
+				// remove marker
+				mapTrigger.triggerMarker.remove();
+				// remove trigger zone Circle
+				mapTrigger.triggerZoneCircle.remove();
+				// add to list of triggers objects to remove from List. (Done afterward to avoid innerloop conflicts
+				markersAndCirclesToRemove.add(mapTrigger);
+			}
+		}
+		// remove any triggers designated for deletion;
+		for (Trigger toDie : markersAndCirclesToRemove) {
+			markersAndCircles.remove(toDie);
+		}
+
+		//Add locations
+		for (Trigger modelTrigger : mGamePlayAct.mGame.triggersModel.playerTriggers)
+		{
+			modelInstance = mGamePlayAct.mGame.instancesModel.instanceForId(modelTrigger.instance_id);
+			if ( modelInstance.instance_id == 0 || modelInstance.object() == null) continue;
+			//@formatter:off
+			if (    ( //trigger not eligible for map
+					    !modelTrigger.type.equals("LOCATION") || modelTrigger.hidden != 0
+				    )
+			     || ( //instance not eligible for map
+						modelInstance.object_type.equals("ITEM")
+				     && modelInstance.infinite_qty == 0
+					 && modelInstance.qty <= 0
+				    )
+			) continue; // move on to next in list
+				//@formatter:on
+
+			shouldAdd = true;
+//			for(long j = 0; j < markersAndCircles.count; j++)
+			for (Trigger mapTrigger : markersAndCircles) {
+				if(mapTrigger.trigger_id == modelTrigger.trigger_id) shouldAdd = false;
+			}
+			if (shouldAdd) {
 //				MKCircle *circle = [MKCircle circleWithCenterCoordinate:modelTrigger.location.coordinate radius:(modelTrigger.infinite_distance ? 0 : modelTrigger.distance)];
 //				MapViewAnnotationOverlay *mvao = [[MapViewAnnotationOverlay alloc] initWithAnnotation:modelTrigger overlay:circle];
-//
+				// add new marker to map
 //				[mapView addAnnotation:mvao.annotation];
+				modelTrigger.triggerMarker = mMap.addMarker(new MarkerOptions()
+						.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_media_pause)) // first icon I found. really wanted to use a map oriented one.
+						.anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
+						.position(new LatLng(modelTrigger.latitude, modelTrigger.longitude))
+				);
+				// add new circle to map
 //				[mapView addOverlay:mvao.overlay];
-//				[annotationOverlays addObject:mvao];
-//			}
-//		}
-//
-//
-//		//
-//		//OVERLAYS
-//		//
-//
-//		//Remove overlays
+				modelTrigger.triggerZoneCircle = mMap.addCircle(new CircleOptions()
+						.center(new LatLng(modelTrigger.latitude, modelTrigger.longitude))
+						.radius(modelTrigger.distance)
+						.fillColor(Color.argb(128,0,255,110))
+						.strokeWidth(1)
+				);
+//				[markersAndCircles addObject:mvao];
+				markersAndCircles.add(modelTrigger);
+			}
+		}
+
+
+		//
+		//OVERLAYS
+		//
+// TODO: looks like overlays are an unused concept in Aris. Leaving this un translated code in in the
+		// TODO: event that it ever become necessary.
+		//Remove overlays
 //		for(long i = 0; i < overlays.count; i++)
 //		{
 //			mapOverlay = [self mvoAt:i];
@@ -340,8 +388,9 @@ public class MapViewFragment extends Fragment {
 //				[overlays addObject:modelOverlay];
 //			}
 //		}
-//
-//		//refresh views (ugly)
+
+		//refresh views (ugly)
+		// todo: below
 //		[mapView setCenterCoordinate:mapView.region.center animated:NO];
 //		if(firstLoad)
 //		{
@@ -350,7 +399,7 @@ public class MapViewFragment extends Fragment {
 //			else if([_MODEL_GAME_.map_focus isEqualToString:@"FIT_LOCATIONS"]) [self zoomToFitAnnotations:NO];
 //		}
 //		firstLoad = false;
-//	}
+	}
 
 //	@Override
 //	public void onAttach(Activity activity) {
