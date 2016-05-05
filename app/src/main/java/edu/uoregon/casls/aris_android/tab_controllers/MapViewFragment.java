@@ -1,7 +1,11 @@
 package edu.uoregon.casls.aris_android.tab_controllers;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -12,9 +16,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -37,9 +43,13 @@ import java.util.Map;
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
+import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.data_objects.Overlay;
 import edu.uoregon.casls.aris_android.data_objects.Trigger;
+import edu.uoregon.casls.aris_android.models.InstancesModel;
 import edu.uoregon.casls.aris_android.models.TriggersModel;
+import edu.uoregon.casls.aris_android.services.ARISMediaLoader;
+import edu.uoregon.casls.aris_android.services.MediaResult;
 
 
 /**
@@ -254,15 +264,14 @@ public class MapViewFragment extends Fragment {
 	 where the circle represents the trigger distance radius.
 	  (not to be confused with Google Map GroundOverlays, which are literally images overlaid on a map area.)
 	  iOS Aris' annotationOverlays array therefor will be called markersAndCircles here.
+	The Google and Apple versions of polygon-based "overlays" is (apparently) not implemented in ARIS yet.
+	  so it's commented out.
 	 */
 
-	// store list of Trigger/Overlays pairs, or as is called in iOS triggers/circles.
-	public Map<String, Object>       markerPoly        = new HashMap<>();
-//	public List<Map<String, Object>> markersAndCircles = new ArrayList<>();
 	public List<Trigger> markersAndCircles = new ArrayList<>();
 
 	public void refreshViewFromModel() {
-		if (mMap == null) return;
+		if (mMap == null) return; // There will be calls arriving before the map is available; ignore them.
 
 		boolean shouldRemove;
 		boolean shouldAdd;
@@ -280,7 +289,7 @@ public class MapViewFragment extends Fragment {
 		//Remove locations
 		for (Trigger mapTrigger : markersAndCircles) {
 			shouldRemove = true;
-			for (Trigger modelTrigger : mGamePlayAct.mGame.triggersModel.playerTriggers) {
+			for (Trigger modelTrigger : triggersModel.playerTriggers) {
 				//@formatter:off
 				if (mapTrigger.trigger_id == modelTrigger.trigger_id
 					&& (mGamePlayAct.mGame.instancesModel.instanceForId(mapTrigger.instance_id).infinite_qty != 0
@@ -292,9 +301,9 @@ public class MapViewFragment extends Fragment {
 			}
 			if (shouldRemove) { // remove the trigger point and its circle from the map
 				// remove marker
-				mapTrigger.triggerMarker.remove();
+				if (mapTrigger.triggerMarker != null) mapTrigger.triggerMarker.remove();
 				// remove trigger zone Circle
-				mapTrigger.triggerZoneCircle.remove();
+				if (mapTrigger.triggerZoneCircle != null) mapTrigger.triggerZoneCircle.remove();
 				// add to list of triggers objects to remove from List. (Done afterward to avoid innerloop conflicts
 				markersAndCirclesToRemove.add(mapTrigger);
 			}
@@ -303,9 +312,9 @@ public class MapViewFragment extends Fragment {
 		for (Trigger toDie : markersAndCirclesToRemove) {
 			markersAndCircles.remove(toDie);
 		}
-
+		boolean showFirstMarkerTitle = true;
 		//Add locations
-		for (Trigger modelTrigger : mGamePlayAct.mGame.triggersModel.playerTriggers)
+		for (Trigger modelTrigger : triggersModel.playerTriggers)
 		{
 			modelInstance = mGamePlayAct.mGame.instancesModel.instanceForId(modelTrigger.instance_id);
 			if ( modelInstance.instance_id == 0 || modelInstance.object() == null) continue;
@@ -322,32 +331,51 @@ public class MapViewFragment extends Fragment {
 				//@formatter:on
 
 			shouldAdd = true;
-//			for(long j = 0; j < markersAndCircles.count; j++)
 			for (Trigger mapTrigger : markersAndCircles) {
 				if(mapTrigger.trigger_id == modelTrigger.trigger_id) shouldAdd = false;
 			}
 			if (shouldAdd) {
-//				MKCircle *circle = [MKCircle circleWithCenterCoordinate:modelTrigger.location.coordinate radius:(modelTrigger.infinite_distance ? 0 : modelTrigger.distance)];
-//				MapViewAnnotationOverlay *mvao = [[MapViewAnnotationOverlay alloc] initWithAnnotation:modelTrigger overlay:circle];
-				// add new marker to map
-//				[mapView addAnnotation:mvao.annotation];
-				modelTrigger.triggerMarker = mMap.addMarker(new MarkerOptions()
-						.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_media_pause)) // first icon I found. really wanted to use a map oriented one.
-						.anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
-						.position(new LatLng(modelTrigger.latitude, modelTrigger.longitude))
-				);
+				Media m = mGamePlayAct.mMediaModel.mediaForId((modelTrigger.icon_media_id == 0) ? Media.DEFAULT_PLAQUE_ICON_MEDIA_ID : modelTrigger.icon_media_id);
+				Bitmap markerIconBitmap;
+				// find the bitmap (media.data) in the swirling vortex of ARIS data...
+				if (m.data == null) {
+					ARISMediaLoader mediaLoader = new ARISMediaLoader(mGamePlayAct);
+					mediaLoader.loadMedia(m);
+					if (m.data == null) // if loadData didn't give us a bitmap from a local file set to generic icon
+						markerIconBitmap = mGamePlayAct.mMediaModel.mediaForId(Media.DEFAULT_PLAQUE_ICON_MEDIA_ID).data;
+					else
+						markerIconBitmap = m.data;
+				}
+				else
+					markerIconBitmap =  m.data;
+				markerIconBitmap = Bitmap.createScaledBitmap(markerIconBitmap, 50, 50, false);
+
+				MarkerOptions markerOptions = new MarkerOptions()
+						.title(modelInstance.name())
+						.icon(BitmapDescriptorFactory.fromBitmap(markerIconBitmap))
+						.anchor(0.5f, 0.5f) // Center the icon
+						.position(new LatLng(modelTrigger.latitude, modelTrigger.longitude)
+						);
+
+				modelTrigger.triggerMarker = mMap.addMarker(markerOptions);
+				if (showFirstMarkerTitle) { // just show the starting point.
+					modelTrigger.triggerMarker.showInfoWindow();
+					showFirstMarkerTitle = false;
+				}
+
 				// add new circle to map
-//				[mapView addOverlay:mvao.overlay];
+
 				modelTrigger.triggerZoneCircle = mMap.addCircle(new CircleOptions()
 						.center(new LatLng(modelTrigger.latitude, modelTrigger.longitude))
 						.radius(modelTrigger.distance)
 						.fillColor(Color.argb(128,0,255,110))
 						.strokeWidth(1)
 				);
-//				[markersAndCircles addObject:mvao];
 				markersAndCircles.add(modelTrigger);
 			}
 		}
+		if (!markersAndCircles.isEmpty()) setOnclickListenerForMarkers();
+
 
 
 		//
@@ -401,6 +429,65 @@ public class MapViewFragment extends Fragment {
 //		firstLoad = false;
 	}
 
+	private void setOnclickListenerForMarkers() {
+		mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+			@Override
+			public boolean onMarkerClick(Marker marker) {
+				for (final Trigger trigger : markersAndCircles) {
+					Instance  modelInstance = mGamePlayAct.mGame.instancesModel.instanceForId(trigger.instance_id);
+					String in = modelInstance.name();
+					String mt = marker.getTitle();
+					if (modelInstance.name().equals(marker.getTitle())) {
+						// get distance from player.
+						trigger.setLocationFromExistingLatLng();
+						float distance = trigger.location.distanceTo(mGamePlayAct.mPlayer.location);
+						if (mGamePlayAct.mGame.map_offsite_mode != 0
+							|| trigger.infinite_distance != 0
+							|| (distance <= trigger.distance && mGamePlayAct.mPlayer.location != null))
+						{
+							// temporarily just show a popup dialog instead of fancy on screen icon
+							// todo: do fancy icon
+							new AlertDialog.Builder(mGamePlayAct)
+									.setIcon(mGamePlayAct.getResources().getDrawable(R.drawable.plaque_icon_120))
+									.setTitle("View Plaque?")
+//									.setMessage("Are you sure you want to quit Aris?")
+									.setPositiveButton("View", new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(DialogInterface dialog, int which) {
+											//kill inner map fragment
+											FragmentManager fm = getChildFragmentManager();
+											Fragment innerMapFragment = fm.findFragmentById(R.id.inner_fragment_map);
+											if (innerMapFragment != null) {
+												fm.beginTransaction().remove(innerMapFragment).commit();
+											}
+
+
+											// enqueueTrigger
+											if (trigger != null) mGamePlayAct.mGame.displayQueueModel.enqueueTrigger(trigger);
+
+										}
+									})
+									.setNegativeButton("Back", null)
+									.show();
+
+							return false;
+						}
+						else {
+							float distanceToWalk = distance - trigger.distance;
+							Toast t = Toast.makeText(mGamePlayAct, "You are not in range to interact with this. Walk " + distanceToWalk + "m",
+									Toast.LENGTH_LONG);
+							t.setGravity(Gravity.CENTER, 0, 0);
+							t.show();
+
+						}
+					}
+				}
+
+				return false;
+			}
+		});
+	}
+
 //	@Override
 //	public void onAttach(Activity activity) {
 //		super.onAttach(activity);
@@ -411,7 +498,20 @@ public class MapViewFragment extends Fragment {
 //					+ " must implement OnFragmentInteractionListener");
 //		}
 //	}
-//
+
+	@Override
+	public void onDestroyView() {
+
+		FragmentManager fm = getFragmentManager();
+
+		Fragment innerMapFragment = fm.findFragmentById(R.id.inner_fragment_map);
+		if (innerMapFragment != null) {
+			fm.beginTransaction().remove(innerMapFragment).commit();
+		}
+
+		super.onDestroyView();
+	}
+
 	@Override
 	public void onDetach() {
 		super.onDetach();

@@ -367,6 +367,8 @@ public class MediaModel extends ARISModel {
 				media = new Media(mediaCD);
 			}
 		}
+		// temp fix try to get media values to align with mediaCD's
+//		media.l
 		medias.put(media.media_id(), media); // [[NSNumber numberWithLong:media.media_id]] = media; //set light cache
 
 //		this.commitContext();

@@ -606,6 +606,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 						String dataStr = jsonData.getJSONObject(i).toString();
 						Trigger trigger = gson.fromJson(dataStr, Trigger.class);
 						//populate hashmap as trigger_id, Quest Obj>
+						trigger.setLocationFromExistingLatLng(); // sets the location member var from lat and long.
 						triggers.add(trigger);
 					}
 					mGamePlayAct.mDispatch.services_triggers_received(triggers);

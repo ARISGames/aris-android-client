@@ -819,12 +819,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	}
 
 	public void onClickMapOpenDrawer(View v) {
-		Toast t = Toast.makeText(this, "This should cause the sliding navigation menu to appear.",
-				Toast.LENGTH_SHORT);
-		t.setGravity(Gravity.CENTER, 0, 0);
-		t.show();
 		this.openNavDrawer();
-
 	}
 
 

@@ -48,6 +48,11 @@ public class Trigger {
 		location.setLongitude(marker_latlng2.longitude);
 	}
 
+	public void setLocationFromExistingLatLng() {
+		location.setLatitude(latitude);
+		location.setLongitude(longitude);
+	}
+
 	public Boolean mergeDataFromTrigger(Trigger t) //returns whether or not an update occurred
 	{
 //		Boolean e = this.equals(t);//self trigIsEqual:t; // can't just use this.equals(t); instead use sutom compare method

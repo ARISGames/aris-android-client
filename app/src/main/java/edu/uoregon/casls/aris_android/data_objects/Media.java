@@ -110,7 +110,11 @@ public class Media {
 			File path = ArisApp.getContext().getFilesDir();
 
 			try {
-				url = new URL("file://" + path.getPath() + mediaCD.localURL);
+				if (mediaCD.localURL.startsWith("/data/data/"))
+					url = new URL("file://" + mediaCD.localURL);
+				else
+					url = new URL("file://" + path.getPath() + mediaCD.localURL);
+
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
