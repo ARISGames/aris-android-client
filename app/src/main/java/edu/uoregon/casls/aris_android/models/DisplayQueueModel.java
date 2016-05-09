@@ -212,10 +212,10 @@ public class DisplayQueueModel extends ARISModel {
 						if (t == jt
 							&& (t.type.contentEquals("IMMEDIATE")
 								|| (t.type.contentEquals("LOCATION")
-								&& t.trigger_on_enter == 1
-								&& (t.infinite_distance == 1
-									|| t.location.distanceTo(mGamePlayAct.mPlayer.location) < t.distance
-									)
+									&& t.trigger_on_enter == 1
+									&& (t.infinite_distance == 1
+										|| t.location.distanceTo(mGamePlayAct.mPlayer.location) < t.distance
+										)
 								)
 							)
 						)
