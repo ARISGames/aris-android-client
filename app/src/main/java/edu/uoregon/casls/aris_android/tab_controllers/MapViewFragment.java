@@ -454,7 +454,7 @@ public class MapViewFragment extends Fragment {
 									.setPositiveButton("View", new DialogInterface.OnClickListener() {
 										@Override
 										public void onClick(DialogInterface dialog, int which) {
-											//kill inner map fragment
+											//kill inner map fragment todo: put this in onDetsroyView/detach
 											FragmentManager fm = getChildFragmentManager();
 											Fragment innerMapFragment = fm.findFragmentById(R.id.inner_fragment_map);
 											if (innerMapFragment != null) {
