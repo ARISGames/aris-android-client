@@ -181,24 +181,25 @@ public class DisplayQueueModel extends ARISModel {
 
 		//if trigger in queue no longer available, remove from queue
 //		for (int i = 0; i < displayQueue.size(); i++) {
-		if (displayQueue != null) // hold off until there's something in the List. NPE otherwise.
+		if (displayQueue != null) { // hold off until there's something in the List. NPE otherwise.
 //			for (Object o : displayQueue) {
 			for (Iterator<Object> iter = displayQueue.iterator(); iter.hasNext(); ) {// for (Iterator<String> iterator = list.iterator(); iterator.hasNext(); ) {
 				Object o = iter.next(); //String value = iterator.next();
 				boolean valid = false;
 				if (!(o instanceof Trigger)) // (!o instanceof Trigger) <- is this more efficient/appropriate/logically correct?
 					continue; // isKindOfClass:[Trigger class]]) continue; //only triggers are blacklisted
-				t = (Trigger)o; // cast to Trigger
-				for (Trigger  jt : pt)
+				t = (Trigger) o; // cast to Trigger
+				for (Trigger jt : pt)
 					if (t.trigger_id == 0 || t.trigger_id == ((Trigger) jt).trigger_id)
 						valid = true; //allow artificial triggers to stay in queue
 //				if (!valid) displayQueue.remove(o);
 				if (!valid) iter.remove();
 			}
+		}
 
 		//if trigger in blacklist no longer available/within range, remove from blacklist
 //		for (int i = 0; i < displayBlacklist.size(); i++) {
-		if (displayBlacklist != null)
+		if (displayBlacklist != null) {
 //			for (Object o : displayBlacklist) { // could probably just be cast to Trigger instead of Object here - sem
 //			for (Iterator<Trigger> iter = displayBlacklist.iterator(); iter.hasNext(); ) { // could probably just be cast to Trigger instead of Object here - sem
 			for (int i = displayBlacklist.size() - 1; i > -1; i--) { // could probably just be cast to Trigger instead of Object here - sem
@@ -206,26 +207,25 @@ public class DisplayQueueModel extends ARISModel {
 //				if (o instanceof Trigger) { //only triggers are blacklisted - sem: so why are we testing here?
 //					t = (Trigger)o;
 //					t = iter.next();
-					t = displayBlacklist.get(i);
-	//@formatter:off
-					for (Trigger  jt : pt) {
-						if (t == jt
-							&& (t.type.contentEquals("IMMEDIATE")
-								|| (t.type.contentEquals("LOCATION")
-									&& t.trigger_on_enter == 1
-									&& (t.infinite_distance == 1
-										|| t.location.distanceTo(mGamePlayAct.mPlayer.location) < t.distance
-										)
-								)
+				t = displayBlacklist.get(i);
+				//@formatter:off
+				for (Trigger jt : pt) {
+					if (t == jt
+						&& (t.type.contentEquals("IMMEDIATE")
+							|| (t.type.contentEquals("LOCATION")
+								&& t.trigger_on_enter == 1
+								&& (t.infinite_distance == 1
+									|| t.location.distanceTo(mGamePlayAct.mPlayer.location) < t.distance
+								    )
 							)
 						)
-						valid = true;
-					}
-	//@formatter:on
-//				}
+					)
+					valid = true;
+				}
+				//@formatter:on
 				if (!valid) displayBlacklist.remove(t);// removeObject(t);
-//				if (!valid) displayBlacklist.remove(i);// removeObject(t);
 			}
+		}
 	}
 
 	public void tickAndEnqueueAvailableTimers() {

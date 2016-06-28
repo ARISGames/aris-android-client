@@ -1,0 +1,861 @@
+2016-01-19 15:08:10.271 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+2016-01-19 15:08:10.273 ARIS[3632:2063004] NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+2016-01-19 15:08:10.274 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:10.276 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/
+2016-01-19 15:08:10.277 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:10.279 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+2016-01-19 15:08:10.280 ARIS[3632:2063004] NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+2016-01-19 15:08:10.281 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:10.282 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/
+2016-01-19 15:08:10.283 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:10.285 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+2016-01-19 15:08:10.290 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+2016-01-19 15:08:10.292 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:10.294 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/
+2016-01-19 15:08:10.295 ARIS[3632:2063004] Req async data: {"tick_factories":1,"game_id":64,"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"}}
+2016-01-19 15:08:10.297 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:08:10.297 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:10.300 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/
+2016-01-19 15:08:10.301 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:10.304 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:08:10.305 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:08:10.306 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:08:10.307 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:08:10.308 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:08:10.309 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:08:10.310 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:10.311 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/
+2016-01-19 15:08:10.312 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64,"owner_id":10269}
+2016-01-19 15:08:10.314 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:08:10.315 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:10.316 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/
+2016-01-19 15:08:10.317 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:10.319 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/
+2016-01-19 15:08:10.320 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:10.322 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:08:10.323 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:10.325 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/
+2016-01-19 15:08:10.326 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:10.441 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/	(0.161454)
+2016-01-19 15:08:10.442 ARIS[3632:2063004] Fin async data: 
+{"data":{"scene_id":"76","game_id":"64","name":"main","description":"","editor_x":"0","editor_y":"0","created":"2014-09-17 03:53:16","last_active":"2014-09-17 03:53:16"},"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:10.445 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+2016-01-19 15:08:10.446 ARIS[3632:2063004] NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+2016-01-19 15:08:10.447 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:10.449 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/	(0.164798)
+2016-01-19 15:08:10.450 ARIS[3632:2063004] Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:10.452 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+2016-01-19 15:08:10.455 ARIS[3632:2063004] NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+2016-01-19 15:08:10.456 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:10.470 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/	(0.167701)
+2016-01-19 15:08:10.471 ARIS[3632:2063004] Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:10.472 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:08:10.473 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:10.475 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/	(0.178653)
+2016-01-19 15:08:10.476 ARIS[3632:2063004] Fin async data: 
+{"data":[{"trigger_id":"1476","game_id":"64","instance_id":"2855","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"Ben","icon_media_id":"0","latitude":"42.746103625045","longitude":"-89.459908190918","distance":"5","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"1","qr_code":"1410926060845","seconds":"0","user_id":10269},{"trigger_id":"251720","game_id":"64","instance_id":"1693302","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"","icon_media_id":"0","latitude":"38.142667840506","longitude":"-102.12808865662","distance":"25","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"0","qr_code":"1445460405247","seconds":"10","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:10.483 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+2016-01-19 15:08:10.484 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+2016-01-19 15:08:10.486 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:10.508 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/	(0.194742)
+2016-01-19 15:08:10.509 ARIS[3632:2063004] Fin async data: 
+{"data":[{"instance_id":"2855","game_id":"64","object_type":"DIALOG","object_id":"605","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:21"},{"instance_id":"2856","game_id":"64","object_type":"DIALOG","object_id":"606","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:29"},{"instance_id":"4843","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-25 20:41:05"},{"instance_id":"5834","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-10-01 21:32:37"},{"instance_id":"1023174","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME","owner_id":"0","created":"2015-08-27 20:13:59"},{"instance_id":"1693302","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"1","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2015-10-21 20:46:45"},{"instance_id":"2247899","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"USER","owner_id":"10269","created":"2016-01-19 21:07:59"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:10.520 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:08:10.522 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:08:10.523 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:08:10.524 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:08:10.525 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:08:10.526 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:08:10.526 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:10.529 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/	(0.210481)
+2016-01-19 15:08:10.530 ARIS[3632:2063004] Fin async data: 
+{"data":[{"tab_id":"645","game_id":"64","type":"MAP","name":"Map","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"2","user_id":10269},{"tab_id":"646","game_id":"64","type":"INVENTORY","name":"Inventory","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"3","user_id":10269},{"tab_id":"647","game_id":"64","type":"SCANNER","name":"Scanner","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"4","user_id":10269},{"tab_id":"648","game_id":"64","type":"DECODER","name":"Decoder","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"5","user_id":10269},{"tab_id":"649","game_id":"64","type":"PLAYER","name":"Player","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"6","user_id":10269},{"tab_id":"650","game_id":"64","type":"NOTEBOOK","name":"Notebook","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"7","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:10.536 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:08:10.537 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:10.541 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/	(0.219285)
+2016-01-19 15:08:10.543 ARIS[3632:2063004] Fin async data: 
+{"data":[{"user_log_id":"6464954","user_id":"10269","group_id":"0","game_id":"64","event_type":"BEGIN_GAME","content_id":"0","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464956","user_id":"10269","group_id":"0","game_id":"64","event_type":"MOVE","content_id":"0","qty":"0","latitude":"43.073127861546","longitude":"-89.409259557724","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464958","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_INSTANCE","content_id":"2855","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464962","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_DIALOG_SCRIPT","content_id":"6191","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:09"},{"user_log_id":"6464961","user_id":"10269","group_id":"0","game_id":"64","event_type":"TRIGGER_TRIGGER","content_id":"1476","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:10.551 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_LOGS_RECEIVED
+2016-01-19 15:08:10.552 ARIS[3632:2063004] NSNotification: MODEL_LOGS_AVAILABLE
+2016-01-19 15:08:10.552 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:10.556 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/	(0.228842)
+2016-01-19 15:08:10.557 ARIS[3632:2063004] Fin async data: 
+{"data":{"active":[],"complete":[]},"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:10.558 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:08:10.559 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:20.271 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+2016-01-19 15:08:20.273 ARIS[3632:2063004] NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+2016-01-19 15:08:20.274 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:20.276 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/
+2016-01-19 15:08:20.277 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:20.278 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+2016-01-19 15:08:20.279 ARIS[3632:2063004] NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+2016-01-19 15:08:20.280 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:20.281 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/
+2016-01-19 15:08:20.282 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:20.288 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+2016-01-19 15:08:20.290 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+2016-01-19 15:08:20.292 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:20.293 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/
+2016-01-19 15:08:20.294 ARIS[3632:2063004] Req async data: {"tick_factories":1,"game_id":64,"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"}}
+2016-01-19 15:08:20.296 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:08:20.297 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:20.298 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/
+2016-01-19 15:08:20.299 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:20.301 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:08:20.303 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:08:20.304 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:08:20.305 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:08:20.306 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:08:20.307 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:08:20.308 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:20.309 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/
+2016-01-19 15:08:20.310 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64,"owner_id":10269}
+2016-01-19 15:08:20.313 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:08:20.314 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:20.316 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/
+2016-01-19 15:08:20.316 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:20.319 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/
+2016-01-19 15:08:20.320 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:20.321 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:08:20.322 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:20.323 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/
+2016-01-19 15:08:20.324 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:20.447 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/	(0.158944)
+2016-01-19 15:08:20.448 ARIS[3632:2063004] Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:20.449 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+2016-01-19 15:08:20.450 ARIS[3632:2063004] NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+2016-01-19 15:08:20.452 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:20.455 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/	(0.159513)
+2016-01-19 15:08:20.456 ARIS[3632:2063004] Fin async data: 
+{"data":[{"trigger_id":"1476","game_id":"64","instance_id":"2855","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"Ben","icon_media_id":"0","latitude":"42.746103625045","longitude":"-89.459908190918","distance":"5","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"1","qr_code":"1410926060845","seconds":"0","user_id":10269},{"trigger_id":"251720","game_id":"64","instance_id":"1693302","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"","icon_media_id":"0","latitude":"38.142667840506","longitude":"-102.12808865662","distance":"25","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"0","qr_code":"1445460405247","seconds":"10","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:20.471 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+2016-01-19 15:08:20.473 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+2016-01-19 15:08:20.476 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:20.481 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/	(0.202979)
+2016-01-19 15:08:20.482 ARIS[3632:2063004] Fin async data: 
+{"data":{"scene_id":"76","game_id":"64","name":"main","description":"","editor_x":"0","editor_y":"0","created":"2014-09-17 03:53:16","last_active":"2014-09-17 03:53:16"},"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:20.484 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+2016-01-19 15:08:20.485 ARIS[3632:2063004] NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+2016-01-19 15:08:20.486 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:20.490 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/	(0.189926)
+2016-01-19 15:08:20.491 ARIS[3632:2063004] Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:20.493 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:08:20.494 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:20.517 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/	(0.205215)
+2016-01-19 15:08:20.518 ARIS[3632:2063004] Fin async data: 
+{"data":[{"instance_id":"2855","game_id":"64","object_type":"DIALOG","object_id":"605","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:21"},{"instance_id":"2856","game_id":"64","object_type":"DIALOG","object_id":"606","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:29"},{"instance_id":"4843","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-25 20:41:05"},{"instance_id":"5834","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-10-01 21:32:37"},{"instance_id":"1023174","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME","owner_id":"0","created":"2015-08-27 20:13:59"},{"instance_id":"1693302","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"1","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2015-10-21 20:46:45"},{"instance_id":"2247899","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"USER","owner_id":"10269","created":"2016-01-19 21:07:59"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:20.528 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:08:20.529 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:08:20.530 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:08:20.531 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:08:20.532 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:08:20.533 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:08:20.534 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:20.540 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/	(0.222514)
+2016-01-19 15:08:20.541 ARIS[3632:2063004] Fin async data: 
+{"data":[{"tab_id":"645","game_id":"64","type":"MAP","name":"Map","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"2","user_id":10269},{"tab_id":"646","game_id":"64","type":"INVENTORY","name":"Inventory","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"3","user_id":10269},{"tab_id":"647","game_id":"64","type":"SCANNER","name":"Scanner","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"4","user_id":10269},{"tab_id":"648","game_id":"64","type":"DECODER","name":"Decoder","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"5","user_id":10269},{"tab_id":"649","game_id":"64","type":"PLAYER","name":"Player","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"6","user_id":10269},{"tab_id":"650","game_id":"64","type":"NOTEBOOK","name":"Notebook","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"7","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:20.550 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:08:20.551 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:20.557 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/	(0.236193)
+2016-01-19 15:08:20.558 ARIS[3632:2063004] Fin async data: 
+{"data":[{"user_log_id":"6464954","user_id":"10269","group_id":"0","game_id":"64","event_type":"BEGIN_GAME","content_id":"0","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464956","user_id":"10269","group_id":"0","game_id":"64","event_type":"MOVE","content_id":"0","qty":"0","latitude":"43.073127861546","longitude":"-89.409259557724","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464958","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_INSTANCE","content_id":"2855","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464962","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_DIALOG_SCRIPT","content_id":"6191","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:09"},{"user_log_id":"6464961","user_id":"10269","group_id":"0","game_id":"64","event_type":"TRIGGER_TRIGGER","content_id":"1476","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:20.570 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_LOGS_RECEIVED
+2016-01-19 15:08:20.571 ARIS[3632:2063004] NSNotification: MODEL_LOGS_AVAILABLE
+2016-01-19 15:08:20.572 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:20.576 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/	(0.250426)
+2016-01-19 15:08:20.577 ARIS[3632:2063004] Fin async data: 
+{"data":{"active":[],"complete":[]},"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:20.578 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:08:20.579 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:30.271 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+2016-01-19 15:08:30.273 ARIS[3632:2063004] NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+2016-01-19 15:08:30.274 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:30.276 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/
+2016-01-19 15:08:30.277 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:30.278 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+2016-01-19 15:08:30.279 ARIS[3632:2063004] NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+2016-01-19 15:08:30.280 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:30.281 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/
+2016-01-19 15:08:30.286 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:30.288 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+2016-01-19 15:08:30.289 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+2016-01-19 15:08:30.291 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:30.293 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/
+2016-01-19 15:08:30.293 ARIS[3632:2063004] Req async data: {"tick_factories":1,"game_id":64,"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"}}
+2016-01-19 15:08:30.296 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:08:30.297 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:30.299 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/
+2016-01-19 15:08:30.300 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:30.301 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:08:30.302 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:08:30.303 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:08:30.306 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:08:30.307 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:08:30.308 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:08:30.308 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:30.310 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/
+2016-01-19 15:08:30.311 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64,"owner_id":10269}
+2016-01-19 15:08:30.313 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:08:30.314 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:30.316 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/
+2016-01-19 15:08:30.317 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:30.319 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/
+2016-01-19 15:08:30.320 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:30.322 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:08:30.323 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:30.325 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/
+2016-01-19 15:08:30.326 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:30.439 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/	(0.160746)
+2016-01-19 15:08:30.440 ARIS[3632:2063004] Fin async data: 
+{"data":{"scene_id":"76","game_id":"64","name":"main","description":"","editor_x":"0","editor_y":"0","created":"2014-09-17 03:53:16","last_active":"2014-09-17 03:53:16"},"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:30.442 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+2016-01-19 15:08:30.443 ARIS[3632:2063004] NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+2016-01-19 15:08:30.444 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:30.452 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/	(0.151089)
+2016-01-19 15:08:30.453 ARIS[3632:2063004] Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:30.456 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:08:30.457 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:30.470 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/	(0.182225)
+2016-01-19 15:08:30.471 ARIS[3632:2063004] Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:30.474 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+2016-01-19 15:08:30.475 ARIS[3632:2063004] NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+2016-01-19 15:08:30.476 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:30.479 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/	(0.184257)
+2016-01-19 15:08:30.480 ARIS[3632:2063004] Fin async data: 
+{"data":[{"trigger_id":"1476","game_id":"64","instance_id":"2855","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"Ben","icon_media_id":"0","latitude":"42.746103625045","longitude":"-89.459908190918","distance":"5","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"1","qr_code":"1410926060845","seconds":"0","user_id":10269},{"trigger_id":"251720","game_id":"64","instance_id":"1693302","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"","icon_media_id":"0","latitude":"38.142667840506","longitude":"-102.12808865662","distance":"25","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"0","qr_code":"1445460405247","seconds":"10","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:30.486 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+2016-01-19 15:08:30.487 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+2016-01-19 15:08:30.490 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:30.538 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/	(0.226278)
+2016-01-19 15:08:30.539 ARIS[3632:2063004] Fin async data: 
+{"data":[{"instance_id":"2855","game_id":"64","object_type":"DIALOG","object_id":"605","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:21"},{"instance_id":"2856","game_id":"64","object_type":"DIALOG","object_id":"606","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:29"},{"instance_id":"4843","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-25 20:41:05"},{"instance_id":"5834","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-10-01 21:32:37"},{"instance_id":"1023174","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME","owner_id":"0","created":"2015-08-27 20:13:59"},{"instance_id":"1693302","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"1","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2015-10-21 20:46:45"},{"instance_id":"2247899","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"USER","owner_id":"10269","created":"2016-01-19 21:07:59"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:30.553 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:08:30.555 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:08:30.556 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:08:30.557 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:08:30.558 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:08:30.559 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:08:30.560 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:30.563 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/	(0.245053)
+2016-01-19 15:08:30.564 ARIS[3632:2063004] Fin async data: 
+{"data":[{"tab_id":"645","game_id":"64","type":"MAP","name":"Map","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"2","user_id":10269},{"tab_id":"646","game_id":"64","type":"INVENTORY","name":"Inventory","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"3","user_id":10269},{"tab_id":"647","game_id":"64","type":"SCANNER","name":"Scanner","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"4","user_id":10269},{"tab_id":"648","game_id":"64","type":"DECODER","name":"Decoder","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"5","user_id":10269},{"tab_id":"649","game_id":"64","type":"PLAYER","name":"Player","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"6","user_id":10269},{"tab_id":"650","game_id":"64","type":"NOTEBOOK","name":"Notebook","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"7","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:30.570 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:08:30.572 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:30.575 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/	(0.253225)
+2016-01-19 15:08:30.576 ARIS[3632:2063004] Fin async data: 
+{"data":[{"user_log_id":"6464954","user_id":"10269","group_id":"0","game_id":"64","event_type":"BEGIN_GAME","content_id":"0","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464956","user_id":"10269","group_id":"0","game_id":"64","event_type":"MOVE","content_id":"0","qty":"0","latitude":"43.073127861546","longitude":"-89.409259557724","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464958","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_INSTANCE","content_id":"2855","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464962","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_DIALOG_SCRIPT","content_id":"6191","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:09"},{"user_log_id":"6464961","user_id":"10269","group_id":"0","game_id":"64","event_type":"TRIGGER_TRIGGER","content_id":"1476","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:30.583 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_LOGS_RECEIVED
+2016-01-19 15:08:30.584 ARIS[3632:2063004] NSNotification: MODEL_LOGS_AVAILABLE
+2016-01-19 15:08:30.585 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:30.589 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/	(0.262221)
+2016-01-19 15:08:30.590 ARIS[3632:2063004] Fin async data: 
+{"data":{"active":[],"complete":[]},"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:30.592 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:08:30.593 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:40.271 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+2016-01-19 15:08:40.273 ARIS[3632:2063004] NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+2016-01-19 15:08:40.274 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:40.276 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/
+2016-01-19 15:08:40.277 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:40.278 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+2016-01-19 15:08:40.279 ARIS[3632:2063004] NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+2016-01-19 15:08:40.280 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:40.281 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/
+2016-01-19 15:08:40.283 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:40.285 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+2016-01-19 15:08:40.287 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+2016-01-19 15:08:40.289 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:40.293 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/
+2016-01-19 15:08:40.294 ARIS[3632:2063004] Req async data: {"tick_factories":1,"game_id":64,"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"}}
+2016-01-19 15:08:40.296 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:08:40.297 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:40.299 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/
+2016-01-19 15:08:40.299 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:40.301 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:08:40.302 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:08:40.303 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:08:40.305 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:08:40.306 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:08:40.306 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:08:40.307 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:40.309 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/
+2016-01-19 15:08:40.309 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64,"owner_id":10269}
+2016-01-19 15:08:40.311 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:08:40.313 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:40.315 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/
+2016-01-19 15:08:40.315 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:40.319 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/
+2016-01-19 15:08:40.320 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:40.321 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:08:40.322 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:40.324 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/
+2016-01-19 15:08:40.325 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:40.501 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/	(0.200232)
+2016-01-19 15:08:40.502 ARIS[3632:2063004] Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:40.503 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:08:40.505 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:40.582 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/	(0.271328)
+2016-01-19 15:08:40.583 ARIS[3632:2063004] Fin async data: 
+{"data":[{"instance_id":"2855","game_id":"64","object_type":"DIALOG","object_id":"605","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:21"},{"instance_id":"2856","game_id":"64","object_type":"DIALOG","object_id":"606","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:29"},{"instance_id":"4843","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-25 20:41:05"},{"instance_id":"5834","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-10-01 21:32:37"},{"instance_id":"1023174","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME","owner_id":"0","created":"2015-08-27 20:13:59"},{"instance_id":"1693302","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"1","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2015-10-21 20:46:45"},{"instance_id":"2247899","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"USER","owner_id":"10269","created":"2016-01-19 21:07:59"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:40.592 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:08:40.594 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:08:40.595 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:08:40.597 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:08:40.598 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:08:40.599 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:08:40.600 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:40.649 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/	(0.331739)
+2016-01-19 15:08:40.650 ARIS[3632:2063004] Fin async data: 
+{"data":[{"tab_id":"645","game_id":"64","type":"MAP","name":"Map","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"2","user_id":10269},{"tab_id":"646","game_id":"64","type":"INVENTORY","name":"Inventory","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"3","user_id":10269},{"tab_id":"647","game_id":"64","type":"SCANNER","name":"Scanner","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"4","user_id":10269},{"tab_id":"648","game_id":"64","type":"DECODER","name":"Decoder","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"5","user_id":10269},{"tab_id":"649","game_id":"64","type":"PLAYER","name":"Player","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"6","user_id":10269},{"tab_id":"650","game_id":"64","type":"NOTEBOOK","name":"Notebook","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"7","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:40.658 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:08:40.659 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:40.718 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/	(0.395864)
+2016-01-19 15:08:40.719 ARIS[3632:2063004] Fin async data: 
+{"data":[{"user_log_id":"6464954","user_id":"10269","group_id":"0","game_id":"64","event_type":"BEGIN_GAME","content_id":"0","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464956","user_id":"10269","group_id":"0","game_id":"64","event_type":"MOVE","content_id":"0","qty":"0","latitude":"43.073127861546","longitude":"-89.409259557724","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464958","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_INSTANCE","content_id":"2855","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464962","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_DIALOG_SCRIPT","content_id":"6191","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:09"},{"user_log_id":"6464961","user_id":"10269","group_id":"0","game_id":"64","event_type":"TRIGGER_TRIGGER","content_id":"1476","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:40.726 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_LOGS_RECEIVED
+2016-01-19 15:08:40.727 ARIS[3632:2063004] NSNotification: MODEL_LOGS_AVAILABLE
+2016-01-19 15:08:40.728 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:40.784 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/	(0.458015)
+2016-01-19 15:08:40.785 ARIS[3632:2063004] Fin async data: 
+{"data":{"active":[],"complete":[]},"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:40.786 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:08:40.787 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:40.896 ARIS[3632:2063004] Fail async URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/	(0.611172)
+2016-01-19 15:08:40.897 ARIS[3632:2063004] Fail async URL: Info: The network connection was lost. , http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/
+2016-01-19 15:08:40.898 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_FETCH_FAILED
+2016-01-19 15:08:40.907 ARIS[3632:2063004] Fail async URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/	(0.612147)
+2016-01-19 15:08:40.908 ARIS[3632:2063004] Fail async URL: Info: The network connection was lost. , http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/
+2016-01-19 15:08:40.909 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_FETCH_FAILED
+2016-01-19 15:08:40.919 ARIS[3632:2063004] Fail async URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/	(0.641144)
+2016-01-19 15:08:40.920 ARIS[3632:2063004] Fail async URL: Info: The network connection was lost. , http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/
+2016-01-19 15:08:40.921 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_FETCH_FAILED
+2016-01-19 15:08:50.271 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+2016-01-19 15:08:50.272 ARIS[3632:2063004] NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+2016-01-19 15:08:50.274 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:50.276 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/
+2016-01-19 15:08:50.277 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:50.278 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+2016-01-19 15:08:50.279 ARIS[3632:2063004] NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+2016-01-19 15:08:50.280 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:50.282 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/
+2016-01-19 15:08:50.287 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:50.289 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+2016-01-19 15:08:50.290 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+2016-01-19 15:08:50.292 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:50.294 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/
+2016-01-19 15:08:50.295 ARIS[3632:2063004] Req async data: {"tick_factories":1,"game_id":64,"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"}}
+2016-01-19 15:08:50.296 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:08:50.297 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:50.298 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/
+2016-01-19 15:08:50.299 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:50.302 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:08:50.303 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:08:50.304 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:08:50.306 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:08:50.306 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:08:50.307 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:08:50.308 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:50.309 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/
+2016-01-19 15:08:50.310 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64,"owner_id":10269}
+2016-01-19 15:08:50.312 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:08:50.314 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:50.315 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/
+2016-01-19 15:08:50.316 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:50.318 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/
+2016-01-19 15:08:50.319 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:50.321 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:08:50.322 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:50.323 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/
+2016-01-19 15:08:50.324 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:08:50.413 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/	(0.135360)
+2016-01-19 15:08:50.414 ARIS[3632:2063004] Fin async data: 
+{"data":{"scene_id":"76","game_id":"64","name":"main","description":"","editor_x":"0","editor_y":"0","created":"2014-09-17 03:53:16","last_active":"2014-09-17 03:53:16"},"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:50.416 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+2016-01-19 15:08:50.417 ARIS[3632:2063004] NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+2016-01-19 15:08:50.418 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:50.496 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/	(0.184419)
+2016-01-19 15:08:50.497 ARIS[3632:2063004] Fin async data: 
+{"data":[{"instance_id":"2855","game_id":"64","object_type":"DIALOG","object_id":"605","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:21"},{"instance_id":"2856","game_id":"64","object_type":"DIALOG","object_id":"606","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:29"},{"instance_id":"4843","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-25 20:41:05"},{"instance_id":"5834","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-10-01 21:32:37"},{"instance_id":"1023174","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME","owner_id":"0","created":"2015-08-27 20:13:59"},{"instance_id":"1693302","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"1","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2015-10-21 20:46:45"},{"instance_id":"2247899","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"USER","owner_id":"10269","created":"2016-01-19 21:07:59"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:50.513 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:08:50.515 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:08:50.516 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:08:50.518 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:08:50.518 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:08:50.519 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:08:50.520 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:50.525 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/	(0.236584)
+2016-01-19 15:08:50.526 ARIS[3632:2063004] Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:50.528 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+2016-01-19 15:08:50.529 ARIS[3632:2063004] NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+2016-01-19 15:08:50.530 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:50.533 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/	(0.231742)
+2016-01-19 15:08:50.533 ARIS[3632:2063004] Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:50.535 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:08:50.535 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:50.538 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/	(0.242460)
+2016-01-19 15:08:50.541 ARIS[3632:2063004] Fin async data: 
+{"data":[{"trigger_id":"1476","game_id":"64","instance_id":"2855","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"Ben","icon_media_id":"0","latitude":"42.746103625045","longitude":"-89.459908190918","distance":"5","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"1","qr_code":"1410926060845","seconds":"0","user_id":10269},{"trigger_id":"251720","game_id":"64","instance_id":"1693302","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"","icon_media_id":"0","latitude":"38.142667840506","longitude":"-102.12808865662","distance":"25","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"0","qr_code":"1445460405247","seconds":"10","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:50.545 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+2016-01-19 15:08:50.547 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+2016-01-19 15:08:50.549 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:50.573 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/	(0.255087)
+2016-01-19 15:08:50.575 ARIS[3632:2063004] Fin async data: 
+{"data":[{"tab_id":"645","game_id":"64","type":"MAP","name":"Map","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"2","user_id":10269},{"tab_id":"646","game_id":"64","type":"INVENTORY","name":"Inventory","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"3","user_id":10269},{"tab_id":"647","game_id":"64","type":"SCANNER","name":"Scanner","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"4","user_id":10269},{"tab_id":"648","game_id":"64","type":"DECODER","name":"Decoder","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"5","user_id":10269},{"tab_id":"649","game_id":"64","type":"PLAYER","name":"Player","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"6","user_id":10269},{"tab_id":"650","game_id":"64","type":"NOTEBOOK","name":"Notebook","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"7","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:50.581 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:08:50.583 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:50.591 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/	(0.264109)
+2016-01-19 15:08:50.592 ARIS[3632:2063004] Fin async data: 
+{"data":{"active":[],"complete":[]},"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:50.597 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:08:50.598 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:08:50.605 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/	(0.284167)
+2016-01-19 15:08:50.606 ARIS[3632:2063004] Fin async data: 
+{"data":[{"user_log_id":"6464954","user_id":"10269","group_id":"0","game_id":"64","event_type":"BEGIN_GAME","content_id":"0","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464956","user_id":"10269","group_id":"0","game_id":"64","event_type":"MOVE","content_id":"0","qty":"0","latitude":"43.073127861546","longitude":"-89.409259557724","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464958","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_INSTANCE","content_id":"2855","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464962","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_DIALOG_SCRIPT","content_id":"6191","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:09"},{"user_log_id":"6464961","user_id":"10269","group_id":"0","game_id":"64","event_type":"TRIGGER_TRIGGER","content_id":"1476","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:08:50.613 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_LOGS_RECEIVED
+2016-01-19 15:08:50.614 ARIS[3632:2063004] NSNotification: MODEL_LOGS_AVAILABLE
+2016-01-19 15:08:50.615 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:00.271 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+2016-01-19 15:09:00.273 ARIS[3632:2063004] NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+2016-01-19 15:09:00.274 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:00.276 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/
+2016-01-19 15:09:00.277 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:00.278 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+2016-01-19 15:09:00.279 ARIS[3632:2063004] NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+2016-01-19 15:09:00.280 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:00.281 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/
+2016-01-19 15:09:00.286 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:00.289 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+2016-01-19 15:09:00.290 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+2016-01-19 15:09:00.292 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:00.294 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/
+2016-01-19 15:09:00.295 ARIS[3632:2063004] Req async data: {"tick_factories":1,"game_id":64,"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"}}
+2016-01-19 15:09:00.298 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:09:00.299 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:00.300 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/
+2016-01-19 15:09:00.301 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:00.303 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:09:00.304 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:09:00.305 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:09:00.306 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:09:00.307 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:09:00.308 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:09:00.309 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:00.310 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/
+2016-01-19 15:09:00.311 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64,"owner_id":10269}
+2016-01-19 15:09:00.313 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:09:00.315 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:00.316 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/
+2016-01-19 15:09:00.317 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:00.320 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/
+2016-01-19 15:09:00.321 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:00.324 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:09:00.325 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:00.326 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/
+2016-01-19 15:09:00.327 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:00.439 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/	(0.136824)
+2016-01-19 15:09:00.440 ARIS[3632:2063004] Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:00.443 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:09:00.444 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:00.457 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/	(0.170024)
+2016-01-19 15:09:00.458 ARIS[3632:2063004] Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:00.460 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+2016-01-19 15:09:00.461 ARIS[3632:2063004] NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+2016-01-19 15:09:00.462 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:00.468 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/	(0.171432)
+2016-01-19 15:09:00.468 ARIS[3632:2063004] Fin async data: 
+{"data":[{"trigger_id":"1476","game_id":"64","instance_id":"2855","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"Ben","icon_media_id":"0","latitude":"42.746103625045","longitude":"-89.459908190918","distance":"5","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"1","qr_code":"1410926060845","seconds":"0","user_id":10269},{"trigger_id":"251720","game_id":"64","instance_id":"1693302","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"","icon_media_id":"0","latitude":"38.142667840506","longitude":"-102.12808865662","distance":"25","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"0","qr_code":"1445460405247","seconds":"10","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:00.473 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+2016-01-19 15:09:00.474 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+2016-01-19 15:09:00.477 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:00.481 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/	(0.202805)
+2016-01-19 15:09:00.482 ARIS[3632:2063004] Fin async data: 
+{"data":{"scene_id":"76","game_id":"64","name":"main","description":"","editor_x":"0","editor_y":"0","created":"2014-09-17 03:53:16","last_active":"2014-09-17 03:53:16"},"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:00.485 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+2016-01-19 15:09:00.486 ARIS[3632:2063004] NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+2016-01-19 15:09:00.487 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:00.505 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/	(0.192727)
+2016-01-19 15:09:00.506 ARIS[3632:2063004] Fin async data: 
+{"data":[{"instance_id":"2855","game_id":"64","object_type":"DIALOG","object_id":"605","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:21"},{"instance_id":"2856","game_id":"64","object_type":"DIALOG","object_id":"606","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:29"},{"instance_id":"4843","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-25 20:41:05"},{"instance_id":"5834","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-10-01 21:32:37"},{"instance_id":"1023174","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME","owner_id":"0","created":"2015-08-27 20:13:59"},{"instance_id":"1693302","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"1","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2015-10-21 20:46:45"},{"instance_id":"2247899","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"USER","owner_id":"10269","created":"2016-01-19 21:07:59"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:00.514 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:09:00.516 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:09:00.517 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:09:00.519 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:09:00.520 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:09:00.521 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:09:00.522 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:00.530 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/	(0.207450)
+2016-01-19 15:09:00.532 ARIS[3632:2063004] Fin async data: 
+{"data":[{"user_log_id":"6464954","user_id":"10269","group_id":"0","game_id":"64","event_type":"BEGIN_GAME","content_id":"0","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464956","user_id":"10269","group_id":"0","game_id":"64","event_type":"MOVE","content_id":"0","qty":"0","latitude":"43.073127861546","longitude":"-89.409259557724","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464958","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_INSTANCE","content_id":"2855","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464962","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_DIALOG_SCRIPT","content_id":"6191","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:09"},{"user_log_id":"6464961","user_id":"10269","group_id":"0","game_id":"64","event_type":"TRIGGER_TRIGGER","content_id":"1476","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:00.542 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_LOGS_RECEIVED
+2016-01-19 15:09:00.543 ARIS[3632:2063004] NSNotification: MODEL_LOGS_AVAILABLE
+2016-01-19 15:09:00.544 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:00.547 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/	(0.228271)
+2016-01-19 15:09:00.548 ARIS[3632:2063004] Fin async data: 
+{"data":[{"tab_id":"645","game_id":"64","type":"MAP","name":"Map","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"2","user_id":10269},{"tab_id":"646","game_id":"64","type":"INVENTORY","name":"Inventory","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"3","user_id":10269},{"tab_id":"647","game_id":"64","type":"SCANNER","name":"Scanner","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"4","user_id":10269},{"tab_id":"648","game_id":"64","type":"DECODER","name":"Decoder","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"5","user_id":10269},{"tab_id":"649","game_id":"64","type":"PLAYER","name":"Player","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"6","user_id":10269},{"tab_id":"650","game_id":"64","type":"NOTEBOOK","name":"Notebook","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"7","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:00.554 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:09:00.555 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:00.558 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/	(0.229711)
+2016-01-19 15:09:00.559 ARIS[3632:2063004] Fin async data: 
+{"data":{"active":[],"complete":[]},"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:00.561 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:09:00.562 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:10.271 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+2016-01-19 15:09:10.273 ARIS[3632:2063004] NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+2016-01-19 15:09:10.274 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:10.276 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/
+2016-01-19 15:09:10.277 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:10.278 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+2016-01-19 15:09:10.279 ARIS[3632:2063004] NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+2016-01-19 15:09:10.280 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:10.281 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/
+2016-01-19 15:09:10.283 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:10.285 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+2016-01-19 15:09:10.288 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+2016-01-19 15:09:10.290 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:10.292 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/
+2016-01-19 15:09:10.292 ARIS[3632:2063004] Req async data: {"tick_factories":1,"game_id":64,"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"}}
+2016-01-19 15:09:10.294 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:09:10.295 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:10.297 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/
+2016-01-19 15:09:10.298 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:10.299 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:09:10.302 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:09:10.303 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:09:10.304 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:09:10.305 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:09:10.306 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:09:10.306 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:10.308 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/
+2016-01-19 15:09:10.309 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64,"owner_id":10269}
+2016-01-19 15:09:10.310 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:09:10.312 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:10.314 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/
+2016-01-19 15:09:10.315 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:10.318 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/
+2016-01-19 15:09:10.319 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:10.322 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:09:10.323 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:10.324 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/
+2016-01-19 15:09:10.325 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:10.409 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/	(0.130824)
+2016-01-19 15:09:10.410 ARIS[3632:2063004] Fin async data: 
+{"data":{"scene_id":"76","game_id":"64","name":"main","description":"","editor_x":"0","editor_y":"0","created":"2014-09-17 03:53:16","last_active":"2014-09-17 03:53:16"},"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:10.412 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+2016-01-19 15:09:10.413 ARIS[3632:2063004] NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+2016-01-19 15:09:10.413 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:10.437 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/	(0.152277)
+2016-01-19 15:09:10.439 ARIS[3632:2063004] Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:10.440 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+2016-01-19 15:09:10.441 ARIS[3632:2063004] NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+2016-01-19 15:09:10.442 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:10.447 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/	(0.153012)
+2016-01-19 15:09:10.449 ARIS[3632:2063004] Fin async data: 
+{"data":[{"trigger_id":"1476","game_id":"64","instance_id":"2855","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"Ben","icon_media_id":"0","latitude":"42.746103625045","longitude":"-89.459908190918","distance":"5","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"1","qr_code":"1410926060845","seconds":"0","user_id":10269},{"trigger_id":"251720","game_id":"64","instance_id":"1693302","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"","icon_media_id":"0","latitude":"38.142667840506","longitude":"-102.12808865662","distance":"25","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"0","qr_code":"1445460405247","seconds":"10","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:10.454 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+2016-01-19 15:09:10.455 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+2016-01-19 15:09:10.457 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:10.461 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/	(0.161400)
+2016-01-19 15:09:10.462 ARIS[3632:2063004] Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:10.463 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:09:10.465 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:10.492 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/	(0.182292)
+2016-01-19 15:09:10.493 ARIS[3632:2063004] Fin async data: 
+{"data":[{"instance_id":"2855","game_id":"64","object_type":"DIALOG","object_id":"605","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:21"},{"instance_id":"2856","game_id":"64","object_type":"DIALOG","object_id":"606","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:29"},{"instance_id":"4843","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-25 20:41:05"},{"instance_id":"5834","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-10-01 21:32:37"},{"instance_id":"1023174","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME","owner_id":"0","created":"2015-08-27 20:13:59"},{"instance_id":"1693302","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"1","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2015-10-21 20:46:45"},{"instance_id":"2247899","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"USER","owner_id":"10269","created":"2016-01-19 21:07:59"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:10.502 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:09:10.503 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:09:10.505 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:09:10.508 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:09:10.508 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:09:10.510 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:09:10.510 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:10.518 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/	(0.197039)
+2016-01-19 15:09:10.519 ARIS[3632:2063004] Fin async data: 
+{"data":[{"user_log_id":"6464954","user_id":"10269","group_id":"0","game_id":"64","event_type":"BEGIN_GAME","content_id":"0","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464956","user_id":"10269","group_id":"0","game_id":"64","event_type":"MOVE","content_id":"0","qty":"0","latitude":"43.073127861546","longitude":"-89.409259557724","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464958","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_INSTANCE","content_id":"2855","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464962","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_DIALOG_SCRIPT","content_id":"6191","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:09"},{"user_log_id":"6464961","user_id":"10269","group_id":"0","game_id":"64","event_type":"TRIGGER_TRIGGER","content_id":"1476","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:10.525 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_LOGS_RECEIVED
+2016-01-19 15:09:10.527 ARIS[3632:2063004] NSNotification: MODEL_LOGS_AVAILABLE
+2016-01-19 15:09:10.528 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:10.534 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/	(0.217333)
+2016-01-19 15:09:10.535 ARIS[3632:2063004] Fin async data: 
+{"data":[{"tab_id":"645","game_id":"64","type":"MAP","name":"Map","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"2","user_id":10269},{"tab_id":"646","game_id":"64","type":"INVENTORY","name":"Inventory","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"3","user_id":10269},{"tab_id":"647","game_id":"64","type":"SCANNER","name":"Scanner","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"4","user_id":10269},{"tab_id":"648","game_id":"64","type":"DECODER","name":"Decoder","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"5","user_id":10269},{"tab_id":"649","game_id":"64","type":"PLAYER","name":"Player","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"6","user_id":10269},{"tab_id":"650","game_id":"64","type":"NOTEBOOK","name":"Notebook","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"7","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:10.545 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:09:10.547 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:10.552 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/	(0.225318)
+2016-01-19 15:09:10.554 ARIS[3632:2063004] Fin async data: 
+{"data":{"active":[],"complete":[]},"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:10.556 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:09:10.557 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:20.271 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+2016-01-19 15:09:20.273 ARIS[3632:2063004] NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+2016-01-19 15:09:20.274 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:20.276 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/
+2016-01-19 15:09:20.277 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:20.278 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+2016-01-19 15:09:20.279 ARIS[3632:2063004] NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+2016-01-19 15:09:20.280 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:20.281 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/
+2016-01-19 15:09:20.286 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:20.289 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+2016-01-19 15:09:20.290 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+2016-01-19 15:09:20.292 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:20.293 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/
+2016-01-19 15:09:20.294 ARIS[3632:2063004] Req async data: {"tick_factories":1,"game_id":64,"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"}}
+2016-01-19 15:09:20.296 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:09:20.297 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:20.299 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/
+2016-01-19 15:09:20.300 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:20.303 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:09:20.304 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:09:20.305 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:09:20.306 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:09:20.307 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:09:20.308 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:09:20.308 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:20.310 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/
+2016-01-19 15:09:20.311 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64,"owner_id":10269}
+2016-01-19 15:09:20.314 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:09:20.315 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:20.317 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/
+2016-01-19 15:09:20.318 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:20.321 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/
+2016-01-19 15:09:20.321 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:20.323 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:09:20.324 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:20.325 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/
+2016-01-19 15:09:20.326 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:20.450 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/	(0.162737)
+2016-01-19 15:09:20.451 ARIS[3632:2063004] Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:20.453 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+2016-01-19 15:09:20.454 ARIS[3632:2063004] NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+2016-01-19 15:09:20.457 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:20.469 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/	(0.172808)
+2016-01-19 15:09:20.470 ARIS[3632:2063004] Fin async data: 
+{"data":[{"trigger_id":"1476","game_id":"64","instance_id":"2855","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"Ben","icon_media_id":"0","latitude":"42.746103625045","longitude":"-89.459908190918","distance":"5","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"1","qr_code":"1410926060845","seconds":"0","user_id":10269},{"trigger_id":"251720","game_id":"64","instance_id":"1693302","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"","icon_media_id":"0","latitude":"38.142667840506","longitude":"-102.12808865662","distance":"25","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"0","qr_code":"1445460405247","seconds":"10","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:20.478 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+2016-01-19 15:09:20.479 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+2016-01-19 15:09:20.482 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:20.485 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/	(0.183500)
+2016-01-19 15:09:20.487 ARIS[3632:2063004] Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:20.488 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:09:20.489 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:20.492 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/	(0.213971)
+2016-01-19 15:09:20.493 ARIS[3632:2063004] Fin async data: 
+{"data":{"scene_id":"76","game_id":"64","name":"main","description":"","editor_x":"0","editor_y":"0","created":"2014-09-17 03:53:16","last_active":"2014-09-17 03:53:16"},"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:20.495 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+2016-01-19 15:09:20.496 ARIS[3632:2063004] NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+2016-01-19 15:09:20.496 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:20.537 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/	(0.213772)
+2016-01-19 15:09:20.538 ARIS[3632:2063004] Fin async data: 
+{"data":[{"user_log_id":"6464954","user_id":"10269","group_id":"0","game_id":"64","event_type":"BEGIN_GAME","content_id":"0","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464956","user_id":"10269","group_id":"0","game_id":"64","event_type":"MOVE","content_id":"0","qty":"0","latitude":"43.073127861546","longitude":"-89.409259557724","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464958","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_INSTANCE","content_id":"2855","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464962","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_DIALOG_SCRIPT","content_id":"6191","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:09"},{"user_log_id":"6464961","user_id":"10269","group_id":"0","game_id":"64","event_type":"TRIGGER_TRIGGER","content_id":"1476","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:20.550 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_LOGS_RECEIVED
+2016-01-19 15:09:20.551 ARIS[3632:2063004] NSNotification: MODEL_LOGS_AVAILABLE
+2016-01-19 15:09:20.552 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:20.555 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/	(0.227124)
+2016-01-19 15:09:20.557 ARIS[3632:2063004] Fin async data: 
+{"data":{"active":[],"complete":[]},"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:20.559 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:09:20.560 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:20.562 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/	(0.249988)
+2016-01-19 15:09:20.564 ARIS[3632:2063004] Fin async data: 
+{"data":[{"instance_id":"2855","game_id":"64","object_type":"DIALOG","object_id":"605","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:21"},{"instance_id":"2856","game_id":"64","object_type":"DIALOG","object_id":"606","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:29"},{"instance_id":"4843","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-25 20:41:05"},{"instance_id":"5834","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-10-01 21:32:37"},{"instance_id":"1023174","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME","owner_id":"0","created":"2015-08-27 20:13:59"},{"instance_id":"1693302","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"1","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2015-10-21 20:46:45"},{"instance_id":"2247899","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"USER","owner_id":"10269","created":"2016-01-19 21:07:59"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:20.570 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:09:20.571 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:09:20.572 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:09:20.573 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:09:20.578 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:09:20.579 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:09:20.579 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:20.583 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/	(0.264167)
+2016-01-19 15:09:20.586 ARIS[3632:2063004] Fin async data: 
+{"data":[{"tab_id":"645","game_id":"64","type":"MAP","name":"Map","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"2","user_id":10269},{"tab_id":"646","game_id":"64","type":"INVENTORY","name":"Inventory","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"3","user_id":10269},{"tab_id":"647","game_id":"64","type":"SCANNER","name":"Scanner","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"4","user_id":10269},{"tab_id":"648","game_id":"64","type":"DECODER","name":"Decoder","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"5","user_id":10269},{"tab_id":"649","game_id":"64","type":"PLAYER","name":"Player","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"6","user_id":10269},{"tab_id":"650","game_id":"64","type":"NOTEBOOK","name":"Notebook","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"7","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:20.592 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:09:20.594 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:30.271 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+2016-01-19 15:09:30.272 ARIS[3632:2063004] NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+2016-01-19 15:09:30.274 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:30.276 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/
+2016-01-19 15:09:30.277 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:30.278 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+2016-01-19 15:09:30.279 ARIS[3632:2063004] NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+2016-01-19 15:09:30.280 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:30.281 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/
+2016-01-19 15:09:30.284 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:30.286 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+2016-01-19 15:09:30.287 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+2016-01-19 15:09:30.289 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:30.291 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/
+2016-01-19 15:09:30.292 ARIS[3632:2063004] Req async data: {"tick_factories":1,"game_id":64,"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"}}
+2016-01-19 15:09:30.294 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:09:30.296 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:30.298 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/
+2016-01-19 15:09:30.299 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:30.300 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:09:30.302 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:09:30.303 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:09:30.304 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:09:30.305 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:09:30.306 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:09:30.307 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:30.308 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/
+2016-01-19 15:09:30.309 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64,"owner_id":10269}
+2016-01-19 15:09:30.312 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:09:30.313 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:30.315 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/
+2016-01-19 15:09:30.316 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:30.318 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/
+2016-01-19 15:09:30.319 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:30.321 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:09:30.322 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:30.323 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/
+2016-01-19 15:09:30.324 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:30.445 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/	(0.145272)
+2016-01-19 15:09:30.446 ARIS[3632:2063004] Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:30.448 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:09:30.450 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:30.455 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/	(0.169525)
+2016-01-19 15:09:30.456 ARIS[3632:2063004] Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:30.457 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+2016-01-19 15:09:30.458 ARIS[3632:2063004] NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+2016-01-19 15:09:30.459 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:30.461 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/	(0.183229)
+2016-01-19 15:09:30.465 ARIS[3632:2063004] Fin async data: 
+{"data":{"scene_id":"76","game_id":"64","name":"main","description":"","editor_x":"0","editor_y":"0","created":"2014-09-17 03:53:16","last_active":"2014-09-17 03:53:16"},"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:30.467 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+2016-01-19 15:09:30.468 ARIS[3632:2063004] NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+2016-01-19 15:09:30.469 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:30.475 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/	(0.181689)
+2016-01-19 15:09:30.477 ARIS[3632:2063004] Fin async data: 
+{"data":[{"trigger_id":"1476","game_id":"64","instance_id":"2855","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"Ben","icon_media_id":"0","latitude":"42.746103625045","longitude":"-89.459908190918","distance":"5","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"1","qr_code":"1410926060845","seconds":"0","user_id":10269},{"trigger_id":"251720","game_id":"64","instance_id":"1693302","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"","icon_media_id":"0","latitude":"38.142667840506","longitude":"-102.12808865662","distance":"25","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"0","qr_code":"1445460405247","seconds":"10","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:30.483 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+2016-01-19 15:09:30.484 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+2016-01-19 15:09:30.486 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:30.517 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/	(0.206774)
+2016-01-19 15:09:30.518 ARIS[3632:2063004] Fin async data: 
+{"data":[{"instance_id":"2855","game_id":"64","object_type":"DIALOG","object_id":"605","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:21"},{"instance_id":"2856","game_id":"64","object_type":"DIALOG","object_id":"606","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:29"},{"instance_id":"4843","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-25 20:41:05"},{"instance_id":"5834","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-10-01 21:32:37"},{"instance_id":"1023174","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME","owner_id":"0","created":"2015-08-27 20:13:59"},{"instance_id":"1693302","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"1","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2015-10-21 20:46:45"},{"instance_id":"2247899","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"USER","owner_id":"10269","created":"2016-01-19 21:07:59"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:30.532 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:09:30.533 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:09:30.534 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:09:30.536 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:09:30.537 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:09:30.538 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:09:30.538 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:30.542 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/	(0.224620)
+2016-01-19 15:09:30.543 ARIS[3632:2063004] Fin async data: 
+{"data":[{"tab_id":"645","game_id":"64","type":"MAP","name":"Map","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"2","user_id":10269},{"tab_id":"646","game_id":"64","type":"INVENTORY","name":"Inventory","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"3","user_id":10269},{"tab_id":"647","game_id":"64","type":"SCANNER","name":"Scanner","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"4","user_id":10269},{"tab_id":"648","game_id":"64","type":"DECODER","name":"Decoder","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"5","user_id":10269},{"tab_id":"649","game_id":"64","type":"PLAYER","name":"Player","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"6","user_id":10269},{"tab_id":"650","game_id":"64","type":"NOTEBOOK","name":"Notebook","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"7","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:30.549 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:09:30.550 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:30.553 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/	(0.232497)
+2016-01-19 15:09:30.554 ARIS[3632:2063004] Fin async data: 
+{"data":[{"user_log_id":"6464954","user_id":"10269","group_id":"0","game_id":"64","event_type":"BEGIN_GAME","content_id":"0","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464956","user_id":"10269","group_id":"0","game_id":"64","event_type":"MOVE","content_id":"0","qty":"0","latitude":"43.073127861546","longitude":"-89.409259557724","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464958","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_INSTANCE","content_id":"2855","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464962","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_DIALOG_SCRIPT","content_id":"6191","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:09"},{"user_log_id":"6464961","user_id":"10269","group_id":"0","game_id":"64","event_type":"TRIGGER_TRIGGER","content_id":"1476","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:30.561 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_LOGS_RECEIVED
+2016-01-19 15:09:30.562 ARIS[3632:2063004] NSNotification: MODEL_LOGS_AVAILABLE
+2016-01-19 15:09:30.563 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:30.567 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/	(0.241463)
+2016-01-19 15:09:30.568 ARIS[3632:2063004] Fin async data: 
+{"data":{"active":[],"complete":[]},"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:30.569 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:09:30.571 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:40.271 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+2016-01-19 15:09:40.273 ARIS[3632:2063004] NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+2016-01-19 15:09:40.274 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:40.276 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/
+2016-01-19 15:09:40.277 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:40.278 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+2016-01-19 15:09:40.279 ARIS[3632:2063004] NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+2016-01-19 15:09:40.280 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:40.281 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/
+2016-01-19 15:09:40.287 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:40.292 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+2016-01-19 15:09:40.293 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+2016-01-19 15:09:40.295 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:40.296 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/
+2016-01-19 15:09:40.297 ARIS[3632:2063004] Req async data: {"tick_factories":1,"game_id":64,"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"}}
+2016-01-19 15:09:40.300 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:09:40.301 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:40.302 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/
+2016-01-19 15:09:40.303 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:40.305 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:09:40.307 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:09:40.308 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:09:40.310 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:09:40.311 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:09:40.312 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:09:40.312 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:40.314 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/
+2016-01-19 15:09:40.315 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64,"owner_id":10269}
+2016-01-19 15:09:40.316 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:09:40.318 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:40.319 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/
+2016-01-19 15:09:40.320 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:40.324 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/
+2016-01-19 15:09:40.325 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:40.328 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:09:40.329 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:40.330 ARIS[3632:2063004] Req asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/
+2016-01-19 15:09:40.331 ARIS[3632:2063004] Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+2016-01-19 15:09:40.444 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/	(0.155387)
+2016-01-19 15:09:40.445 ARIS[3632:2063004] Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:40.447 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+2016-01-19 15:09:40.448 ARIS[3632:2063004] NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+2016-01-19 15:09:40.449 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:40.457 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/	(0.152581)
+2016-01-19 15:09:40.458 ARIS[3632:2063004] Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:40.459 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+2016-01-19 15:09:40.460 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:40.465 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/	(0.186682)
+2016-01-19 15:09:40.466 ARIS[3632:2063004] Fin async data: 
+{"data":{"scene_id":"76","game_id":"64","name":"main","description":"","editor_x":"0","editor_y":"0","created":"2014-09-17 03:53:16","last_active":"2014-09-17 03:53:16"},"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:40.469 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+2016-01-19 15:09:40.470 ARIS[3632:2063004] NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+2016-01-19 15:09:40.473 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:40.475 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/	(0.176715)
+2016-01-19 15:09:40.476 ARIS[3632:2063004] Fin async data: 
+{"data":[{"trigger_id":"1476","game_id":"64","instance_id":"2855","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"Ben","icon_media_id":"0","latitude":"42.746103625045","longitude":"-89.459908190918","distance":"5","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"1","qr_code":"1410926060845","seconds":"0","user_id":10269},{"trigger_id":"251720","game_id":"64","instance_id":"1693302","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"","icon_media_id":"0","latitude":"38.142667840506","longitude":"-102.12808865662","distance":"25","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"0","qr_code":"1445460405247","seconds":"10","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:40.484 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+2016-01-19 15:09:40.486 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+2016-01-19 15:09:40.488 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:40.518 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/	(0.201692)
+2016-01-19 15:09:40.519 ARIS[3632:2063004] Fin async data: 
+{"data":[{"instance_id":"2855","game_id":"64","object_type":"DIALOG","object_id":"605","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:21"},{"instance_id":"2856","game_id":"64","object_type":"DIALOG","object_id":"606","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:29"},{"instance_id":"4843","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-25 20:41:05"},{"instance_id":"5834","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-10-01 21:32:37"},{"instance_id":"1023174","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME","owner_id":"0","created":"2015-08-27 20:13:59"},{"instance_id":"1693302","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"1","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2015-10-21 20:46:45"},{"instance_id":"2247899","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"USER","owner_id":"10269","created":"2016-01-19 21:07:59"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:40.533 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+2016-01-19 15:09:40.534 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+2016-01-19 15:09:40.535 ARIS[3632:2063004] NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+2016-01-19 15:09:40.536 ARIS[3632:2063004] NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+2016-01-19 15:09:40.537 ARIS[3632:2063004] NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+2016-01-19 15:09:40.538 ARIS[3632:2063004] NSNotification: MODEL_INSTANCES_AVAILABLE
+2016-01-19 15:09:40.539 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:40.543 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/	(0.220256)
+2016-01-19 15:09:40.544 ARIS[3632:2063004] Fin async data: 
+{"data":[{"tab_id":"645","game_id":"64","type":"MAP","name":"Map","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"2","user_id":10269},{"tab_id":"646","game_id":"64","type":"INVENTORY","name":"Inventory","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"3","user_id":10269},{"tab_id":"647","game_id":"64","type":"SCANNER","name":"Scanner","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"4","user_id":10269},{"tab_id":"648","game_id":"64","type":"DECODER","name":"Decoder","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"5","user_id":10269},{"tab_id":"649","game_id":"64","type":"PLAYER","name":"Player","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"6","user_id":10269},{"tab_id":"650","game_id":"64","type":"NOTEBOOK","name":"Notebook","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"7","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:40.551 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+2016-01-19 15:09:40.552 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:40.555 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/	(0.227291)
+2016-01-19 15:09:40.556 ARIS[3632:2063004] Fin async data: 
+{"data":[{"user_log_id":"6464954","user_id":"10269","group_id":"0","game_id":"64","event_type":"BEGIN_GAME","content_id":"0","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464956","user_id":"10269","group_id":"0","game_id":"64","event_type":"MOVE","content_id":"0","qty":"0","latitude":"43.073127861546","longitude":"-89.409259557724","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464958","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_INSTANCE","content_id":"2855","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6464962","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_DIALOG_SCRIPT","content_id":"6191","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:09"},{"user_log_id":"6464961","user_id":"10269","group_id":"0","game_id":"64","event_type":"TRIGGER_TRIGGER","content_id":"1476","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"}],"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:40.561 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_LOGS_RECEIVED
+2016-01-19 15:09:40.562 ARIS[3632:2063004] NSNotification: MODEL_LOGS_AVAILABLE
+2016-01-19 15:09:40.563 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE
+2016-01-19 15:09:40.567 ARIS[3632:2063004] Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/	(0.234177)
+2016-01-19 15:09:40.568 ARIS[3632:2063004] Fin async data: 
+{"data":{"active":[],"complete":[]},"returnCode":0,"returnCodeDescription":null}
+2016-01-19 15:09:40.569 ARIS[3632:2063004] NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+2016-01-19 15:09:40.570 ARIS[3632:2063004] NSNotification: PLAYER_PIECE_AVAILABLE

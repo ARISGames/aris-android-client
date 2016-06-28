@@ -12,11 +12,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -74,7 +72,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		ARISMediaViewFragment.OnFragmentInteractionListener {
 
 
-
 	private final static String TAG_SERVER_SUCCESS      = "success";
 	private static final String FRAGMENT_VISIBILITY_MAP = "FRAGMENT_VISIBILITY_MAP";
 	public static SharedPreferences appPrefs;
@@ -96,20 +93,20 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	// fragment views for game. Acting in place of DisplayViewController classes in iOS.
 	// (may want to centralize these in a Navigation Controller)
-	public GamePlayPlayerFragment     playerViewFragment;
+	public GamePlayPlayerFragment playerViewFragment;
 	// tab_controllers
-	public AttributesViewFragment    attributesViewController;
-	public DecoderViewFragment       decoderViewFragment;
-	public InventoryViewFragment   inventoryViewFragment;
-	public MapViewFragment         mapViewFragment;
-	public QuestsViewFragment  questsViewFragment;
-	public ScannerViewFragment scannerViewFragment;
+	public AttributesViewFragment attributesViewController;
+	public DecoderViewFragment    decoderViewFragment;
+	public InventoryViewFragment  inventoryViewFragment;
+	public MapViewFragment        mapViewFragment;
+	public QuestsViewFragment     questsViewFragment;
+	public ScannerViewFragment    scannerViewFragment;
 	// object_controllers
-	public DialogViewFragment  dialogViewFragment;
-	public ItemViewFragment    itemViewFragment;
-	public NoteViewFragment    noteViewFragment;
-	public PlaqueViewFragment  plaqueViewFragment;
-	public WebPageViewFragment webPageViewFragment;
+	public DialogViewFragment     dialogViewFragment;
+	public ItemViewFragment       itemViewFragment;
+	public NoteViewFragment       noteViewFragment;
+	public PlaqueViewFragment     plaqueViewFragment;
+	public WebPageViewFragment    webPageViewFragment;
 
 	public HashMap<String, Boolean> fragVisible = new HashMap<>();
 	public String mCurrentFragVisible;
@@ -128,8 +125,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	 * Used to store the last screen title. For use in {@link #restoreActionBar()}.
 	 */
 	private CharSequence mTitle = "ARIS"; // defualt.
-	public ActionBar mActionBar;
-	private long     preferred_game_id;
+	private long      preferred_game_id;
+	public  ActionBar mActionBar;
 	public boolean leave_game_enabled  = true; // todo: this should get set somewhere in the login return data mashup. For now hardwire ON.
 	public boolean triggerQueueWaiting = false;
 
@@ -149,7 +146,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			mPlayer = new User(extras.getString("user")); // we're now a "Player", BTW.
-			//GSON (Slow in debug mode. Ok in regular run mode)
+			//GSON (Super slow in debug mode. Ok in regular run mode)
 			mGame = gson.fromJson(extras.getString("game"), Game.class);
 			mGame.initContext(this); // to allow upward visibility to activities various game/player objects
 			mGame.initWithDictionary(); // misleading name in Android. Checks for and loads version number of saved game file.
@@ -446,7 +443,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 //		mNavigationDrawerFragment.setHasOptionsMenu(false);
 
 		boolean debugThis = true; // todo: dev debugging
-		if (debugThis) checkGameFile(); // todo: dev debugging delete or disable after code is working.
+		if (debugThis)
+			checkGameFile(); // todo: dev debugging delete or disable after code is working.
 
 		mGame.logsModel.playerEnteredGame(); //		mGame.logsModel.playerEnteredGame);
 		mDispatch.model_game_began(); // calls mGame.gameBegan() and mGamePlayAct.gameBegan()
@@ -469,7 +467,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
 		if (!fragToDisplay.isAdded())
 			ft.addToBackStack(fragTag);
-			ft.replace(R.id.fragment_view_container, fragToDisplay);
+		ft.replace(R.id.fragment_view_container, fragToDisplay);
 		ft.commit();
 
 		hideNavBar();
@@ -872,9 +870,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		}
 	}
 
-
 	public void displayInstance(Instance i) {
-		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Entering displayInstance instanceType: " + i.object_type);
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Entering displayInstance instanceType: " + i.object_type);
 		String tag = "";
 		String fragViewToDisplay = "";
 //		ARISViewController *vc;
@@ -886,10 +883,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				plaqueViewFragment.initWithInstance(i);
 				tag = plaqueViewFragment.toString();
 				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-					ft.addToBackStack(tag);
-					ft.replace(R.id.fragment_view_container, plaqueViewFragment, tag); //set tag.
-					Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Fragment added ");
-					ft.commit();
+				ft.addToBackStack(tag);
+				ft.replace(R.id.fragment_view_container, plaqueViewFragment, tag); //set tag.
+				Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Fragment added ");
+				ft.commit();
 				getSupportFragmentManager().executePendingTransactions();
 				setAsFrontmostFragment(tag);
 			}
@@ -909,9 +906,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				itemViewFragment.initWithInstance(i);
 				tag = itemViewFragment.toString();
 				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-					ft.replace(R.id.fragment_view_container, itemViewFragment, tag); //set tag.
-					ft.addToBackStack(tag);
-					ft.commit();
+				ft.replace(R.id.fragment_view_container, itemViewFragment, tag); //set tag.
+				ft.addToBackStack(tag);
+				ft.commit();
 				getSupportFragmentManager().executePendingTransactions();
 				setAsFrontmostFragment(tag);
 			}
@@ -931,10 +928,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				dialogViewFragment.initWithInstance(i);
 				tag = dialogViewFragment.toString();
 				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-					ft.replace(R.id.fragment_view_container, dialogViewFragment, tag); //set tag. // was .add()
-					ft.addToBackStack(tag);
+				ft.replace(R.id.fragment_view_container, dialogViewFragment, tag); //set tag. // was .add()
+				ft.addToBackStack(tag);
 //					ft.attach(dialogViewFragment); // was .show()
-					ft.commit();
+				ft.commit();
 				getSupportFragmentManager().executePendingTransactions();
 				setAsFrontmostFragment(tag);
 			}

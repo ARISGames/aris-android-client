@@ -1,0 +1,1525 @@
+{
+    "allow_download": 0,
+    "authors": [
+        {
+            "display_name": "clh",
+            "email": "",
+            "location": {
+                "mAccuracy": 0.0,
+                "mAltitude": 0.0,
+                "mBearing": 0.0,
+                "mDistance": 0.0,
+                "mElapsedRealtimeNanos": 0,
+                "mHasAccuracy": false,
+                "mHasAltitude": false,
+                "mHasBearing": false,
+                "mHasSpeed": false,
+                "mInitialBearing": 0.0,
+                "mIsFromMockProvider": false,
+                "mLat1": 0.0,
+                "mLat2": 0.0,
+                "mLatitude": 0.0,
+                "mLon1": 0.0,
+                "mLon2": 0.0,
+                "mLongitude": 0.0,
+                "mProvider": "0",
+                "mResults": [
+                    0.0,
+                    0.0
+                ],
+                "mSpeed": 0.0,
+                "mTime": 0
+            },
+            "media_id": "15632",
+            "read_write_key": "",
+            "user_id": "6",
+            "user_name": "chrish"
+        }
+    ],
+    "begin_fresh": 1,
+    "comments": [],
+    "desc": "",
+    "dialogsModel": {
+        "dialogCharacters": {
+            "1572": {
+                "dialog_character_id": 1572,
+                "media_id": 2383,
+                "name": "Ben",
+                "title": ""
+            },
+            "1573": {
+                "dialog_character_id": 1573,
+                "media_id": 2384,
+                "name": "Audrey",
+                "title": ""
+            },
+            "1574": {
+                "dialog_character_id": 1574,
+                "media_id": 2385,
+                "name": "Cooper",
+                "title": ""
+            }
+        },
+        "dialogOptions": {
+            "10524": {
+                "dialog_id": 1003,
+                "dialog_option_id": 10524,
+                "link_id": 0,
+                "link_info": "",
+                "link_type": "EXIT",
+                "parent_dialog_script_id": 7805,
+                "prompt": "Bye bye",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "10525": {
+                "dialog_id": 1003,
+                "dialog_option_id": 10525,
+                "link_id": 7806,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 7805,
+                "prompt": "sure am",
+                "requirement_root_package_id": 0,
+                "sort_index": 1
+            },
+            "10526": {
+                "dialog_id": 1003,
+                "dialog_option_id": 10526,
+                "link_id": 7807,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 7806,
+                "prompt": "well I have more questions",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "10527": {
+                "dialog_id": 1003,
+                "dialog_option_id": 10527,
+                "link_id": 7805,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 7807,
+                "prompt": "Then I'll ask again.",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "10529": {
+                "dialog_id": 1003,
+                "dialog_option_id": 10529,
+                "link_id": 0,
+                "link_info": "",
+                "link_type": "EXIT",
+                "parent_dialog_script_id": 7808,
+                "prompt": "Exit",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "10531": {
+                "dialog_id": 1003,
+                "dialog_option_id": 10531,
+                "link_id": 0,
+                "link_info": "",
+                "link_type": "EXIT",
+                "parent_dialog_script_id": 7809,
+                "prompt": "Exit",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8053": {
+                "dialog_id": 605,
+                "dialog_option_id": 8053,
+                "link_id": 6192,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6191,
+                "prompt": "I'll try to help",
+                "requirement_root_package_id": 3982,
+                "sort_index": 0
+            },
+            "8054": {
+                "dialog_id": 605,
+                "dialog_option_id": 8054,
+                "link_id": 6194,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6192,
+                "prompt": "Norwegians?",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8056": {
+                "dialog_id": 605,
+                "dialog_option_id": 8056,
+                "link_id": 6198,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6194,
+                "prompt": "...",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8063": {
+                "dialog_id": 605,
+                "dialog_option_id": 8063,
+                "link_id": 6199,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6198,
+                "prompt": "Fine",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8064": {
+                "dialog_id": 605,
+                "dialog_option_id": 8064,
+                "link_id": 647,
+                "link_info": "",
+                "link_type": "EXIT_TO_TAB",
+                "parent_dialog_script_id": 6199,
+                "prompt": "I'll go see your daughter.",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8067": {
+                "dialog_id": 605,
+                "dialog_option_id": 8067,
+                "link_id": 6201,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6191,
+                "prompt": "I spoke with Audrey",
+                "requirement_root_package_id": 3981,
+                "sort_index": 1
+            },
+            "8068": {
+                "dialog_id": 605,
+                "dialog_option_id": 8068,
+                "link_id": 6202,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6201,
+                "prompt": "",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8069": {
+                "dialog_id": 605,
+                "dialog_option_id": 8069,
+                "link_id": 647,
+                "link_info": "",
+                "link_type": "EXIT_TO_TAB",
+                "parent_dialog_script_id": 6204,
+                "prompt": "I still expect to see you about Laura soon.",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8072": {
+                "dialog_id": 605,
+                "dialog_option_id": 8072,
+                "link_id": 6204,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6202,
+                "prompt": "Okee dokee. I'll go see Audrey.",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8073": {
+                "dialog_id": 606,
+                "dialog_option_id": 8073,
+                "link_id": 6211,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6210,
+                "prompt": "",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8074": {
+                "dialog_id": 606,
+                "dialog_option_id": 8074,
+                "link_id": 6206,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6205,
+                "prompt": "Miss Horne",
+                "requirement_root_package_id": 3983,
+                "sort_index": 0
+            },
+            "8075": {
+                "dialog_id": 606,
+                "dialog_option_id": 8075,
+                "link_id": 6207,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6206,
+                "prompt": "",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8076": {
+                "dialog_id": 606,
+                "dialog_option_id": 8076,
+                "link_id": 6208,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6207,
+                "prompt": "Gone?",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8077": {
+                "dialog_id": 606,
+                "dialog_option_id": 8077,
+                "link_id": 6209,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6208,
+                "prompt": "",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8078": {
+                "dialog_id": 606,
+                "dialog_option_id": 8078,
+                "link_id": 6210,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6209,
+                "prompt": "Audrey! Really...",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8079": {
+                "dialog_id": 606,
+                "dialog_option_id": 8079,
+                "link_id": 6226,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6212,
+                "prompt": "Okay Audrey",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8080": {
+                "dialog_id": 606,
+                "dialog_option_id": 8080,
+                "link_id": 6212,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6211,
+                "prompt": "",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8102": {
+                "dialog_id": 606,
+                "dialog_option_id": 8102,
+                "link_id": 6351,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6226,
+                "prompt": "",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8274": {
+                "dialog_id": 606,
+                "dialog_option_id": 8274,
+                "link_id": 0,
+                "link_info": "",
+                "link_type": "EXIT",
+                "parent_dialog_script_id": 6351,
+                "prompt": "Bye",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8275": {
+                "dialog_id": 606,
+                "dialog_option_id": 8275,
+                "link_id": 6352,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6205,
+                "prompt": "I told your father about the Norwegians",
+                "requirement_root_package_id": 3984,
+                "sort_index": 1
+            },
+            "8276": {
+                "dialog_id": 606,
+                "dialog_option_id": 8276,
+                "link_id": 6353,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6352,
+                "prompt": "Your father loves you very much, Miss Horne",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8277": {
+                "dialog_id": 606,
+                "dialog_option_id": 8277,
+                "link_id": 6354,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6353,
+                "prompt": "",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8278": {
+                "dialog_id": 606,
+                "dialog_option_id": 8278,
+                "link_id": 6355,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6354,
+                "prompt": "And?",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8279": {
+                "dialog_id": 606,
+                "dialog_option_id": 8279,
+                "link_id": 6357,
+                "link_info": "",
+                "link_type": "DIALOG_SCRIPT",
+                "parent_dialog_script_id": 6355,
+                "prompt": "Nothing doing.",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            },
+            "8281": {
+                "dialog_id": 606,
+                "dialog_option_id": 8281,
+                "link_id": 0,
+                "link_info": "",
+                "link_type": "EXIT",
+                "parent_dialog_script_id": 6357,
+                "prompt": "Good day, Ms Horne.",
+                "requirement_root_package_id": 0,
+                "sort_index": 0
+            }
+        },
+        "dialogScripts": {
+            "6191": {
+                "dialog_character_id": 1572,
+                "dialog_id": 605,
+                "dialog_script_id": 6191,
+                "event_package_id": 0,
+                "text": "Agent Cooper, what am I going to do about Audrey?"
+            },
+            "6192": {
+                "dialog_character_id": 1572,
+                "dialog_id": 605,
+                "dialog_script_id": 6192,
+                "event_package_id": 0,
+                "text": "Good. I knew I could count on you as an officer of the law. Go find out about the Norwegians."
+            },
+            "6194": {
+                "dialog_character_id": 1574,
+                "dialog_id": 605,
+                "dialog_script_id": 6194,
+                "event_package_id": 0,
+                "text": "Who are the Norwegians? "
+            },
+            "6198": {
+                "dialog_character_id": 1572,
+                "dialog_id": 605,
+                "dialog_script_id": 6198,
+                "event_package_id": 0,
+                "text": "<p> Ahh yes, well they are an investment group, very interested in helping our community by supporting the development of <b>Ghostwood Estates</b>.</p>\n\n<p>In any case, I fear Audrey may be trying to run them off in yet another attempt to frustrate me. Can you help? She's downstairs.</p>"
+            },
+            "6199": {
+                "dialog_character_id": 1574,
+                "dialog_id": 605,
+                "dialog_script_id": 6199,
+                "event_package_id": 0,
+                "text": "I'm happy to help. Perhaps you can tell me later about her and <em>your</em> relationships with <b>Laura Palmer</b> soon."
+            },
+            "6201": {
+                "dialog_character_id": 1574,
+                "dialog_id": 605,
+                "dialog_script_id": 6201,
+                "event_package_id": 0,
+                "text": "I'm sorry to report that the Norwegians have left. Audrey mentioned to me that she shared her concern over the recent murder of her dear friend, Laura, with them and that\u2014not having heard the news\u2014they decided perhaps a community with such troubles was not a ripe location for their investment."
+            },
+            "6202": {
+                "dialog_character_id": 1572,
+                "dialog_id": 605,
+                "dialog_script_id": 6202,
+                "event_package_id": 0,
+                "text": "<p>Well...</p>\n\n<p> Mr. Cooper, you can see the vileness my offspring has for my well being. In truth, she was never friendly with Laura. Her wounded affectation is merely an opportunity to wound me. </p>\n\n<p> But thank you. Perhaps she only does this to seek attention. She is so grown up I sometimes forget she is still a child. Maybe I do need to include her more in my business. It's not like Johnny is going to take over for me someday, and let's face it, my brother is a bit of a joke. </p>  \n\n<p> Please go see Audrey again. Tell her we have some things to discuss, but I think she should talk to me about <b> a job</b>.</p>"
+            },
+            "6204": {
+                "dialog_character_id": 1574,
+                "dialog_id": 605,
+                "dialog_script_id": 6204,
+                "event_package_id": 0,
+                "text": "I can see you are willing to reconcile despite these difficulties. It takes a strong man to see  beyond his own material interests. I'll go tell Audrey."
+            },
+            "6205": {
+                "dialog_character_id": 1573,
+                "dialog_id": 606,
+                "dialog_script_id": 6205,
+                "event_package_id": 0,
+                "text": "Special Agent Cooper!"
+            },
+            "6206": {
+                "dialog_character_id": 1574,
+                "dialog_id": 606,
+                "dialog_script_id": 6206,
+                "event_package_id": 0,
+                "text": "Audrey, I just spoke with your father. He was wondering about the Norwegians."
+            },
+            "6207": {
+                "dialog_character_id": 1573,
+                "dialog_id": 606,
+                "dialog_script_id": 6207,
+                "event_package_id": 0,
+                "text": "They're gone, Agent Cooper. You can tell my dad that if you'd like."
+            },
+            "6208": {
+                "dialog_character_id": 1574,
+                "dialog_id": 606,
+                "dialog_script_id": 6208,
+                "event_package_id": 0,
+                "text": "Audrey, what do you mean?"
+            },
+            "6209": {
+                "dialog_character_id": 1573,
+                "dialog_id": 606,
+                "dialog_script_id": 6209,
+                "event_package_id": 0,
+                "text": "<p>I didn't mean to. Really Agent Cooper.</p>\n\n<p>I just happened to mention to them how broken up I was about my dear friend Laura, how she was murdered and all.</p>"
+            },
+            "6210": {
+                "dialog_character_id": 1573,
+                "dialog_id": 606,
+                "dialog_script_id": 6210,
+                "event_package_id": 0,
+                "text": "Really, I swear! They asked why I looked so down. "
+            },
+            "6211": {
+                "dialog_character_id": 1574,
+                "dialog_id": 606,
+                "dialog_script_id": 6211,
+                "event_package_id": 0,
+                "text": "And I imagine this had nothing to do with your father..."
+            },
+            "6212": {
+                "dialog_character_id": 1573,
+                "dialog_id": 606,
+                "dialog_script_id": 6212,
+                "event_package_id": 0,
+                "text": "Well you can tell daddy if you want. I don't mind. But I really wish you would let me help you with you investigation. I know I could do well."
+            },
+            "6226": {
+                "dialog_character_id": 1574,
+                "dialog_id": 606,
+                "dialog_script_id": 6226,
+                "event_package_id": 0,
+                "text": "I do have some more questions I'd like to ask your father. But please remember Sheriff Truman has instated a curfew. Stay in at night and stay safe Audrey."
+            },
+            "6351": {
+                "dialog_character_id": 1573,
+                "dialog_id": 606,
+                "dialog_script_id": 6351,
+                "event_package_id": 0,
+                "text": "Anything you say, special agent."
+            },
+            "6352": {
+                "dialog_character_id": 1573,
+                "dialog_id": 606,
+                "dialog_script_id": 6352,
+                "event_package_id": 0,
+                "text": "Oh no! Was he very angry, Agent Cooper?"
+            },
+            "6353": {
+                "dialog_character_id": 1574,
+                "dialog_id": 606,
+                "dialog_script_id": 6353,
+                "event_package_id": 0,
+                "text": "Mr. Horne understands your rebellious nature. Although he  was indeed disappointed, he suggested you might benefit from gainful employment within his enterprise. I might add that there is no better way to cultivate responsibility and commitment than through gainful employment."
+            },
+            "6354": {
+                "dialog_character_id": 1573,
+                "dialog_id": 606,
+                "dialog_script_id": 6354,
+                "event_package_id": 0,
+                "text": "<p>Oh thank you! And I know you're right, special agent. Maybe I can reconcile with daddy.</p>\n\n<p><em>...and...</em></p>"
+            },
+            "6355": {
+                "dialog_character_id": 1573,
+                "dialog_id": 606,
+                "dialog_script_id": 6355,
+                "event_package_id": 0,
+                "text": "And maybe I really could help you with your investigation. You know, <b>Laura</b> worked at daddy's department store, at the perfume counter. So did Ronette. Maybe daddy would put me there and I could investigate for you."
+            },
+            "6357": {
+                "dialog_character_id": 1574,
+                "dialog_id": 606,
+                "dialog_script_id": 6357,
+                "event_package_id": 0,
+                "text": "<p>Ms Horne, although I appreciate your intent, your safety is far more valuable than leads. We already have one dead girl and another in a coma. My commitment to the bureau is a responsibility to takes risks in the name of law.</p>\n<p>Please do not take risks. It would be a shame if you didn't get a chance to grow up.</p>\n"
+            },
+            "7805": {
+                "dialog_character_id": 1572,
+                "dialog_id": 1003,
+                "dialog_script_id": 7805,
+                "event_package_id": 0,
+                "text": "Back again eh?"
+            },
+            "7806": {
+                "dialog_character_id": 1572,
+                "dialog_id": 1003,
+                "dialog_script_id": 7806,
+                "event_package_id": 0,
+                "text": "I'm tired of talking to you"
+            },
+            "7807": {
+                "dialog_character_id": 1572,
+                "dialog_id": 1003,
+                "dialog_script_id": 7807,
+                "event_package_id": 0,
+                "text": "I don't have answers."
+            },
+            "7808": {
+                "dialog_character_id": 0,
+                "dialog_id": 1003,
+                "dialog_script_id": 7808,
+                "event_package_id": 0,
+                "text": "Hello"
+            },
+            "7809": {
+                "dialog_character_id": 0,
+                "dialog_id": 1003,
+                "dialog_script_id": 7809,
+                "event_package_id": 0,
+                "text": "Hello"
+            }
+        },
+        "dialogs": {
+            "1003": {
+                "back_button_enabled": 1,
+                "desc": "",
+                "dialog_id": 1003,
+                "icon_media_id": 0,
+                "intro_dialog_script_id": 7805,
+                "name": "new convo"
+            },
+            "605": {
+                "back_button_enabled": 1,
+                "desc": "",
+                "dialog_id": 605,
+                "icon_media_id": 2828,
+                "intro_dialog_script_id": 6191,
+                "name": "Talk with Ben"
+            },
+            "606": {
+                "back_button_enabled": 1,
+                "desc": "",
+                "dialog_id": 606,
+                "icon_media_id": 2827,
+                "intro_dialog_script_id": 6205,
+                "name": "Talk with Audrey"
+            }
+        },
+        "n_game_data_received": 4,
+        "n_maintenance_data_received": 0,
+        "n_player_data_received": 0
+    },
+    "downloadedVersion": 0,
+    "eventsModel": {
+        "events": {},
+        "n_game_data_received": 1,
+        "n_maintenance_data_received": 0,
+        "n_player_data_received": 0
+    },
+    "factoriesModel": {
+        "factories": {},
+        "n_game_data_received": 1,
+        "n_maintenance_data_received": 0,
+        "n_player_data_received": 0
+    },
+    "gameInstancesModel": {
+        "currentWeight": 0,
+        "n_game_data_received": 0,
+        "n_maintenance_data_received": 1,
+        "n_player_data_received": 0
+    },
+    "game_id": 64,
+    "groupInstancesModel": {
+        "currentWeight": 0,
+        "groupOwnedInstances": [],
+        "instances": {},
+        "n_game_data_received": 0,
+        "n_maintenance_data_received": 2,
+        "n_player_data_received": 0
+    },
+    "groupsModel": {
+        "groups": {},
+        "n_game_data_received": 1,
+        "n_maintenance_data_received": 1,
+        "n_player_data_received": 1,
+        "playerGroup": {
+            "group_id": 0,
+            "name": ""
+        }
+    },
+    "icon_media": {
+        "file_name": "arisf5d6612131594e5444abaee8fc03c40c.jpg",
+        "game_id": 64,
+        "mediaCD": {
+            "game_id": 0,
+            "media_id": 0,
+            "user_id": 0
+        },
+        "media_id": 2827,
+        "name": "audrey icon",
+        "remoteURL": "http://arisgames.org/server/gamedatav2/64/arisf5d6612131594e5444abaee8fc03c40c.jpg",
+        "url": "http://arisgames.org/server/gamedatav2/64/arisf5d6612131594e5444abaee8fc03c40c.jpg",
+        "user_id": 0
+    },
+    "icon_media_id": 2827,
+    "instancesModel": {
+        "blacklist": {},
+        "instances": {
+            "1023174": {
+                "created": "2015-08-27 20:13:59",
+                "factory_id": 0,
+                "infinite_qty": 0,
+                "instance_id": 1023174,
+                "object_id": 1048,
+                "object_type": "ITEM",
+                "owner_id": 0,
+                "owner_type": "GAME",
+                "qty": 0
+            },
+            "1693302": {
+                "created": "2015-10-21 20:46:45",
+                "factory_id": 0,
+                "infinite_qty": 1,
+                "instance_id": 1693302,
+                "object_id": 1048,
+                "object_type": "ITEM",
+                "owner_id": 0,
+                "owner_type": "GAME_CONTENT",
+                "qty": 0
+            },
+            "2855": {
+                "created": "2014-09-17 03:54:21",
+                "factory_id": 0,
+                "infinite_qty": 0,
+                "instance_id": 2855,
+                "object_id": 605,
+                "object_type": "DIALOG",
+                "owner_id": 0,
+                "owner_type": "GAME_CONTENT",
+                "qty": 0
+            },
+            "2856": {
+                "created": "2014-09-17 03:54:29",
+                "factory_id": 0,
+                "infinite_qty": 0,
+                "instance_id": 2856,
+                "object_id": 606,
+                "object_type": "DIALOG",
+                "owner_id": 0,
+                "owner_type": "GAME_CONTENT",
+                "qty": 0
+            },
+            "4843": {
+                "created": "2014-09-25 20:41:05",
+                "factory_id": 0,
+                "infinite_qty": 0,
+                "instance_id": 4843,
+                "object_id": 632,
+                "object_type": "PLAQUE",
+                "owner_id": 0,
+                "owner_type": "GAME_CONTENT",
+                "qty": 0
+            },
+            "5834": {
+                "created": "2014-10-01 21:32:37",
+                "factory_id": 0,
+                "infinite_qty": 0,
+                "instance_id": 5834,
+                "object_id": 632,
+                "object_type": "PLAQUE",
+                "owner_id": 0,
+                "owner_type": "GAME_CONTENT",
+                "qty": 0
+            }
+        },
+        "n_game_data_received": 1,
+        "n_maintenance_data_received": 0,
+        "n_player_data_received": 1
+    },
+    "intro_scene_id": 76,
+    "inventory_weight_cap": 0,
+    "isPollTimerRunning": false,
+    "itemsModel": {
+        "items": {
+            "1048": {
+                "delta_notification": 1,
+                "desc": "",
+                "destroyable": 1,
+                "droppable": 1,
+                "icon_media_id": 0,
+                "item_id": 1048,
+                "max_qty_in_inventory": 500,
+                "media_id": 0,
+                "name": "key",
+                "type": "HIDDEN",
+                "url": "",
+                "weight": 0
+            }
+        },
+        "n_game_data_received": 1,
+        "n_maintenance_data_received": 0,
+        "n_player_data_received": 0
+    },
+    "know_if_begin_fresh": 1,
+    "listen_game_piece_available": 1,
+    "listen_maintenance_piece_available": 1,
+    "listen_media_piece_available": 1,
+    "listen_player_piece_available": 1,
+    "location": {
+        "mAccuracy": 0.0,
+        "mAltitude": 0.0,
+        "mBearing": 0.0,
+        "mDistance": 0.0,
+        "mElapsedRealtimeNanos": 0,
+        "mHasAccuracy": false,
+        "mHasAltitude": false,
+        "mHasBearing": false,
+        "mHasSpeed": false,
+        "mInitialBearing": 0.0,
+        "mIsFromMockProvider": false,
+        "mLat1": 0.0,
+        "mLat2": 0.0,
+        "mLatitude": 42.947888441436,
+        "mLon1": 0.0,
+        "mLon2": 0.0,
+        "mLongitude": -89.823401156616,
+        "mProvider": "0",
+        "mResults": [
+            0.0,
+            0.0
+        ],
+        "mSpeed": 0.0,
+        "mTime": 0
+    },
+    "logsModel": {
+        "local_log_id": 0,
+        "logs": {},
+        "n_game_data_received": 0,
+        "n_maintenance_data_received": 0,
+        "n_player_data_received": 1
+    },
+    "map_focus": "PLAYER",
+    "map_location": {
+        "mAccuracy": 0.0,
+        "mAltitude": 0.0,
+        "mBearing": 0.0,
+        "mDistance": 0.0,
+        "mElapsedRealtimeNanos": 0,
+        "mHasAccuracy": false,
+        "mHasAltitude": false,
+        "mHasBearing": false,
+        "mHasSpeed": false,
+        "mInitialBearing": 0.0,
+        "mIsFromMockProvider": false,
+        "mLat1": 0.0,
+        "mLat2": 0.0,
+        "mLatitude": 0.0,
+        "mLon1": 0.0,
+        "mLon2": 0.0,
+        "mLongitude": 0.0,
+        "mProvider": "0",
+        "mResults": [
+            0.0,
+            0.0
+        ],
+        "mSpeed": 0.0,
+        "mTime": 0
+    },
+    "map_offsite_mode": 1,
+    "map_show_player": 1,
+    "map_show_players": 1,
+    "map_type": "STREET",
+    "map_zoom_level": 0.0,
+    "media": {
+        "file_name": "aris8e4de40283cdc5d1aefbbf93d7df82f3.jpg",
+        "game_id": 64,
+        "mediaCD": {
+            "game_id": 0,
+            "media_id": 0,
+            "user_id": 0
+        },
+        "media_id": 2384,
+        "name": "audrey horne",
+        "remoteURL": "http://arisgames.org/server/gamedatav2/64/aris8e4de40283cdc5d1aefbbf93d7df82f3.jpg",
+        "url": "http://arisgames.org/server/gamedatav2/64/aris8e4de40283cdc5d1aefbbf93d7df82f3.jpg",
+        "user_id": 0
+    },
+    "media_id": 2384,
+    "n_game_data_received": 25,
+    "n_game_data_to_receive": 25,
+    "n_maintenance_data_received": 5,
+    "n_maintenance_data_to_receive": 5,
+    "n_media_data_received": 0,
+    "n_media_data_to_receive": 9999,
+    "n_player_data_received": 8,
+    "n_player_data_to_receive": 8,
+    "name": "Quibble",
+    "network_level": "HYBRID",
+    "notebook_allow_comments": 1,
+    "notebook_allow_likes": 1,
+    "notebook_allow_player_tags": 0,
+    "notesModel": {
+        "listNotes": [],
+        "n_game_data_received": 2,
+        "n_maintenance_data_received": 0,
+        "n_player_data_received": 0,
+        "noteComments": {},
+        "notes": {},
+        "notesMatchingTag": [],
+        "playerNotes": []
+    },
+    "overlaysModel": {
+        "n_game_data_received": 1,
+        "n_maintenance_data_received": 0,
+        "n_player_data_received": 1,
+        "overlays": {},
+        "playerOverlays": []
+    },
+    "plaquesModel": {
+        "n_game_data_received": 1,
+        "n_maintenance_data_received": 0,
+        "n_player_data_received": 0,
+        "plaques": {
+            "632": {
+                "back_button_enabled": 1,
+                "continue_function": "EXIT",
+                "desc": "Text",
+                "event_package_id": 0,
+                "icon_media_id": 0,
+                "media_id": 0,
+                "name": "plaque",
+                "plaque_id": 632
+            }
+        }
+    },
+    "playerInstancesModel": {
+        "attributes": {},
+        "currentWeight": 0,
+        "inventory": {},
+        "n_game_data_received": 0,
+        "n_maintenance_data_received": 1,
+        "n_player_data_received": 0,
+        "playerInstances": {}
+    },
+    "player_count": 0,
+    "preload_media": 0,
+    "published": 1,
+    "questsModel": {
+        "n_game_data_received": 1,
+        "n_maintenance_data_received": 0,
+        "n_player_data_received": 1,
+        "quests": {},
+        "visibleActiveQuests": [],
+        "visibleCompleteQuests": []
+    },
+    "requirementsModel": {
+        "n_game_data_received": 3,
+        "n_maintenance_data_received": 0,
+        "n_player_data_received": 0,
+        "requirementAndPackages": {
+            "5173": {
+                "name": "and package",
+                "requirement_and_package_id": 5173,
+                "requirement_root_package_id": 3981
+            },
+            "5174": {
+                "name": "and package",
+                "requirement_and_package_id": 5174,
+                "requirement_root_package_id": 3982
+            },
+            "5175": {
+                "name": "and package",
+                "requirement_and_package_id": 5175,
+                "requirement_root_package_id": 3983
+            },
+            "5176": {
+                "name": "and package",
+                "requirement_and_package_id": 5176,
+                "requirement_root_package_id": 3984
+            },
+            "5177": {
+                "name": "and package",
+                "requirement_and_package_id": 5177,
+                "requirement_root_package_id": 3985
+            }
+        },
+        "requirementAtoms": {
+            "7516": {
+                "bool_operator": 1,
+                "content_id": 6351,
+                "distance": 5,
+                "latitude": 86.75309,
+                "longitude": 3.141592,
+                "qty": 1,
+                "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+                "requirement_and_package_id": 5173,
+                "requirement_atom_id": 7516
+            },
+            "7517": {
+                "bool_operator": 0,
+                "content_id": 6351,
+                "distance": 5,
+                "latitude": 86.75309,
+                "longitude": 3.141592,
+                "qty": 1,
+                "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+                "requirement_and_package_id": 5174,
+                "requirement_atom_id": 7517
+            },
+            "7518": {
+                "bool_operator": 1,
+                "content_id": 6192,
+                "distance": 5,
+                "latitude": 86.75309,
+                "longitude": 3.141592,
+                "qty": 1,
+                "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+                "requirement_and_package_id": 5175,
+                "requirement_atom_id": 7518
+            },
+            "7519": {
+                "bool_operator": 0,
+                "content_id": 6204,
+                "distance": 5,
+                "latitude": 86.75309,
+                "longitude": 3.141592,
+                "qty": 1,
+                "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+                "requirement_and_package_id": 5175,
+                "requirement_atom_id": 7519
+            },
+            "7520": {
+                "bool_operator": 1,
+                "content_id": 6204,
+                "distance": 5,
+                "latitude": 86.75309,
+                "longitude": 3.141592,
+                "qty": 1,
+                "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+                "requirement_and_package_id": 5176,
+                "requirement_atom_id": 7520
+            },
+            "7521": {
+                "bool_operator": 0,
+                "content_id": 6357,
+                "distance": 5,
+                "latitude": 86.75309,
+                "longitude": 3.141592,
+                "qty": 1,
+                "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+                "requirement_and_package_id": 5176,
+                "requirement_atom_id": 7521
+            },
+            "7522": {
+                "bool_operator": 1,
+                "content_id": 6199,
+                "distance": 5,
+                "latitude": 86.75309,
+                "longitude": 3.141592,
+                "qty": 1,
+                "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+                "requirement_and_package_id": 5177,
+                "requirement_atom_id": 7522
+            }
+        },
+        "requirementRootPackages": {
+            "3981": {
+                "name": "requirement package",
+                "requirement_root_package_id": 3981
+            },
+            "3982": {
+                "name": "requirement package",
+                "requirement_root_package_id": 3982
+            },
+            "3983": {
+                "name": "requirement package",
+                "requirement_root_package_id": 3983
+            },
+            "3984": {
+                "name": "requirement package",
+                "requirement_root_package_id": 3984
+            },
+            "3985": {
+                "name": "requirement package",
+                "requirement_root_package_id": 3985
+            }
+        }
+    },
+    "scenesModel": {
+        "n_game_data_received": 1,
+        "n_maintenance_data_received": 1,
+        "n_player_data_received": 1,
+        "playerScene": {
+            "icon_media_id": 0,
+            "name": "main",
+            "scene_id": 76
+        },
+        "scenes": {
+            "172": {
+                "icon_media_id": 0,
+                "name": "intro",
+                "scene_id": 172
+            },
+            "76": {
+                "icon_media_id": 0,
+                "name": "main",
+                "scene_id": 76
+            }
+        }
+    },
+    "tabsModel": {
+        "n_game_data_received": 1,
+        "n_maintenance_data_received": 0,
+        "n_player_data_received": 1,
+        "playerTabs": [
+            {
+                "content_id": 0,
+                "icon_media_id": 0,
+                "info": "",
+                "name": "Map",
+                "requirement_root_package_id": 0,
+                "sort_index": 2,
+                "tab_id": 645,
+                "type": "MAP"
+            },
+            {
+                "content_id": 0,
+                "icon_media_id": 0,
+                "info": "",
+                "name": "Inventory",
+                "requirement_root_package_id": 0,
+                "sort_index": 3,
+                "tab_id": 646,
+                "type": "INVENTORY"
+            },
+            {
+                "content_id": 0,
+                "icon_media_id": 0,
+                "info": "",
+                "name": "Scanner",
+                "requirement_root_package_id": 0,
+                "sort_index": 4,
+                "tab_id": 647,
+                "type": "SCANNER"
+            },
+            {
+                "content_id": 0,
+                "icon_media_id": 0,
+                "info": "",
+                "name": "Decoder",
+                "requirement_root_package_id": 0,
+                "sort_index": 5,
+                "tab_id": 648,
+                "type": "DECODER"
+            },
+            {
+                "content_id": 0,
+                "icon_media_id": 0,
+                "info": "",
+                "name": "Player",
+                "requirement_root_package_id": 0,
+                "sort_index": 6,
+                "tab_id": 649,
+                "type": "PLAYER"
+            },
+            {
+                "content_id": 0,
+                "icon_media_id": 0,
+                "info": "",
+                "name": "Notebook",
+                "requirement_root_package_id": 0,
+                "sort_index": 7,
+                "tab_id": 650,
+                "type": "NOTEBOOK"
+            }
+        ],
+        "tabs": {
+            "645": {
+                "content_id": 0,
+                "icon_media_id": 0,
+                "info": "",
+                "name": "Map",
+                "requirement_root_package_id": 0,
+                "sort_index": 2,
+                "tab_id": 645,
+                "type": "MAP"
+            },
+            "646": {
+                "content_id": 0,
+                "icon_media_id": 0,
+                "info": "",
+                "name": "Inventory",
+                "requirement_root_package_id": 0,
+                "sort_index": 3,
+                "tab_id": 646,
+                "type": "INVENTORY"
+            },
+            "647": {
+                "content_id": 0,
+                "icon_media_id": 0,
+                "info": "",
+                "name": "Scanner",
+                "requirement_root_package_id": 0,
+                "sort_index": 4,
+                "tab_id": 647,
+                "type": "SCANNER"
+            },
+            "648": {
+                "content_id": 0,
+                "icon_media_id": 0,
+                "info": "",
+                "name": "Decoder",
+                "requirement_root_package_id": 0,
+                "sort_index": 5,
+                "tab_id": 648,
+                "type": "DECODER"
+            },
+            "649": {
+                "content_id": 0,
+                "icon_media_id": 0,
+                "info": "",
+                "name": "Player",
+                "requirement_root_package_id": 0,
+                "sort_index": 6,
+                "tab_id": 649,
+                "type": "PLAYER"
+            },
+            "650": {
+                "content_id": 0,
+                "icon_media_id": 0,
+                "info": "",
+                "name": "Notebook",
+                "requirement_root_package_id": 0,
+                "sort_index": 7,
+                "tab_id": 650,
+                "type": "NOTEBOOK"
+            }
+        }
+    },
+    "tagsModel": {
+        "n_game_data_received": 2,
+        "n_maintenance_data_received": 0,
+        "n_player_data_received": 0,
+        "objectTags": {},
+        "tags": {
+            "146": {
+                "curated": 0,
+                "media_id": 0,
+                "sort_index": 0,
+                "tag": "green",
+                "tag_id": 146,
+                "visible": 1
+            }
+        }
+    },
+    "triggersModel": {
+        "blacklist": {},
+        "n_game_data_received": 1,
+        "n_maintenance_data_received": 0,
+        "n_player_data_received": 1,
+        "playerTriggers": [
+            {
+                "distance": 5,
+                "hidden": 0,
+                "icon_media_id": 0,
+                "infinite_distance": 1,
+                "instance_id": 2855,
+                "location": {
+                    "mAccuracy": 0.0,
+                    "mAltitude": 0.0,
+                    "mBearing": 0.0,
+                    "mDistance": 0.0,
+                    "mElapsedRealtimeNanos": 0,
+                    "mHasAccuracy": false,
+                    "mHasAltitude": false,
+                    "mHasBearing": false,
+                    "mHasSpeed": false,
+                    "mInitialBearing": 0.0,
+                    "mIsFromMockProvider": false,
+                    "mLat1": 0.0,
+                    "mLat2": 0.0,
+                    "mLatitude": 0.0,
+                    "mLon1": 0.0,
+                    "mLon2": 0.0,
+                    "mLongitude": 0.0,
+                    "mProvider": "0",
+                    "mResults": [
+                        0.0,
+                        0.0
+                    ],
+                    "mSpeed": 0.0,
+                    "mTime": 0
+                },
+                "name": "",
+                "qr_code": "1410926060845",
+                "requirement_root_package_id": 0,
+                "scene_id": 76,
+                "seconds": 0,
+                "show_title": 1,
+                "time_left": 0,
+                "title": "Ben",
+                "trigger_id": 1476,
+                "trigger_on_enter": 1,
+                "type": "LOCATION",
+                "wiggle": 0
+            },
+            {
+                "distance": 25,
+                "hidden": 0,
+                "icon_media_id": 0,
+                "infinite_distance": 1,
+                "instance_id": 1693302,
+                "location": {
+                    "mAccuracy": 0.0,
+                    "mAltitude": 0.0,
+                    "mBearing": 0.0,
+                    "mDistance": 0.0,
+                    "mElapsedRealtimeNanos": 0,
+                    "mHasAccuracy": false,
+                    "mHasAltitude": false,
+                    "mHasBearing": false,
+                    "mHasSpeed": false,
+                    "mInitialBearing": 0.0,
+                    "mIsFromMockProvider": false,
+                    "mLat1": 0.0,
+                    "mLat2": 0.0,
+                    "mLatitude": 0.0,
+                    "mLon1": 0.0,
+                    "mLon2": 0.0,
+                    "mLongitude": 0.0,
+                    "mProvider": "0",
+                    "mResults": [
+                        0.0,
+                        0.0
+                    ],
+                    "mSpeed": 0.0,
+                    "mTime": 0
+                },
+                "name": "",
+                "qr_code": "1445460405247",
+                "requirement_root_package_id": 0,
+                "scene_id": 76,
+                "seconds": 10,
+                "show_title": 1,
+                "time_left": 0,
+                "title": "",
+                "trigger_id": 251720,
+                "trigger_on_enter": 0,
+                "type": "LOCATION",
+                "wiggle": 0
+            }
+        ],
+        "triggers": {
+            "1476": {
+                "distance": 5,
+                "hidden": 0,
+                "icon_media_id": 0,
+                "infinite_distance": 1,
+                "instance_id": 2855,
+                "location": {
+                    "mAccuracy": 0.0,
+                    "mAltitude": 0.0,
+                    "mBearing": 0.0,
+                    "mDistance": 0.0,
+                    "mElapsedRealtimeNanos": 0,
+                    "mHasAccuracy": false,
+                    "mHasAltitude": false,
+                    "mHasBearing": false,
+                    "mHasSpeed": false,
+                    "mInitialBearing": 0.0,
+                    "mIsFromMockProvider": false,
+                    "mLat1": 0.0,
+                    "mLat2": 0.0,
+                    "mLatitude": 0.0,
+                    "mLon1": 0.0,
+                    "mLon2": 0.0,
+                    "mLongitude": 0.0,
+                    "mProvider": "0",
+                    "mResults": [
+                        0.0,
+                        0.0
+                    ],
+                    "mSpeed": 0.0,
+                    "mTime": 0
+                },
+                "name": "",
+                "qr_code": "1410926060845",
+                "requirement_root_package_id": 0,
+                "scene_id": 76,
+                "seconds": 0,
+                "show_title": 1,
+                "time_left": 0,
+                "title": "Ben",
+                "trigger_id": 1476,
+                "trigger_on_enter": 1,
+                "type": "LOCATION",
+                "wiggle": 0
+            },
+            "1477": {
+                "distance": 5,
+                "hidden": 0,
+                "icon_media_id": 0,
+                "infinite_distance": 0,
+                "instance_id": 2856,
+                "location": {
+                    "mAccuracy": 0.0,
+                    "mAltitude": 0.0,
+                    "mBearing": 0.0,
+                    "mDistance": 0.0,
+                    "mElapsedRealtimeNanos": 0,
+                    "mHasAccuracy": false,
+                    "mHasAltitude": false,
+                    "mHasBearing": false,
+                    "mHasSpeed": false,
+                    "mInitialBearing": 0.0,
+                    "mIsFromMockProvider": false,
+                    "mLat1": 0.0,
+                    "mLat2": 0.0,
+                    "mLatitude": 0.0,
+                    "mLon1": 0.0,
+                    "mLon2": 0.0,
+                    "mLongitude": 0.0,
+                    "mProvider": "0",
+                    "mResults": [
+                        0.0,
+                        0.0
+                    ],
+                    "mSpeed": 0.0,
+                    "mTime": 0
+                },
+                "name": "",
+                "qr_code": "1410926069199",
+                "requirement_root_package_id": 3985,
+                "scene_id": 76,
+                "seconds": 0,
+                "show_title": 1,
+                "time_left": 0,
+                "title": "Audrey",
+                "trigger_id": 1477,
+                "trigger_on_enter": 0,
+                "type": "LOCATION",
+                "wiggle": 1
+            },
+            "2190": {
+                "distance": 34,
+                "hidden": 0,
+                "icon_media_id": 0,
+                "infinite_distance": 0,
+                "instance_id": 4843,
+                "location": {
+                    "mAccuracy": 0.0,
+                    "mAltitude": 0.0,
+                    "mBearing": 0.0,
+                    "mDistance": 0.0,
+                    "mElapsedRealtimeNanos": 0,
+                    "mHasAccuracy": false,
+                    "mHasAltitude": false,
+                    "mHasBearing": false,
+                    "mHasSpeed": false,
+                    "mInitialBearing": 0.0,
+                    "mIsFromMockProvider": false,
+                    "mLat1": 0.0,
+                    "mLat2": 0.0,
+                    "mLatitude": 0.0,
+                    "mLon1": 0.0,
+                    "mLon2": 0.0,
+                    "mLongitude": 0.0,
+                    "mProvider": "0",
+                    "mResults": [
+                        0.0,
+                        0.0
+                    ],
+                    "mSpeed": 0.0,
+                    "mTime": 0
+                },
+                "name": "",
+                "qr_code": "1411677665407",
+                "requirement_root_package_id": 0,
+                "scene_id": 172,
+                "seconds": 0,
+                "show_title": 1,
+                "time_left": 0,
+                "title": "plaque #4843",
+                "trigger_id": 2190,
+                "trigger_on_enter": 0,
+                "type": "LOCATION",
+                "wiggle": 0
+            },
+            "251720": {
+                "distance": 25,
+                "hidden": 0,
+                "icon_media_id": 0,
+                "infinite_distance": 1,
+                "instance_id": 1693302,
+                "location": {
+                    "mAccuracy": 0.0,
+                    "mAltitude": 0.0,
+                    "mBearing": 0.0,
+                    "mDistance": 0.0,
+                    "mElapsedRealtimeNanos": 0,
+                    "mHasAccuracy": false,
+                    "mHasAltitude": false,
+                    "mHasBearing": false,
+                    "mHasSpeed": false,
+                    "mInitialBearing": 0.0,
+                    "mIsFromMockProvider": false,
+                    "mLat1": 0.0,
+                    "mLat2": 0.0,
+                    "mLatitude": 0.0,
+                    "mLon1": 0.0,
+                    "mLon2": 0.0,
+                    "mLongitude": 0.0,
+                    "mProvider": "0",
+                    "mResults": [
+                        0.0,
+                        0.0
+                    ],
+                    "mSpeed": 0.0,
+                    "mTime": 0
+                },
+                "name": "",
+                "qr_code": "1445460405247",
+                "requirement_root_package_id": 0,
+                "scene_id": 76,
+                "seconds": 10,
+                "show_title": 1,
+                "time_left": 0,
+                "title": "",
+                "trigger_id": 251720,
+                "trigger_on_enter": 0,
+                "type": "LOCATION",
+                "wiggle": 0
+            }
+        }
+    },
+    "type": "LOCATION",
+    "version": 25,
+    "webPagesModel": {
+        "n_game_data_received": 1,
+        "n_maintenance_data_received": 0,
+        "n_player_data_received": 0,
+        "webpages": {}
+    }
+}

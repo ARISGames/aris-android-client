@@ -1,0 +1,2319 @@
+=== Get all game related data. Many of these calls will be skipped if the game is found in a stored game file from prior loading. ===
+
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getPlayerPlayedGame/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":"64"}
+Req asynch URL: http://arisgames.org/server/json.php/v2.media.getMedia/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"media_id":2384}
+NSNotification: CONNECTION_LAG
+ === get media for "Audrey Horne" === (Game Cover Page?)
+Fin asynch URL: http://arisgames.org/server/json.php/v2.media.getMedia/	(0.502951)
+Fin async data: 
+{
+    "data": {
+        "big_thumb_url": "http://arisgames.org/server/gamedatav2/64/aris8e4de40283cdc5d1aefbbf93d7df82f3_256.jpg",
+        "file_name": "aris8e4de40283cdc5d1aefbbf93d7df82f3.jpg",
+        "game_id": "64",
+        "media_id": "2384",
+        "name": "audrey horne",
+        "thumb_url": "http://arisgames.org/server/gamedatav2/64/aris8e4de40283cdc5d1aefbbf93d7df82f3_128.jpg",
+        "url": "http://arisgames.org/server/gamedatav2/64/aris8e4de40283cdc5d1aefbbf93d7df82f3.jpg"
+    },
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+
+NSNotification: SERVICES_MEDIA_RECEIVED
+NSNotification: MODEL_MEDIA_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getPlayerPlayedGame/	(0.835078)
+Fin async data: 
+{"data":{"game_id":"64","has_played":true},"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_PLAYED_GAME_RECEIVED
+NSNotification: MODEL_PLAYER_PLAYED_GAME_AVAILABLE
+Media loader  : Media id:2384 loaded:http://arisgames.org/server/gamedatav2/64/aris8e4de40283cdc5d1aefbbf93d7df82f3.jpg
+Media loader  : Media id:2384 loaded:http://arisgames.org/server/gamedatav2/64/aris8e4de40283cdc5d1aefbbf93d7df82f3.jpg
+DefaultsState : Saving
+NSNotification: MODEL_GAME_CHOSEN
+
+=== get all Game data requests === 
+Req asynch URL: http://arisgames.org/server/json.php/v2.scenes.getScenesForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.groups.getGroupsForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.plaques.getPlaquesForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.items.getItemsForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.dialogs.getDialogsForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.dialogs.getDialogCharactersForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.dialogs.getDialogScriptsForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.dialogs.getDialogOptionsForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.web_pages.getWebPagesForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.notes.getNotesForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.note_comments.getNoteCommentsForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.tags.getTagsForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.tags.getObjectTagsForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.events.getEventsForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.requirements.getRequirementRootPackagesForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.requirements.getRequirementAndPackagesForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.requirements.getRequirementAtomsForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.triggers.getTriggersForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.factories.getFactoriesForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.overlays.getOverlaysForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.instances.getInstancesForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.tabs.getTabsForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.quests.getQuestsForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.users.getUsersForGame/
+Req asynch URL: http://arisgames.org/server/json.php/v2.media.getMediaForGame/
+
+=== Get Scenes for Game return Data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.scenes.getScenesForGame/	(0.347864)
+Fin async data: 
+{
+    "data": [
+        {
+            "description": "",
+            "editor_x": "0",
+            "editor_y": "0",
+            "game_id": "64",
+            "name": "main",
+            "scene_id": "76"
+        },
+        {
+            "description": "",
+            "editor_x": "0",
+            "editor_y": "0",
+            "game_id": "64",
+            "name": "intro",
+            "scene_id": "172"
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+NSNotification: SERVICES_SCENES_RECEIVED
+NSNotification: MODEL_SCENES_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== get Plaques for Game return data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.plaques.getPlaquesForGame/	(0.351301)
+Fin async data: 
+{
+    "data": [
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "0",
+            "game_id": "64",
+            "icon_media_id": "0",
+            "media_id": "0",
+            "name": "plaque",
+            "plaque_id": "632"
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+NSNotification: SERVICES_PLAQUES_RECEIVED
+NSNotification: MODEL_PLAQUES_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== get Items for Game return Data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.items.getItemsForGame/	(0.362132)
+Fin async data: 
+{
+    "data": [
+        {
+            "delta_notification": "1",
+            "description": "",
+            "destroyable": "1",
+            "droppable": "1",
+            "game_id": "64",
+            "icon_media_id": "0",
+            "item_id": "1048",
+            "max_qty_in_inventory": "500",
+            "media_id": "0",
+            "name": "key",
+            "type": "HIDDEN",
+            "url": "",
+            "weight": "0"
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+NSNotification: SERVICES_ITEMS_RECEIVED
+NSNotification: MODEL_ITEMS_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+== Get Groups for Game return ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.groups.getGroupsForGame/	(0.377668)
+Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_GROUPS_RECEIVED
+NSNotification: MODEL_GROUPS_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== get Dialogs For Game return Data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.dialogs.getDialogsForGame/	(0.406844)
+Fin async data: 
+{
+    "data": [
+        {
+            "back_button_enabled": "1",
+            "description": "",
+            "dialog_id": "605",
+            "game_id": "64",
+            "icon_media_id": "2828",
+            "intro_dialog_script_id": "6191",
+            "name": "Talk with Ben"
+        },
+        {
+            "back_button_enabled": "1",
+            "description": "",
+            "dialog_id": "606",
+            "game_id": "64",
+            "icon_media_id": "2827",
+            "intro_dialog_script_id": "6205",
+            "name": "Talk with Audrey"
+        },
+        {
+            "back_button_enabled": "1",
+            "description": "",
+            "dialog_id": "1003",
+            "game_id": "64",
+            "icon_media_id": "0",
+            "intro_dialog_script_id": "7805",
+            "name": "new convo"
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+NSNotification: SERVICES_DIALOGS_RECEIVED
+NSNotification: MODEL_DIALOGS_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== get Dialog Characters For Game return Data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.dialogs.getDialogCharactersForGame/	(0.413895)
+Fin async data: 
+{
+    "data": [
+        {
+            "dialog_character_id": "1572",
+            "game_id": "64",
+            "media_id": "2383",
+            "name": "Ben",
+            "title": ""
+        },
+        {
+            "dialog_character_id": "1573",
+            "game_id": "64",
+            "media_id": "2384",
+            "name": "Audrey",
+            "title": ""
+        },
+        {
+            "dialog_character_id": "1574",
+            "game_id": "64",
+            "media_id": "2385",
+            "name": "Cooper",
+            "title": ""
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+NSNotification: SERVICES_DIALOG_CHARACTERS_RECEIVED
+NSNotification: MODEL_DIALOG_CHARACTERS_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== get Dialog Scripts For Game return Data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.dialogs.getDialogScriptsForGame/	(0.437843)
+Fin async data: 
+{
+    "data": [
+        {
+            "dialog_character_id": "1572",
+            "dialog_id": "605",
+            "dialog_script_id": "6191",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "Agent Cooper, what am I going to do about Audrey?"
+        },
+        {
+            "dialog_character_id": "1572",
+            "dialog_id": "605",
+            "dialog_script_id": "6192",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "Good. I knew I could count on you as an officer of the law. Go find out about the Norwegians."
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "605",
+            "dialog_script_id": "6194",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "Who are the Norwegians? "
+        },
+        {
+            "dialog_character_id": "1572",
+            "dialog_id": "605",
+            "dialog_script_id": "6198",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "<p> Ahh yes, well they are an investment group, very interested in helping our community by supporting the development of <b>Ghostwood Estates</b>.</p>\n\n<p>In any case, I fear Audrey may be trying to run them off in yet another attempt to frustrate me. Can you help? She's downstairs.</p>"
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "605",
+            "dialog_script_id": "6199",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "I'm happy to help. Perhaps you can tell me later about her and <em>your</em> relationships with <b>Laura Palmer</b> soon."
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "605",
+            "dialog_script_id": "6201",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "I'm sorry to report that the Norwegians have left. Audrey mentioned to me that she shared her concern over the recent murder of her dear friend, Laura, with them and that\u2014not having heard the news\u2014they decided perhaps a community with such troubles was not a ripe location for their investment."
+        },
+        {
+            "dialog_character_id": "1572",
+            "dialog_id": "605",
+            "dialog_script_id": "6202",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "<p>Well...</p>\n\n<p> Mr. Cooper, you can see the vileness my offspring has for my well being. In truth, she was never friendly with Laura. Her wounded affectation is merely an opportunity to wound me. </p>\n\n<p> But thank you. Perhaps she only does this to seek attention. She is so grown up I sometimes forget she is still a child. Maybe I do need to include her more in my business. It's not like Johnny is going to take over for me someday, and let's face it, my brother is a bit of a joke. </p>  \n\n<p> Please go see Audrey again. Tell her we have some things to discuss, but I think she should talk to me about <b> a job</b>.</p>"
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "605",
+            "dialog_script_id": "6204",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "I can see you are willing to reconcile despite these difficulties. It takes a strong man to see  beyond his own material interests. I'll go tell Audrey."
+        },
+        {
+            "dialog_character_id": "1573",
+            "dialog_id": "606",
+            "dialog_script_id": "6205",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "Special Agent Cooper!"
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "606",
+            "dialog_script_id": "6206",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "Audrey, I just spoke with your father. He was wondering about the Norwegians."
+        },
+        {
+            "dialog_character_id": "1573",
+            "dialog_id": "606",
+            "dialog_script_id": "6207",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "They're gone, Agent Cooper. You can tell my dad that if you'd like."
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "606",
+            "dialog_script_id": "6208",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "Audrey, what do you mean?"
+        },
+        {
+            "dialog_character_id": "1573",
+            "dialog_id": "606",
+            "dialog_script_id": "6209",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "<p>I didn't mean to. Really Agent Cooper.</p>\n\n<p>I just happened to mention to them how broken up I was about my dear friend Laura, how she was murdered and all.</p>"
+        },
+        {
+            "dialog_character_id": "1573",
+            "dialog_id": "606",
+            "dialog_script_id": "6210",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "Really, I swear! They asked why I looked so down. "
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "606",
+            "dialog_script_id": "6211",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "And I imagine this had nothing to do with your father..."
+        },
+        {
+            "dialog_character_id": "1573",
+            "dialog_id": "606",
+            "dialog_script_id": "6212",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "Well you can tell daddy if you want. I don't mind. But I really wish you would let me help you with you investigation. I know I could do well."
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "606",
+            "dialog_script_id": "6226",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "I do have some more questions I'd like to ask your father. But please remember Sheriff Truman has instated a curfew. Stay in at night and stay safe Audrey."
+        },
+        {
+            "dialog_character_id": "1573",
+            "dialog_id": "606",
+            "dialog_script_id": "6351",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "Anything you say, special agent."
+        },
+        {
+            "dialog_character_id": "1573",
+            "dialog_id": "606",
+            "dialog_script_id": "6352",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "Oh no! Was he very angry, Agent Cooper?"
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "606",
+            "dialog_script_id": "6353",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "Mr. Horne understands your rebellious nature. Although he  was indeed disappointed, he suggested you might benefit from gainful employment within his enterprise. I might add that there is no better way to cultivate responsibility and commitment than through gainful employment."
+        },
+        {
+            "dialog_character_id": "1573",
+            "dialog_id": "606",
+            "dialog_script_id": "6354",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "<p>Oh thank you! And I know you're right, special agent. Maybe I can reconcile with daddy.</p>\n\n<p><em>...and...</em></p>"
+        },
+        {
+            "dialog_character_id": "1573",
+            "dialog_id": "606",
+            "dialog_script_id": "6355",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "And maybe I really could help you with your investigation. You know, <b>Laura</b> worked at daddy's department store, at the perfume counter. So did Ronette. Maybe daddy would put me there and I could investigate for you."
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "606",
+            "dialog_script_id": "6357",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "<p>Ms Horne, although I appreciate your intent, your safety is far more valuable than leads. We already have one dead girl and another in a coma. My commitment to the bureau is a responsibility to takes risks in the name of law.</p>\n<p>Please do not take risks. It would be a shame if you didn't get a chance to grow up.</p>\n"
+        },
+        {
+            "dialog_character_id": "1572",
+            "dialog_id": "1003",
+            "dialog_script_id": "7805",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "Back again eh?"
+        },
+        {
+            "dialog_character_id": "1572",
+            "dialog_id": "1003",
+            "dialog_script_id": "7806",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "I'm tired of talking to you"
+        },
+        {
+            "dialog_character_id": "1572",
+            "dialog_id": "1003",
+            "dialog_script_id": "7807",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "I don't have answers."
+        },
+        {
+            "dialog_character_id": "0",
+            "dialog_id": "1003",
+            "dialog_script_id": "7808",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "Hello"
+        },
+        {
+            "dialog_character_id": "0",
+            "dialog_id": "1003",
+            "dialog_script_id": "7809",
+            "event_package_id": "0",
+            "game_id": "64",
+            "text": "Hello"
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+NSNotification: SERVICES_DIALOG_SCRIPTS_RECEIVED
+NSNotification: MODEL_DIALOG_SCRIPTS_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== getDialogOptionsForGame return data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.dialogs.getDialogOptionsForGame/	(0.480599)
+Fin async data: 
+{
+    "data": [
+        {
+            "dialog_id": "605",
+            "dialog_option_id": "8053",
+            "game_id": "64",
+            "link_id": "6192",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6191",
+            "prompt": "I'll try to help",
+            "requirement_root_package_id": "3982",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "605",
+            "dialog_option_id": "8054",
+            "game_id": "64",
+            "link_id": "6194",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6192",
+            "prompt": "Norwegians?",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "605",
+            "dialog_option_id": "8056",
+            "game_id": "64",
+            "link_id": "6198",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6194",
+            "prompt": "...",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "605",
+            "dialog_option_id": "8063",
+            "game_id": "64",
+            "link_id": "6199",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6198",
+            "prompt": "Fine",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "605",
+            "dialog_option_id": "8064",
+            "game_id": "64",
+            "link_id": "647",
+            "link_info": "",
+            "link_type": "EXIT_TO_TAB",
+            "parent_dialog_script_id": "6199",
+            "prompt": "I'll go see your daughter.",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "605",
+            "dialog_option_id": "8067",
+            "game_id": "64",
+            "link_id": "6201",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6191",
+            "prompt": "I spoke with Audrey",
+            "requirement_root_package_id": "3981",
+            "sort_index": "1"
+        },
+        {
+            "dialog_id": "605",
+            "dialog_option_id": "8068",
+            "game_id": "64",
+            "link_id": "6202",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6201",
+            "prompt": "",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "605",
+            "dialog_option_id": "8069",
+            "game_id": "64",
+            "link_id": "647",
+            "link_info": "",
+            "link_type": "EXIT_TO_TAB",
+            "parent_dialog_script_id": "6204",
+            "prompt": "I still expect to see you about Laura soon.",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "605",
+            "dialog_option_id": "8072",
+            "game_id": "64",
+            "link_id": "6204",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6202",
+            "prompt": "Okee dokee. I'll go see Audrey.",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8073",
+            "game_id": "64",
+            "link_id": "6211",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6210",
+            "prompt": "",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8074",
+            "game_id": "64",
+            "link_id": "6206",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6205",
+            "prompt": "Miss Horne",
+            "requirement_root_package_id": "3983",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8075",
+            "game_id": "64",
+            "link_id": "6207",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6206",
+            "prompt": "",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8076",
+            "game_id": "64",
+            "link_id": "6208",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6207",
+            "prompt": "Gone?",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8077",
+            "game_id": "64",
+            "link_id": "6209",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6208",
+            "prompt": "",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8078",
+            "game_id": "64",
+            "link_id": "6210",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6209",
+            "prompt": "Audrey! Really...",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8079",
+            "game_id": "64",
+            "link_id": "6226",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6212",
+            "prompt": "Okay Audrey",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8080",
+            "game_id": "64",
+            "link_id": "6212",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6211",
+            "prompt": "",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8102",
+            "game_id": "64",
+            "link_id": "6351",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6226",
+            "prompt": "",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8274",
+            "game_id": "64",
+            "link_id": "0",
+            "link_info": "",
+            "link_type": "EXIT",
+            "parent_dialog_script_id": "6351",
+            "prompt": "Bye",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8275",
+            "game_id": "64",
+            "link_id": "6352",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6205",
+            "prompt": "I told your father about the Norwegians",
+            "requirement_root_package_id": "3984",
+            "sort_index": "1"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8276",
+            "game_id": "64",
+            "link_id": "6353",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6352",
+            "prompt": "Your father loves you very much, Miss Horne",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8277",
+            "game_id": "64",
+            "link_id": "6354",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6353",
+            "prompt": "",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8278",
+            "game_id": "64",
+            "link_id": "6355",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6354",
+            "prompt": "And?",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8279",
+            "game_id": "64",
+            "link_id": "6357",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6355",
+            "prompt": "Nothing doing.",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8281",
+            "game_id": "64",
+            "link_id": "0",
+            "link_info": "",
+            "link_type": "EXIT",
+            "parent_dialog_script_id": "6357",
+            "prompt": "Good day, Ms Horne.",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "1003",
+            "dialog_option_id": "10524",
+            "game_id": "64",
+            "link_id": "0",
+            "link_info": "",
+            "link_type": "EXIT",
+            "parent_dialog_script_id": "7805",
+            "prompt": "Bye bye",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "1003",
+            "dialog_option_id": "10525",
+            "game_id": "64",
+            "link_id": "7806",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "7805",
+            "prompt": "sure am",
+            "requirement_root_package_id": "0",
+            "sort_index": "1"
+        },
+        {
+            "dialog_id": "1003",
+            "dialog_option_id": "10526",
+            "game_id": "64",
+            "link_id": "7807",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "7806",
+            "prompt": "well I have more questions",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "1003",
+            "dialog_option_id": "10527",
+            "game_id": "64",
+            "link_id": "7805",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "7807",
+            "prompt": "Then I'll ask again.",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "1003",
+            "dialog_option_id": "10529",
+            "game_id": "64",
+            "link_id": "0",
+            "link_info": "",
+            "link_type": "EXIT",
+            "parent_dialog_script_id": "7808",
+            "prompt": "Exit",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "1003",
+            "dialog_option_id": "10531",
+            "game_id": "64",
+            "link_id": "0",
+            "link_info": "",
+            "link_type": "EXIT",
+            "parent_dialog_script_id": "7809",
+            "prompt": "Exit",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+NSNotification: SERVICES_DIALOG_OPTIONS_RECEIVED
+NSNotification: MODEL_DIALOG_OPTIONS_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== getTagsForGame return data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.tags.getTagsForGame/	(0.510290)
+Fin async data: 
+{
+    "data": [
+        {
+            "curated": "0",
+            "game_id": "64",
+            "media_id": "0",
+            "sort_index": "0",
+            "tag": "green",
+            "tag_id": "146",
+            "visible": "1"
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+NSNotification: SERVICES_TAGS_RECEIVED
+NSNotification: MODEL_TAGS_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== getWebPagesForGame return data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.web_pages.getWebPagesForGame/	(0.530005)
+Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_WEB_PAGES_RECEIVED
+NSNotification: MODEL_WEB_PAGES_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== getNotesForGame return data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.notes.getNotesForGame/	(0.535010)
+Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_NOTES_RECEIVED
+NSNotification: MODEL_NOTES_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== getNoteCommentsForGame return data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.note_comments.getNoteCommentsForGame/	(0.542958)
+Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_NOTE_COMMENTS_RECEIVED
+NSNotification: MODEL_NOTE_COMMENTS_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== getObjectTagsForGame return data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.tags.getObjectTagsForGame/	(0.547380)
+Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_OBJECT_TAGS_RECEIVED
+NSNotification: MODEL_OBJECT_TAGS_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== getEventsForGame return data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.events.getEventsForGame/	(0.556148)
+Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_EVENTS_RECEIVED
+NSNotification: MODEL_EVENTS_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+NSNotification: CONNECTION_LAG
+
+=== getRequirementRootPackagesForGame return data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.requirements.getRequirementRootPackagesForGame/	(0.574599)
+Fin async data: 
+{
+    "data": [
+        {
+            "game_id": "64",
+            "name": "requirement package",
+            "requirement_root_package_id": "3981"
+        },
+        {
+            "game_id": "64",
+            "name": "requirement package",
+            "requirement_root_package_id": "3982"
+        },
+        {
+            "game_id": "64",
+            "name": "requirement package",
+            "requirement_root_package_id": "3983"
+        },
+        {
+            "game_id": "64",
+            "name": "requirement package",
+            "requirement_root_package_id": "3984"
+        },
+        {
+            "game_id": "64",
+            "name": "requirement package",
+            "requirement_root_package_id": "3985"
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+NSNotification: SERVICES_REQUIREMENT_ROOT_PACKAGES_RECEIVED
+NSNotification: MODEL_REQUIREMENT_ROOT_PACKAGES_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== getRequirementAndPackagesForGame return data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.requirements.getRequirementAndPackagesForGame/	(0.587695)
+Fin async data: 
+{
+    "data": [
+        {
+            "game_id": "64",
+            "name": "and package",
+            "requirement_and_package_id": "5173",
+            "requirement_root_package_id": "3981"
+        },
+        {
+            "game_id": "64",
+            "name": "and package",
+            "requirement_and_package_id": "5174",
+            "requirement_root_package_id": "3982"
+        },
+        {
+            "game_id": "64",
+            "name": "and package",
+            "requirement_and_package_id": "5175",
+            "requirement_root_package_id": "3983"
+        },
+        {
+            "game_id": "64",
+            "name": "and package",
+            "requirement_and_package_id": "5176",
+            "requirement_root_package_id": "3984"
+        },
+        {
+            "game_id": "64",
+            "name": "and package",
+            "requirement_and_package_id": "5177",
+            "requirement_root_package_id": "3985"
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+
+=== getRequirementAtomsForGame return data ===
+NSNotification: SERVICES_REQUIREMENT_AND_PACKAGES_RECEIVED
+NSNotification: MODEL_REQUIREMENT_AND_PACKAGES_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+Fin asynch URL: http://arisgames.org/server/json.php/v2.requirements.getRequirementAtomsForGame/	(0.606021)
+Fin async data: 
+{
+    "data": [
+        {
+            "bool_operator": "1",
+            "content_id": "6351",
+            "distance": "5",
+            "game_id": "64",
+            "latitude": "86.75309",
+            "longitude": "3.141592",
+            "name": null,
+            "qty": "1",
+            "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+            "requirement_and_package_id": "5173",
+            "requirement_atom_id": "7516"
+        },
+        {
+            "bool_operator": "0",
+            "content_id": "6351",
+            "distance": "5",
+            "game_id": "64",
+            "latitude": "86.75309",
+            "longitude": "3.141592",
+            "name": null,
+            "qty": "1",
+            "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+            "requirement_and_package_id": "5174",
+            "requirement_atom_id": "7517"
+        },
+        {
+            "bool_operator": "1",
+            "content_id": "6192",
+            "distance": "5",
+            "game_id": "64",
+            "latitude": "86.75309",
+            "longitude": "3.141592",
+            "name": null,
+            "qty": "1",
+            "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+            "requirement_and_package_id": "5175",
+            "requirement_atom_id": "7518"
+        },
+        {
+            "bool_operator": "0",
+            "content_id": "6204",
+            "distance": "5",
+            "game_id": "64",
+            "latitude": "86.75309",
+            "longitude": "3.141592",
+            "name": null,
+            "qty": "1",
+            "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+            "requirement_and_package_id": "5175",
+            "requirement_atom_id": "7519"
+        },
+        {
+            "bool_operator": "1",
+            "content_id": "6204",
+            "distance": "5",
+            "game_id": "64",
+            "latitude": "86.75309",
+            "longitude": "3.141592",
+            "name": null,
+            "qty": "1",
+            "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+            "requirement_and_package_id": "5176",
+            "requirement_atom_id": "7520"
+        },
+        {
+            "bool_operator": "0",
+            "content_id": "6357",
+            "distance": "5",
+            "game_id": "64",
+            "latitude": "86.75309",
+            "longitude": "3.141592",
+            "name": null,
+            "qty": "1",
+            "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+            "requirement_and_package_id": "5176",
+            "requirement_atom_id": "7521"
+        },
+        {
+            "bool_operator": "1",
+            "content_id": "6199",
+            "distance": "5",
+            "game_id": "64",
+            "latitude": "86.75309",
+            "longitude": "3.141592",
+            "name": null,
+            "qty": "1",
+            "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+            "requirement_and_package_id": "5177",
+            "requirement_atom_id": "7522"
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+NSNotification: SERVICES_REQUIREMENT_ATOMS_RECEIVED
+NSNotification: MODEL_REQUIREMENT_ATOMS_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== getTriggersForGame return data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.triggers.getTriggersForGame/	(0.626182)
+Fin async data: 
+{
+    "data": [
+        {
+            "distance": "5",
+            "game_id": "64",
+            "hidden": "0",
+            "icon_media_id": "0",
+            "infinite_distance": "1",
+            "instance_id": "2855",
+            "latitude": "42.746103625045",
+            "longitude": "-89.459908190918",
+            "name": "",
+            "qr_code": "1410926060845",
+            "requirement_root_package_id": "0",
+            "scene_id": "76",
+            "seconds": "0",
+            "show_title": "1",
+            "title": "Ben",
+            "trigger_id": "1476",
+            "trigger_on_enter": "1",
+            "type": "LOCATION",
+            "wiggle": "0"
+        },
+        {
+            "distance": "5",
+            "game_id": "64",
+            "hidden": "0",
+            "icon_media_id": "0",
+            "infinite_distance": "0",
+            "instance_id": "2856",
+            "latitude": "42.753162736343",
+            "longitude": "-90.318558398438",
+            "name": "",
+            "qr_code": "1410926069199",
+            "requirement_root_package_id": "3985",
+            "scene_id": "76",
+            "seconds": "0",
+            "show_title": "1",
+            "title": "Audrey",
+            "trigger_id": "1477",
+            "trigger_on_enter": "0",
+            "type": "LOCATION",
+            "wiggle": "1"
+        },
+        {
+            "distance": "34",
+            "game_id": "64",
+            "hidden": "0",
+            "icon_media_id": "0",
+            "infinite_distance": "0",
+            "instance_id": "4843",
+            "latitude": "41.67890344053524",
+            "longitude": "-93.69696158523516",
+            "name": "",
+            "qr_code": "1411677665407",
+            "requirement_root_package_id": "0",
+            "scene_id": "172",
+            "seconds": "0",
+            "show_title": "1",
+            "title": "plaque #4843",
+            "trigger_id": "2190",
+            "trigger_on_enter": "0",
+            "type": "LOCATION",
+            "wiggle": "0"
+        },
+        {
+            "distance": "25",
+            "game_id": "64",
+            "hidden": "0",
+            "icon_media_id": "0",
+            "infinite_distance": "1",
+            "instance_id": "1693302",
+            "latitude": "38.142667840506",
+            "longitude": "-102.12808865662",
+            "name": "",
+            "qr_code": "1445460405247",
+            "requirement_root_package_id": "0",
+            "scene_id": "76",
+            "seconds": "10",
+            "show_title": "1",
+            "title": "",
+            "trigger_id": "251720",
+            "trigger_on_enter": "0",
+            "type": "LOCATION",
+            "wiggle": "0"
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+NSNotification: SERVICES_TRIGGERS_RECEIVED
+NSNotification: MODEL_TRIGGERS_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== getFactoriesForGame return data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.factories.getFactoriesForGame/	(0.645557)
+Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_FACTORIES_RECEIVED
+NSNotification: MODEL_FACTORIES_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== getOverlaysForGame return data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.overlays.getOverlaysForGame/	(0.659475)
+Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_OVERLAYS_RECEIVED
+NSNotification: MODEL_OVERLAYS_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== getInstancesForGame return data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.instances.getInstancesForGame/	(0.686997)
+Fin async data: 
+{
+    "data": [
+        {
+            "created": "2014-09-17 03:54:21",
+            "factory_id": "0",
+            "game_id": "64",
+            "infinite_qty": "0",
+            "instance_id": "2855",
+            "object_id": "605",
+            "object_type": "DIALOG",
+            "owner_id": "0",
+            "owner_type": "GAME_CONTENT",
+            "qty": "0"
+        },
+        {
+            "created": "2014-09-17 03:54:29",
+            "factory_id": "0",
+            "game_id": "64",
+            "infinite_qty": "0",
+            "instance_id": "2856",
+            "object_id": "606",
+            "object_type": "DIALOG",
+            "owner_id": "0",
+            "owner_type": "GAME_CONTENT",
+            "qty": "0"
+        },
+        {
+            "created": "2014-09-25 20:41:05",
+            "factory_id": "0",
+            "game_id": "64",
+            "infinite_qty": "0",
+            "instance_id": "4843",
+            "object_id": "632",
+            "object_type": "PLAQUE",
+            "owner_id": "0",
+            "owner_type": "GAME_CONTENT",
+            "qty": "0"
+        },
+        {
+            "created": "2014-10-01 21:32:37",
+            "factory_id": "0",
+            "game_id": "64",
+            "infinite_qty": "0",
+            "instance_id": "5834",
+            "object_id": "632",
+            "object_type": "PLAQUE",
+            "owner_id": "0",
+            "owner_type": "GAME_CONTENT",
+            "qty": "0"
+        },
+        {
+            "created": "2015-08-27 20:13:59",
+            "factory_id": "0",
+            "game_id": "64",
+            "infinite_qty": "0",
+            "instance_id": "1023174",
+            "object_id": "1048",
+            "object_type": "ITEM",
+            "owner_id": "0",
+            "owner_type": "GAME",
+            "qty": "0"
+        },
+        {
+            "created": "2015-10-21 20:46:45",
+            "factory_id": "0",
+            "game_id": "64",
+            "infinite_qty": "1",
+            "instance_id": "1693302",
+            "object_id": "1048",
+            "object_type": "ITEM",
+            "owner_id": "0",
+            "owner_type": "GAME_CONTENT",
+            "qty": "0"
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+NSNotification: SERVICES_INSTANCES_RECEIVED
+NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+NSNotification: MODEL_INSTANCES_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== getTabsForGame return data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.tabs.getTabsForGame/	(0.702992)
+Fin async data: 
+{
+    "data": [
+        {
+            "content_id": "0",
+            "game_id": "64",
+            "icon_media_id": "0",
+            "info": "",
+            "name": "Map",
+            "requirement_root_package_id": "0",
+            "sort_index": "2",
+            "tab_id": "645",
+            "type": "MAP"
+        },
+        {
+            "content_id": "0",
+            "game_id": "64",
+            "icon_media_id": "0",
+            "info": "",
+            "name": "Inventory",
+            "requirement_root_package_id": "0",
+            "sort_index": "3",
+            "tab_id": "646",
+            "type": "INVENTORY"
+        },
+        {
+            "content_id": "0",
+            "game_id": "64",
+            "icon_media_id": "0",
+            "info": "",
+            "name": "Scanner",
+            "requirement_root_package_id": "0",
+            "sort_index": "4",
+            "tab_id": "647",
+            "type": "SCANNER"
+        },
+        {
+            "content_id": "0",
+            "game_id": "64",
+            "icon_media_id": "0",
+            "info": "",
+            "name": "Decoder",
+            "requirement_root_package_id": "0",
+            "sort_index": "5",
+            "tab_id": "648",
+            "type": "DECODER"
+        },
+        {
+            "content_id": "0",
+            "game_id": "64",
+            "icon_media_id": "0",
+            "info": "",
+            "name": "Player",
+            "requirement_root_package_id": "0",
+            "sort_index": "6",
+            "tab_id": "649",
+            "type": "PLAYER"
+        },
+        {
+            "content_id": "0",
+            "game_id": "64",
+            "icon_media_id": "0",
+            "info": "",
+            "name": "Notebook",
+            "requirement_root_package_id": "0",
+            "sort_index": "7",
+            "tab_id": "650",
+            "type": "NOTEBOOK"
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+NSNotification: SERVICES_TABS_RECEIVED
+NSNotification: MODEL_TABS_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== getUsersForGame return data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.users.getUsersForGame/	(0.717274)
+Fin async data: 
+{
+    "data": [
+        {
+            "display_name": "clh",
+            "media_id": "15632",
+            "user_id": "6",
+            "user_name": "chrish"
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+NSNotification: SERVICES_USERS_RECEIVED
+NSNotification: MODEL_USERS_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+
+=== getQuestsForGame return data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.quests.getQuestsForGame/	(0.735698)
+Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_QUESTS_RECEIVED
+NSNotification: MODEL_QUESTS_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+NSNotification: GAME_DATA_LOADED
+
+=== Declare start of (game? Scene? turn?) ===
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.touchSceneForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.touchGroupForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.touchItemsForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.touchItemsForGame/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.touchItemsForGroups/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+
+=== getMediaForGame return data ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.media.getMediaForGame/	(0.760005)
+Fin async data: 
+{
+    "data": [
+        {
+            "big_thumb_url": "http://arisgames.org/server/gamedatav2/64/arisc87bdd68f3cb53603acd5a50824583bd_256.jpg",
+            "file_name": "arisc87bdd68f3cb53603acd5a50824583bd.jpg",
+            "game_id": "64",
+            "media_id": "2383",
+            "name": "ben horne",
+            "thumb_url": "http://arisgames.org/server/gamedatav2/64/arisc87bdd68f3cb53603acd5a50824583bd_128.jpg",
+            "url": "http://arisgames.org/server/gamedatav2/64/arisc87bdd68f3cb53603acd5a50824583bd.jpg"
+        },
+        {
+            "big_thumb_url": "http://arisgames.org/server/gamedatav2/64/aris8e4de40283cdc5d1aefbbf93d7df82f3_256.jpg",
+            "file_name": "aris8e4de40283cdc5d1aefbbf93d7df82f3.jpg",
+            "game_id": "64",
+            "media_id": "2384",
+            "name": "audrey horne",
+            "thumb_url": "http://arisgames.org/server/gamedatav2/64/aris8e4de40283cdc5d1aefbbf93d7df82f3_128.jpg",
+            "url": "http://arisgames.org/server/gamedatav2/64/aris8e4de40283cdc5d1aefbbf93d7df82f3.jpg"
+        },
+        {
+            "big_thumb_url": "http://arisgames.org/server/gamedatav2/64/aris5cef1e548ab6ed5eaeccd55365ce30fb_256.jpg",
+            "file_name": "aris5cef1e548ab6ed5eaeccd55365ce30fb.jpg",
+            "game_id": "64",
+            "media_id": "2385",
+            "name": "dale cooper",
+            "thumb_url": "http://arisgames.org/server/gamedatav2/64/aris5cef1e548ab6ed5eaeccd55365ce30fb_128.jpg",
+            "url": "http://arisgames.org/server/gamedatav2/64/aris5cef1e548ab6ed5eaeccd55365ce30fb.jpg"
+        },
+        {
+            "big_thumb_url": "http://arisgames.org/server/gamedatav2/64/arisf5d6612131594e5444abaee8fc03c40c_256.jpg",
+            "file_name": "arisf5d6612131594e5444abaee8fc03c40c.jpg",
+            "game_id": "64",
+            "media_id": "2827",
+            "name": "audrey icon",
+            "thumb_url": "http://arisgames.org/server/gamedatav2/64/arisf5d6612131594e5444abaee8fc03c40c_128.jpg",
+            "url": "http://arisgames.org/server/gamedatav2/64/arisf5d6612131594e5444abaee8fc03c40c.jpg"
+        },
+        {
+            "big_thumb_url": "http://arisgames.org/server/gamedatav2/64/arisf6c7d574f70ad3d41c92652b0addfe16_256.jpg",
+            "file_name": "arisf6c7d574f70ad3d41c92652b0addfe16.jpg",
+            "game_id": "64",
+            "media_id": "2828",
+            "name": "ben icon",
+            "thumb_url": "http://arisgames.org/server/gamedatav2/64/arisf6c7d574f70ad3d41c92652b0addfe16_128.jpg",
+            "url": "http://arisgames.org/server/gamedatav2/64/arisf6c7d574f70ad3d41c92652b0addfe16.jpg"
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+NSNotification: SERVICES_MEDIAS_RECEIVED
+NSNotification: MODEL_MEDIA_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+NSNotification: GAME_PERCENT_LOADED
+NSNotification: GAME_DATA_LOADED
+
+=== Seems strange that they would require dup checking ===
+Dup req abort : http://arisgames.org/server/json.php/v2.client.touchSceneForPlayer/
+Dup req data  : {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Dup req abort : http://arisgames.org/server/json.php/v2.client.touchGroupForPlayer/
+Dup req data  : {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Dup req abort : http://arisgames.org/server/json.php/v2.client.touchItemsForPlayer/
+Dup req data  : {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Dup req abort : http://arisgames.org/server/json.php/v2.client.touchItemsForGame/
+Dup req data  : {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Dup req abort : http://arisgames.org/server/json.php/v2.client.touchItemsForGroups/
+Dup req data  : {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+
+=== Return Receipts for various "touch" calls ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.touchSceneForPlayer/	(0.100819)
+Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_SCENE_TOUCHED
+NSNotification: MODEL_SCENE_TOUCHED
+NSNotification: MAINTENANCE_PIECE_AVAILABLE
+NSNotification: MAINTENANCE_PERCENT_LOADED
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.touchGroupForPlayer/	(0.135006)
+Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_GROUP_TOUCHED
+NSNotification: MODEL_GROUP_TOUCHED
+NSNotification: MAINTENANCE_PIECE_AVAILABLE
+NSNotification: MAINTENANCE_PERCENT_LOADED
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.touchItemsForGame/	(0.143967)
+Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_GAME_INSTANCES_TOUCHED
+NSNotification: MODEL_GAME_INSTANCES_TOUCHED
+NSNotification: MAINTENANCE_PIECE_AVAILABLE
+NSNotification: MAINTENANCE_PERCENT_LOADED
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.touchItemsForPlayer/	(0.154576)
+Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_INSTANCES_TOUCHED
+NSNotification: MODEL_PLAYER_INSTANCES_TOUCHED
+NSNotification: MAINTENANCE_PIECE_AVAILABLE
+NSNotification: MAINTENANCE_PERCENT_LOADED
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.touchItemsForGroups/	(0.156400)
+Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_GROUP_INSTANCES_TOUCHED
+NSNotification: MODEL_GROUP_INSTANCES_TOUCHED
+NSNotification: MAINTENANCE_PIECE_AVAILABLE
+NSNotification: MAINTENANCE_PERCENT_LOADED
+NSNotification: MAINTENANCE_DATA_LOADED
+
+============================================================================================================================================
+=== Step through all model requestPlayerData() methods... via loadingViewController.maintenanceDataLoaded() --> Game.requestPlayerData() ===
+============================================================================================================================================
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/
+Req async data: {"tick_factories":1,"game_id":64,"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"}}
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64,"owner_id":10269}
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+============================================================================================================================================
+
+=== getGroupForPlayer return ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/	(0.135230)
+Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+NSNotification: PLAYER_PERCENT_LOADED
+
+=== getTriggersForPlayer return ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/	(0.141789)
+Fin async data: 
+{
+    "data": [
+        {
+            "distance": "5",
+            "game_id": "64",
+            "hidden": "0",
+            "icon_media_id": "0",
+            "infinite_distance": "1",
+            "instance_id": "2855",
+            "latitude": "42.746103625045",
+            "longitude": "-89.459908190918",
+            "name": "",
+            "qr_code": "1410926060845",
+            "requirement_root_package_id": "0",
+            "scene_id": "76",
+            "seconds": "0",
+            "show_title": "1",
+            "title": "Ben",
+            "trigger_id": "1476",
+            "trigger_on_enter": "1",
+            "type": "LOCATION",
+            "user_id": 10269,
+            "wiggle": "0"
+        },
+        {
+            "distance": "25",
+            "game_id": "64",
+            "hidden": "0",
+            "icon_media_id": "0",
+            "infinite_distance": "1",
+            "instance_id": "1693302",
+            "latitude": "38.142667840506",
+            "longitude": "-102.12808865662",
+            "name": "",
+            "qr_code": "1445460405247",
+            "requirement_root_package_id": "0",
+            "scene_id": "76",
+            "seconds": "10",
+            "show_title": "1",
+            "title": "",
+            "trigger_id": "251720",
+            "trigger_on_enter": "0",
+            "type": "LOCATION",
+            "user_id": 10269,
+            "wiggle": "0"
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+NSNotification: MODEL_TRIGGERS_INVALIDATED
+NSNotification: MODEL_TRIGGERS_NEW_AVAILABLE
+NSNotification: MODEL_DISPLAY_NEW_ENQUEUED
+NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+NSNotification: PLAYER_PERCENT_LOADED
+
+=== getOverlaysForPlayer return ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/	(0.155759)
+Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+NSNotification: PLAYER_PERCENT_LOADED
+
+=== getSceneForPlayer return ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/	(0.179005)
+Fin async data: 
+{"data":{"scene_id":"76","game_id":"64","name":"main","description":"","editor_x":"0","editor_y":"0","created":"2014-09-17 03:53:16","last_active":"2014-09-17 03:53:16"},"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+NSNotification: PLAYER_PERCENT_LOADED
+
+=== getInstancesForPlayer return ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/	(0.188898)
+Fin async data: 
+{
+    "data": [
+        {
+            "created": "2014-09-17 03:54:21",
+            "factory_id": "0",
+            "game_id": "64",
+            "infinite_qty": "0",
+            "instance_id": "2855",
+            "object_id": "605",
+            "object_type": "DIALOG",
+            "owner_id": "0",
+            "owner_type": "GAME_CONTENT",
+            "qty": "0"
+        },
+        {
+            "created": "2014-09-17 03:54:29",
+            "factory_id": "0",
+            "game_id": "64",
+            "infinite_qty": "0",
+            "instance_id": "2856",
+            "object_id": "606",
+            "object_type": "DIALOG",
+            "owner_id": "0",
+            "owner_type": "GAME_CONTENT",
+            "qty": "0"
+        },
+        {
+            "created": "2014-09-25 20:41:05",
+            "factory_id": "0",
+            "game_id": "64",
+            "infinite_qty": "0",
+            "instance_id": "4843",
+            "object_id": "632",
+            "object_type": "PLAQUE",
+            "owner_id": "0",
+            "owner_type": "GAME_CONTENT",
+            "qty": "0"
+        },
+        {
+            "created": "2014-10-01 21:32:37",
+            "factory_id": "0",
+            "game_id": "64",
+            "infinite_qty": "0",
+            "instance_id": "5834",
+            "object_id": "632",
+            "object_type": "PLAQUE",
+            "owner_id": "0",
+            "owner_type": "GAME_CONTENT",
+            "qty": "0"
+        },
+        {
+            "created": "2015-08-27 20:13:59",
+            "factory_id": "0",
+            "game_id": "64",
+            "infinite_qty": "0",
+            "instance_id": "1023174",
+            "object_id": "1048",
+            "object_type": "ITEM",
+            "owner_id": "0",
+            "owner_type": "GAME",
+            "qty": "0"
+        },
+        {
+            "created": "2015-10-21 20:46:45",
+            "factory_id": "0",
+            "game_id": "64",
+            "infinite_qty": "1",
+            "instance_id": "1693302",
+            "object_id": "1048",
+            "object_type": "ITEM",
+            "owner_id": "0",
+            "owner_type": "GAME_CONTENT",
+            "qty": "0"
+        },
+        {
+            "created": "2016-01-19 21:07:59",
+            "factory_id": "0",
+            "game_id": "64",
+            "infinite_qty": "0",
+            "instance_id": "2247899",
+            "object_id": "1048",
+            "object_type": "ITEM",
+            "owner_id": "10269",
+            "owner_type": "USER",
+            "qty": "0"
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+NSNotification: MODEL_INSTANCES_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+NSNotification: PLAYER_PERCENT_LOADED
+
+=== getTabsForPlayer return ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/	(0.206872)
+Fin async data: 
+{
+    "data": [
+        {
+            "content_id": "0",
+            "game_id": "64",
+            "icon_media_id": "0",
+            "info": "",
+            "name": "Map",
+            "requirement_root_package_id": "0",
+            "sort_index": "2",
+            "tab_id": "645",
+            "type": "MAP",
+            "user_id": 10269
+        },
+        {
+            "content_id": "0",
+            "game_id": "64",
+            "icon_media_id": "0",
+            "info": "",
+            "name": "Inventory",
+            "requirement_root_package_id": "0",
+            "sort_index": "3",
+            "tab_id": "646",
+            "type": "INVENTORY",
+            "user_id": 10269
+        },
+        {
+            "content_id": "0",
+            "game_id": "64",
+            "icon_media_id": "0",
+            "info": "",
+            "name": "Scanner",
+            "requirement_root_package_id": "0",
+            "sort_index": "4",
+            "tab_id": "647",
+            "type": "SCANNER",
+            "user_id": 10269
+        },
+        {
+            "content_id": "0",
+            "game_id": "64",
+            "icon_media_id": "0",
+            "info": "",
+            "name": "Decoder",
+            "requirement_root_package_id": "0",
+            "sort_index": "5",
+            "tab_id": "648",
+            "type": "DECODER",
+            "user_id": 10269
+        },
+        {
+            "content_id": "0",
+            "game_id": "64",
+            "icon_media_id": "0",
+            "info": "",
+            "name": "Player",
+            "requirement_root_package_id": "0",
+            "sort_index": "6",
+            "tab_id": "649",
+            "type": "PLAYER",
+            "user_id": 10269
+        },
+        {
+            "content_id": "0",
+            "game_id": "64",
+            "icon_media_id": "0",
+            "info": "",
+            "name": "Notebook",
+            "requirement_root_package_id": "0",
+            "sort_index": "7",
+            "tab_id": "650",
+            "type": "NOTEBOOK",
+            "user_id": 10269
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+NSNotification: MODEL_TABS_NEW_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+NSNotification: PLAYER_PERCENT_LOADED
+
+=== getLogsForPlayer return ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/	(0.246273)
+Fin async data: 
+{
+    "data": [
+        {
+            "content_id": "0",
+            "created": "2016-01-19 21:08:08",
+            "deleted": "0",
+            "event_type": "BEGIN_GAME",
+            "game_id": "64",
+            "group_id": "0",
+            "latitude": "0",
+            "longitude": "0",
+            "qty": "0",
+            "user_id": "10269",
+            "user_log_id": "6464954"
+        },
+        {
+            "content_id": "0",
+            "created": "2016-01-19 21:47:31",
+            "deleted": "0",
+            "event_type": "BEGIN_GAME",
+            "game_id": "64",
+            "group_id": "0",
+            "latitude": "0",
+            "longitude": "0",
+            "qty": "0",
+            "user_id": "10269",
+            "user_log_id": "6467302"
+        },
+        {
+            "content_id": "0",
+            "created": "2016-01-19 21:08:08",
+            "deleted": "0",
+            "event_type": "MOVE",
+            "game_id": "64",
+            "group_id": "0",
+            "latitude": "43.073127861546",
+            "longitude": "-89.409259557724",
+            "qty": "0",
+            "user_id": "10269",
+            "user_log_id": "6464956"
+        },
+        {
+            "content_id": "0",
+            "created": "2016-01-19 21:47:31",
+            "deleted": "0",
+            "event_type": "MOVE",
+            "game_id": "64",
+            "group_id": "0",
+            "latitude": "43.073127861546",
+            "longitude": "-89.409259557724",
+            "qty": "0",
+            "user_id": "10269",
+            "user_log_id": "6467299"
+        },
+        {
+            "content_id": "2855",
+            "created": "2016-01-19 21:08:08",
+            "deleted": "0",
+            "event_type": "VIEW_INSTANCE",
+            "game_id": "64",
+            "group_id": "0",
+            "latitude": "0",
+            "longitude": "0",
+            "qty": "0",
+            "user_id": "10269",
+            "user_log_id": "6464958"
+        },
+        {
+            "content_id": "2855",
+            "created": "2016-01-19 21:47:35",
+            "deleted": "0",
+            "event_type": "VIEW_INSTANCE",
+            "game_id": "64",
+            "group_id": "0",
+            "latitude": "0",
+            "longitude": "0",
+            "qty": "0",
+            "user_id": "10269",
+            "user_log_id": "6467317"
+        },
+        {
+            "content_id": "6191",
+            "created": "2016-01-19 21:08:09",
+            "deleted": "0",
+            "event_type": "VIEW_DIALOG_SCRIPT",
+            "game_id": "64",
+            "group_id": "0",
+            "latitude": "0",
+            "longitude": "0",
+            "qty": "0",
+            "user_id": "10269",
+            "user_log_id": "6464962"
+        },
+        {
+            "content_id": "6191",
+            "created": "2016-01-19 21:47:36",
+            "deleted": "0",
+            "event_type": "VIEW_DIALOG_SCRIPT",
+            "game_id": "64",
+            "group_id": "0",
+            "latitude": "0",
+            "longitude": "0",
+            "qty": "0",
+            "user_id": "10269",
+            "user_log_id": "6467322"
+        },
+        {
+            "content_id": "1476",
+            "created": "2016-01-19 21:08:08",
+            "deleted": "0",
+            "event_type": "TRIGGER_TRIGGER",
+            "game_id": "64",
+            "group_id": "0",
+            "latitude": "0",
+            "longitude": "0",
+            "qty": "0",
+            "user_id": "10269",
+            "user_log_id": "6464961"
+        },
+        {
+            "content_id": "1476",
+            "created": "2016-01-19 21:47:35",
+            "deleted": "0",
+            "event_type": "TRIGGER_TRIGGER",
+            "game_id": "64",
+            "group_id": "0",
+            "latitude": "0",
+            "longitude": "0",
+            "qty": "0",
+            "user_id": "10269",
+            "user_log_id": "6467315"
+        }
+    ],
+    "returnCode": 0,
+    "returnCodeDescription": null
+}
+NSNotification: SERVICES_PLAYER_LOGS_RECEIVED
+NSNotification: MODEL_LOGS_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+NSNotification: PLAYER_PERCENT_LOADED
+
+=== getQuestsForPlayer return ===
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/	(0.265667)
+Fin async data: 
+{"data":{"active":[],"complete":[]},"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+NSNotification: PLAYER_PERCENT_LOADED
+NSNotification: PLAYER_DATA_LOADED
+
+=== Player Data Load Complete. logPlayerBeganGame  ===
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.logPlayerBeganGame/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.logPlayerMoved/
+Req async data: {"game_id":64,"longitude":-89.409259557723999,"latitude":43.073127861546048,"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"}}
+NSNotification: USER_MOVED
+NSNotification: MODEL_DISPLAY_NEW_ENQUEUED
+NSNotification: MODEL_GAME_BEGAN
+NSNotification: GAME_PLAY_DISPLAYED_TRIGGER
+
+
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.logPlayerViewedInstance/
+Req async data: {"instance_id":2855,"game_id":64,"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"}}
+NSNotification: GAME_PLAY_DISPLAYED_INSTANCE
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.logPlayerTriggeredTrigger/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64,"trigger_id":1476}
+NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/
+Req async data: {"tick_factories":1,"game_id":64,"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"}}
+NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.logPlayerBeganGame/	(0.824353)
+Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.logPlayerMoved/	(0.826707)
+Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.logPlayerViewedContent/
+Req async data: {"content_type":"DIALOG_SCRIPT","game_id":64,"content_id":6191,"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"}}
+NSNotification: SERVICES_PLAYER_SCRIPT_OPTIONS_RECEIVED
+NSNotification: MODEL_PLAYER_SCRIPT_OPTIONS_AVAILABLE
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.logPlayerViewedInstance/	(0.575137)
+Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Dup req abort : http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/
+Dup req data  : {"tick_factories":1,"game_id":64,"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"}}
+NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+Dup req abort : http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/
+Dup req data  : {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+Req asynch URL: http://arisgames.org/server/json.php/v2.media.getMedia/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"media_id":164156}
+NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+NSNotification: MODEL_INSTANCES_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64,"owner_id":10269}
+NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.logPlayerTriggeredTrigger/	(0.806436)
+Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Dup req abort : http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/
+Dup req data  : {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Dup req abort : http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/
+Dup req data  : {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Dup req abort : http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/
+Dup req data  : {"tick_factories":1,"game_id":64,"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"}}
+NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+Dup req abort : http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/
+Dup req data  : {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+NSNotification: MODEL_INSTANCES_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Dup req abort : http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/
+Dup req data  : {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64,"owner_id":10269}
+NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+Dup req abort : http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/
+Dup req data  : {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Dup req abort : http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/
+Dup req data  : {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+Dup req abort : http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/
+Dup req data  : {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/	(0.807378)
+Fin async data: 
+{"data":[{"trigger_id":"1476","game_id":"64","instance_id":"2855","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"Ben","icon_media_id":"0","latitude":"42.746103625045","longitude":"-89.459908190918","distance":"5","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"1","qr_code":"1410926060845","seconds":"0","user_id":10269},{"trigger_id":"251720","game_id":"64","instance_id":"1693302","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"","icon_media_id":"0","latitude":"38.142667840506","longitude":"-102.12808865662","distance":"25","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"0","qr_code":"1445460405247","seconds":"10","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/	(0.814011)
+Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+Media loader  : Media id:2828 loaded:http://arisgames.org/server/gamedatav2/64/arisf6c7d574f70ad3d41c92652b0addfe16.jpg
+NSNotification: CONNECTION_LAG
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.logPlayerViewedContent/	(0.691043)
+Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Dup req abort : http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/
+Dup req data  : {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Dup req abort : http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/
+Dup req data  : {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/
+Req async data: {"tick_factories":1,"game_id":64,"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"}}
+NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+NSNotification: MODEL_INSTANCES_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Dup req abort : http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/
+Dup req data  : {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64,"owner_id":10269}
+NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+Dup req abort : http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/
+Dup req data  : {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Dup req abort : http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/
+Dup req data  : {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+Dup req abort : http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/
+Dup req data  : {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/	(0.609357)
+Fin async data: 
+{"data":{"scene_id":"76","game_id":"64","name":"main","description":"","editor_x":"0","editor_y":"0","created":"2014-09-17 03:53:16","last_active":"2014-09-17 03:53:16"},"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/	(0.593897)
+Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Fin asynch URL: http://arisgames.org/server/json.php/v2.media.getMedia/	(0.480764)
+Fin async data: 
+{"data":{"media_id":"164156","game_id":"0","name":"","file_name":"aris6805d25fe4a573b2cef44b83ed775110.jpg","url":"http:\/\/arisgames.org\/server\/gamedatav2\/players\/aris6805d25fe4a573b2cef44b83ed775110.jpg","big_thumb_url":"http:\/\/arisgames.org\/server\/gamedatav2\/players\/aris6805d25fe4a573b2cef44b83ed775110_256.jpg","thumb_url":"http:\/\/arisgames.org\/server\/gamedatav2\/players\/aris6805d25fe4a573b2cef44b83ed775110_128.jpg"},"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_MEDIA_RECEIVED
+NSNotification: MODEL_MEDIA_AVAILABLE
+NSNotification: GAME_PIECE_AVAILABLE
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/	(0.474641)
+Fin async data: 
+{"data":[{"instance_id":"2855","game_id":"64","object_type":"DIALOG","object_id":"605","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:21"},{"instance_id":"2856","game_id":"64","object_type":"DIALOG","object_id":"606","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:29"},{"instance_id":"4843","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-25 20:41:05"},{"instance_id":"5834","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-10-01 21:32:37"},{"instance_id":"1023174","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME","owner_id":"0","created":"2015-08-27 20:13:59"},{"instance_id":"1693302","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"1","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2015-10-21 20:46:45"},{"instance_id":"2247899","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"USER","owner_id":"10269","created":"2016-01-19 21:07:59"}],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+NSNotification: MODEL_INSTANCES_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/	(0.501684)
+Fin async data: 
+{"data":[{"tab_id":"645","game_id":"64","type":"MAP","name":"Map","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"2","user_id":10269},{"tab_id":"646","game_id":"64","type":"INVENTORY","name":"Inventory","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"3","user_id":10269},{"tab_id":"647","game_id":"64","type":"SCANNER","name":"Scanner","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"4","user_id":10269},{"tab_id":"648","game_id":"64","type":"DECODER","name":"Decoder","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"5","user_id":10269},{"tab_id":"649","game_id":"64","type":"PLAYER","name":"Player","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"6","user_id":10269},{"tab_id":"650","game_id":"64","type":"NOTEBOOK","name":"Notebook","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"7","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/	(0.510846)
+Fin async data: 
+{"data":[{"user_log_id":"6464954","user_id":"10269","group_id":"0","game_id":"64","event_type":"BEGIN_GAME","content_id":"0","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6467302","user_id":"10269","group_id":"0","game_id":"64","event_type":"BEGIN_GAME","content_id":"0","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:47:31"},{"user_log_id":"6468794","user_id":"10269","group_id":"0","game_id":"64","event_type":"BEGIN_GAME","content_id":"0","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:58:15"},{"user_log_id":"6464956","user_id":"10269","group_id":"0","game_id":"64","event_type":"MOVE","content_id":"0","qty":"0","latitude":"43.073127861546","longitude":"-89.409259557724","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6467299","user_id":"10269","group_id":"0","game_id":"64","event_type":"MOVE","content_id":"0","qty":"0","latitude":"43.073127861546","longitude":"-89.409259557724","deleted":"0","created":"2016-01-19 21:47:31"},{"user_log_id":"6468797","user_id":"10269","group_id":"0","game_id":"64","event_type":"MOVE","content_id":"0","qty":"0","latitude":"43.073127861546","longitude":"-89.409259557724","deleted":"0","created":"2016-01-19 21:58:15"},{"user_log_id":"6464958","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_INSTANCE","content_id":"2855","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6467317","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_INSTANCE","content_id":"2855","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:47:35"},{"user_log_id":"6468798","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_INSTANCE","content_id":"2855","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:58:15"},{"user_log_id":"6464962","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_DIALOG_SCRIPT","content_id":"6191","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:09"},{"user_log_id":"6467322","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_DIALOG_SCRIPT","content_id":"6191","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:47:36"},{"user_log_id":"6468803","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_DIALOG_SCRIPT","content_id":"6191","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:58:16"},{"user_log_id":"6464961","user_id":"10269","group_id":"0","game_id":"64","event_type":"TRIGGER_TRIGGER","content_id":"1476","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6467315","user_id":"10269","group_id":"0","game_id":"64","event_type":"TRIGGER_TRIGGER","content_id":"1476","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:47:35"},{"user_log_id":"6468800","user_id":"10269","group_id":"0","game_id":"64","event_type":"TRIGGER_TRIGGER","content_id":"1476","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:58:15"}],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_LOGS_RECEIVED
+NSNotification: MODEL_LOGS_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/	(0.260860)
+Fin async data: 
+{"data":[{"trigger_id":"1476","game_id":"64","instance_id":"2855","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"Ben","icon_media_id":"0","latitude":"42.746103625045","longitude":"-89.459908190918","distance":"5","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"1","qr_code":"1410926060845","seconds":"0","user_id":10269},{"trigger_id":"251720","game_id":"64","instance_id":"1693302","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"","icon_media_id":"0","latitude":"38.142667840506","longitude":"-102.12808865662","distance":"25","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"0","qr_code":"1445460405247","seconds":"10","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Media loader  : Media id:2383 loaded:http://arisgames.org/server/gamedatav2/64/arisc87bdd68f3cb53603acd5a50824583bd.jpg
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/	(0.351296)
+Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/	(0.648449)
+Fin async data: 
+{"data":{"active":[],"complete":[]},"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+Media loader  : Media id:164156 loaded:http://arisgames.org/server/gamedatav2/players/aris6805d25fe4a573b2cef44b83ed775110.jpg
+NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/
+Req async data: {"tick_factories":1,"game_id":64,"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"}}
+NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+NSNotification: MODEL_INSTANCES_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64,"owner_id":10269}
+NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+Req asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/
+Req async data: {"auth":{"user_id":10269,"key":"WQ52ILlkxh1QIMCblMPptTE9n7XO1xyNduGM6RXtZPayrCACefSyZmyckmRcJgQN"},"game_id":64}
+NSNotification: CONNECTION_LAG
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getOverlaysForPlayer/	(0.245002)
+Fin async data: 
+{"data":[],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_OVERLAYS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getInstancesForPlayer/	(0.306461)
+Fin async data: 
+{"data":[{"instance_id":"2855","game_id":"64","object_type":"DIALOG","object_id":"605","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:21"},{"instance_id":"2856","game_id":"64","object_type":"DIALOG","object_id":"606","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-17 03:54:29"},{"instance_id":"4843","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-09-25 20:41:05"},{"instance_id":"5834","game_id":"64","object_type":"PLAQUE","object_id":"632","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2014-10-01 21:32:37"},{"instance_id":"1023174","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"GAME","owner_id":"0","created":"2015-08-27 20:13:59"},{"instance_id":"1693302","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"1","factory_id":"0","owner_type":"GAME_CONTENT","owner_id":"0","created":"2015-10-21 20:46:45"},{"instance_id":"2247899","game_id":"64","object_type":"ITEM","object_id":"1048","qty":"0","infinite_qty":"0","factory_id":"0","owner_type":"USER","owner_id":"10269","created":"2016-01-19 21:07:59"}],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_INSTANCES_RECEIVED
+NSNotification: MODEL_INSTANCES_PLAYER_AVAILABLE
+NSNotification: MODEL_PLAYER_INSTANCES_AVAILABLE
+NSNotification: MODEL_GAME_INSTANCES_AVAILABLE
+NSNotification: MODEL_GROUP_INSTANCES_AVAILABLE
+NSNotification: MODEL_INSTANCES_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTabsForPlayer/	(0.367679)
+Fin async data: 
+{"data":[{"tab_id":"645","game_id":"64","type":"MAP","name":"Map","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"2","user_id":10269},{"tab_id":"646","game_id":"64","type":"INVENTORY","name":"Inventory","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"3","user_id":10269},{"tab_id":"647","game_id":"64","type":"SCANNER","name":"Scanner","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"4","user_id":10269},{"tab_id":"648","game_id":"64","type":"DECODER","name":"Decoder","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"5","user_id":10269},{"tab_id":"649","game_id":"64","type":"PLAYER","name":"Player","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"6","user_id":10269},{"tab_id":"650","game_id":"64","type":"NOTEBOOK","name":"Notebook","icon_media_id":"0","content_id":"0","info":"","requirement_root_package_id":"0","sort_index":"7","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_TABS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getSceneForPlayer/	(0.425538)
+Fin async data: 
+{"data":{"scene_id":"76","game_id":"64","name":"main","description":"","editor_x":"0","editor_y":"0","created":"2014-09-17 03:53:16","last_active":"2014-09-17 03:53:16"},"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_SCENE_RECEIVED
+NSNotification: MODEL_SCENES_PLAYER_SCENE_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getTriggersForPlayer/	(0.420386)
+Fin async data: 
+{"data":[{"trigger_id":"1476","game_id":"64","instance_id":"2855","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"Ben","icon_media_id":"0","latitude":"42.746103625045","longitude":"-89.459908190918","distance":"5","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"1","qr_code":"1410926060845","seconds":"0","user_id":10269},{"trigger_id":"251720","game_id":"64","instance_id":"1693302","scene_id":"76","requirement_root_package_id":"0","type":"LOCATION","name":"","title":"","icon_media_id":"0","latitude":"38.142667840506","longitude":"-102.12808865662","distance":"25","infinite_distance":"1","wiggle":"0","show_title":"1","hidden":"0","trigger_on_enter":"0","qr_code":"1445460405247","seconds":"10","user_id":10269}],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_TRIGGERS_RECEIVED
+NSNotification: MODEL_PLAYER_TRIGGERS_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getGroupForPlayer/	(0.460663)
+Fin async data: 
+{"data":null,"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_GROUP_RECEIVED
+NSNotification: MODEL_GROUPS_PLAYER_GROUP_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getLogsForPlayer/	(0.433844)
+Fin async data: 
+{"data":[{"user_log_id":"6464954","user_id":"10269","group_id":"0","game_id":"64","event_type":"BEGIN_GAME","content_id":"0","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6467302","user_id":"10269","group_id":"0","game_id":"64","event_type":"BEGIN_GAME","content_id":"0","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:47:31"},{"user_log_id":"6468794","user_id":"10269","group_id":"0","game_id":"64","event_type":"BEGIN_GAME","content_id":"0","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:58:15"},{"user_log_id":"6464956","user_id":"10269","group_id":"0","game_id":"64","event_type":"MOVE","content_id":"0","qty":"0","latitude":"43.073127861546","longitude":"-89.409259557724","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6467299","user_id":"10269","group_id":"0","game_id":"64","event_type":"MOVE","content_id":"0","qty":"0","latitude":"43.073127861546","longitude":"-89.409259557724","deleted":"0","created":"2016-01-19 21:47:31"},{"user_log_id":"6468797","user_id":"10269","group_id":"0","game_id":"64","event_type":"MOVE","content_id":"0","qty":"0","latitude":"43.073127861546","longitude":"-89.409259557724","deleted":"0","created":"2016-01-19 21:58:15"},{"user_log_id":"6464958","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_INSTANCE","content_id":"2855","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6467317","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_INSTANCE","content_id":"2855","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:47:35"},{"user_log_id":"6468798","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_INSTANCE","content_id":"2855","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:58:15"},{"user_log_id":"6464962","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_DIALOG_SCRIPT","content_id":"6191","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:09"},{"user_log_id":"6467322","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_DIALOG_SCRIPT","content_id":"6191","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:47:36"},{"user_log_id":"6468803","user_id":"10269","group_id":"0","game_id":"64","event_type":"VIEW_DIALOG_SCRIPT","content_id":"6191","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:58:16"},{"user_log_id":"6464961","user_id":"10269","group_id":"0","game_id":"64","event_type":"TRIGGER_TRIGGER","content_id":"1476","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:08:08"},{"user_log_id":"6467315","user_id":"10269","group_id":"0","game_id":"64","event_type":"TRIGGER_TRIGGER","content_id":"1476","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:47:35"},{"user_log_id":"6468800","user_id":"10269","group_id":"0","game_id":"64","event_type":"TRIGGER_TRIGGER","content_id":"1476","qty":"0","latitude":"0","longitude":"0","deleted":"0","created":"2016-01-19 21:58:15"}],"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_LOGS_RECEIVED
+NSNotification: MODEL_LOGS_AVAILABLE
+NSNotification: PLAYER_PIECE_AVAILABLE
+Fin asynch URL: http://arisgames.org/server/json.php/v2.client.getQuestsForPlayer/	(0.450303)
+Fin async data: 
+{"data":{"active":[],"complete":[]},"returnCode":0,"returnCodeDescription":null}
+NSNotification: SERVICES_PLAYER_QUESTS_RECEIVED
+NSNotification: PLAYER_PIECE_AVAILABLE
