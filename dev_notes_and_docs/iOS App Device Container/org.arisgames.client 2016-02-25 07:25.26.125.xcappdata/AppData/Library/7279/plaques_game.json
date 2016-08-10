@@ -1,0 +1,1024 @@
+{
+    "plaques": [
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "0",
+            "icon_media_id": "170611",
+            "media_id": "170611",
+            "name": "RIP5",
+            "plaque_id": "35332"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "35532",
+            "icon_media_id": "-1",
+            "media_id": "190302",
+            "name": "Give Water Bottle Jeremy",
+            "plaque_id": "31972"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "41739",
+            "icon_media_id": "176757",
+            "media_id": "0",
+            "name": "Lost Photos",
+            "plaque_id": "36464"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "42354",
+            "icon_media_id": "-1",
+            "media_id": "180103",
+            "name": "Lost Batteries",
+            "plaque_id": "37279"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "We only have thirty minutes to gather what we need, and I have to get my own things together, too. The RA did tell me that the items we need are all over campus. Look on this map. See? There are different items at each location. Think through what you want to bring with you. Remember, you can only take eight things with you. Choose wisely. Good luck and stay alive! I hope I will see you again. Oh! If you see a woman named Charlie, tell her to meet me at the Pioneer Woman.",
+            "event_package_id": "0",
+            "icon_media_id": "-1",
+            "media_id": "0",
+            "name": "S1.Pa.P1 Complete",
+            "plaque_id": "27842"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You forgot to get food.  Don't forget to pick up some food on your way so you don't starve.",
+            "event_package_id": "38129",
+            "icon_media_id": "190175",
+            "media_id": "190175",
+            "name": "No Food",
+            "plaque_id": "33644"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "33837",
+            "icon_media_id": "176746",
+            "media_id": "190311",
+            "name": "Graphic Novel",
+            "plaque_id": "30737"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "<script type=\"text/javascript\">\nvar ARIS = {};\nARIS.ready = function() {\nARIS.exit();\n}\n</script>",
+            "event_package_id": "38135",
+            "icon_media_id": "160682",
+            "media_id": "0",
+            "name": "Food Eaten2",
+            "plaque_id": "33653"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "JAVASCRIPT",
+            "description": "You gave up some hazelnuts in exchange for the harmonica.\n\n<script type=\"text/javascript\">\nvar ARIS = {};\nARIS.ready = function() {\n\nARIS.hook = function()\n{\n  ARIS. exitToDialog('28350');\n}\n\n}\n</script>",
+            "event_package_id": "34414",
+            "icon_media_id": "180104",
+            "media_id": "180109",
+            "name": "Hazelnuts for Harmonica",
+            "plaque_id": "31274"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "The two adults in the family look at you, and you can see gratitude in their eyes.\n\nYou sit beneath a tree to rest. As you drift off to sleep, you feel strangely optimistic and begin to think that things may turn out okay.\n<script type=\"text/javascript\">\nvar areAllItemsCheckedOnce = false;\nvar ARIS = {};\n\nfunction itemObj(itemId){\n\tthis.itemId = itemId;\n\tthis.qty = 0;\n\tthis.wasChecked = false;\n}\n\nfunction removeOneItemAtRandom(){\n\tvar tempItemArray = [];\n\t//First set them all to not checked\n\tfor (i = 0; i < itemArray.length; i++) {\n\t\tvar itemObject = itemArray[i];\n\t\titemObject.wasChecked = false;\n\t\t//If the item's quantity is greater then 0 (meaning the user has picked up at least one of said item)\n\t\tif(itemObject.qty > 0){\n\t\t\t//Add that item to the temp array.\n\t\t\ttempItemArray.push(itemObject);\n\t\t}\n\t}\n\t//Get a random object from the temp array\n\tvar randNum = Math.floor(Math.random() * tempItemArray.length);\n//\talert(\"random number = \" + randNum);\n\tvar randomObj = tempItemArray[randNum];\n\tareAllItemsCheckedOnce = true;\n\t//Remove one item from the random object quantity.\n\tARIS.takeItemCount(randomObj.itemId, 1);\n\t\n}\n\nvar cellPhone = new itemObj(39786);\nvar laptop = new itemObj(41997);\nvar water = new itemObj(41493);\nvar gloves = new itemObj(41026);\nvar solarCellphoneCharger = new itemObj(41484);\nvar graphicNovel = new itemObj(41482);\nvar photos = new itemObj(42759); \nvar clothes = new itemObj(42761); \nvar toothbrush = new itemObj(42764);\nvar firstAidKit = new itemObj(40936);\nvar flashlight = new itemObj(42948);\nvar novelWithPicture = new itemObj(41540);\nvar food = new itemObj(39784);\nvar fireStarter = new itemObj(42093);\nvar matches = new itemObj(42095);\nvar knife = new itemObj(42096);\nvar batteries = new itemObj(44845);\nvar hazelnuts = new itemObj(41543);\nvar harmonica = new itemObj(41545);\nvar berries = new itemObj(44713);\nvar oysterMushrooms = new itemObj(44714);\nvar tamborine = new itemObj(44715);\nvar firewood = new itemObj(44717);\nvar guitar = new itemObj(41788);\nvar rifle = new itemObj(41790);\n\nvar itemArray = [cellPhone, laptop, water, gloves, solarCellphoneCharger, graphicNovel, photos, clothes, toothbrush, firstAidKit, flashlight, novelWithPicture, food, fireStarter, matches, knife, batteries, hazelnuts, harmonica, berries, oysterMushrooms, tamborine, firewood, guitar, rifle];\n\nARIS.ready = function() {\n\t\n\tfor (i = 0; i < itemArray.length; i++) { \n\t\tvar itemObject = itemArray[i];\n\t\tARIS.getItemCount(itemObject.itemId);\n\t}\n\n\tARIS.didUpdateItemQty = function(item_id, qty) {\n\t\tif(areAllItemsCheckedOnce != true){\n\t\t\tfor (i = 0; i < itemArray.length; i++) {\n\t\t\t\tvar item = itemArray[i];\n\t\t\t\tif(item_id == item.itemId){\n\t\t\t\t\titem.qty = qty;\n\t\t\t\t\titem.wasChecked = true;\n\t\t\t\t\tbreak; // break out of the loop since we've set the item that was currently being updated\n\t\t\t\t}\n\t\t\t}\n\t\t\t\n\t\t\t//Loop through the array and check if they are all TRUE for wasChecked\n\t\t\t//If there is even one that is FALSE, then exit the loop\n\t\t\tvar allItemsChecked = true;\n\t\t\tfor (i = 0; i < itemArray.length; i++) {\n\t\t\t\tvar itemObject = itemArray[i];\n\t\t\t\tif(itemObject.wasChecked == false){\n\t\t\t\t\tallItemsChecked = false;\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t\tif(i == itemArray.length-1){\n\t\t\t\t\tallItemsChecked = true;\n\t\t\t\t}\n\t\t\t}\n//\t\t\talert(\"all items checked = \" + allItemsChecked);\n\t\t\tif(allItemsChecked == true){\n//\t\t\t\talert(\"all items checked = \" + allItemsChecked);\n\t\t\t\tareAllItemsCheckedOnce = true;\n//\t\t\t\talert(\"ALL HAVE BEEN CHECKED!\" + firstAidKit.qty + \" \" + water.qty + \" \" + gloves.qty + \" \" + food.qty + \" \" + solarCellphoneCharger.qty + \" \" + graphicNovel.qty + \" \");\n\t\t\t\t//code before the pause\n\t\t\t\tsetTimeout(function(){\n\t\t\t\t    //do what you need here\n\t\t\t\t\tremoveOneItemAtRandom();\n\t\t\t\t}, 2000);\n\t\t\t}\n\t\t}\n\t}\n\n}\n</script>",
+            "event_package_id": "38462",
+            "icon_media_id": "190175",
+            "media_id": "190175",
+            "name": "Family Chooses an Item",
+            "plaque_id": "31262"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "35915",
+            "icon_media_id": "-1",
+            "media_id": "190300",
+            "name": "Give Cell Phone",
+            "plaque_id": "32110"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You are out foraging with your group when suddenly a cougar jumps out at you. You dodge the deadly blow, but the cougar immediately attacks another member of your group. Charlie scares off the cougar with her machete while Jeremy checks on the injured member of the group. You have to cut the foraging party short to care for the injured. If only you had a weapon to protect yourself...",
+            "event_package_id": "0",
+            "icon_media_id": "-1",
+            "media_id": "192468",
+            "name": "No Knife",
+            "plaque_id": "36922"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "The children look freezing in their torn, old clothes. You pull out the clothes you gathered from your apartment two years ago and tell them to choose whatever they want to wear. The kids look at you in wonder. They immediately start to try on everything you have. They don't care how they look; they just want to be warm.",
+            "event_package_id": "0",
+            "icon_media_id": "-1",
+            "media_id": "192458",
+            "name": "Used Clothes",
+            "plaque_id": "36931"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You've completed Year 2.  See where the journey has taken you!  Find Year 5 on the map to start.\n\n<script type=\"text/javascript\">\n//Level Complete sound\nvar ARIS = {};\nARIS.ready = function() {\n\t//Inject the audio\n\tvar audioElement = document.createElement('audio');\n\taudioElement.setAttribute('src', 'http://arisgames.org/server/gamedatav2/8757/aris5d22b7653570e3db9338590f3b2f2655.mp3');\n\taudioElement.setAttribute('type','audio/mpeg');\n\taudioElement.load();\n\taudioElement.play(); \n}\n</script>",
+            "event_package_id": "0",
+            "icon_media_id": "190175",
+            "media_id": "190175",
+            "name": "Completed Year 2",
+            "plaque_id": "30709"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "40896",
+            "icon_media_id": "160685",
+            "media_id": "190316",
+            "name": "Gained First Aid Kit",
+            "plaque_id": "35056"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "40914",
+            "icon_media_id": "-1",
+            "media_id": "0",
+            "name": "Gained Oyster Mushrooms",
+            "plaque_id": "35089"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "33835",
+            "icon_media_id": "176758",
+            "media_id": "190309",
+            "name": "Solar Cell Phone Charger",
+            "plaque_id": "30739"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "43298",
+            "icon_media_id": "-1",
+            "media_id": "190304",
+            "name": "Lost Water1",
+            "plaque_id": "37510"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "34404",
+            "icon_media_id": "160685",
+            "media_id": "190303",
+            "name": "Give Away First Aid Kit",
+            "plaque_id": "31255"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "Before you leave the city, you take some time to write a final email to your family with the little battery power left on your laptop. Luckily, the Internet has not gone down yet. You hope your message reaches them.",
+            "event_package_id": "41957",
+            "icon_media_id": "-1",
+            "media_id": "192451",
+            "name": "Used Laptop",
+            "plaque_id": "36903"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You pick some wild berries as you are foraging, but they look kind of dirty. You use some of your water to rinse them off. You collect as many as you can hold and bring them back to the group. They are grateful that you brought back so many to share. Good thing you were prepared!",
+            "event_package_id": "41977",
+            "icon_media_id": "-1",
+            "media_id": "192473",
+            "name": "Used Water2",
+            "plaque_id": "36924"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "As you look off into the distance, you swear you can see Luli bounding toward you. You close your eyes and never wake up.",
+            "event_package_id": "0",
+            "icon_media_id": "170611",
+            "media_id": "170611",
+            "name": "RIP3",
+            "plaque_id": "35327"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You continue your journey out of the city, but before too long, it starts to rain. You find shelter, but you do not have a way to make fire so your clothes are still soaked. If only you had picked up a fire starter or even just a box of matches...",
+            "event_package_id": "41978",
+            "icon_media_id": "-1",
+            "media_id": "192477",
+            "name": "No Matches/Firestarter",
+            "plaque_id": "36912"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You pull out the graphic novel Jeremy gave you two years ago. You toss it to him, and he can't contain his excitement. <span style='color:#FC7A57;'>\"I can't believe you held onto this for so long!\"</span> He starts to read it to the children, but they eventually lose interest. The younger girl says, <span style='color:#B84729;'>\"I like the pictures, but...\"</span> The older brother finishes, <span style='color:#B84729;'>\"But the post-apocalyptic story is a little too relatable.\"</span> They go back to reading their book as Jeremy flips through the graphic novel.",
+            "event_package_id": "0",
+            "icon_media_id": "-1",
+            "media_id": "192466",
+            "name": "Used Graphic Novel",
+            "plaque_id": "36933"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "41734",
+            "icon_media_id": "176761",
+            "media_id": "190836",
+            "name": "Gained Toothbrush",
+            "plaque_id": "36471"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "42349",
+            "icon_media_id": "-1",
+            "media_id": "192643",
+            "name": "Lost Photos",
+            "plaque_id": "37274"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You ate some of your food.",
+            "event_package_id": "38120",
+            "icon_media_id": "160682",
+            "media_id": "190314",
+            "name": "Ate Food2",
+            "plaque_id": "33639"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You trade your 10 Hazelnuts for the Recorder.",
+            "event_package_id": "33828",
+            "icon_media_id": "-1",
+            "media_id": "0",
+            "name": "Recorder",
+            "plaque_id": "30732"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "Prepare to gather resources for your party.  Collect items available on the Map.",
+            "event_package_id": "0",
+            "icon_media_id": "189000",
+            "media_id": "189000",
+            "name": "Prepare2",
+            "plaque_id": "33041"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "34406",
+            "icon_media_id": "161954",
+            "media_id": "190304",
+            "name": "Give Away Water",
+            "plaque_id": "31257"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "Congratulations! You've unlocked Day 2 of your journey. Find Day 2 on the map to continue.\n<script type=\"text/javascript\">\n//Level Complete sound\nvar ARIS = {};\nARIS.ready = function() {\n\t//Inject the audio\n\tvar audioElement = document.createElement('audio');\n\taudioElement.setAttribute('src', 'http://arisgames.org/server/gamedatav2/8757/aris5d22b7653570e3db9338590f3b2f2655.mp3');\n\taudioElement.setAttribute('type','audio/mpeg');\n\taudioElement.load();\n\taudioElement.play(); \n}\n</script>",
+            "event_package_id": "0",
+            "icon_media_id": "190175",
+            "media_id": "190175",
+            "name": "Completed Day 1",
+            "plaque_id": "30538"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "35535",
+            "icon_media_id": "-1",
+            "media_id": "190300",
+            "name": "Give Cell Phone Jeremy",
+            "plaque_id": "31969"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You've gathered all your items and you're ready to evacuate the city.",
+            "event_package_id": "0",
+            "icon_media_id": "190175",
+            "media_id": "190175",
+            "name": "Evacuate now",
+            "plaque_id": "30713"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "Thanks for coming with me. I\u2019m so glad you\u2019re ready. Before she left, the RA gave me some stuff. I can\u2019t possibly carry to all in addition to all my own stuff. Which do you want?",
+            "event_package_id": "31198",
+            "icon_media_id": "-1",
+            "media_id": "0",
+            "name": "Awarded 2 Items",
+            "plaque_id": "27839"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You found a novel!",
+            "event_package_id": "33833",
+            "icon_media_id": "176755",
+            "media_id": "190313",
+            "name": "Novel",
+            "plaque_id": "30734"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "40906",
+            "icon_media_id": "176753",
+            "media_id": "190327",
+            "name": "Gained Matches",
+            "plaque_id": "35063"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "40918",
+            "icon_media_id": "-1",
+            "media_id": "0",
+            "name": "Gained Firewood",
+            "plaque_id": "35093"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You survived the Georgia Flu and the aftermath.\n\n<script type=\"text/javascript\">\n//Applause sound\nvar ARIS = {};\nARIS.ready = function() {\n\t//Inject the audio\n\tvar audioElement = document.createElement('audio');\n\taudioElement.setAttribute('src', 'http://arisgames.org/server/gamedatav2/8757/aris6a8f91b7c18895e75c676cbc9337fa24.mp3');\n\taudioElement.setAttribute('type','audio/mpeg');\n\taudioElement.load();\n\taudioElement.play(); \n}\n</script>",
+            "event_package_id": "0",
+            "icon_media_id": "159228",
+            "media_id": "195432",
+            "name": "Congratulations!",
+            "plaque_id": "30725"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "JAVASCRIPT",
+            "description": "<b>Information about the ecopod research study</b>\n<br/>\n<p>As a participant in the <b>ecopod</b>, we would like to ask your permission to use your game play data for a research study. We want to find out how learners can use place-based mobile games for learning foreign language and understand what their perceptions of the learning activities are. The research will improve this game and contribute to our understanding of language learning.</p>\n\n<p>When you play <b>ecopod</b>, information about your game play is collected and saved on our servers. This information is collected whether you participate in the research study or not. The data includes your login names, profile information, clicks you make during game play, choices you make while doing game activities, and your performance on game activities. This data must be collected in \u201cEXEMPT\" order for us to host this interactive game. We will not use your data for the research study without your permission.</p>\n\n<p>Participation in this study is voluntary. You may choose to participant in the research project by clicking \u201cI\u2019m happy to share my game play data for research purposes.\u201d If you agree, there is nothing else you need to do to participate. If you don\u2019t want to participate, then click \u201cI\u2019d prefer that my game play data not be used for research purposes.\u201d Your decision whether or not to participate will not affect your current or future relations with the University of Oregon or other organizations. If you decide to participate, you are free to withdraw from the research at any time without affecting those relationships. The study will continue as long as game activities are available. We expect the game to be available throughout the academic year.</p>\n\n<p>We will take all measures to protect your privacy and the security of all your personal information, but we cannot guarantee the confidentiality of all data. Research records and data will be stored securely on University of Oregon servers and only the research team will have access to them. Any report that might be published will not include your name or other information that would make it possible to identify you. Your responses will be archived for future analysis, but all identifying information will be removed or stored separately from the data itself. The University of Oregon Research Compliance Services that oversees human subject research will be permitted to access your records. There may be times when we are required by law to share your information.</p>\n\n<p>There are no direct benefits of the study. The indirect benefits of this study are an increased understanding of the use of synthetic immersive environments in foreign language learning and the potential to improve your abilities in the foreign language you are studying.</p>\n\n<p>This study has minimal risks in that your responses will be archived for evaluation. There are potential risks of loss of privacy and confidentiality associated with participating in a research study.</p>\n\n<p>This study is being conducted by Dr. Julie Sykes at the Center for Applied Second Language Studies, University of Oregon. If you have any questions, concerns or complaints at any time about the research study, Dr. Sykes will be glad to answer them: jsykes@uoregon.edu, 541-346-5699. The study is funded in part by a grant from the U.S. Department of Education.</p>\n\n<p>This study is approved by UO . If you have any questions or concerns your\n\ufffcResearch Compliance Services \ufffcrights as a research subject, please contact the ResearchCompliance@uoregon.edu for more information.</p>\n\n<script type=\"text/javascript\">\nvar ARIS = {};\nARIS.ready = function() {\n\nARIS.hook = function()\n{\n  ARIS. exitToDialog('33550');\n}\n\n}\n</script>",
+            "event_package_id": "0",
+            "icon_media_id": "-1",
+            "media_id": "0",
+            "name": "IRB Plaque",
+            "plaque_id": "37197"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "42351",
+            "icon_media_id": "-1",
+            "media_id": "192644",
+            "name": "Lost Solar Charger",
+            "plaque_id": "37276"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You've gathered all your items and you're ready to return to your party.",
+            "event_package_id": "0",
+            "icon_media_id": "189000",
+            "media_id": "189000",
+            "name": "Ready to go?",
+            "plaque_id": "33043"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "Your phone battery dies since you have been using it all day to navigate the city. You try to charge it by plugging it into a power outlet, but nothing happens. If only you had another way to give it power...",
+            "event_package_id": "41959",
+            "icon_media_id": "-1",
+            "media_id": "192456",
+            "name": "Used Cell Phone No Charger",
+            "plaque_id": "36907"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "35914",
+            "icon_media_id": "-1",
+            "media_id": "190299",
+            "name": "Give Laptop",
+            "plaque_id": "32107"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You bring out some of the old photographs you saved from your residence hall two years ago. You tell the rest of the group stories about your old friends and family and how much you miss them. They all have similar stories and support you in this hard new life. You are starting to think of them as your new family.",
+            "event_package_id": "0",
+            "icon_media_id": "-1",
+            "media_id": "192471",
+            "name": "Used Photos",
+            "plaque_id": "36928"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You found water, batteries, and a first aid kit.",
+            "event_package_id": "37502",
+            "icon_media_id": "190175",
+            "media_id": "192474",
+            "name": "Duffle Bag",
+            "plaque_id": "33435"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "40909",
+            "icon_media_id": "176752",
+            "media_id": "190330",
+            "name": "Gained Knife",
+            "plaque_id": "35065"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "33839",
+            "icon_media_id": "180123",
+            "media_id": "180129",
+            "name": "Guitar",
+            "plaque_id": "30727"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You begin to forage for wild edible plants.",
+            "event_package_id": "0",
+            "icon_media_id": "-1",
+            "media_id": "190175",
+            "name": "Start Foraging",
+            "plaque_id": "37507"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "One tackles you and holds you down, while the other one takes your things. They run off, leaving just as quickly as they came. \n<br/>\n<b>Now what?</b>",
+            "event_package_id": "38118",
+            "icon_media_id": "190175",
+            "media_id": "190175",
+            "name": "Take All Items",
+            "plaque_id": "31264"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You have collected 10 items in your bag. Looks like that should be enough for now.",
+            "event_package_id": "0",
+            "icon_media_id": "190175",
+            "media_id": "190175",
+            "name": "Collected 10 items",
+            "plaque_id": "33045"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "As you lead the group to forage for supplies, you hear low growling and suddenly a cougar leaps at you. Instinctively, you reach for your knife, dodge the deadly attack, and plunge your blade into the beast's chest. It howls and collapses into a heap on the ground. Jeremy and Charlie look at you in shock, then cheer. Everyone rushes to make sure that you are okay before they start to field dress the cougar.",
+            "event_package_id": "41974",
+            "icon_media_id": "-1",
+            "media_id": "192468",
+            "name": "Used Knife",
+            "plaque_id": "36921"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "41732",
+            "icon_media_id": "176739",
+            "media_id": "190833",
+            "name": "Lost Clothes",
+            "plaque_id": "36468"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You wake up, feverish and uncomfortable, a few times as the night wears on, but you don\u2019t wake up at all come morning.",
+            "event_package_id": "41029",
+            "icon_media_id": "170611",
+            "media_id": "170611",
+            "name": "RIP",
+            "plaque_id": "31810"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "42346",
+            "icon_media_id": "-1",
+            "media_id": "192641",
+            "name": "Lost Matches",
+            "plaque_id": "37271"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "40911",
+            "icon_media_id": "160686",
+            "media_id": "190333",
+            "name": "Gained Medical Gloves",
+            "plaque_id": "35067"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "33840",
+            "icon_media_id": "180126",
+            "media_id": "180134",
+            "name": "Rifle",
+            "plaque_id": "30729"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "After a long day of hiking, you drink some of the water you saved. Staying hydrated is key to survival. It's a good thing you were prepared!",
+            "event_package_id": "41965",
+            "icon_media_id": "-1",
+            "media_id": "192473",
+            "name": "Used Water1",
+            "plaque_id": "36914"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "42343",
+            "icon_media_id": "-1",
+            "media_id": "192634",
+            "name": "Lost Flashlight",
+            "plaque_id": "37264"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "33826",
+            "icon_media_id": "176749",
+            "media_id": "176975",
+            "name": "Hazelnuts",
+            "plaque_id": "30731"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "40916",
+            "icon_media_id": "-1",
+            "media_id": "0",
+            "name": "Gained Tamborine",
+            "plaque_id": "35090"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "<script type=\"text/javascript\">\nvar ARIS = {};\nARIS.ready = function() {\nARIS.exit();\n}\n</script>",
+            "event_package_id": "38132",
+            "icon_media_id": "160682",
+            "media_id": "0",
+            "name": "Food eaten",
+            "plaque_id": "33647"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "34407",
+            "icon_media_id": "160686",
+            "media_id": "190306",
+            "name": "Give Away Medical Gloves",
+            "plaque_id": "31259"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You start to feel lightheaded as you continue to hike. Eventually, you become so thirsty that you have to stop your journey and search for fresh water. You should have gathered some water when you had the chance...",
+            "event_package_id": "41968",
+            "icon_media_id": "-1",
+            "media_id": "192473",
+            "name": "No Water1",
+            "plaque_id": "36916"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You pick some wild berries as you forage for supplies, but notice that they are a little dirty. You don't have any water to rinse them off, but you assume they will be clean enough. You share them with the rest of the group. The next day, they are all sick with food poisoning, blaming you for not cleaning those berries. If only you had some water to rinse them off...",
+            "event_package_id": "0",
+            "icon_media_id": "-1",
+            "media_id": "192473",
+            "name": "No Water2",
+            "plaque_id": "36925"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "35916",
+            "icon_media_id": "-1",
+            "media_id": "190302",
+            "name": "Give Water Bottle",
+            "plaque_id": "32113"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "42344",
+            "icon_media_id": "-1",
+            "media_id": "192635",
+            "name": "Lost Graphic Novel",
+            "plaque_id": "37266"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "One tackles you and holds you down, while the other one takes your things. They run off, leaving just as quickly as they came. \n<br/>\n<b>Now what?</b>\n<script type=\"text/javascript\">\nvar areAllItemsCheckedOnce = false;\nvar ARIS = {};\n\nfunction itemObj(itemId){\n\tthis.itemId = itemId;\n\tthis.qty = 0;\n\tthis.wasChecked = false;\n}\n\nfunction deleteAllItems(){\n\tvar tempItemArray = [];\n\t//First set them all to not checked\n\tfor (i = 0; i < itemArray.length; i++) {\n\t\tvar itemObject = itemArray[i];\n\t\titemObject.wasChecked = false;\n\t\t//If the item's quantity is greater then 0 (meaning the user has picked up at least one of said item)\n\t\tif(itemObject.qty > 0){\n\t\t\t//Add that item to the temp array.\n\t\t\ttempItemArray.push(itemObject);\n\t\t}\n\t}\n\n\t//then reset all the item Counts to 0\n\tfor (i = 0; i < itemArray.length; i++) {\n\t\tvar itemObject = itemArray[i];\n\t\tARIS.setItemCount(itemObject.itemId, 0);\n\t}\n\t//Reset the randomObj to have 1 item of that object\n\tARIS.setItemCount(randomObj.itemId, 1);\n\t\n}\n\nvar cellPhone = new itemObj(39786);\nvar laptop = new itemObj(41997);\nvar water = new itemObj(41493);\nvar gloves = new itemObj(41026);\nvar solarCellphoneCharger = new itemObj(41484);\nvar graphicNovel = new itemObj(41482);\nvar photos = new itemObj(42759); \nvar clothes = new itemObj(42761); \nvar toothbrush = new itemObj(42764);\nvar firstAidKit = new itemObj(40936);\nvar flashlight = new itemObj(42948);\nvar novelWithPicture = new itemObj(41540);\nvar food = new itemObj(39784);\nvar fireStarter = new itemObj(42093);\nvar matches = new itemObj(42095);\nvar knife = new itemObj(42096);\nvar batteries = new itemObj(44845);\nvar hazelnuts = new itemObj(41543);\nvar harmonica = new itemObj(41545);\nvar berries = new itemObj(44713);\nvar oysterMushrooms = new itemObj(44714);\nvar tamborine = new itemObj(44715);\nvar firewood = new itemObj(44717);\nvar guitar = new itemObj(41788);\nvar rifle = new itemObj(41790);\n\nvar itemArray = [cellPhone, laptop, water, gloves, solarCellphoneCharger, graphicNovel, photos, clothes, toothbrush, firstAidKit, flashlight, novelWithPicture, food, fireStarter, matches, knife, batteries, hazelnuts, harmonica, berries, oysterMushrooms, tamborine, firewood, guitar, rifle];\n\nARIS.ready = function() {\n//Inject the audio\n\tvar audioElement = document.createElement('audio');\n\taudioElement.setAttribute('src', 'http://arisgames.org/server/gamedatav2/7279/aris983e06eeeb4df5ccae91ef2180fa8627.mp3');\n\taudioElement.setAttribute('type','audio/mpeg');\n\taudioElement.load();\n\taudioElement.play(); \n\n\tfor (i = 0; i < itemArray.length; i++) { \n\t\tvar itemObject = itemArray[i];\n\t\tARIS.getItemCount(itemObject.itemId);\n\t}\n\n\tARIS.didUpdateItemQty = function(item_id, qty) {\n\t\tif(areAllItemsCheckedOnce != true){\n\t\t\tfor (i = 0; i < itemArray.length; i++) {\n\t\t\t\tvar item = itemArray[i];\n\t\t\t\tif(item_id == item.itemId){\n\t\t\t\t\titem.qty = qty;\n\t\t\t\t\titem.wasChecked = true;\n\t\t\t\t\tbreak; // break out of the loop since we've set the item that was currently being updated\n\t\t\t\t}\n\t\t\t}\n\t\t\t\n\t\t\t//Loop through the array and check if they are all TRUE for wasChecked\n\t\t\t//If there is even one that is FALSE, then exit the loop\n\t\t\tvar allItemsChecked = true;\n\t\t\tfor (i = 0; i < itemArray.length; i++) {\n\t\t\t\tvar itemObject = itemArray[i];\n\t\t\t\tif(itemObject.wasChecked == false){\n\t\t\t\t\tallItemsChecked = false;\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t\tif(i == itemArray.length-1){\n\t\t\t\t\tallItemsChecked = true;\n\t\t\t\t}\n\t\t\t}\n//\t\t\talert(\"all items checked = \" + allItemsChecked);\n\t\t\tif(allItemsChecked == true){\n//\t\t\t\talert(\"all items checked = \" + allItemsChecked);\n\t\t\t\tareAllItemsCheckedOnce = true;\n//\t\t\t\talert(\"ALL HAVE BEEN CHECKED!\" + firstAidKit.qty + \" \" + water.qty + \" \" + gloves.qty + \" \" + food.qty + \" \" + solarCellphoneCharger.qty + \" \" + graphicNovel.qty + \" \");\n\t\t\t\t//code before the pause\n\t\t\t\tsetTimeout(function(){\n\t\t\t\t    //do what you need here\n\t\t\t\t\tdeleteAllItems();\n\t\t\t\t}, 2000);\n\t\t\t}\n\t\t}\n\t}\n\n}\n</script>",
+            "event_package_id": "38463",
+            "icon_media_id": "190175",
+            "media_id": "190136",
+            "name": "Bandits take all items!",
+            "plaque_id": "34105"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "Congratulations! You've unlocked Year 1. Find Year 1 on the map and continue your journey.\n<script type=\"text/javascript\">\n//Level Complete sound\nvar ARIS = {};\nARIS.ready = function() {\n\t//Inject the audio\n\tvar audioElement = document.createElement('audio');\n\taudioElement.setAttribute('src', 'http://arisgames.org/server/gamedatav2/8757/aris5d22b7653570e3db9338590f3b2f2655.mp3');\n\taudioElement.setAttribute('type','audio/mpeg');\n\taudioElement.load();\n\taudioElement.play(); \n}\n</script>",
+            "event_package_id": "0",
+            "icon_media_id": "190175",
+            "media_id": "190175",
+            "name": "Completed Day 2",
+            "plaque_id": "30537"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "40905",
+            "icon_media_id": "176742",
+            "media_id": "190325",
+            "name": "Gained Fire Starter",
+            "plaque_id": "35062"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You just realized that you left your cell phone in your apartment. As you turn around to go get it, you see hazmat teams beginning to quarantine the building. You look at the solar cell phone charger you just got from Jeremy and throw it away. If only you grabbed your cell phone...",
+            "event_package_id": "41961",
+            "icon_media_id": "-1",
+            "media_id": "192456",
+            "name": "Used Charger No Cell Phone",
+            "plaque_id": "36909"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You've eaten some of your food.",
+            "event_package_id": "34411",
+            "icon_media_id": "160682",
+            "media_id": "190314",
+            "name": "Ate Food",
+            "plaque_id": "31270"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "42356",
+            "icon_media_id": "-1",
+            "media_id": "190833",
+            "name": "Lost Clothes",
+            "plaque_id": "37280"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "42345",
+            "icon_media_id": "-1",
+            "media_id": "192638",
+            "name": "Lost Laptop",
+            "plaque_id": "37268"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "40894",
+            "icon_media_id": "161954",
+            "media_id": "190302",
+            "name": "Gained Water",
+            "plaque_id": "35055"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "0",
+            "icon_media_id": "-1",
+            "media_id": "171075",
+            "name": "News Story",
+            "plaque_id": "32169"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You forgot to get food.  Don't forget to pick up some food on your way so you don't starve.",
+            "event_package_id": "38123",
+            "icon_media_id": "190175",
+            "media_id": "190175",
+            "name": "No Food2",
+            "plaque_id": "33642"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "Thank You!",
+            "event_package_id": "0",
+            "icon_media_id": "-1",
+            "media_id": "192124",
+            "name": "Thank You",
+            "plaque_id": "37198"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "It looks like your bag is pretty full. You should probably head back now.",
+            "event_package_id": "0",
+            "icon_media_id": "189000",
+            "media_id": "189000",
+            "name": "Collected 20 items",
+            "plaque_id": "33047"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You notice it starting to rain, and within a few minutes, it is pouring. Luckily, you find a covered area and make a fire to stay warm. Good thing you were prepared!",
+            "event_package_id": "41962",
+            "icon_media_id": "-1",
+            "media_id": "192477",
+            "name": "Used Matches/Firestarter",
+            "plaque_id": "36911"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You are exploring a cave looking for supplies when your flashlight dies. You struggle to feel your way out of the cave, and by the time you make it out, the sun has already started to go down. If only you had some spare batteries...",
+            "event_package_id": "41973",
+            "icon_media_id": "-1",
+            "media_id": "192463",
+            "name": "Used Flashlight No Batteries",
+            "plaque_id": "36920"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "Prepare to evacuate the city.  Scan the QR codes for the items you want to take with you.",
+            "event_package_id": "35912",
+            "icon_media_id": "190175",
+            "media_id": "190175",
+            "name": "Prepare",
+            "plaque_id": "31966"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "41729",
+            "icon_media_id": "176739",
+            "media_id": "190830",
+            "name": "Gained Clothes",
+            "plaque_id": "36467"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "40899",
+            "icon_media_id": "176745",
+            "media_id": "190319",
+            "name": "Gained Flashlight",
+            "plaque_id": "35057"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "<script type=\"text/javascript\">\nvar ARIS = {};\nARIS.ready = function() {\n    ARIS.exitGame();                       //Exits to the game picker\n}\n</script>",
+            "event_package_id": "0",
+            "icon_media_id": "159228",
+            "media_id": "0",
+            "name": "Exit and Reset",
+            "plaque_id": "27833"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "This is a secret trigger just for testing and skipping ahead to a different scene.  Set the scene in the Aris JS Editor",
+            "event_package_id": "40925",
+            "icon_media_id": "-1",
+            "media_id": "0",
+            "name": "Secret Trigger",
+            "plaque_id": "35099"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "40912",
+            "icon_media_id": "-1",
+            "media_id": "0",
+            "name": "Gained Berries",
+            "plaque_id": "35087"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "0",
+            "icon_media_id": "203269",
+            "media_id": "203269",
+            "name": "Audio Plaque",
+            "plaque_id": "41396"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "<script type=\"text/javascript\">\nvar ARIS = {};\nARIS.ready = function() {\n\nARIS.setItemCount(1234,10);\nARIS.exit(); \n}\n</script>",
+            "event_package_id": "0",
+            "icon_media_id": "-1",
+            "media_id": "0",
+            "name": "Scene Change To Day 1",
+            "plaque_id": "37200"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "35536",
+            "icon_media_id": "-1",
+            "media_id": "190299",
+            "name": "Give Laptop Jeremy",
+            "plaque_id": "31968"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "42340",
+            "icon_media_id": "-1",
+            "media_id": "192631",
+            "name": "Lost Cell Phone",
+            "plaque_id": "37263"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "Congratulations! You've completed Year 1. See where the journey takes you next!  Find Year 2 on the map to begin.\n\n<script type=\"text/javascript\">\n//Level Complete sound\nvar ARIS = {};\nARIS.ready = function() {\n\t//Inject the audio\n\tvar audioElement = document.createElement('audio');\n\taudioElement.setAttribute('src', 'http://arisgames.org/server/gamedatav2/8757/aris5d22b7653570e3db9338590f3b2f2655.mp3');\n\taudioElement.setAttribute('type','audio/mpeg');\n\taudioElement.load();\n\taudioElement.play(); \n}\n</script>",
+            "event_package_id": "0",
+            "icon_media_id": "190175",
+            "media_id": "190175",
+            "name": "Completed Year 1",
+            "plaque_id": "30712"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You found some Candles",
+            "event_package_id": "33830",
+            "icon_media_id": "-1",
+            "media_id": "0",
+            "name": "Candles",
+            "plaque_id": "30733"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "40901",
+            "icon_media_id": "176755",
+            "media_id": "190320",
+            "name": "Gained Novel with Picture",
+            "plaque_id": "35059"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "43300",
+            "icon_media_id": "-1",
+            "media_id": "190304",
+            "name": "Lost Water2",
+            "plaque_id": "37513"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "The battery runs out on your cell phone, but you are able to keep it alive by using the solar cell phone charger you got from Jeremy. You use your phone to find the quickest way out of the city.",
+            "event_package_id": "41960",
+            "icon_media_id": "-1",
+            "media_id": "192456",
+            "name": "Used Cell Phone & Charger",
+            "plaque_id": "36906"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "Your friends are unable to stop the bleeding. A calmness washes over you.",
+            "event_package_id": "0",
+            "icon_media_id": "170611",
+            "media_id": "170611",
+            "name": "RIP4",
+            "plaque_id": "35330"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "41735",
+            "icon_media_id": "176761",
+            "media_id": "190837",
+            "name": "Lost Toothbrush",
+            "plaque_id": "36474"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "You hear a loud knock at the door.\n<script type=\"text/javascript\">\nvar ARIS = {};\nARIS.ready = function() {\nARIS.prepareMedia(160829);\nARIS.playMedia(160829);\n}\n</script>",
+            "event_package_id": "0",
+            "icon_media_id": "159228",
+            "media_id": "0",
+            "name": "Knock Knock",
+            "plaque_id": "29063"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "41738",
+            "icon_media_id": "176757",
+            "media_id": "190825",
+            "name": "Gained Photos",
+            "plaque_id": "36462"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "Your fever begins to build. Your body aches. You lie down to rest, but you never get back up.",
+            "event_package_id": "38464",
+            "icon_media_id": "170611",
+            "media_id": "170611",
+            "name": "RIP2",
+            "plaque_id": "32124"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "40904",
+            "icon_media_id": "160682",
+            "media_id": "190322",
+            "name": "Gained Food",
+            "plaque_id": "35061"
+        },
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "Your flashlight dies, but thanks to the batteries you saved, you are able to explore a cave you and your group found. You use your flashlight to search deep within the cave and find a stockpile of food someone left behind. Jeremy pats you on the back as Charlie tosses you a can of food.",
+            "event_package_id": "41971",
+            "icon_media_id": "-1",
+            "media_id": "192453",
+            "name": "Used Flashlight w/ Batteries",
+            "plaque_id": "36917"
+        }
+    ]
+}

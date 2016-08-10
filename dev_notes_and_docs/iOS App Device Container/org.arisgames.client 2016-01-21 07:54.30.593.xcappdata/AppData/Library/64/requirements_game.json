@@ -1,0 +1,130 @@
+{
+    "requirement_and_packages": [
+        {
+            "name": "and package",
+            "requirement_and_package_id": "5175",
+            "requirement_root_package_id": "3983"
+        },
+        {
+            "name": "and package",
+            "requirement_and_package_id": "5173",
+            "requirement_root_package_id": "3981"
+        },
+        {
+            "name": "and package",
+            "requirement_and_package_id": "5177",
+            "requirement_root_package_id": "3985"
+        },
+        {
+            "name": "and package",
+            "requirement_and_package_id": "5176",
+            "requirement_root_package_id": "3984"
+        },
+        {
+            "name": "and package",
+            "requirement_and_package_id": "5174",
+            "requirement_root_package_id": "3982"
+        }
+    ],
+    "requirement_atoms": [
+        {
+            "bool_operator": "1",
+            "content_id": "6199",
+            "distance": "5",
+            "latitude": "86.753090",
+            "longitude": "3.141592",
+            "qty": "1",
+            "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+            "requirement_and_package_id": "5177",
+            "requirement_atom_id": "7522"
+        },
+        {
+            "bool_operator": "1",
+            "content_id": "6204",
+            "distance": "5",
+            "latitude": "86.753090",
+            "longitude": "3.141592",
+            "qty": "1",
+            "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+            "requirement_and_package_id": "5176",
+            "requirement_atom_id": "7520"
+        },
+        {
+            "bool_operator": "1",
+            "content_id": "6192",
+            "distance": "5",
+            "latitude": "86.753090",
+            "longitude": "3.141592",
+            "qty": "1",
+            "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+            "requirement_and_package_id": "5175",
+            "requirement_atom_id": "7518"
+        },
+        {
+            "bool_operator": "1",
+            "content_id": "6351",
+            "distance": "5",
+            "latitude": "86.753090",
+            "longitude": "3.141592",
+            "qty": "1",
+            "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+            "requirement_and_package_id": "5173",
+            "requirement_atom_id": "7516"
+        },
+        {
+            "bool_operator": "0",
+            "content_id": "6357",
+            "distance": "5",
+            "latitude": "86.753090",
+            "longitude": "3.141592",
+            "qty": "1",
+            "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+            "requirement_and_package_id": "5176",
+            "requirement_atom_id": "7521"
+        },
+        {
+            "bool_operator": "0",
+            "content_id": "6204",
+            "distance": "5",
+            "latitude": "86.753090",
+            "longitude": "3.141592",
+            "qty": "1",
+            "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+            "requirement_and_package_id": "5175",
+            "requirement_atom_id": "7519"
+        },
+        {
+            "bool_operator": "0",
+            "content_id": "6351",
+            "distance": "5",
+            "latitude": "86.753090",
+            "longitude": "3.141592",
+            "qty": "1",
+            "requirement": "PLAYER_VIEWED_DIALOG_SCRIPT",
+            "requirement_and_package_id": "5174",
+            "requirement_atom_id": "7517"
+        }
+    ],
+    "requirement_root_packages": [
+        {
+            "name": "requirement package",
+            "requirement_root_package_id": "3982"
+        },
+        {
+            "name": "requirement package",
+            "requirement_root_package_id": "3984"
+        },
+        {
+            "name": "requirement package",
+            "requirement_root_package_id": "3985"
+        },
+        {
+            "name": "requirement package",
+            "requirement_root_package_id": "3983"
+        },
+        {
+            "name": "requirement package",
+            "requirement_root_package_id": "3981"
+        }
+    ]
+}

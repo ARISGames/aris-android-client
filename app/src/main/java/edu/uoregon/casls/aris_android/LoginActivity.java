@@ -296,7 +296,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 		// post data should look like this: {"password":"123123","permission":"read_write","user_name":"scott"}
 		if (AppUtils.isNetworkAvailable(getApplicationContext())) {
 			AsyncHttpClient client = new AsyncHttpClient();
-
+//			AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
+			client.setMaxRetriesAndTimeout(0,10000);
+			client.setTimeout(10000); // milliseconds
 			client.post(context, request_url, entity, "application/json", new JsonHttpResponseHandler() {
 				@Override
 				public void onSuccess(int statusCode, Header[] headers, JSONObject jsonReturn) {
@@ -304,12 +306,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 					processJsonHttpResponse(Calls.HTTP_USER_LOGIN_REQ_API, AppConfig.TAG_SERVER_SUCCESS, jsonReturn);
 
 				}
+				@Override // this one will fire if there is a wifi connection but there's no internet feed.
+				public void onFailure(int statusCode, Header[] headers, java.lang.Throwable throwable, org.json.JSONObject responseJson) {
+					Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient failed server call. ", throwable);
+					showProgress(false);
+					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Make sure you are connected to the internet.",
+							Toast.LENGTH_LONG);
+					t.setGravity(Gravity.CENTER, 0, 0);
+					t.show();
+					super.onFailure(statusCode, headers, throwable, responseJson);
+				}
+
 				@Override
 				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 					Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient failed server call. ", throwable);
 					showProgress(false);
 					Toast t = Toast.makeText(getApplicationContext(), "There was a problem receiving data from the server. Please try again, later.",
-							Toast.LENGTH_SHORT);
+							Toast.LENGTH_LONG);
 					t.setGravity(Gravity.CENTER, 0, 0);
 					t.show();
 					super.onFailure(statusCode, headers, responseString, throwable);

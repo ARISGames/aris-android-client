@@ -1,0 +1,14 @@
+{
+    "plaques": [
+        {
+            "back_button_enabled": "1",
+            "continue_function": "EXIT",
+            "description": "",
+            "event_package_id": "0",
+            "icon_media_id": "-1",
+            "media_id": "0",
+            "name": "plaque",
+            "plaque_id": "632"
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+carrier
+0	wifi
+deviceManufacturer
+0	Apple
+deviceModel
+0	iPod5,1
+memUsageMb
+0	48.746094
+newRelicVersion
+0	5.3.0
+osMajorVersion
+0	8
+osName
+0	iOS
+osVersion
+0	8.3
+sessionId
+0	5DFE431E-C22A-4132-9CB9-9F7FFEE35FB3
+uuid
+0	F99742A7-ABFA-46B0-85E0-B9A2848CC952

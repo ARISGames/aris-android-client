@@ -1,0 +1,589 @@
+{
+    "dialog_characters": [
+        {
+            "dialog_character_id": "1574",
+            "media_id": "2385",
+            "name": "Cooper",
+            "title": ""
+        },
+        {
+            "dialog_character_id": "1572",
+            "media_id": "2383",
+            "name": "Ben",
+            "title": ""
+        },
+        {
+            "dialog_character_id": "1573",
+            "media_id": "2384",
+            "name": "Audrey",
+            "title": ""
+        }
+    ],
+    "dialog_options": [
+        {
+            "dialog_id": "605",
+            "dialog_option_id": "8067",
+            "link_id": "6201",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6191",
+            "prompt": "I spoke with Audrey",
+            "requirement_root_package_id": "3981",
+            "sort_index": "1"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8080",
+            "link_id": "6212",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6211",
+            "prompt": "",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "1003",
+            "dialog_option_id": "10525",
+            "link_id": "7806",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "7805",
+            "prompt": "sure am",
+            "requirement_root_package_id": "0",
+            "sort_index": "1"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8276",
+            "link_id": "6353",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6352",
+            "prompt": "Your father loves you very much, Miss Horne",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "1003",
+            "dialog_option_id": "10531",
+            "link_id": "0",
+            "link_info": "",
+            "link_type": "EXIT",
+            "parent_dialog_script_id": "7809",
+            "prompt": "Exit",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8073",
+            "link_id": "6211",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6210",
+            "prompt": "",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8279",
+            "link_id": "6357",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6355",
+            "prompt": "Nothing doing.",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "605",
+            "dialog_option_id": "8063",
+            "link_id": "6199",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6198",
+            "prompt": "Fine",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8076",
+            "link_id": "6208",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6207",
+            "prompt": "Gone?",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "1003",
+            "dialog_option_id": "10524",
+            "link_id": "0",
+            "link_info": "",
+            "link_type": "EXIT",
+            "parent_dialog_script_id": "7805",
+            "prompt": "Bye bye",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8102",
+            "link_id": "6351",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6226",
+            "prompt": "",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "605",
+            "dialog_option_id": "8056",
+            "link_id": "6198",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6194",
+            "prompt": "...",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "605",
+            "dialog_option_id": "8069",
+            "link_id": "647",
+            "link_info": "",
+            "link_type": "EXIT_TO_TAB",
+            "parent_dialog_script_id": "6204",
+            "prompt": "I still expect to see you about Laura soon.",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "605",
+            "dialog_option_id": "8053",
+            "link_id": "6192",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6191",
+            "prompt": "I'll try to help",
+            "requirement_root_package_id": "3982",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8079",
+            "link_id": "6226",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6212",
+            "prompt": "Okay Audrey",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "605",
+            "dialog_option_id": "8072",
+            "link_id": "6204",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6202",
+            "prompt": "Okee dokee. I'll go see Audrey.",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8275",
+            "link_id": "6352",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6205",
+            "prompt": "I told your father about the Norwegians",
+            "requirement_root_package_id": "3984",
+            "sort_index": "1"
+        },
+        {
+            "dialog_id": "1003",
+            "dialog_option_id": "10527",
+            "link_id": "7805",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "7807",
+            "prompt": "Then I'll ask again.",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8075",
+            "link_id": "6207",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6206",
+            "prompt": "",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8278",
+            "link_id": "6355",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6354",
+            "prompt": "And?",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8281",
+            "link_id": "0",
+            "link_info": "",
+            "link_type": "EXIT",
+            "parent_dialog_script_id": "6357",
+            "prompt": "Good day, Ms Horne.",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8078",
+            "link_id": "6210",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6209",
+            "prompt": "Audrey! Really...",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "1003",
+            "dialog_option_id": "10526",
+            "link_id": "7807",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "7806",
+            "prompt": "well I have more questions",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "605",
+            "dialog_option_id": "8068",
+            "link_id": "6202",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6201",
+            "prompt": "",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8274",
+            "link_id": "0",
+            "link_info": "",
+            "link_type": "EXIT",
+            "parent_dialog_script_id": "6351",
+            "prompt": "Bye",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "1003",
+            "dialog_option_id": "10529",
+            "link_id": "0",
+            "link_info": "",
+            "link_type": "EXIT",
+            "parent_dialog_script_id": "7808",
+            "prompt": "Exit",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8277",
+            "link_id": "6354",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6353",
+            "prompt": "",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "605",
+            "dialog_option_id": "8064",
+            "link_id": "647",
+            "link_info": "",
+            "link_type": "EXIT_TO_TAB",
+            "parent_dialog_script_id": "6199",
+            "prompt": "I'll go see your daughter.",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8074",
+            "link_id": "6206",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6205",
+            "prompt": "Miss Horne",
+            "requirement_root_package_id": "3983",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "606",
+            "dialog_option_id": "8077",
+            "link_id": "6209",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6208",
+            "prompt": "",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "605",
+            "dialog_option_id": "8054",
+            "link_id": "6194",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "6192",
+            "prompt": "Norwegians?",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        }
+    ],
+    "dialog_scripts": [
+        {
+            "dialog_character_id": "1573",
+            "dialog_id": "606",
+            "dialog_script_id": "6352",
+            "event_package_id": "0",
+            "text": "Oh no! Was he very angry, Agent Cooper?"
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "606",
+            "dialog_script_id": "6208",
+            "event_package_id": "0",
+            "text": "Audrey, what do you mean?"
+        },
+        {
+            "dialog_character_id": "1572",
+            "dialog_id": "1003",
+            "dialog_script_id": "7805",
+            "event_package_id": "0",
+            "text": "Back again eh?"
+        },
+        {
+            "dialog_character_id": "1572",
+            "dialog_id": "605",
+            "dialog_script_id": "6198",
+            "event_package_id": "0",
+            "text": "<p> Ahh yes, well they are an investment group, very interested in helping our community by supporting the development of <b>Ghostwood Estates</b>.</p>\n\n<p>In any case, I fear Audrey may be trying to run them off in yet another attempt to frustrate me. Can you help? She's downstairs.</p>"
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "606",
+            "dialog_script_id": "6211",
+            "event_package_id": "0",
+            "text": "And I imagine this had nothing to do with your father..."
+        },
+        {
+            "dialog_character_id": "1573",
+            "dialog_id": "606",
+            "dialog_script_id": "6355",
+            "event_package_id": "0",
+            "text": "And maybe I really could help you with your investigation. You know, <b>Laura</b> worked at daddy's department store, at the perfume counter. So did Ronette. Maybe daddy would put me there and I could investigate for you."
+        },
+        {
+            "dialog_character_id": "0",
+            "dialog_id": "1003",
+            "dialog_script_id": "7808",
+            "event_package_id": "0",
+            "text": "Hello"
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "605",
+            "dialog_script_id": "6201",
+            "event_package_id": "0",
+            "text": "I'm sorry to report that the Norwegians have left. Audrey mentioned to me that she shared her concern over the recent murder of her dear friend, Laura, with them and that\u2014not having heard the news\u2014they decided perhaps a community with such troubles was not a ripe location for their investment."
+        },
+        {
+            "dialog_character_id": "1572",
+            "dialog_id": "605",
+            "dialog_script_id": "6191",
+            "event_package_id": "0",
+            "text": "Agent Cooper, what am I going to do about Audrey?"
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "605",
+            "dialog_script_id": "6204",
+            "event_package_id": "0",
+            "text": "I can see you are willing to reconcile despite these difficulties. It takes a strong man to see  beyond his own material interests. I'll go tell Audrey."
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "605",
+            "dialog_script_id": "6194",
+            "event_package_id": "0",
+            "text": "Who are the Norwegians? "
+        },
+        {
+            "dialog_character_id": "1573",
+            "dialog_id": "606",
+            "dialog_script_id": "6210",
+            "event_package_id": "0",
+            "text": "Really, I swear! They asked why I looked so down. "
+        },
+        {
+            "dialog_character_id": "1573",
+            "dialog_id": "606",
+            "dialog_script_id": "6207",
+            "event_package_id": "0",
+            "text": "They're gone, Agent Cooper. You can tell my dad that if you'd like."
+        },
+        {
+            "dialog_character_id": "1573",
+            "dialog_id": "606",
+            "dialog_script_id": "6351",
+            "event_package_id": "0",
+            "text": "Anything you say, special agent."
+        },
+        {
+            "dialog_character_id": "1573",
+            "dialog_id": "606",
+            "dialog_script_id": "6354",
+            "event_package_id": "0",
+            "text": "<p>Oh thank you! And I know you're right, special agent. Maybe I can reconcile with daddy.</p>\n\n<p><em>...and...</em></p>"
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "606",
+            "dialog_script_id": "6357",
+            "event_package_id": "0",
+            "text": "<p>Ms Horne, although I appreciate your intent, your safety is far more valuable than leads. We already have one dead girl and another in a coma. My commitment to the bureau is a responsibility to takes risks in the name of law.</p>\n<p>Please do not take risks. It would be a shame if you didn't get a chance to grow up.</p>\n"
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "606",
+            "dialog_script_id": "6226",
+            "event_package_id": "0",
+            "text": "I do have some more questions I'd like to ask your father. But please remember Sheriff Truman has instated a curfew. Stay in at night and stay safe Audrey."
+        },
+        {
+            "dialog_character_id": "1572",
+            "dialog_id": "1003",
+            "dialog_script_id": "7807",
+            "event_package_id": "0",
+            "text": "I don't have answers."
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "606",
+            "dialog_script_id": "6206",
+            "event_package_id": "0",
+            "text": "Audrey, I just spoke with your father. He was wondering about the Norwegians."
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "606",
+            "dialog_script_id": "6353",
+            "event_package_id": "0",
+            "text": "Mr. Horne understands your rebellious nature. Although he  was indeed disappointed, he suggested you might benefit from gainful employment within his enterprise. I might add that there is no better way to cultivate responsibility and commitment than through gainful employment."
+        },
+        {
+            "dialog_character_id": "1573",
+            "dialog_id": "606",
+            "dialog_script_id": "6209",
+            "event_package_id": "0",
+            "text": "<p>I didn't mean to. Really Agent Cooper.</p>\n\n<p>I just happened to mention to them how broken up I was about my dear friend Laura, how she was murdered and all.</p>"
+        },
+        {
+            "dialog_character_id": "1572",
+            "dialog_id": "1003",
+            "dialog_script_id": "7806",
+            "event_package_id": "0",
+            "text": "I'm tired of talking to you"
+        },
+        {
+            "dialog_character_id": "1574",
+            "dialog_id": "605",
+            "dialog_script_id": "6199",
+            "event_package_id": "0",
+            "text": "I'm happy to help. Perhaps you can tell me later about her and <em>your</em> relationships with <b>Laura Palmer</b> soon."
+        },
+        {
+            "dialog_character_id": "1573",
+            "dialog_id": "606",
+            "dialog_script_id": "6212",
+            "event_package_id": "0",
+            "text": "Well you can tell daddy if you want. I don't mind. But I really wish you would let me help you with you investigation. I know I could do well."
+        },
+        {
+            "dialog_character_id": "0",
+            "dialog_id": "1003",
+            "dialog_script_id": "7809",
+            "event_package_id": "0",
+            "text": "Hello"
+        },
+        {
+            "dialog_character_id": "1572",
+            "dialog_id": "605",
+            "dialog_script_id": "6192",
+            "event_package_id": "0",
+            "text": "Good. I knew I could count on you as an officer of the law. Go find out about the Norwegians."
+        },
+        {
+            "dialog_character_id": "1573",
+            "dialog_id": "606",
+            "dialog_script_id": "6205",
+            "event_package_id": "0",
+            "text": "Special Agent Cooper!"
+        },
+        {
+            "dialog_character_id": "1572",
+            "dialog_id": "605",
+            "dialog_script_id": "6202",
+            "event_package_id": "0",
+            "text": "<p>Well...</p>\n\n<p> Mr. Cooper, you can see the vileness my offspring has for my well being. In truth, she was never friendly with Laura. Her wounded affectation is merely an opportunity to wound me. </p>\n\n<p> But thank you. Perhaps she only does this to seek attention. She is so grown up I sometimes forget she is still a child. Maybe I do need to include her more in my business. It's not like Johnny is going to take over for me someday, and let's face it, my brother is a bit of a joke. </p>  \n\n<p> Please go see Audrey again. Tell her we have some things to discuss, but I think she should talk to me about <b> a job</b>.</p>"
+        }
+    ],
+    "dialogs": [
+        {
+            "back_button_enabled": "1",
+            "description": "",
+            "dialog_id": "1003",
+            "icon_media_id": "-3",
+            "intro_dialog_script_id": "7805",
+            "name": "new convo"
+        },
+        {
+            "back_button_enabled": "1",
+            "description": "",
+            "dialog_id": "605",
+            "icon_media_id": "2828",
+            "intro_dialog_script_id": "6191",
+            "name": "Talk with Ben"
+        },
+        {
+            "back_button_enabled": "1",
+            "description": "",
+            "dialog_id": "606",
+            "icon_media_id": "2827",
+            "intro_dialog_script_id": "6205",
+            "name": "Talk with Audrey"
+        }
+    ]
+}

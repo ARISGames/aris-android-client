@@ -1,0 +1,64 @@
+{
+    "tabs": [
+        {
+            "content_id": "0",
+            "icon_media_id": "0",
+            "info": "",
+            "name": "Map",
+            "requirement_root_package_id": "0",
+            "sort_index": "2",
+            "tab_id": "645",
+            "type": "MAP"
+        },
+        {
+            "content_id": "0",
+            "icon_media_id": "0",
+            "info": "",
+            "name": "Inventory",
+            "requirement_root_package_id": "0",
+            "sort_index": "3",
+            "tab_id": "646",
+            "type": "INVENTORY"
+        },
+        {
+            "content_id": "0",
+            "icon_media_id": "0",
+            "info": "",
+            "name": "Scanner",
+            "requirement_root_package_id": "0",
+            "sort_index": "4",
+            "tab_id": "647",
+            "type": "SCANNER"
+        },
+        {
+            "content_id": "0",
+            "icon_media_id": "0",
+            "info": "",
+            "name": "Decoder",
+            "requirement_root_package_id": "0",
+            "sort_index": "5",
+            "tab_id": "648",
+            "type": "DECODER"
+        },
+        {
+            "content_id": "0",
+            "icon_media_id": "0",
+            "info": "",
+            "name": "Player",
+            "requirement_root_package_id": "0",
+            "sort_index": "6",
+            "tab_id": "649",
+            "type": "PLAYER"
+        },
+        {
+            "content_id": "0",
+            "icon_media_id": "0",
+            "info": "",
+            "name": "Notebook",
+            "requirement_root_package_id": "0",
+            "sort_index": "7",
+            "tab_id": "650",
+            "type": "NOTEBOOK"
+        }
+    ]
+}

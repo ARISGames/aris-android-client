@@ -1,0 +1,18 @@
+{
+    "items": [
+        {
+            "delta_notification": "1",
+            "description": "",
+            "destroyable": "1",
+            "droppable": "1",
+            "icon_media_id": "-2",
+            "item_id": "1048",
+            "max_qty_in_inventory": "500",
+            "media_id": "0",
+            "name": "key",
+            "type": "HIDDEN",
+            "url": "",
+            "weight": "0"
+        }
+    ]
+}

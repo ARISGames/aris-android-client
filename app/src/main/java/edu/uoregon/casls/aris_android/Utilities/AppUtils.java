@@ -33,6 +33,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -79,12 +80,27 @@ public class AppUtils {
 		}
 		// Get LocationManager object from System Service LOCATION_SERVICE
 		LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-		// Create a criteria object to retrieve provider
-		Criteria criteria = new Criteria();
-		// Get the name of the best provider
-		String provider = locationManager.getBestProvider(criteria, true);
-		// Return Current Location
-		return locationManager.getLastKnownLocation(provider);
+		List<String> providers = locationManager.getProviders(true);
+		Location bestLocation = null;
+		for (String provider : providers) {
+			Location l = locationManager.getLastKnownLocation(provider);
+			if (l == null) {
+				continue;
+			}
+			if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+				// Found best last known location: %s", l);
+				bestLocation = l;
+			}
+		}
+		return bestLocation;
+//		// Create a criteria object to retrieve provider
+//		Criteria criteria = new Criteria();
+//		// Get the name of the best provider
+//		String provider = locationManager.getBestProvider(criteria, true);
+//		// Return Current Location
+//		Location l = locationManager.getLastKnownLocation(provider);
+//		return l;
+////		return locationManager.getLastKnownLocation(provider);
 
 	}
 

@@ -1,0 +1,352 @@
+{
+    "dialog_characters": [
+        {
+            "dialog_character_id": "48517",
+            "media_id": "247985",
+            "name": "Intro",
+            "title": "Intro"
+        },
+        {
+            "dialog_character_id": "48518",
+            "media_id": "247982",
+            "name": "Martin Antenna",
+            "title": "Martin"
+        },
+        {
+            "dialog_character_id": "48513",
+            "media_id": "247983",
+            "name": "Tim",
+            "title": "Tim"
+        },
+        {
+            "dialog_character_id": "48516",
+            "media_id": "247986",
+            "name": "Spaceship",
+            "title": "Spaceship"
+        },
+        {
+            "dialog_character_id": "48510",
+            "media_id": "247979",
+            "name": "Martin",
+            "title": "Uncle Martin"
+        }
+    ],
+    "dialog_options": [
+        {
+            "dialog_id": "48508",
+            "dialog_option_id": "429257",
+            "link_id": "0",
+            "link_info": "",
+            "link_type": "EXIT",
+            "parent_dialog_script_id": "304174",
+            "prompt": "Exit",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "48508",
+            "dialog_option_id": "419816",
+            "link_id": "297332",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "297328",
+            "prompt": "Hi, I'm Tim",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "48508",
+            "dialog_option_id": "419843",
+            "link_id": "0",
+            "link_info": "",
+            "link_type": "EXIT",
+            "parent_dialog_script_id": "297338",
+            "prompt": "Why yes, I think I saw something fall over there.",
+            "requirement_root_package_id": "0",
+            "sort_index": "1"
+        },
+        {
+            "dialog_id": "48508",
+            "dialog_option_id": "419812",
+            "link_id": "0",
+            "link_info": "",
+            "link_type": "EXIT_TO_PLAQUE",
+            "parent_dialog_script_id": "297352",
+            "prompt": "Exit",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "48508",
+            "dialog_option_id": "429264",
+            "link_id": "304179",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "297324",
+            "prompt": "Continue",
+            "requirement_root_package_id": "0",
+            "sort_index": "1"
+        },
+        {
+            "dialog_id": "48508",
+            "dialog_option_id": "419837",
+            "link_id": "297350",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "297338",
+            "prompt": "Sorry, no, I haven't.",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "48513",
+            "dialog_option_id": "419864",
+            "link_id": "297372",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "297369",
+            "prompt": "...",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "48508",
+            "dialog_option_id": "419806",
+            "link_id": "297327",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "297324",
+            "prompt": "Coming in for a landing!",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "48513",
+            "dialog_option_id": "419862",
+            "link_id": "297369",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "297353",
+            "prompt": "It was no problem Martin. I'm happy you found it",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "48508",
+            "dialog_option_id": "429259",
+            "link_id": "304177",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "297324",
+            "prompt": "Continue",
+            "requirement_root_package_id": "0",
+            "sort_index": "2"
+        },
+        {
+            "dialog_id": "48513",
+            "dialog_option_id": "419845",
+            "link_id": "58124",
+            "link_info": "",
+            "link_type": "EXIT_TO_PLAQUE",
+            "parent_dialog_script_id": "297372",
+            "prompt": "Bye bye",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "48508",
+            "dialog_option_id": "429254",
+            "link_id": "304174",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "297324",
+            "prompt": "Continue",
+            "requirement_root_package_id": "0",
+            "sort_index": "3"
+        },
+        {
+            "dialog_id": "48508",
+            "dialog_option_id": "429266",
+            "link_id": "0",
+            "link_info": "",
+            "link_type": "EXIT",
+            "parent_dialog_script_id": "304179",
+            "prompt": "Exit",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "48508",
+            "dialog_option_id": "419826",
+            "link_id": "297338",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "297332",
+            "prompt": "I just landed from Mars. ",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "48508",
+            "dialog_option_id": "419840",
+            "link_id": "297352",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "297350",
+            "prompt": "Goodbye",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "48508",
+            "dialog_option_id": "419809",
+            "link_id": "297328",
+            "link_info": "",
+            "link_type": "DIALOG_SCRIPT",
+            "parent_dialog_script_id": "297327",
+            "prompt": "Get out of Spaceship",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "48508",
+            "dialog_option_id": "429262",
+            "link_id": "0",
+            "link_info": "",
+            "link_type": "EXIT",
+            "parent_dialog_script_id": "304177",
+            "prompt": "Exit",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        },
+        {
+            "dialog_id": "48508",
+            "dialog_option_id": "419835",
+            "link_id": "0",
+            "link_info": "",
+            "link_type": "EXIT",
+            "parent_dialog_script_id": "297347",
+            "prompt": "Exit",
+            "requirement_root_package_id": "0",
+            "sort_index": "0"
+        }
+    ],
+    "dialog_scripts": [
+        {
+            "dialog_character_id": "48513",
+            "dialog_id": "48513",
+            "dialog_script_id": "297372",
+            "event_package_id": "67356",
+            "text": "Thanks Martin!"
+        },
+        {
+            "dialog_character_id": "0",
+            "dialog_id": "48508",
+            "dialog_script_id": "304179",
+            "event_package_id": "0",
+            "text": "Hello"
+        },
+        {
+            "dialog_character_id": "48516",
+            "dialog_id": "48508",
+            "dialog_script_id": "297327",
+            "event_package_id": "0",
+            "text": "Whew! Where am I?"
+        },
+        {
+            "dialog_character_id": "48510",
+            "dialog_id": "48513",
+            "dialog_script_id": "297353",
+            "event_package_id": "67351",
+            "text": "You found my Radio! Hurrah."
+        },
+        {
+            "dialog_character_id": "48516",
+            "dialog_id": "48508",
+            "dialog_script_id": "297352",
+            "event_package_id": "0",
+            "text": "WWWRRRRRRRRRRRrrrrrrrr!"
+        },
+        {
+            "dialog_character_id": "48510",
+            "dialog_id": "48508",
+            "dialog_script_id": "297338",
+            "event_package_id": "0",
+            "text": "Have you seen my radio? It fell out during landing?"
+        },
+        {
+            "dialog_character_id": "0",
+            "dialog_id": "48508",
+            "dialog_script_id": "304174",
+            "event_package_id": "0",
+            "text": "Hello"
+        },
+        {
+            "dialog_character_id": "0",
+            "dialog_id": "48508",
+            "dialog_script_id": "297347",
+            "event_package_id": "0",
+            "text": "Hello"
+        },
+        {
+            "dialog_character_id": "48510",
+            "dialog_id": "48508",
+            "dialog_script_id": "297328",
+            "event_package_id": "0",
+            "text": "Hello, I'm Martin. Who are you?"
+        },
+        {
+            "dialog_character_id": "48510",
+            "dialog_id": "48513",
+            "dialog_script_id": "297369",
+            "event_package_id": "0",
+            "text": "As a reward I give you these nice commemorative action figures."
+        },
+        {
+            "dialog_character_id": "0",
+            "dialog_id": "48508",
+            "dialog_script_id": "304177",
+            "event_package_id": "0",
+            "text": "Hello"
+        },
+        {
+            "dialog_character_id": "48517",
+            "dialog_id": "48508",
+            "dialog_script_id": "297324",
+            "event_package_id": "0",
+            "text": "Welcome Earthling"
+        },
+        {
+            "dialog_character_id": "48510",
+            "dialog_id": "48508",
+            "dialog_script_id": "297350",
+            "event_package_id": "0",
+            "text": "Well then I must leave."
+        },
+        {
+            "dialog_character_id": "48513",
+            "dialog_id": "48508",
+            "dialog_script_id": "297332",
+            "event_package_id": "0",
+            "text": "Where did you come from?"
+        }
+    ],
+    "dialogs": [
+        {
+            "back_button_enabled": "1",
+            "description": "",
+            "dialog_id": "48513",
+            "icon_media_id": "-3",
+            "intro_dialog_script_id": "297353",
+            "name": "Found the Radio Conversation"
+        },
+        {
+            "back_button_enabled": "1",
+            "description": "",
+            "dialog_id": "48508",
+            "icon_media_id": "-3",
+            "intro_dialog_script_id": "297324",
+            "name": "Intro Conversation"
+        }
+    ]
+}

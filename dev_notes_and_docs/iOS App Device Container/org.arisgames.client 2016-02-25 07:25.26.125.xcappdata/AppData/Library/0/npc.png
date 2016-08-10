@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title></title>
+
+<link rel="alternate" type="application/rss+xml" title="ARIS - Mobile Learning Experiences &raquo; Feed" href="http://arisgames.org/feed/" />
+<link rel="alternate" type="application/rss+xml" title="ARIS - Mobile Learning Experiences &raquo; Comments Feed" href="http://arisgames.org/comments/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"http:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/arisgames.org\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.3.1"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&&c.getContext("2d");return d&&d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length>3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&&c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<script type='text/javascript' src='http://arisgames.org/wp-content/themes/Play/js/jquery.min.js?ver=1.7.1'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://arisgames.org/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://arisgames.org/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.3.1" />
+<meta name="template" content="Play 3.3" />
+<meta name="generator" content="NattyWP Framework Version 2.1.5" />
+<meta name="description" content="ARIS is a open-source tool for creating mobile learning games, stories, documentaries, place-based learning activities, citizen science and citizen journalism activities." />
+<link href="http://arisgames.org/wp-content/themes/Play/images/icons/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="http://arisgames.org/wp-content/themes/Play/functions/css/shortcodes.css" media="screen" />
+<script type="text/javascript" src="http://arisgames.org/wp-content/themes/Play/functions/js/shortcode.js"></script>
+	<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+
+<!-- Feed link -->
+<link rel="alternate" type="application/rss+xml" title="ARIS &#8211; Mobile Learning Experiences RSS Feed" href="http://arisgames.org/feed/" />
+<link rel="pingback" href="http://arisgames.org/xmlrpc.php" />
+<link rel="bookmark" type="text/html" title="Best wordpress themes portfolio club" href="http://www.nattywp.com" />
+
+<!-- jQuery utilities -->
+<script type="text/javascript">var $j = jQuery.noConflict();</script>
+<script type='text/javascript' src='http://arisgames.org/wp-content/themes/Play/js/superfish.js?ver=2.9.2'></script>
+<script type='text/javascript' src='http://arisgames.org/wp-content/themes/Play/js/slides.min.jquery.js'></script>
+
+<script type="text/javascript" charset="utf-8">
+$j(document).ready(function(){
+    $j("#loopedSlider").slides({
+        play: 5000,
+        pagination: true,
+        container: "container",
+        currentClass: "active"
+    });
+});
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-10031673-2', 'auto');
+            ga('send', 'pageview');
+
+</script>
+
+
+<!-- Style sheets -->
+<link rel="stylesheet" type="text/css" href="http://arisgames.org/wp-content/themes/Play/style.css" media="screen" />
+<style type="text/css">
+	body {
+		font-size: 13px;
+	}
+	#header {
+		background-color: #e4e5e6;
+	}
+	.menu ul li.current-menu-item a, .menu ul li.current-menu-parent ul li.current-menu-item a, .menu ul li.current-cat a, .menu ul li.current_page_item a, .menu ul li.current_page_parent ul li.current_page_item a, .menu ul li.current-cat-parent ul li.current-cat a {
+		color: #D02037;
+	}
+	.menu ul li a {
+		color: #AAAAAA;
+	}
+	.menu ul li a:hover {
+		color: #D02037;
+	}
+	#note p {
+		color: #000000;
+	}
+	#note a {
+		color: #1e8eba;
+	}
+	#note a:hover {
+		color: #D02037;
+	}
+	.main-title h2, .main-title h2 a, #respond h2, #featured .grid h2 a {
+		color: #000000;
+	}
+	#featured .grid .compact, .post, #respond, .post .entry {
+		color: #383838;
+	}
+	.post a, #featured .grid .more, .post .entry a {
+		color: #1e8eba;
+	}
+	.post a:hover, .post .postmetadata a.comments-link:hover, .post .postmetadata .category a:hover, .post .postmetadata small .author, #featured .grid a:hover, .tags a:hover {
+		color: #D02037;
+	}
+	.widget h2 {
+		color: #000000;
+	}
+	.widget {
+		color: #383838;
+	}
+	.widget a {
+		color: #383838;
+	}
+	.widget a:hover {
+		color: #D02037;
+	}
+	#footer_wrap, #footer_l .social .tit {
+		color: #AAAAAA;
+	}
+	#footer_wrap a {
+		color: #AAAAAA;
+	}
+	#footer_wrap a:hover {
+		color: #D02037;
+	}
+	#footer_wrap {
+		background-color: #e4e5e6;
+	}
+</style>
+
+
+    <!--[if IE 6]>		
+    <script type="text/javascript" src="http://arisgames.org/wp-content/themes/Play/js/menu.js"></script>
+    	<link rel="stylesheet" type="text/css" href="http://arisgames.org/wp-content/themes/Play/ie6.css" />
+        <style type="text/css">
+            img.png {
+            filter: expression(
+            (runtimeStyle.filter == '') ? runtimeStyle.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src='+src+', sizingMethod=scale)' : '',
+            width = width,
+            src = 'http://arisgames.org/wp-content/themes/Play/images/px.gif');
+    }
+        </style>
+	<![endif]-->
+    <!--[if IE 7]>
+		<link rel="stylesheet" type="text/css" media="all" href="http://arisgames.org/wp-content/themes/Play/ie7.css" />
+	<![endif]-->
+</head>
+<body class="error404">
+<div style='width: 1px; height: 1px; overflow: auto;'> 
+</div>
+
+	<div id="header" class="inners">
+		<div class="content-head">	
+	
+            <div class="logo">
+             <a href="http://arisgames.org"><img src="http://arisgames.org/wp-content/uploads/2013/06/Aris-Horizontal251.png" border="0" class="png" alt="ARIS - Mobile Learning Experiences" /></a>   
+            </div>
+            
+     <div class="menu">	
+      <ul id="nav-ie" class="topnav fl fr sf-js-enabled sf-shadow"><li ><a href="/"><span></span></a></li><li class="page_item page-item-2062"><a href="http://arisgames.org/press/"><span>Press</span></a></li>
+<li class="page_item page-item-5284"><a href="http://arisgames.org/ggj2015/"><span>ARIS Global Game Jam 2015</span></a></li>
+<li class="page_item page-item-1731"><a href="http://arisgames.org/make/"><span>Make Games</span></a></li>
+<li class="page_item page-item-1470"><a href="http://arisgames.org/demo/"><span>Demo</span></a></li>
+<li class="page_item page-item-1520"><a href="http://arisgames.org/blog/"><span>Community Blog</span></a></li>
+</ul>    </div>		  
+    <div class="clear"></div>             
+         		</div>
+	</div>
+<!-- END Header -->
+      
+
+   
+
+<div class="content">
+<div id="note">
+<p>ARIS is a user-friendly, open-source platform for creating and playing mobile games, <br>tours and interactive stories. 
+
+Using GPS and QR Codes, ARIS players experience <br>a hybrid world of virtual interactive characters, items, and media placed in physical space.</p>
+</div>
+
+    <div id="featured">
+                      
+             
+                        <div class="grid">                    
+                    <div class="pic_bg"><a href="http://arisgames.org/make/"><img src="http://arisgames.org/wp-content/uploads/2010/08/map.png" alt="Make Games"  height="124"  width="280"  class="" title="" /></a></div>       
+             
+                        <h2><a href="http://arisgames.org/make/">Make Games</a></h2>
+                        <div class="compact">
+                           <p>ARIS is a platform for creating, not just playing. Get involved with us as we create layers of story, science, art and history all over the globe! Launch the 2.0 Editor Access the authoring tool at http://arisgames.org/editor &nbsp; Looking for the old version? See http://arisgames.org/legacy &nbsp; ARIS Online Manual Instructions, tutorials, videos and more. General &hellip; <a href="http://arisgames.org/make/">Read more <span class="meta-nav">&rarr;</span></a></p>
+                        </div>
+                        <p><a class="more" href="http://arisgames.org/make/">Learn More</a></p>                 
+                </div>
+                  
+                       
+                        <div class="grid">                    
+                    <div class="pic_bg"><a href="http://arisgames.org/get-aris/"><img src="http://arisgames.org/wp-content/uploads/2010/08/appstore-aspect-corrected.png" alt="Play"  height="124"  width="280"  class="" title="" /></a></div>       
+             
+                        <h2><a href="http://arisgames.org/get-aris/">Play</a></h2>
+                        <div class="compact">
+                           <p>Thousands of artists, educators, game designers and story tellers are making ARIS games right now! If you have an iPhone, iPod touch, or iPad, click the link below to download ARIS to your device and start playing some of our demo games. Step 1: Get ARIS You can either click the &#8220;Available on the App &hellip; <a href="http://arisgames.org/get-aris/">Read more <span class="meta-nav">&rarr;</span></a></p>
+                        </div>
+                        <p><a class="more" href="http://arisgames.org/get-aris/">Learn More</a></p>                 
+                </div>
+                  
+                       
+                        <div class="grid last">                    
+                    <div class="pic_bg"><a href="http://arisgames.org/remix/"><img src="http://arisgames.org/wp-content/uploads/2008/12/open-source.jpg" alt="Remix ARIS"  height="124"  width="280"  class="" title="" /></a></div>       
+             
+                        <h2><a href="http://arisgames.org/remix/">Remix ARIS</a></h2>
+                        <div class="compact">
+                           <p>If you have PHP or Objective C chops, grab our source code and start hacking. We want to see ARIS not only as an authoring environment for non-programmers, but also a toolbox of useful code for folks that want to make their own mobile media apps. Projects like BIKE BOX and WeBIRD use bits and &hellip; <a href="http://arisgames.org/remix/">Read more <span class="meta-nav">&rarr;</span></a></p>
+                        </div>
+                        <p><a class="more" href="http://arisgames.org/remix/">Learn More</a></p>                 
+                </div>
+                  
+                <div class="clear"></div>                 
+            
+                          
+                      <div class="clear"></div>
+       </div>
+        <!-- END featured -->        
+        <div class="hid">aRty7832340zhri71</div>   
+  </div>    
+     
+
+<hr />
+<div id="footer" role="contentinfo">
+<!-- If you'd like to support WordPress, having the "powered by" link somewhere on your blog is the best way; it's our only promotion or advertising. -->
+	<p>
+		ARIS - Mobile Learning Experiences is proudly powered by <a href="https://wordpress.org/">WordPress</a>		<br /><a href="http://arisgames.org/feed/">Entries (RSS)</a> and <a href="http://arisgames.org/comments/feed/">Comments (RSS)</a>.		<!-- 22 queries. 0.248 seconds. -->
+	</p>
+</div>
+</div>
+
+<!-- Gorgeous design by Michael Heilemann - http://binarybonsai.com/kubrick/ -->
+
+		</body>
+</html>

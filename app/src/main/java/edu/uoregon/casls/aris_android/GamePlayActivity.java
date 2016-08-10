@@ -452,7 +452,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	}
 
 	private void showInstantiableFragment(String fragTag, Instance i) {
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Entering showInstantiableFragment instanceType: " + i.object_type);
 		if (fragTag == null) return; // todo: temporary fix
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Entering showInstantiableFragment loading fragment for view ");
 		// settle any outstanding fragment tasks
 		getSupportFragmentManager().executePendingTransactions();
 		// if there is no currently visible fragment, set incoming one to current.
@@ -798,7 +800,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		// now tell this fragment to die
 		if (dialogViewFragment != null) {
 			FragmentManager fm = getSupportFragmentManager();
-			fm.popBackStack();
+			fm.popBackStack(); // immediate?
 //			if (!viewingInstantiableObject) { // todo: temporary in leu of showNav() call in fragment dismissSelf()
 //				this.showNavBar();
 //			}
@@ -1052,38 +1054,39 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	public void displayObject(Object o) // - (void) displayObject:(NSObject <InstantiableProtocol>*)o
 	{
-		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Entering displayObject instanceType: " + o.getClass().getName());
+//		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Entering displayObject instanceType: " + o.getClass().getName());
+		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Entering displayObject instanceType: " + o.getClass().getName());
 		String tag = "";
 		String fragViewToDisplay = "";
 //		ARISViewController *vc;
 		Instance i = mGame.instancesModel.instanceForId(0);
+
 //		if(Plaque.class.isInstance(o)) // <- better, worse, same, different?
 		if (o instanceof Plaque) {
+			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " displayObject() instance of Plaque was found ");
 			Plaque p = (Plaque) o;
 			i.object_type = "PLAQUE";
 			i.object_id = p.plaque_id;
-//			plaqueViewFragment.initWithInstance(i);
-//			fragViewToDisplay = plaqueViewFragment.getTag(); // same end result as vc var in iOS
-			if (plaqueViewFragment == null) {
+			if (plaqueViewFragment == null || plaqueViewFragment.getTag() == null) {
 				plaqueViewFragment = new PlaqueViewFragment();
 				tag = plaqueViewFragment.toString();
+				plaqueViewFragment.initContext(this);
+				plaqueViewFragment.initWithInstance(i);
 				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 				ft.replace(R.id.fragment_view_container, plaqueViewFragment, tag); //set tag.
 				ft.addToBackStack(tag);
-				if (plaqueViewFragment.isAdded())
-					Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Fragment added ");
 				ft.commit();
 				getSupportFragmentManager().executePendingTransactions();
 				setAsFrontmostFragment(tag);
 			}
 			// if it's already visible and the frontmost fragment... bail, no further action here
-			else if (mCurrentFragVisible != null)
-				if (plaqueViewFragment.isVisible() && plaqueViewFragment.getTag().contentEquals(mCurrentFragVisible))
+			else if (mCurrentFragVisible != null) {
+				if (plaqueViewFragment.isVisible() && plaqueViewFragment.getTag().contentEquals(mCurrentFragVisible)) {
 					return;
+				}
+			}
 
-			plaqueViewFragment.initWithInstance(i);
 			fragViewToDisplay = plaqueViewFragment.getTag(); // same end result as vc var in iOS
-
 //			vc = new PlaqueViewController(i delegate:self);
 		}
 		else if (o instanceof Item) {

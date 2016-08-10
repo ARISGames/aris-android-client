@@ -366,7 +366,21 @@ public class GamesListActivity extends AppCompatActivity {
 		String request_url = AppConfig.SERVER_URL_MOBILE + requestApi;
 
 		user.location = AppUtils.getGeoLocation(context);
+		// todo: check for valid location before allowing server calls. NPE will result otherwise.
+		if (user.location == null ) {
+			new AlertDialog.Builder(this)
+					.setIcon(android.R.drawable.ic_dialog_alert)
+					.setTitle("No Mode Selected")
+					.setMessage("Please select a Mode from the list before proceeding.")
+					.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+						}
+					})
+//					.setNegativeButton("No", null)
+					.show();
 
+		}
 		rqParams.put("request", requestApi);
 		StringEntity entity;
 		entity = null;

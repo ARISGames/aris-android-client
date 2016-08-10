@@ -2,4 +2,5 @@
 <resources>
     <color name="footer_btn_selected">#FFA2A2A2</color>
     <color name="footer_btn_normal">#FFEDEDED</color>
+    <color name="white_background">#FFFEFEFE</color>
 </resources>

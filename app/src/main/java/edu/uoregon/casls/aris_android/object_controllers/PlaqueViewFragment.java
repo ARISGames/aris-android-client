@@ -67,6 +67,7 @@ public class PlaqueViewFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
+
 		// Inflate the layout for this fragment
 		mPlaqueView = inflater.inflate(R.layout.fragment_plaque_view, container, false);
 		FragmentTransaction ft = mGamePlayActivity.getSupportFragmentManager().beginTransaction();
@@ -85,11 +86,13 @@ public class PlaqueViewFragment extends Fragment {
 		super.onResume();
 		// presumably the media fragment has now loaded and passed initial lifecycle calls so we can
 		// tell it to load stuff.
+		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment.onResume; ");
 		this.loadView();
 	}
 
 	public void initWithInstance(Instance i) {
 //		delegate = d; // Android app eschews the delegates (for now, anyway)
+		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment.initWithInstance called; " );
 		instance = i;
 		plaque = mGamePlayActivity.mGame.plaquesModel.plaqueForId(instance.object_id);
 		if (plaque.event_package_id > 0)
@@ -123,7 +126,8 @@ public class PlaqueViewFragment extends Fragment {
 
 		// Show Continue text and forward button if continue_function != NONE
 		// In Android: Hide these features if continue_function == NONE
-		if (plaque.continue_function.contentEquals("NONE")) {
+		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment.loadView; looking at continue_function: " + plaque.continue_function);
+		if (plaque.continue_function.contentEquals("NONE")) { //fixme: NPE here: Attempt to read from field 'java.lang.String edu.uoregon.casls.aris_android.data_objects.Plaque.continue_function' on a null object reference
 			RelativeLayout continueFooter = (RelativeLayout) mPlaqueView.findViewById(R.id.rl_plaque_footer);
 			continueFooter.setVisibility(View.INVISIBLE);
 		}
@@ -144,11 +148,14 @@ public class PlaqueViewFragment extends Fragment {
 
 	public void loadPlaque()
 	{
+		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment.loadPlaque; ");
+
 		if (!plaque.name.isEmpty()) { // set plaqueue title
 			TextView tvPlaqueueTitle = (TextView) mPlaqueView.findViewById(R.id.tv_plaque_title);
 			tvPlaqueueTitle.setText(plaque.name);
 		}
 		if (!plaque.description.contentEquals("")) { // load the description webview
+			Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment.load the description webview; ");
 //			[scrollView addSubview:webView];
 //			webView.frame = CGRectMake(0, 0, self.view.bounds.size.width, 10);//Needs correct width to calc height
 //			[webView loadHTMLString:[NSString stringWithFormat:[ARISTemplate ARISHtmlTemplate], plaque.description] baseURL:nil];
@@ -162,8 +169,10 @@ public class PlaqueViewFragment extends Fragment {
 		}
 
 		// load associated media into media fragment todo: may just want to put fragment into includable view with ordinary class?
+		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment. looking for Plaque media; ");
 		Media media = mGamePlayActivity.mMediaModel.mediaForId(plaque.media_id);
 		if (media != null) {
+			Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment. setting webview with Plaque media; ");
 			mediaViewFrag.setMedia(media);
 //			[mediaView setMedia:media];
 		}

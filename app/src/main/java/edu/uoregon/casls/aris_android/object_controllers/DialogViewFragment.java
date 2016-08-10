@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import java.util.Collection;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
+import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.data_objects.Dialog;
 import edu.uoregon.casls.aris_android.data_objects.DialogCharacter;
 import edu.uoregon.casls.aris_android.data_objects.DialogOption;
@@ -215,10 +217,11 @@ public class DialogViewFragment extends Fragment {
 				dialogFwdButton.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						Toast t = Toast.makeText(getActivity(), "You selected item #" + dialogOptionId,
-								Toast.LENGTH_SHORT);
-						t.setGravity(Gravity.CENTER, 0, 0);
-						t.show();
+						// popup for onscreen debugging. Turn off when not needed.
+//						Toast t = Toast.makeText(getActivity(), "You selected item #" + dialogOptionId,
+//								Toast.LENGTH_SHORT);
+//						t.setGravity(Gravity.CENTER, 0, 0);
+//						t.show();
 						dialogOptionSelected(dialogOptionId);
 					}
 				});
@@ -232,6 +235,7 @@ public class DialogViewFragment extends Fragment {
 	private void dialogOptionSelected(long dialogOptionId) {
 		// if the option is another dialog script, just repave .
 		DialogOption op = dialogsModel.dialogOptions.get(dialogOptionId);
+		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "DialogViewFragment.dialogOptionSelected; link_type: " + op.link_type);
 		if (op.link_type.contentEquals("DIALOG_SCRIPT")) {
 			this.dialogScriptChosen(dialogsModel.scriptForId((long) op.link_id));
 		}
