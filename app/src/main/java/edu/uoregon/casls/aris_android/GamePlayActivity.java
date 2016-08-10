@@ -1072,7 +1072,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				tag = plaqueViewFragment.toString();
 				plaqueViewFragment.initContext(this);
 				plaqueViewFragment.initWithInstance(i);
-				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+				FragmentTransaction ft = getSupportFragmentManager().beginTransaction(); // no change
 				ft.replace(R.id.fragment_view_container, plaqueViewFragment, tag); //set tag.
 				ft.addToBackStack(tag);
 				ft.commit();
