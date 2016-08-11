@@ -1,5 +1,7 @@
 package edu.uoregon.casls.aris_android.models;
 
+import android.location.Location;
+
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -234,4 +236,37 @@ public class LogsModel extends ARISModel {
 		}
 		return false;
 	}
+
+	public long countLogsOfType(String type) {
+		Collection<ArisLog> alllogs = logs.values();
+		long qty = 0;
+		for (ArisLog l : alllogs) {
+			if (type != null && !l.event_type.contentEquals(type)) {
+				continue;
+			}
+			qty++;
+		}
+		return qty;
+	}
+//
+
+	public long countLogsOfType(String type, long withinDistance, double lat, double lng) {
+		Collection<ArisLog> alllogs = logs.values();
+		long qty = 0;
+		Location targetLocation = new Location("0");
+		targetLocation.setLatitude(lat);
+		targetLocation.setLongitude(lng);
+
+		for (ArisLog l : alllogs) {
+			if (type != null && !l.event_type.contentEquals(type)) {
+				continue;
+			}
+			if (l.location.distanceTo(targetLocation) > withinDistance) {
+				continue;
+			}
+			qty++;
+		}
+		return qty;
+	}
+
 }
