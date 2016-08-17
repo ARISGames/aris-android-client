@@ -277,6 +277,20 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			this.playerDataLoaded();
 		}
 
+		// new logic in iOS as of 8/16 update: (mostly the same as above with added conditions and the if/else logic inverted.)
+/*
+		if(
+				(_MODEL_GAME_.downloadedVersion && [_DELEGATE_.reachability currentReachabilityStatus] == NotReachable) ||//offline but playable...
+		([_MODEL_GAME_ hasLatestDownload] && [_MODEL_GAME_.network_level isEqualToString:@"LOCAL"]) //if !local, need to perform maintenance on server so it doesn't keep conflicting with local data
+		)
+		{
+			[_MODEL_ restorePlayerData];
+			[self playerDataLoaded];
+		}
+		else
+		[self requestMaintenanceData];
+*/
+
 	}
 
 	// todo: implement Android version of these iOS methods:
@@ -296,12 +310,15 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	// will be called from Game.maintenancePieceReceived() when Game.allMaintenanceDataLoaded() is satisfied.
 	public void maintenanceDataLoaded() {
-		if (!mGame.hasLatestDownload() || !mGame.begin_fresh()) // fixme: ensure begin_game condition is being set meaningfully from server call, getPlayerPlayedGame
-			this.requestPlayerData();
-		else {
-			//_MODEL_ restorePlayerData); // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restorePlayerData
-			this.playerDataLoaded();
-		}
+		// prior to 8/16 iOS update:
+//		if (!mGame.hasLatestDownload() || !mGame.begin_fresh()) // fixme: ensure begin_game condition is being set meaningfully from server call, getPlayerPlayedGame
+//			this.requestPlayerData();
+//		else {
+//			//_MODEL_ restorePlayerData); // todo: code in the "restoreGameData" process. See iOS LoadingViewController.startLoading -> AppModel.restorePlayerData
+//			this.playerDataLoaded();
+//		}
+		// after 8/16 iOS update:
+		this.requestPlayerData();
 	}
 
 	// todo: implement Android version of these iOS methods:

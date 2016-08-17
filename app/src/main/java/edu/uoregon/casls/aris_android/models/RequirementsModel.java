@@ -210,16 +210,16 @@ public class RequirementsModel extends ARISModel {
 			return a.bool_operator == (mGame.logsModel.hasLogType("RUN_EVENT_PACKAGE", a.content_id) ? 1 : 0);
 		}
 		if (a.requirement.contentEquals("PLAYER_HAS_UPLOADED_MEDIA_ITEM")) {
-			return a.bool_operator == 0;
+			return a.bool_operator == ((mGame.logsModel.countLogsOfType("UPLOAD_MEDIA_ITEM", a.distance, a.latitude, a.longitude) >= a.qty) ? 1 : 0);
 		}
 		if (a.requirement.contentEquals("PLAYER_HAS_UPLOADED_MEDIA_ITEM_IMAGE")) {
-			return a.bool_operator == 0;
+			return a.bool_operator == ((mGame.logsModel.countLogsOfType("UPLOAD_MEDIA_ITEM_IMAGE", a.distance, a.latitude, a.longitude) >= a.qty) ? 1 : 0);
 		}
 		if (a.requirement.contentEquals("PLAYER_HAS_UPLOADED_MEDIA_ITEM_AUDIO")) {
-			return a.bool_operator == 0;
+			return a.bool_operator == ((mGame.logsModel.countLogsOfType("UPLOAD_MEDIA_ITEM_AUDIO", a.distance, a.latitude, a.longitude) >= a.qty) ? 1 : 0);
 		}
 		if (a.requirement.contentEquals("PLAYER_HAS_UPLOADED_MEDIA_ITEM_VIDEO")) {
-			return a.bool_operator == 0;
+			return a.bool_operator == ((mGame.logsModel.countLogsOfType("UPLOAD_MEDIA_ITEM_VIDEO", a.distance, a.latitude, a.longitude) >= a.qty) ? 1 : 0);
 		}
 		if (a.requirement.contentEquals("PLAYER_HAS_COMPLETED_QUEST")) {
 			return a.bool_operator == (mGame.logsModel.hasLogType("COMPLETE_QUEST", a.content_id) ? 1 : 0);

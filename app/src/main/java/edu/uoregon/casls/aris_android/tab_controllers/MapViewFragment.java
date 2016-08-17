@@ -7,6 +7,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,6 +34,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -42,6 +46,7 @@ import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
+import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
 import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.data_objects.Overlay;
@@ -79,8 +84,11 @@ public class MapViewFragment extends Fragment {
 	double longitude = -123.0695084;
 	private final static int MY_PERMISSION_ACCESS_COURSE_LOCATION = 22; // arbitrary?
 	LatLng marker_latlng  = new LatLng(latitude, longitude);
+	LatLng player_latlng  = new LatLng(0,0); // todo: set to current player location
 	LatLng marker_latlng2 = new LatLng(latitude + 0.0008, longitude - 0.0002);
 
+	public GoogleMap mMap;
+	private boolean firstLoad = true;
 
 	/**
 	 * Use this factory method to create a new instance of
@@ -127,7 +135,7 @@ public class MapViewFragment extends Fragment {
 
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) { // similar to viewWillAppear in iOS (?)
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null) {
 			mParam1 = getArguments().getString(ARG_PARAM1);
@@ -139,7 +147,7 @@ public class MapViewFragment extends Fragment {
 //	public void onResume() {
 //		super.onResume();
 //		if (mGamePlayAct == null) {
-////			this.initContext(this.getParentFragment().getActivity());
+//			mGamePlayAct = (GamePlayActivity) this.getActivity();
 //		}
 //	}
 
@@ -160,15 +168,21 @@ public class MapViewFragment extends Fragment {
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-							 Bundle savedInstanceState) {
+							 Bundle savedInstanceState) { // similar to viewDidAppear in iOS(?)
 		// Inflate the layout for this fragment
 
 		View v = inflater.inflate(R.layout.fragment_map_view, container, false);
 		mGamePlayAct.hideNavBar();
+		//get current location of player
+		Location l = AppUtils.getGeoLocation(mGamePlayAct);
+		player_latlng = new LatLng(l.getLatitude(), l.getLongitude());
 
-		setUpMap();
-//		refreshViewFromModel();
-//		refreshModels();
+		setUpMap(); // moved to onResume
+//		if (mMap != null) {
+//			refreshViewFromModel();
+//			refreshModels();
+//		}
+
 		return v;
 	}
 
@@ -177,7 +191,35 @@ public class MapViewFragment extends Fragment {
 		mGamePlayAct.mGame.overlaysModel.requestPlayerOverlays();
 	}
 
-	public GoogleMap mMap;
+	public void triggersInvalidated(List<Trigger> invalidated) { // not yet implimented
+
+//		NSMutableArray *invalidated = n.userInfo[@"invalidated_triggers"];
+//
+//		Trigger *invalidatedTrigger;
+//		Trigger *mapTrigger;
+//		MapViewAnnotationOverlay *mvao;
+//		for(long i = 0; i < invalidated.count; i++)
+//		for (Trigger invalidatedTrigger : invalidated)
+//		{
+////			mvao = nil; todo?
+////			invalidatedTrigger = invalidated[i];
+//			for(long j = 0; j < annotationOverlays.count; j++)
+//			{
+//				mapTrigger = [self mvaoAt:j].annotation;
+//				if(mapTrigger.trigger_id == invalidatedTrigger.trigger_id) mvao = [self mvaoAt:j];
+//			}
+//			if(mvao)
+//			{
+//				[mapView removeAnnotation:mvao.annotation];
+//				[mapView removeOverlay:mvao.overlay];
+//				[annotationOverlays removeObject:mvao];
+//			}
+//		}
+	}
+
+	public void clearLocalData () {
+		// stub. not used
+	}
 
 	private void setUpMap() {
 		mSupportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.inner_fragment_map);
@@ -217,38 +259,38 @@ public class MapViewFragment extends Fragment {
 
 						mMap = googleMap; // globalize it (hopefully!)
 
-						// test putting marker on map:
-						Trigger trig = new Trigger(marker_latlng2);
-//						final Marker marker1 = googleMap.addMarker(new MarkerOptions()
-						trig.triggerMarker = googleMap.addMarker(new MarkerOptions()
-								.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_media_pause)) // first icon I found. really wanted to use a map oriented one.
-								.anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
-								.position(marker_latlng2)
-						);
-//						marker1.setTitle("Marker One");
-						trig.triggerMarker.setTitle("Marker One");
-						final Marker marker1 = trig.triggerMarker;
-						googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-							@Override
-							public boolean onMarkerClick(Marker marker) {
-//								if (marker.getTitle().equalsIgnoreCase(marker1.getTitle())) {
-								Log.d("SEM", "Marker Clicked:" + marker.getTitle() + ", Id: " + marker.getId() + ", marker1 id: " + marker1.getId());
-								if (marker.getId() == marker1.getId()) {
-									Log.d("SEM", "Marker Clicked:" + marker.getTitle() + ", Id: " + marker.getId());
-//									if (marker.isInfoWindowShown()) {
-//										marker.hideInfoWindow();
-//										return false;
-//									}
-//									else {
-//										marker.showInfoWindow();
-//										return false;
-//									}
-								}
-								return false;
-							}
-						});
+						// test putting marker on map:// manual trigger set for POC.
+//						Trigger trig = new Trigger(marker_latlng2);
+////						final Marker marker1 = googleMap.addMarker(new MarkerOptions()
+//						trig.triggerMarker = googleMap.addMarker(new MarkerOptions()
+//								.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_media_pause)) // first icon I found. really wanted to use a map oriented one.
+//								.anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
+//								.position(marker_latlng2)
+//						);
+////						marker1.setTitle("Marker One");
+//						trig.triggerMarker.setTitle("Marker One");
+//						final Marker marker1 = trig.triggerMarker;
+//						googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+//							@Override
+//							public boolean onMarkerClick(Marker marker) {
+////								if (marker.getTitle().equalsIgnoreCase(marker1.getTitle())) {
+//								Log.d("SEM", "Marker Clicked:" + marker.getTitle() + ", Id: " + marker.getId() + ", marker1 id: " + marker1.getId());
+//								if (marker.getId() == marker1.getId()) {
+//									Log.d("SEM", "Marker Clicked:" + marker.getTitle() + ", Id: " + marker.getId());
+////									if (marker.isInfoWindowShown()) {
+////										marker.hideInfoWindow();
+////										return false;
+////									}
+////									else {
+////										marker.showInfoWindow();
+////										return false;
+////									}
+//								}
+//								return false;
+//							}
+//						});
 						refreshViewFromModel();
-						refreshModels();
+ 						refreshModels();
 
 					}
 				}
@@ -314,10 +356,9 @@ public class MapViewFragment extends Fragment {
 		}
 		boolean showFirstMarkerTitle = true;
 		//Add locations
-		for (Trigger modelTrigger : triggersModel.playerTriggers)
-		{
-			modelInstance = mGamePlayAct.mGame.instancesModel.instanceForId(modelTrigger.instance_id);
-			if ( modelInstance.instance_id == 0 || modelInstance.object() == null) continue;
+		for (Trigger modelTrigger : triggersModel.playerTriggers) { // walk through all playerTriggers
+			modelInstance = mGamePlayAct.mGame.instancesModel.instanceForId(modelTrigger.instance_id); // get instance
+			if ( modelInstance.instance_id == 0 || modelInstance.object() == null) continue; // bogus instance? skip it
 			//@formatter:off
 			if (    ( //trigger not eligible for map
 					    !modelTrigger.type.equals("LOCATION") || modelTrigger.hidden != 0
@@ -327,29 +368,35 @@ public class MapViewFragment extends Fragment {
 				     && modelInstance.infinite_qty == 0
 					 && modelInstance.qty <= 0
 				    )
-			) continue; // move on to next in list
+			) continue; // not eligible, move on to next in list
 				//@formatter:on
 
-			shouldAdd = true;
-			for (Trigger mapTrigger : markersAndCircles) {
-				if(mapTrigger.trigger_id == modelTrigger.trigger_id) shouldAdd = false;
-			}
-			if (shouldAdd) {
+			shouldAdd = true; // we found a good one to add.
+			//todo: in iOS the map view retains the old markers when redrawn after going out to a plaque (for example)
+			//todo: in Android the map is redrawn fresh each time, so decide if we need the loop below that excludes
+			//todo: markers that have previously been added. Perhaps we can maintain a list of those that are visible
+			//todo: instead of checking those that are just in a data list.
+//			for (Trigger mapTrigger : markersAndCircles) { // look through any/all locations already in list
+//				if (mapTrigger.trigger_id == modelTrigger.trigger_id) shouldAdd = false; // revoke their shouldAdd pass if they're already in the list.
+//			}
+			if (shouldAdd) { // having vetted this location as one to be added...
+				// get any custom icon media if there was a valid media id provided; otherwise use default icon.
 				Media m = mGamePlayAct.mMediaModel.mediaForId((modelTrigger.icon_media_id == 0) ? Media.DEFAULT_PLAQUE_ICON_MEDIA_ID : modelTrigger.icon_media_id);
-				Bitmap markerIconBitmap;
-				// find the bitmap (media.data) in the swirling vortex of ARIS data...
+				Bitmap markerIconBitmap; // reminder: a "marker" here in Android, is an "annotation" in iOS
+				// find the bitmap (media.data) in the swirling vortex of ARIS data.
+				// (this is more involved in Android than iOS)
 				if (m.data == null) {
 					ARISMediaLoader mediaLoader = new ARISMediaLoader(mGamePlayAct);
 					mediaLoader.loadMedia(m);
-					if (m.data == null) // if loadData didn't give us a bitmap from a local file set to generic icon
+					if (m.data == null) // if loadMedia() didn't give us a bitmap from a local file, set to generic icon
 						markerIconBitmap = mGamePlayAct.mMediaModel.mediaForId(Media.DEFAULT_PLAQUE_ICON_MEDIA_ID).data;
 					else
 						markerIconBitmap = m.data;
 				}
 				else
-					markerIconBitmap =  m.data;
-				markerIconBitmap = Bitmap.createScaledBitmap(markerIconBitmap, 50, 50, false);
-
+					markerIconBitmap =  m.data; // image bitmap data looks valid so we'll use it for the icon
+				markerIconBitmap = Bitmap.createScaledBitmap(markerIconBitmap, 50, 50, false); // scale it to map marker size
+				// set various marker properties
 				MarkerOptions markerOptions = new MarkerOptions()
 						.title(modelInstance.name())
 						.icon(BitmapDescriptorFactory.fromBitmap(markerIconBitmap))
@@ -357,14 +404,14 @@ public class MapViewFragment extends Fragment {
 						.position(new LatLng(modelTrigger.latitude, modelTrigger.longitude)
 						);
 
-				modelTrigger.triggerMarker = mMap.addMarker(markerOptions);
+				// todo for future consideration, add animated marker drop: http://stackoverflow.com/a/38008342
+				modelTrigger.triggerMarker = mMap.addMarker(markerOptions); // iOS: [mapView addAnnotation:mvao.annotation];
 				if (showFirstMarkerTitle) { // just show the starting point.
 					modelTrigger.triggerMarker.showInfoWindow();
 					showFirstMarkerTitle = false;
 				}
 
-				// add new circle to map
-
+				// add the new trigger circle to map that accompanies the marker
 				modelTrigger.triggerZoneCircle = mMap.addCircle(new CircleOptions()
 						.center(new LatLng(modelTrigger.latitude, modelTrigger.longitude))
 						.radius(modelTrigger.distance)
@@ -376,12 +423,10 @@ public class MapViewFragment extends Fragment {
 		}
 		if (!markersAndCircles.isEmpty()) setOnclickListenerForMarkers();
 
-
-
 		//
 		//OVERLAYS
 		//
-// TODO: looks like overlays are an unused concept in Aris. Leaving this un translated code in in the
+		// TODO: looks like overlays are an unused concept in Aris. Leaving this un translated code in in the
 		// TODO: event that it ever become necessary.
 		//Remove overlays
 //		for(long i = 0; i < overlays.count; i++)
@@ -418,15 +463,47 @@ public class MapViewFragment extends Fragment {
 //		}
 
 		//refresh views (ugly)
+
 		// todo: below
-//		[mapView setCenterCoordinate:mapView.region.center animated:NO];
-//		if(firstLoad)
-//		{
-//			if     ([_MODEL_GAME_.map_focus isEqualToString:@"PLAYER"])        [self centerMapOnPlayer];
-//			else if([_MODEL_GAME_.map_focus isEqualToString:@"LOCATION"])      [self centerMapOnLoc:_MODEL_GAME_.map_location.coordinate zoom:_MODEL_GAME_.map_zoom_level];
-//			else if([_MODEL_GAME_.map_focus isEqualToString:@"FIT_LOCATIONS"]) [self zoomToFitAnnotations:NO];
-//		}
-//		firstLoad = false;
+//		[mapView setCenterCoordinate:mapView.region.center animated:NO]; // map should already be centered on user location, as set in setUpMap()
+		if (firstLoad) {
+			if     (mGamePlayAct.mGame.map_focus.contentEquals("PLAYER"))        this.centerMapOnPlayer();
+			else if(mGamePlayAct.mGame.map_focus.contentEquals("LOCATION"))      this.centerMapOnLoc(mGamePlayAct.mGame.map_location, mGamePlayAct.mGame.map_zoom_level);
+			else if(mGamePlayAct.mGame.map_focus.contentEquals("FIT_LOCATIONS")) this.zoomToFitAnnotations(false);
+		}
+		firstLoad = false;
+	}
+
+	public void centerMapOnPlayer() {
+		Location l = AppUtils.getGeoLocation(mGamePlayAct);
+		CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(l.getLatitude(), l.getLongitude())).zoom(17.0f).build();
+		CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+//		mMap.moveCamera(cameraUpdate);
+		mMap.animateCamera(cameraUpdate);
+	}
+
+	public void centerMapOnLoc(Location loc, double map_zoom_level) {
+		CameraPosition cameraPosition = new CameraPosition.Builder()
+				.target(new LatLng(loc.getLatitude(), loc.getLongitude()))
+				.zoom((float)map_zoom_level == 0.0 ? 17.0f : (float)map_zoom_level) // if zoom level is 0 set arbitrarily to a sensible value
+				.build();
+		CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+//		mMap.moveCamera(cameraUpdate);
+		mMap.animateCamera(cameraUpdate);
+	}
+
+	// MKMapView zoom levels. http://troybrant.net/blog/2010/01/mkmapview-and-zoom-levels-a-visual-guide/
+	private void zoomToFitAnnotations(boolean b) {
+		LatLngBounds.Builder builder = new LatLngBounds.Builder();
+		for (Trigger mapTrigger : markersAndCircles) {
+			Marker marker = mapTrigger.triggerMarker;
+			builder.include(marker.getPosition());
+		}
+		LatLngBounds bounds = builder.build();
+
+		int padding = 0; // offset from edges of the map in pixels
+		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+		mMap.animateCamera(cameraUpdate);
 	}
 
 	private void setOnclickListenerForMarkers() {
@@ -446,9 +523,18 @@ public class MapViewFragment extends Fragment {
 							|| (distance <= trigger.distance && mGamePlayAct.mPlayer.location != null))
 						{
 							// temporarily just show a popup dialog instead of fancy on screen icon
-							// todo: do fancy icon
+							// todo: show custom icon or default
+							Drawable alertImage;
+							if (modelInstance.icon_media_id() == 0)
+								alertImage = ContextCompat.getDrawable(mGamePlayAct, R.drawable.plaque_icon_120);
+							else {
+								Media m = mGamePlayAct.mMediaModel.mediaForId(modelInstance.icon_media_id());
+								alertImage = new BitmapDrawable(getResources(), m.data);
+							}
 							new AlertDialog.Builder(mGamePlayAct)
-									.setIcon(mGamePlayAct.getResources().getDrawable(R.drawable.plaque_icon_120))
+									.setIcon(alertImage)
+//									.setIcon(ContextCompat.getDrawable(mGamePlayAct, R.drawable.plaque_icon_120))
+//									.setIcon(mGamePlayAct.getResources().getDrawable(R.drawable.plaque_icon_120))
 									.setTitle("View Plaque?")
 //									.setMessage("Are you sure you want to quit Aris?")
 									.setPositiveButton("View", new DialogInterface.OnClickListener() {
@@ -461,10 +547,8 @@ public class MapViewFragment extends Fragment {
 												fm.beginTransaction().remove(innerMapFragment).commit();
 											}
 
-
 											// enqueueTrigger
 											if (trigger != null) mGamePlayAct.mGame.displayQueueModel.enqueueTrigger(trigger);
-
 										}
 									})
 									.setNegativeButton("Back", null)
@@ -474,7 +558,7 @@ public class MapViewFragment extends Fragment {
 						}
 						else {
 							float distanceToWalk = distance - trigger.distance;
-							Toast t = Toast.makeText(mGamePlayAct, "You are not in range to interact with this. Walk " + distanceToWalk + "m",
+							Toast t = Toast.makeText(mGamePlayAct, "You are not in range to interact with this. Walk " + String.format("%.1f", distanceToWalk) + "m",
 									Toast.LENGTH_LONG);
 							t.setGravity(Gravity.CENTER, 0, 0);
 							t.show();

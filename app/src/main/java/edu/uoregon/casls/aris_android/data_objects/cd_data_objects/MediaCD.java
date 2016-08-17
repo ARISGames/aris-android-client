@@ -10,6 +10,7 @@ public class MediaCD {
 	public int user_id;
 	public String localURL;
 	public String remoteURL;
+	public long autoplay = 0; // added in iOS 8/16;
 
 	public String fileExtension() {
 		if (this.remoteURL != null && !this.remoteURL.isEmpty())

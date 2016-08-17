@@ -254,15 +254,15 @@ public class DisplayQueueModel extends ARISModel {
 			for (Trigger t : pt) {
 				//@formatter:off
 				if (
-						( t.type.contentEquals("IMMEDIATE")
-						  || ( t.type.contentEquals("LOCATION")
-							   && t.trigger_on_enter == 1
-							   && ( t.infinite_distance == 1
-								    || t.location.distanceTo(mGamePlayAct.mPlayer.location) < t.distance
-								  )
-							 )
-						)
-						&& !this.displayBlacklisted(t)
+					( t.type.contentEquals("IMMEDIATE")
+					  || ( t.type.contentEquals("LOCATION")
+						   && t.trigger_on_enter == 1
+						   && ( t.infinite_distance == 1
+							    || t.location.distanceTo(mGamePlayAct.mPlayer.location) < t.distance
+							  )
+						 )
+					)
+					&& !this.displayBlacklisted(t)
 				)
 				{
 					Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " enqueueNewImmediates() ");

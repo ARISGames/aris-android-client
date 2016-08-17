@@ -129,7 +129,8 @@ public class Dispatcher {
 	//	MODEL_GAME_AVAILABLE",nil,@{@"game":[self gameForId:g.game_id]});// Will be handled in GamePlayActivity -sem
 //	MODEL_GAME_BEGAN",nil,nil); // Will be handled in GamePlayActivity -sem
 	public void model_game_began() {
-		mGamePlayAct.mGame.gameBegan();
+		if (mGamePlayAct.mGame.listen_model_game_began == 1)
+			mGamePlayAct.mGame.gameBegan();
 		mGamePlayAct.gameBegan(); // possibly not needed. // or maybe this is where I need to load the tab fragment underneith the other views.
 	}
 
@@ -438,6 +439,8 @@ public class Dispatcher {
 	public void model_triggers_invalidated(List<Trigger> invalidatedTriggers) {
 		if (mGamePlayAct.mGame.displayQueueModel.listen_model_triggers_invalidated == 1)
 			mGamePlayAct.mGame.displayQueueModel.reevaluateAutoTriggers();
+		if (mGamePlayAct.mapViewFragment != null)
+			mGamePlayAct.mapViewFragment.triggersInvalidated(invalidatedTriggers);
 		// todo: MapViewController.triggersInvalidated(invalidatedTriggers)
 	}
 

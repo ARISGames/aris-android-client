@@ -614,7 +614,7 @@ public class ResponseHandler { // for now only handles responses with respect to
 			}
 			/* parsePlayerTriggers */
 			else if (callingReq.equals(Calls.HTTP_GET_TRIGGERS_4_PLAYER)) {
-				Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " HTTP_GET_TRIGGERS_4_PLAYER " + callingReq + "; data: " + jsonReturn.toString());
+//				Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " HTTP_GET_TRIGGERS_4_PLAYER " + callingReq + "; data: " + jsonReturn.toString());
 				if (jsonReturn.has("data")) {
 					JSONArray jsonData = jsonReturn.getJSONArray("data");
 					Gson gson = new Gson();

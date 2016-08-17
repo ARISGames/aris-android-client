@@ -33,6 +33,8 @@ public class GameInstancesModel extends ARISModel {
 	public void initContext(GamePlayActivity gamePlayAct) {
 		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
 		mGame = mGamePlayAct.mGame; // shortcut convenience reference
+		// maybe doing the same thing as line 214 iOS
+		n_player_data_received = this.nPlayerDataToReceive(); // looks like this always return 0?
 	}
 
 	public void clearGameData() {
@@ -79,6 +81,10 @@ public class GameInstancesModel extends ARISModel {
 		for (Instance newInstance : newInstances) {
 			if (!newInstance.object_type.contentEquals("ITEM") || !newInstance.object_type.contentEquals("GAME"))
 				continue;
+			// new as of 8/16 iOS update
+			if (instances.get(newInstance.object_id) != null && (instances.get(newInstance.object_id).instance_id > newInstance.instance_id))
+				continue; //"new Instance" has older ID than known... prefer newer
+
 			instances.put(newInstance.object_id, newInstance); //[[NSNumber numberWithLong:newInstance.object_id]] = newInstance;
 		}
 		mGamePlayAct.mDispatch.model_game_instances_available(); // _ARIS_NOTIF_SEND_(@"INSTANCES_AVAILABLE",nil,nil);

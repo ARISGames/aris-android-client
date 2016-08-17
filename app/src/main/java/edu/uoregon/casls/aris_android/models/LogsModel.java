@@ -208,8 +208,8 @@ public class LogsModel extends ARISModel {
 	}
 
 	public boolean hasLogType(String type) {
-		Collection<ArisLog> alllogs = logs.values();
-		for (ArisLog l : alllogs) {
+		Collection<ArisLog> allLogs = logs.values();
+		for (ArisLog l : allLogs) {
 			if (l.event_type.contentEquals(type))
 				return true;
 		}
@@ -217,53 +217,46 @@ public class LogsModel extends ARISModel {
 	}
 
 	public boolean hasLogType(String type, long content_id) {
-		Collection<ArisLog> alllogs = logs.values();
-		for (ArisLog l : alllogs) {
-			if (l.event_type.contentEquals(type) &&
-					l.content_id == content_id)
+		Collection<ArisLog> allLogs = logs.values();
+		for (ArisLog l : allLogs) {
+			if (l.event_type.contentEquals(type) && l.content_id == content_id)
 				return true;
 		}
 		return false;
 	}
 
 	public boolean hasLogType(String type, long content_id, long qty) {
-		Collection<ArisLog> alllogs = logs.values();
-		for (ArisLog l : alllogs) {
-			if (l.event_type.contentEquals(type) &&
-					l.content_id == content_id &&
-					l.qty == qty)
+		Collection<ArisLog> allLogs = logs.values();
+		for (ArisLog l : allLogs) {
+			if (l.event_type.contentEquals(type) && l.content_id == content_id && l.qty == qty)
 				return true;
 		}
 		return false;
 	}
 
 	public long countLogsOfType(String type) {
-		Collection<ArisLog> alllogs = logs.values();
+		Collection<ArisLog> allLogs = logs.values();
 		long qty = 0;
-		for (ArisLog l : alllogs) {
-			if (type != null && !l.event_type.contentEquals(type)) {
+		for (ArisLog l : allLogs) {
+			if (type != null && !l.event_type.contentEquals(type))
 				continue;
-			}
 			qty++;
 		}
 		return qty;
 	}
-//
 
 	public long countLogsOfType(String type, long withinDistance, double lat, double lng) {
-		Collection<ArisLog> alllogs = logs.values();
+		Collection<ArisLog> allLogs = logs.values();
 		long qty = 0;
 		Location targetLocation = new Location("0");
 		targetLocation.setLatitude(lat);
 		targetLocation.setLongitude(lng);
 
-		for (ArisLog l : alllogs) {
-			if (type != null && !l.event_type.contentEquals(type)) {
+		for (ArisLog l : allLogs) {
+			if (type != null && !l.event_type.contentEquals(type))
 				continue;
-			}
-			if (l.location.distanceTo(targetLocation) > withinDistance) {
+			if (l.location.distanceTo(targetLocation) > withinDistance)
 				continue;
-			}
 			qty++;
 		}
 		return qty;

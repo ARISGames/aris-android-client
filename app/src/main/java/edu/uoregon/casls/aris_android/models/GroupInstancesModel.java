@@ -72,7 +72,9 @@ public class GroupInstancesModel extends ARISModel {
 		for (Instance newInstance : newInstances) {
 			if (!newInstance.object_type.contentEquals("ITEM") || !newInstance.owner_type.contentEquals("GROUP"))
 				continue;
-
+			// added in 8/16 iOS update:
+			if (instances.get(newInstance.object_id) != null && (instances.get(newInstance.object_id).instance_id > newInstance.instance_id))
+				continue;  //"new Instance" has older ID than known... prefer newer
 			instances.put(newInstance.object_id, newInstance);
 		}
 		mGamePlayAct.mDispatch.model_group_instances_available(); //_ARIS_NOTIF_SEND_(@"MODEL_GROUP_INSTANCES_AVAILABLE",nil,nil);

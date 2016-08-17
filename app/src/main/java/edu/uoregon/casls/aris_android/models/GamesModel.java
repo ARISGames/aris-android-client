@@ -73,7 +73,8 @@ public class GamesModel {
 				if ( gameFile.isFile() && gameFile.getName().endsWith("_game.json") ) {
 					String jsonStoredGame = AppUtils.readFromFileStream(mGamePlayAct, gameFile); // read raw json from stored game file
 					Game g = gson.fromJson(jsonStoredGame, Game.class); // deserialize json into Game
-					d_games.add(g);
+					if(!g.network_level.equalsIgnoreCase("REMOTE")) // condition added with 8/16 iOS update
+						d_games.add(g);
 				}
 			}
 			// send directly to updateDownloadedGames() (Android)
@@ -88,6 +89,35 @@ public class GamesModel {
 //		else [self performSelector:@selector(notifDownloadedGames) withObject:nil afterDelay:1];
 
 		return downloadedGames;
+	}
+
+
+	public void requestPlayerPlayedGame(long game_id) {
+		Game g = this.gameForId(game_id);
+		//when offline mode implemented, just check log here
+		// todo: offline for android:
+/*
+		if (
+		[_DELEGATE_.reachability currentReachabilityStatus] == NotReachable && //offline
+			g.downloadedVersion //downloaded
+		)
+		{
+			NSError *error;
+			NSString *folder = [[_MODEL_ applicationDocumentsDirectory] stringByAppendingPathComponent:[NSString stringWithFormat:@"%ld",game_id]];
+			NSString *file = [folder stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_player.json",@"logs"]];
+			NSString *contents = [NSString stringWithContentsOfFile:file encoding:NSUTF8StringEncoding error:&error];
+			if(!contents || [contents isEqualToString:@""] || [contents isEqualToString:@"{\"logs\":[]}"])
+			{
+				_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_PLAYED_GAME_AVAILABLE",nil,(@{@"game_id":[NSNumber numberWithLong:game_id],@"has_played":[NSNumber numberWithBool:FALSE]}));
+			}
+			else
+			{
+				_ARIS_NOTIF_SEND_(@"MODEL_PLAYER_PLAYED_GAME_AVAILABLE",nil,(@{@"game_id":[NSNumber numberWithLong:game_id],@"has_played":[NSNumber numberWithBool:TRUE]}));
+			}
+		}
+		else
+		[_SERVICES_ fetchPlayerPlayedGame:game_id];
+*/
 	}
 
 	public void notifDownloadedGames() {

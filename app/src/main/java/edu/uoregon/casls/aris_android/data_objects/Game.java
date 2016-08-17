@@ -66,6 +66,7 @@ public class Game {
 	public int listen_game_piece_available        = 1;
 	public int listen_maintenance_piece_available = 1;
 	public int listen_media_piece_available       = 1;
+	public int listen_model_game_began       = 1;
 
 	private static final String HTTP_GET_FULL_GAME_REQ_API = "v2.games.getFullGame/";
 	public long game_id;
@@ -494,6 +495,11 @@ public class Game {
 		}
 	}
 
+	public void requestPlayerDataUnlessBusy() { // new in iOS 8/16; stubbed in for Android; might be useful to mitigated net traffic jams.
+		// todo: look at a way to see if server calls are backing up or app is really busy; use for condition below.
+		if (true) //(![[[RootViewController sharedRootViewController] gamePlayViewController] viewingObject])
+		    this.requestPlayerData();
+	}
 
 	public void requestPlayerData() {
 		n_player_data_received = 0;
@@ -564,6 +570,7 @@ public class Game {
 		listen_player_piece_available = 0;        // _ARIS_NOTIF_IGNORE_(@"PLAYER_PIECE_AVAILABLE", self, null);
 		listen_maintenance_piece_available = 0;    // _ARIS_NOTIF_IGNORE_(@"MAINTENANCE_PIECE_AVAILABLE", self, nil);
 		listen_media_piece_available = 0;        // _ARIS_NOTIF_IGNORE_(@"MEDIA_PIECE_AVAILABLE", self, nil);
+		listen_model_game_began = 0;
 //		poller = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(requestPlayerData) userInfo:null repeats:true];
 		this.startServerPoller();
 	}
@@ -643,7 +650,7 @@ public class Game {
 		switch (data.getInt(AppConfig.COMMAND, 0)) {
 			case AppConfig.POLLTIMER_CYCLE_PASS:
 //				int progress = data.getInt(AppConfig.DATA, 0); // not used.
-				this.requestPlayerData();
+				this.requestPlayerDataUnlessBusy();
 				break;
 			case AppConfig.POLLTIMER_RESULT: // sent when finished cycling stub. not used.
 //				String res = data.getString(AppConfig.DATA);

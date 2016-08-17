@@ -28,6 +28,7 @@ public class Media {
 	public long   media_id;
 	public long   game_id;
 	public long   user_id; //??
+	public long   autoplay = 0;
 	public String name; // omitted in iOS, but a valid field in server return data from getMediaForGame (fetchMedias)
 	public String file_name; // omitted in iOS, but a valid field in server return data as stated above
 
@@ -93,6 +94,10 @@ public class Media {
 
 	public void setMediaId(long mid) {
 		mediaCD.media_id = (int) mid;
+	}
+
+	public boolean autoplay() {
+		return mediaCD.autoplay != 0;
 	}
 
 	public URL localURL() {
