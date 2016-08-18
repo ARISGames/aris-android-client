@@ -370,8 +370,8 @@ public class GamesListActivity extends AppCompatActivity {
 		if (user.location == null ) {
 			new AlertDialog.Builder(this)
 					.setIcon(android.R.drawable.ic_dialog_alert)
-					.setTitle("No Mode Selected")
-					.setMessage("Please select a Mode from the list before proceeding.")
+					.setTitle("No GPS Location Available")
+					.setMessage("Please make sure your device is GPS enabled before proceeding.")
 					.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
@@ -387,7 +387,6 @@ public class GamesListActivity extends AppCompatActivity {
 		JSONObject jsonMain = new JSONObject();
 		JSONObject jsonAuth = new JSONObject();
 		try {
-
 			jsonMain.put("user_id", user.user_id);
 			jsonMain.put("page", 0); // todo: determine proper value for page. 0 is just a stand-in value.
 

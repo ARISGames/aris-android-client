@@ -5,9 +5,22 @@
              tools:context=".object_controllers.WebPageViewFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"/>
+
+    <WebView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/wv_page_viewer"
+        android:layout_gravity="center"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ib_back_button"
+        android:layout_gravity="left|top"
+        android:src="@drawable/arrow_back_small"
+        android:layout_margin="10dp"
+        android:background="#ffffff"
+        android:padding="2dp"
+        android:alpha=".50"/>
 
 </FrameLayout>

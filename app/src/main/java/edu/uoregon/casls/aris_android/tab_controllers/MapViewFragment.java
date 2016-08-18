@@ -253,7 +253,7 @@ public class MapViewFragment extends Fragment {
 						googleMap.setMyLocationEnabled(true);
 
 
-						CameraPosition cameraPosition = new CameraPosition.Builder().target(marker_latlng).zoom(17.0f).build();
+						CameraPosition cameraPosition = new CameraPosition.Builder().target(player_latlng).zoom(17.0f).build();
 						CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
 						googleMap.moveCamera(cameraUpdate);
 
@@ -482,17 +482,21 @@ public class MapViewFragment extends Fragment {
 		mMap.animateCamera(cameraUpdate);
 	}
 
+	public void centerMapOnLoc(Location loc) {
+		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(new LatLng(loc.getLatitude(), loc.getLongitude()));
+		mMap.animateCamera(cameraUpdate);
+	}
+
 	public void centerMapOnLoc(Location loc, double map_zoom_level) {
 		CameraPosition cameraPosition = new CameraPosition.Builder()
 				.target(new LatLng(loc.getLatitude(), loc.getLongitude()))
-				.zoom((float)map_zoom_level == 0.0 ? 17.0f : (float)map_zoom_level) // if zoom level is 0 set arbitrarily to a sensible value
+				.zoom((float)map_zoom_level == 0.0 ? 17.0f : (float)map_zoom_level) // if zoom level is 0 set arbitrarily to a sensible value of roughly 1/4 mile diagonally
 				.build();
 		CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
 //		mMap.moveCamera(cameraUpdate);
 		mMap.animateCamera(cameraUpdate);
 	}
 
-	// MKMapView zoom levels. http://troybrant.net/blog/2010/01/mkmapview-and-zoom-levels-a-visual-guide/
 	private void zoomToFitAnnotations(boolean b) {
 		LatLngBounds.Builder builder = new LatLngBounds.Builder();
 		for (Trigger mapTrigger : markersAndCircles) {
@@ -531,11 +535,12 @@ public class MapViewFragment extends Fragment {
 								Media m = mGamePlayAct.mMediaModel.mediaForId(modelInstance.icon_media_id());
 								alertImage = new BitmapDrawable(getResources(), m.data);
 							}
-							new AlertDialog.Builder(mGamePlayAct)
+							String triggerType = trigger.name;
+							new AlertDialog.Builder(mGamePlayAct) // todo: put this in displayHUDWithTrigger()?
 									.setIcon(alertImage)
 //									.setIcon(ContextCompat.getDrawable(mGamePlayAct, R.drawable.plaque_icon_120))
 //									.setIcon(mGamePlayAct.getResources().getDrawable(R.drawable.plaque_icon_120))
-									.setTitle("View Plaque?")
+									.setTitle("View?")
 //									.setMessage("Are you sure you want to quit Aris?")
 									.setPositiveButton("View", new DialogInterface.OnClickListener() {
 										@Override

@@ -26,8 +26,8 @@ import edu.uoregon.casls.aris_android.models.InstancesModel;
 
 public class PlaqueViewFragment extends Fragment {
 
-	public Plaque plaque;
-	public Instance instance;
+	public Plaque mPlaque;
+	public Instance mInstance;
 	public InstancesModel instancesModel;
 	public Tab tab;
 	public ARISMediaViewFragment mediaViewFrag;
@@ -56,8 +56,8 @@ public class PlaqueViewFragment extends Fragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		mGamePlayActivity = (GamePlayActivity) getActivity(); //??
 		super.onCreate(savedInstanceState);
+		mGamePlayActivity = (GamePlayActivity) getActivity();
 		if (getArguments() != null) {
 			mParam1 = getArguments().getString(ARG_PARAM1);
 			mParam2 = getArguments().getString(ARG_PARAM2);
@@ -70,7 +70,7 @@ public class PlaqueViewFragment extends Fragment {
 
 		// Inflate the layout for this fragment
 		mPlaqueView = inflater.inflate(R.layout.fragment_plaque_view, container, false);
-		FragmentTransaction ft = mGamePlayActivity.getSupportFragmentManager().beginTransaction();
+//		FragmentTransaction ft = mGamePlayActivity.getSupportFragmentManager().beginTransaction();
 		// Init fragment
 		mediaViewFrag = new ARISMediaViewFragment();
 		mediaViewFrag.initContext(mGamePlayActivity);
@@ -93,20 +93,20 @@ public class PlaqueViewFragment extends Fragment {
 	public void initWithInstance(Instance i) {
 //		delegate = d; // Android app eschews the delegates (for now, anyway)
 		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment.initWithInstance called; " );
-		instance = i;
-		plaque = mGamePlayActivity.mGame.plaquesModel.plaqueForId(instance.object_id);
-		if (plaque.event_package_id > 0)
-			mGamePlayActivity.mGame.eventsModel.runEventPackageId(plaque.event_package_id);
+		mInstance = i;
+		mPlaque = mGamePlayActivity.mGame.plaquesModel.plaqueForId(mInstance.object_id);
+		if (mPlaque.event_package_id > 0)
+			mGamePlayActivity.mGame.eventsModel.runEventPackageId(mPlaque.event_package_id);
 //		this.title = this.tabTitle; // iOS IU stuff.
 	}
 
 	public void initWithTab(Tab t) {
 //		delegate = d;
 		tab = t;
-		instance = mGamePlayActivity.mGame.instancesModel.instanceForId(0); //get null inst
-		instance.object_type = tab.type;
-		instance.object_id = tab.content_id;
-		plaque = mGamePlayActivity.mGame.plaquesModel.plaqueForId(instance.object_id);
+		mInstance = mGamePlayActivity.mGame.instancesModel.instanceForId(0); //get null inst
+		mInstance.object_type = tab.type;
+		mInstance.object_id = tab.content_id;
+		mPlaque = mGamePlayActivity.mGame.plaquesModel.plaqueForId(mInstance.object_id);
 //		self.title = plaque.name; // iOS
 	}
 
@@ -126,8 +126,8 @@ public class PlaqueViewFragment extends Fragment {
 
 		// Show Continue text and forward button if continue_function != NONE
 		// In Android: Hide these features if continue_function == NONE
-		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment.loadView; looking at continue_function: " + plaque.continue_function);
-		if (plaque.continue_function.contentEquals("NONE")) { //fixme: NPE here: Attempt to read from field 'java.lang.String edu.uoregon.casls.aris_android.data_objects.Plaque.continue_function' on a null object reference
+		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment.loadView; looking at continue_function: " + mPlaque.continue_function);
+		if (mPlaque.continue_function.contentEquals("NONE")) { //fixme: NPE here: Attempt to read from field 'java.lang.String edu.uoregon.casls.aris_android.data_objects.Plaque.continue_function' on a null object reference
 			RelativeLayout continueFooter = (RelativeLayout) mPlaqueView.findViewById(R.id.rl_plaque_footer);
 			continueFooter.setVisibility(View.INVISIBLE);
 		}
@@ -150,11 +150,11 @@ public class PlaqueViewFragment extends Fragment {
 	{
 		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment.loadPlaque; ");
 
-		if (!plaque.name.isEmpty()) { // set plaqueue title
+		if (!mPlaque.name.isEmpty()) { // set plaqueue title
 			TextView tvPlaqueueTitle = (TextView) mPlaqueView.findViewById(R.id.tv_plaque_title);
-			tvPlaqueueTitle.setText(plaque.name);
+			tvPlaqueueTitle.setText(mPlaque.name);
 		}
-		if (!plaque.description.contentEquals("")) { // load the description webview
+		if (!mPlaque.description.contentEquals("")) { // load the description webview
 			Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment.load the description webview; ");
 //			[scrollView addSubview:webView];
 //			webView.frame = CGRectMake(0, 0, self.view.bounds.size.width, 10);//Needs correct width to calc height
@@ -164,13 +164,13 @@ public class PlaqueViewFragment extends Fragment {
 			wvDialogOptionPrompt.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
 			wvDialogOptionPrompt.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
 //		    	wvDialogOptionPrompt.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-			String dialogOptionHtml = "<html><body>" + plaque.description + "</body></html>";
+			String dialogOptionHtml = "<html><body>" + mPlaque.description + "</body></html>";
 			wvDialogOptionPrompt.loadData(dialogOptionHtml, "text/html", null);
 		}
 
 		// load associated media into media fragment todo: may just want to put fragment into includable view with ordinary class?
 		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment. looking for Plaque media; ");
-		Media media = mGamePlayActivity.mMediaModel.mediaForId(plaque.media_id);
+		Media media = mGamePlayActivity.mMediaModel.mediaForId(mPlaque.media_id);
 		if (media != null) {
 			Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment. setting webview with Plaque media; ");
 			mediaViewFrag.setMedia(media);
@@ -179,11 +179,11 @@ public class PlaqueViewFragment extends Fragment {
 	}
 
 	public void continueButtonTouched(View v) {
-		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " continueButtonTouched. plaque.continue_function = " + plaque.continue_function);
+		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " continueButtonTouched. mPlaque.continue_function = " + mPlaque.continue_function);
 
-		if (plaque.continue_function.contentEquals("JAVASCRIPT")) {
+		if (mPlaque.continue_function.contentEquals("JAVASCRIPT")) {
 			// todo: [webView hookWithParams:@""];
-		} else if (plaque.continue_function.contentEquals("EXIT")) {
+		} else if (mPlaque.continue_function.contentEquals("EXIT")) {
 			this.dismissSelf();
 		}
 	}

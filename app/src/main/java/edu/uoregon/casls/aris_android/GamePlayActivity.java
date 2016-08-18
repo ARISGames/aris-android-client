@@ -69,6 +69,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		MapViewFragment.OnFragmentInteractionListener,
 		PlaqueViewFragment.OnFragmentInteractionListener,
 		DialogViewFragment.OnFragmentInteractionListener,
+		WebPageViewFragment.OnFragmentInteractionListener,
 		ARISMediaViewFragment.OnFragmentInteractionListener {
 
 
@@ -781,15 +782,19 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mGame.logsModel.playerViewedContent(ivc.object_type, ivc.object_id);
 		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " instantiableViewControllerRequestsDismissal() called. about to call tryDequeue ");
 		// [self performSelector:@selector(tryDequeue) withObject:nil afterDelay:1];
-		this.performSelector.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				tryDequeue();
-			}
-		}, 1000); //:@selector(tryDequeue) withObject:nil afterDelay:1);
+		tryDequeue();
 
+//		this.performSelector.postDelayed(new Runnable() {
+//			@Override
+//			public void run() {
+//				tryDequeue();
+//			}
+//		}, 1000); //:@selector(tryDequeue) withObject:nil afterDelay:1);
+//		if (!this.doDequeue && instantiableViewController.viewControllers[0] == ivc) {
+//			[self displayContentController:gamePlayRevealController];
+//			instantiableViewController = nil;
 
-	}
+		}
 
 	@Override
 	public void fragmentPlaqueDismiss() {
@@ -798,7 +803,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		// todo: make plaque fragment disband (stop) somewhere in here, but not before we're done referring to it.
 		// todo perhaps just hide it at this point and let it get replaced when the next view is enqueued. ?
 		// this happens in [*]ViewController.dismissSelf() in iOS; in Android we stuff them all in this method.
-		this.instantiableViewControllerRequestsDismissal(plaqueViewFragment.instance);
+		this.instantiableViewControllerRequestsDismissal(plaqueViewFragment.mInstance);
 		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " fragmentPlaqueDismiss(). looking at plaqueViewFragment.tab: ");
 		// now tell this fragment to die
 		if (plaqueViewFragment != null) {
@@ -808,6 +813,16 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 //				this.showNavBar();
 //			}
 			this.hideNavBar(); // fixme: test to see if I can get the nav bar to not show on maps, etc.
+		}
+	}
+
+	@Override
+	public void fragmentWebPageViewDismiss() {
+		this.instantiableViewControllerRequestsDismissal(webPageViewFragment.instance);
+
+		if (webPageViewFragment != null) {
+			FragmentManager fm = getSupportFragmentManager();
+			fm.popBackStackImmediate(); // immediate?
 		}
 	}
 
@@ -846,7 +861,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	*
 	*/
 
-	public void tryDequeue() {
+	public void tryDequeue() { // combines tryDequeue and doDequeue from iOS
 		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Try Dequeue: viewingInstantiableObject = " + viewingInstantiableObject);
 		//Doesn't currently have the view-heirarchy authority to display.
 		//if(!(self.isViewLoaded && self.view.window)) //should work but apple's timing is terrible
@@ -855,9 +870,12 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		o = mGame.displayQueueModel.dequeue();
 		if (o != null) {
 			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " in tryDeQueue(): object is class " + o.getClass().getSimpleName());
-			if (o instanceof Trigger) this.displayTrigger((Trigger) o);
-			else if (o instanceof Instance) this.displayInstance((Instance) o);
-			else if (o instanceof Tab) this.displayTab((Tab) o);
+			if (o instanceof Trigger)
+				this.displayTrigger((Trigger) o);
+			else if (o instanceof Instance)
+				this.displayInstance((Instance) o);
+			else if (o instanceof Tab)
+				this.displayTab((Tab) o);
 			else if (InstantiableProtocol.class.isInstance(o))
 				this.displayObject(o);
 		}
