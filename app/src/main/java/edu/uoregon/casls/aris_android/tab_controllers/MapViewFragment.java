@@ -313,10 +313,14 @@ public class MapViewFragment extends Fragment {
 	public List<Trigger> markersAndCircles = new ArrayList<>();
 
 	public void refreshViewFromModel() {
+
 		if (mMap == null) return; // There will be calls arriving before the map is available; ignore them.
 
 		boolean shouldRemove;
 		boolean shouldAdd;
+		// reset old markersAndCircles; start fresh each time.
+		markersAndCircles.clear();
+
 		TriggersModel triggersModel = mGamePlayAct.mGame.triggersModel;
 
 		List<Trigger> markersAndCirclesToRemove = new LinkedList<>();
@@ -376,9 +380,9 @@ public class MapViewFragment extends Fragment {
 			//todo: in Android the map is redrawn fresh each time, so decide if we need the loop below that excludes
 			//todo: markers that have previously been added. Perhaps we can maintain a list of those that are visible
 			//todo: instead of checking those that are just in a data list.
-//			for (Trigger mapTrigger : markersAndCircles) { // look through any/all locations already in list
-//				if (mapTrigger.trigger_id == modelTrigger.trigger_id) shouldAdd = false; // revoke their shouldAdd pass if they're already in the list.
-//			}
+			for (Trigger mapTrigger : markersAndCircles) { // look through any/all locations already in list
+				if (mapTrigger.trigger_id == modelTrigger.trigger_id) shouldAdd = false; // revoke their shouldAdd pass if they're already in the list.
+			}
 			if (shouldAdd) { // having vetted this location as one to be added...
 				// get any custom icon media if there was a valid media id provided; otherwise use default icon.
 				Media m = mGamePlayAct.mMediaModel.mediaForId((modelTrigger.icon_media_id == 0) ? Media.DEFAULT_PLAQUE_ICON_MEDIA_ID : modelTrigger.icon_media_id);
@@ -421,6 +425,9 @@ public class MapViewFragment extends Fragment {
 				markersAndCircles.add(modelTrigger);
 			}
 		}
+
+		// In iOS, a clicked marker will result in a call to displayHUDWithTrigger via an internal MKMapView call;
+		// in Android we explicitly set up the onClickListener for the map markers all at once.
 		if (!markersAndCircles.isEmpty()) setOnclickListenerForMarkers();
 
 		//
@@ -511,6 +518,9 @@ public class MapViewFragment extends Fragment {
 	}
 
 	private void setOnclickListenerForMarkers() {
+		// In iOS, a clicked marker will result in a call to displayHUDWithTrigger via an internal MKMapView call;
+		// in Android we explicitly set up the onClickListener for the map markers all at once.
+		// todo: possibly move the logic for determining which Instance to reference based on the marker clicked, to a separate method? Any advantages?
 		mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 			@Override
 			public boolean onMarkerClick(Marker marker) {
@@ -521,13 +531,13 @@ public class MapViewFragment extends Fragment {
 					if (modelInstance.name().equals(marker.getTitle())) {
 						// get distance from player.
 						trigger.setLocationFromExistingLatLng();
+						// below is found in displayHUDWithTrigger in iOS
 						float distance = trigger.location.distanceTo(mGamePlayAct.mPlayer.location);
 						if (mGamePlayAct.mGame.map_offsite_mode != 0
 							|| trigger.infinite_distance != 0
 							|| (distance <= trigger.distance && mGamePlayAct.mPlayer.location != null))
 						{
-							// temporarily just show a popup dialog instead of fancy on screen icon
-							// todo: show custom icon or default
+							// todo: custom icon not getting displayed
 							Drawable alertImage;
 							if (modelInstance.icon_media_id() == 0)
 								alertImage = ContextCompat.getDrawable(mGamePlayAct, R.drawable.plaque_icon_120);
@@ -536,7 +546,7 @@ public class MapViewFragment extends Fragment {
 								alertImage = new BitmapDrawable(getResources(), m.data);
 							}
 							String triggerType = trigger.name;
-							new AlertDialog.Builder(mGamePlayAct) // todo: put this in displayHUDWithTrigger()?
+							new AlertDialog.Builder(mGamePlayAct)
 									.setIcon(alertImage)
 //									.setIcon(ContextCompat.getDrawable(mGamePlayAct, R.drawable.plaque_icon_120))
 //									.setIcon(mGamePlayAct.getResources().getDrawable(R.drawable.plaque_icon_120))
@@ -552,7 +562,7 @@ public class MapViewFragment extends Fragment {
 												fm.beginTransaction().remove(innerMapFragment).commit();
 											}
 
-											// enqueueTrigger
+											// enqueueTrigger (found in interactWithLocation in iOS)
 											if (trigger != null) mGamePlayAct.mGame.displayQueueModel.enqueueTrigger(trigger);
 										}
 									})
