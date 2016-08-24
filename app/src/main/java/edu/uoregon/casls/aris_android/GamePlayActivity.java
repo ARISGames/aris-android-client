@@ -782,14 +782,16 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mGame.logsModel.playerViewedContent(ivc.object_type, ivc.object_id);
 		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " instantiableViewControllerRequestsDismissal() called. about to call tryDequeue ");
 		// [self performSelector:@selector(tryDequeue) withObject:nil afterDelay:1];
-		tryDequeue();
 
-//		this.performSelector.postDelayed(new Runnable() {
-//			@Override
-//			public void run() {
-//				tryDequeue();
-//			}
-//		}, 1000); //:@selector(tryDequeue) withObject:nil afterDelay:1);
+//		tryDequeue(); // jumping straight to tryDequeue will result in previous item in queue to not get dequeued.
+
+		this.performSelector.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				tryDequeue();
+			}
+		}, 1000); //:@selector(tryDequeue) withObject:nil afterDelay:1);
+
 //		if (!this.doDequeue && instantiableViewController.viewControllers[0] == ivc) {
 //			[self displayContentController:gamePlayRevealController];
 //			instantiableViewController = nil;
@@ -865,7 +867,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Try Dequeue: viewingInstantiableObject = " + viewingInstantiableObject);
 		//Doesn't currently have the view-heirarchy authority to display.
 		//if(!(self.isViewLoaded && self.view.window)) //should work but apple's timing is terrible
-		if (viewingInstantiableObject) return;
+		if (viewingInstantiableObject)
+			return;
 		Object o;
 		o = mGame.displayQueueModel.dequeue();
 		if (o != null) {
