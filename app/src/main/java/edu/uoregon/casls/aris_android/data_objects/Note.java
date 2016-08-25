@@ -22,7 +22,7 @@ public class Note implements InstantiableProtocol {
 
 	private String created = new SimpleDateFormat(AppConfig.GAME_DATE_FORMAT).format(new Date()); // use set/get
 
-	public long icon_media_id; // irrelevant?
+	public long icon_media_id = 0; // irrelevant?
 
 	public Note() {
 		setCreated(new Date());
@@ -41,4 +41,14 @@ public class Note implements InstantiableProtocol {
 		return null; // satisfy default return obligation.
 	}
 
+	public long icon_media_id(Game game) {
+		if (game.tagsModel.tagsForObjectType("NOTE", note_id).size() > 0) { //[_MODEL_TAGS_ tagsForObjectType:@"NOTE" id:note_id].count)
+			Tag tag = game.tagsModel.tagsForObjectType("NOTE", note_id).get(0);
+			if (tag.media_id != 0) {
+				return tag.media_id;
+			}
+		}
+
+		return Media.DEFAULT_NOTE_ICON_MEDIA_ID;
+	}
 }

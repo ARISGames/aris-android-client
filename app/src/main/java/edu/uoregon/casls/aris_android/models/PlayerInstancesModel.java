@@ -201,7 +201,7 @@ public class PlayerInstancesModel extends ARISModel {
 	}
 
 	public Map<Long, Instance> inventory() {
-		if(inventory != null) return inventory;
+		if(inventory != null && inventory.size() > 0) return inventory;
 
 		inventory = new LinkedHashMap<Long, Instance>();
 		Collection<Instance> instancearray = playerInstances.values();

@@ -108,7 +108,7 @@ public class DisplayQueueModel extends ARISModel {
 
 	public void enqueue(Object i) {
 		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Enqueue the following: " + i.getClass().getName());
-		if (!this.displayInQueue(i)) {
+		if (!this.displayInQueue(i)) { // if this (Instance) is not already in displayQueue, add it.
 			if (displayQueue == null) displayQueue = new ArrayList<>();
 			displayQueue.add(i); // addObject(i);
 		}
@@ -117,21 +117,24 @@ public class DisplayQueueModel extends ARISModel {
 
 	public void enqueueTrigger(Trigger t) {
 		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " enqueueTrigger() ");
-		this.enqueue(t); }
+		this.enqueue(t);
+	}
 
 	/* injectTrigger is never called */
 	public void injectTrigger(Trigger t) { this.inject(t); }
 
 	public void enqueueInstance(Instance i) {
 		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " enqueueInstance() ");
-		this.enqueue(i); }
+		this.enqueue(i);
+	}
 
 	/* injectInstance is never called */
 	public void injectInstance(Instance i) { this.inject(i); }
 
 	public void enqueueObject(InstantiableProtocol o) {
 		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " enqueueObject() ");
-		this.enqueue(o); }
+		this.enqueue(o);
+	}
 
 	public void injectObject(InstantiableProtocol o) { this.inject(o); }
 
@@ -156,7 +159,8 @@ public class DisplayQueueModel extends ARISModel {
 	public boolean displayInQueue(Object d) {
 		if (displayQueue != null)
 			for (Object o : displayQueue)
-				if (d == o) return true; // == tests to see that d and t are references to the SAME object
+				if (d == o)
+					return true; // == tests to see that d and t are references to the SAME object
 		return false;
 	}
 

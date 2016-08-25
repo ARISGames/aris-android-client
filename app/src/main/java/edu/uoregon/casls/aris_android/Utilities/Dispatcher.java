@@ -336,7 +336,7 @@ public class Dispatcher {
 //	MODEL_PLAYER_SCRIPT_OPTIONS_AVAILABLE",nil,uInfo); // handled as internal method redirect in DialogsModel - sem
 //	MODEL_PLAYER_TRIGGERS_AVAILABLE",nil,nil);
 	public void model_player_triggers_available() {
-		// todo: MapViewController.refreshViewFromModel()
+
 		if (mGamePlayAct.mapViewFragment != null && mGamePlayAct.mapViewFragment.isVisible())
 			mGamePlayAct.mapViewFragment.refreshViewFromModel();
 		// todo: NotebookNotesViewController.newNoteListAvailable()

@@ -6,6 +6,8 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import edu.uoregon.casls.aris_android.GamePlayActivity;
+
 /**
  * Created by smorison on 8/19/15.
  */
@@ -80,6 +82,14 @@ public class Trigger {
 		triggerZoneCircle = t.triggerZoneCircle == null ? null : t.triggerZoneCircle;
 		if (time_left > seconds) time_left = seconds;
 		return e;
+	}
+
+	//returns icon_media of instance if self's isn't set
+	// needs reference to current game to look up instance.
+	public long icon_media_id(Game game)
+	{
+		if (icon_media_id != 0) return icon_media_id;
+		return game.instancesModel.instanceForId(instance_id).icon_media_id(); //[_MODEL_INSTANCES_ instanceForId:instance_id].icon_media_id;
 	}
 
 	private Boolean trigIsEqual(Trigger t) {

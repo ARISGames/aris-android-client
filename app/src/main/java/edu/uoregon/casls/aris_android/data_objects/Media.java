@@ -21,6 +21,7 @@ public class Media {
 	public static final int DEFAULT_WEB_PAGE_ICON_MEDIA_ID = -4;
 	public static final int LOGO_ICON_MEDIA_ID             = -5;
 	public static final int DEFAULT_NOTE_ICON_MEDIA_ID     = -6;
+	public static final int STAR_BLUE_ICON_MEDIA_ID         = -7;
 
 	public MediaCD mediaCD;
 

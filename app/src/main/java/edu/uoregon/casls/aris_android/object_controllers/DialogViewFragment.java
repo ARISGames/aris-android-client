@@ -121,7 +121,8 @@ public class DialogViewFragment extends Fragment {
 				// retrieve stored pic
 				Media youChar = mGamePlayAct.mMediaModel.mediaForId(playerMediaId);
 				if (youChar != null && youChar.mediaCD != null && youChar.mediaCD.localURL != null) { // todo: Android doesn't do the player pic thing yet. Logic will default to generic icon.
-					// set dialog character image
+//todo: modularize this webview setup since it's duplicated multiple times.
+								// set dialog character image
 					wvCharImage.getSettings().setJavaScriptEnabled(true);
 					wvCharImage.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
 					wvCharImage.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.

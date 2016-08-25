@@ -1,9 +1,12 @@
 package edu.uoregon.casls.aris_android.data_objects;
 
+import android.content.Context;
 import android.location.Location;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 
 /**
  * Created by smorison on 7/29/15.
@@ -39,6 +42,12 @@ public class User {
 	// Construct with json object encoded user data.
 	public User(JSONObject jsonNewUser) throws JSONException {
 		initWithJson(jsonNewUser);
+	}
+
+	public void updateToCurrentLocation(Context context) {
+		location = AppUtils.getGeoLocation(context);
+		latitude = location.getLatitude();
+		longitude = location.getLongitude();
 	}
 
 	public void initWithJson(JSONObject jsonUser) throws JSONException {

@@ -16,4 +16,9 @@ public class Item implements InstantiableProtocol {
 	public String url                  = "";
 	public String type                 = "NORMAL"; //NORMAL, ATRIB, HIDDEN, URL
 	public long   delta_notification   = 1; // boolean as long
+
+	public long icon_media_id() {
+		if (icon_media_id == 0) return Media.DEFAULT_ITEM_ICON_MEDIA_ID;
+		return icon_media_id;
+	}
 }

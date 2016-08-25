@@ -35,6 +35,4 @@ public class WebPage implements InstantiableProtocol {
 		if (icon_media_id == 0) return Media.DEFAULT_WEB_PAGE_ICON_MEDIA_ID;
 		return icon_media_id;
 	}
-
-
 }

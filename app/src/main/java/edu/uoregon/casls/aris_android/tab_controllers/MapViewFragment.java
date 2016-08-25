@@ -20,6 +20,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
+import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
 import edu.uoregon.casls.aris_android.data_objects.Media;
@@ -77,7 +79,7 @@ public class MapViewFragment extends Fragment {
 	private String mParam2;
 
 	private OnFragmentInteractionListener mListener;
-	private GamePlayActivity mGamePlayAct   ;
+	private GamePlayActivity mGamePlayAct;
 
 	private SupportMapFragment mSupportMapFragment;
 	double latitude = 44.047822;
@@ -88,6 +90,7 @@ public class MapViewFragment extends Fragment {
 	LatLng marker_latlng2 = new LatLng(latitude + 0.0008, longitude - 0.0002);
 
 	public GoogleMap mMap;
+	public List<Trigger> markersAndCircles = new ArrayList<>();
 	private boolean firstLoad = true;
 
 	/**
@@ -166,18 +169,33 @@ public class MapViewFragment extends Fragment {
 		}
 
 	}
+
+	private static View v;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) { // similar to viewDidAppear in iOS(?)
-		// Inflate the layout for this fragment
+		// check for preexisting view; remove it if one is found. Otherwise get Duplicate Fragment error.
+		if (v != null) {
+			ViewGroup parent = (ViewGroup) v.getParent();
+			if (parent != null)
+				parent.removeView(v);
+		}
 
-		View v = inflater.inflate(R.layout.fragment_map_view, container, false);
+		try {
+			// Inflate the layout for this fragment
+			v = inflater.inflate(R.layout.fragment_map_view, container, false);
+		}
+		catch(InflateException ie) {
+			// do nothing; just go on.
+		}
+
 		mGamePlayAct.hideNavBar();
 		//get current location of player
 		Location l = AppUtils.getGeoLocation(mGamePlayAct);
 		player_latlng = new LatLng(l.getLatitude(), l.getLongitude());
 
-		setUpMap(); // moved to onResume
+		setUpMap();
 //		if (mMap != null) {
 //			refreshViewFromModel();
 //			refreshModels();
@@ -186,6 +204,18 @@ public class MapViewFragment extends Fragment {
 		return v;
 	}
 
+	/*    if (view != null) {
+        ViewGroup parent = (ViewGroup) view.getParent();
+        if (parent != null)
+            parent.removeView(view);
+    }
+    try {
+        view = inflater.inflate(R.layout.map, container, false);
+    } catch (InflateException e) {
+//         map is already there, just return view as it is
+}
+return view;
+		*/
 	private void refreshModels() {
 		mGamePlayAct.mGame.triggersModel.requestPlayerTriggers();
 		mGamePlayAct.mGame.overlaysModel.requestPlayerOverlays();
@@ -194,27 +224,34 @@ public class MapViewFragment extends Fragment {
 	public void triggersInvalidated(List<Trigger> invalidated) { // not yet implimented
 
 //		NSMutableArray *invalidated = n.userInfo[@"invalidated_triggers"];
-//
+
 //		Trigger *invalidatedTrigger;
 //		Trigger *mapTrigger;
 //		MapViewAnnotationOverlay *mvao;
 //		for(long i = 0; i < invalidated.count; i++)
-//		for (Trigger invalidatedTrigger : invalidated)
-//		{
-////			mvao = nil; todo?
-////			invalidatedTrigger = invalidated[i];
-//			for(long j = 0; j < annotationOverlays.count; j++)
-//			{
+		for (Trigger invalidatedTrigger : invalidated) {
+//			mvao = nil; todo?
+//			invalidatedTrigger = invalidated[i];
+//			for(long j = 0; j < annotationOverlays.count; j++) // markersAndCircles is "annotationOverlays" in iOS
+//			List<Trigger> markersAndCirclesToRemove = new LinkedList<>();
+			Trigger markerToRemove = null;
+			for (Trigger mapTrigger : markersAndCircles) {
 //				mapTrigger = [self mvaoAt:j].annotation;
-//				if(mapTrigger.trigger_id == invalidatedTrigger.trigger_id) mvao = [self mvaoAt:j];
-//			}
-//			if(mvao)
-//			{
-//				[mapView removeAnnotation:mvao.annotation];
-//				[mapView removeOverlay:mvao.overlay];
-//				[annotationOverlays removeObject:mvao];
-//			}
-//		}
+				if (mapTrigger.trigger_id == invalidatedTrigger.trigger_id)
+					markerToRemove = mapTrigger; // mvao = [self mvaoAt:j];
+			}
+			if (markerToRemove != null) { //if(mvao)
+				if (mMap != null) {
+					if (markerToRemove.triggerMarker != null) {
+						Log.d(AppConfig.LOGTAG_D2, "111 Removing Marker ID:" + markerToRemove.triggerMarker.getId()+" TriggerID:"+markerToRemove.trigger_id);
+						markerToRemove.triggerMarker.remove();// [mapView removeAnnotation:mvao.annotation];
+					}
+					if (markerToRemove.triggerZoneCircle != null)
+						markerToRemove.triggerZoneCircle.remove(); // [mapView removeOverlay:mvao.overlay];
+					markersAndCircles.remove(markerToRemove); // [annotationOverlays removeObject:mvao];
+				}
+			}
+		}
 	}
 
 	public void clearLocalData () {
@@ -259,7 +296,7 @@ public class MapViewFragment extends Fragment {
 
 						mMap = googleMap; // globalize it (hopefully!)
 
-						// test putting marker on map:// manual trigger set for POC.
+//						// test putting marker on map:// manual trigger set for POC.
 //						Trigger trig = new Trigger(marker_latlng2);
 ////						final Marker marker1 = googleMap.addMarker(new MarkerOptions()
 //						trig.triggerMarker = googleMap.addMarker(new MarkerOptions()
@@ -291,7 +328,6 @@ public class MapViewFragment extends Fragment {
 //						});
 						refreshViewFromModel();
  						refreshModels();
-
 					}
 				}
 			});
@@ -310,7 +346,7 @@ public class MapViewFragment extends Fragment {
 	  so it's commented out.
 	 */
 
-	public List<Trigger> markersAndCircles = new ArrayList<>();
+	int testcount = 0;
 
 	public void refreshViewFromModel() {
 
@@ -318,8 +354,8 @@ public class MapViewFragment extends Fragment {
 
 		boolean shouldRemove;
 		boolean shouldAdd;
-		// reset old markersAndCircles; start fresh each time.
-		markersAndCircles.clear();
+		// reset old markersAndCircles; start fresh each time. ?
+//		markersAndCircles.clear();
 
 		TriggersModel triggersModel = mGamePlayAct.mGame.triggersModel;
 
@@ -333,30 +369,60 @@ public class MapViewFragment extends Fragment {
 		//
 
 		//Remove locations
-		for (Trigger mapTrigger : markersAndCircles) {
+		for (Trigger mapTrigger : markersAndCircles) { // markersAndCircles is "annotationOverlays" in iOS to match GoogleMap dialect.
 			shouldRemove = true;
+//			if (mapTrigger.triggerMarker == null)
+//				Log.d(AppConfig.LOGTAG_D2, "Check to Remove Marker ID:NULL TriggerID:" + mapTrigger.trigger_id);
+//			else
+//				Log.d(AppConfig.LOGTAG_D2, "Check to Remove Marker ID:" + mapTrigger.triggerMarker.getId()+" TriggerID:"+mapTrigger.trigger_id);
+//
+//			Instance i = mGamePlayAct.mGame.instancesModel.instanceForId(mapTrigger.instance_id);
+//			Log.d(AppConfig.LOGTAG_D2, "Inst inf_qty:" + i.infinite_qty +" Inst qty:" + i.qty + " Inst obj_type:" + i.object_type.toString());
 			for (Trigger modelTrigger : triggersModel.playerTriggers) {
+//				Log.d(AppConfig.LOGTAG_D2, "Trying to match:" + mapTrigger.trigger_id+"=?="+modelTrigger.trigger_id + (mapTrigger.trigger_id == modelTrigger.trigger_id ? " MATCH!" : ""));
 				//@formatter:off
 				if (mapTrigger.trigger_id == modelTrigger.trigger_id
-					&& (mGamePlayAct.mGame.instancesModel.instanceForId(mapTrigger.instance_id).infinite_qty != 0
+					&& (
+						   mGamePlayAct.mGame.instancesModel.instanceForId(mapTrigger.instance_id).infinite_qty != 0
 						|| mGamePlayAct.mGame.instancesModel.instanceForId(mapTrigger.instance_id).qty > 0
 						|| !mGamePlayAct.mGame.instancesModel.instanceForId(mapTrigger.instance_id).object_type.equals("ITEM")
-					)
-				) shouldRemove = false;
+					   )
+				) {
+					Log.d(AppConfig.LOGTAG_D2, "Adding to Should Remove TriggerID:"+mapTrigger.trigger_id);
+					shouldRemove = false;
+				}
 				//@formatter:on
 			}
 			if (shouldRemove) { // remove the trigger point and its circle from the map
 				// remove marker
-				if (mapTrigger.triggerMarker != null) mapTrigger.triggerMarker.remove();
+				if (mapTrigger.triggerMarker != null) {
+					Log.d(AppConfig.LOGTAG_D2, "222 Removing Marker ID:" + mapTrigger.triggerMarker.getId()+" TriggerID:"+mapTrigger.trigger_id);
+					mapTrigger.triggerMarker.remove();
+				}
+				else {
+					Log.d(AppConfig.LOGTAG_D2, "222 Removing Marker ID: WAS NULL. not removing TriggerID:"+mapTrigger.trigger_id);
+				}
 				// remove trigger zone Circle
-				if (mapTrigger.triggerZoneCircle != null) mapTrigger.triggerZoneCircle.remove();
+				if (mapTrigger.triggerZoneCircle != null)
+					mapTrigger.triggerZoneCircle.remove();
 				// add to list of triggers objects to remove from List. (Done afterward to avoid innerloop conflicts
 				markersAndCirclesToRemove.add(mapTrigger);
 			}
 		}
 		// remove any triggers designated for deletion;
-		for (Trigger toDie : markersAndCirclesToRemove) {
-			markersAndCircles.remove(toDie);
+		// this is done directly in the shouldRemove block in iOS. Done separately here to avoid deforming the loop base while looping.
+		for (Trigger markerToRemove : markersAndCirclesToRemove) {
+//			if (markerToRemove.triggerMarker != null) {
+//				Log.d(AppConfig.LOGTAG_D2, "333 Removing Marker ID:" + markerToRemove.triggerMarker.getId());
+//				markerToRemove.triggerMarker.remove();// [mapView removeAnnotation:mvao.annotation];
+//			}
+//			else {
+//				Log.d(AppConfig.LOGTAG_D1, "triggerMarker to remove was null for this trigger.");
+//			}
+//			if (markerToRemove.triggerZoneCircle != null)
+//				markerToRemove.triggerZoneCircle.remove(); // [mapView removeOverlay:mvao.overlay];
+			Log.d(AppConfig.LOGTAG_D2, "Removing from markersAndCircles TrID:" + markerToRemove.trigger_id);
+			markersAndCircles.remove(markerToRemove);
 		}
 		boolean showFirstMarkerTitle = true;
 		//Add locations
@@ -385,7 +451,12 @@ public class MapViewFragment extends Fragment {
 			}
 			if (shouldAdd) { // having vetted this location as one to be added...
 				// get any custom icon media if there was a valid media id provided; otherwise use default icon.
-				Media m = mGamePlayAct.mMediaModel.mediaForId((modelTrigger.icon_media_id == 0) ? Media.DEFAULT_PLAQUE_ICON_MEDIA_ID : modelTrigger.icon_media_id);
+				Media m;
+				if (modelTrigger.icon_media_id(mGamePlayAct.mGame) != 0 )
+					m = mGamePlayAct.mMediaModel.mediaForId(modelTrigger.icon_media_id(mGamePlayAct.mGame));
+				else
+					m = mGamePlayAct.mMediaModel.mediaForId(Media.STAR_BLUE_ICON_MEDIA_ID);
+				//== 0) ? Media.DEFAULT_PLAQUE_ICON_MEDIA_ID : modelTrigger.icon_media_id);
 				Bitmap markerIconBitmap; // reminder: a "marker" here in Android, is an "annotation" in iOS
 				// find the bitmap (media.data) in the swirling vortex of ARIS data.
 				// (this is more involved in Android than iOS)
@@ -398,7 +469,7 @@ public class MapViewFragment extends Fragment {
 						markerIconBitmap = m.data;
 				}
 				else
-					markerIconBitmap =  m.data; // image bitmap data looks valid so we'll use it for the icon
+					markerIconBitmap = m.data; // image bitmap data looks valid so we'll use it for the icon
 				markerIconBitmap = Bitmap.createScaledBitmap(markerIconBitmap, 50, 50, false); // scale it to map marker size
 				// set various marker properties
 				MarkerOptions markerOptions = new MarkerOptions()
@@ -410,6 +481,7 @@ public class MapViewFragment extends Fragment {
 
 				// todo for future consideration, add animated marker drop: http://stackoverflow.com/a/38008342
 				modelTrigger.triggerMarker = mMap.addMarker(markerOptions); // iOS: [mapView addAnnotation:mvao.annotation];
+				Log.d(AppConfig.LOGTAG_D2, "ADDING Marker ID:" + modelTrigger.triggerMarker.getId()+" TriggerID:"+modelTrigger.trigger_id);
 				if (showFirstMarkerTitle) { // just show the starting point.
 					modelTrigger.triggerMarker.showInfoWindow();
 					showFirstMarkerTitle = false;
@@ -423,6 +495,21 @@ public class MapViewFragment extends Fragment {
 						.strokeWidth(1)
 				);
 				markersAndCircles.add(modelTrigger);
+
+//				// ##### testing
+//				double testLng = marker_latlng2.longitude - (.0003 * testcount);
+//				LatLng testLatLng = new LatLng(marker_latlng2.latitude, testLng);
+//				Trigger trig = new Trigger(testLatLng);
+////						final Marker marker1 = googleMap.addMarker(new MarkerOptions()
+//				trig.triggerMarker = mMap.addMarker(new MarkerOptions()
+//						.icon(BitmapDescriptorFactory.fromResource(R.drawable.appicon_40x40)) // first icon I found. really wanted to use a map oriented one.
+//						.anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
+//						.position(testLatLng)
+//				);
+////						marker1.setTitle("Marker One");
+//				trig.triggerMarker.setTitle("Marker " + testcount++);
+//				// ##### end testing
+
 			}
 		}
 

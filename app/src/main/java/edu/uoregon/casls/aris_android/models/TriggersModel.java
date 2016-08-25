@@ -88,7 +88,7 @@ public class TriggersModel extends ARISModel {
 			}
 		}
 		if (!invalidatedTriggers.isEmpty()) {
-			mGamePlayAct.mDispatch.model_triggers_available(); //("MODEL_TRIGGERS_INVALIDATED", null, @{@"invalidated_triggers":invalidatedTriggers});
+			mGamePlayAct.mDispatch.model_triggers_invalidated(invalidatedTriggers); //("MODEL_TRIGGERS_INVALIDATED", null, @{@"invalidated_triggers":invalidatedTriggers});
 		}
 
 		n_game_data_received++;

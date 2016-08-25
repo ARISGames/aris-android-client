@@ -15,6 +15,7 @@ public class AppConfig {
 	public static final String SERVER_URL_MOBILE = SERVER_URL_BASE + "/server/json.php/";
 	public static final String LOGTAG            = "ARIS_ANDROID";
 	public static final String LOGTAG_D1         = "DEBUG_1";
+	public static final String LOGTAG_D2         = "DEBUG_2";
 
 	public static final Boolean DEBUG_ON        = true; //todo: Make sure to turn this off for release version
 	public static final Boolean FAKE_GOOD_LOGIN = false; //todo: Make sure to turn this off for release version

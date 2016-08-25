@@ -345,6 +345,19 @@ public class MediaModel extends ARISModel {
 			return media;
 		}
 
+		if (media_id == Media.STAR_BLUE_ICON_MEDIA_ID) {
+			MediaCD mediaCD = new MediaCD();
+			mediaCD.media_id = media_id;
+			mediaCD.game_id = 0;
+			mediaCD.user_id = 0;
+			Media media = new Media(mediaCD);
+			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.star_blue);
+			media.data = ((BitmapDrawable)drawable).getBitmap();
+			media.thumb = media.data;
+			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
+			return media;
+		}
+
 		Media media = medias.isEmpty() ? null : medias.get(media_id); //[[NSNumber numberWithLong:media_id]
 		if (media == null) //if doesn't exist in light cache...
 		{

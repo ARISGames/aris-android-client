@@ -16,7 +16,7 @@ public class FactoriesModel extends ARISModel {
 	public transient GamePlayActivity mGamePlayAct;
 
 	public void initContext(GamePlayActivity gamePlayAct) {
-		mGamePlayAct = gamePlayAct; // todo: may need leak checking is activity gets recreated.
+		mGamePlayAct = gamePlayAct; // todo: may need leak checking if activity gets recreated.
 	}
 
 	public void clearGameData() {
@@ -37,11 +37,9 @@ public class FactoriesModel extends ARISModel {
 		this.updateFactories(newFactories);
 	}
 
-	public void updateFactories(List<Factory> newFactories)
-	{
+	public void updateFactories(List<Factory> newFactories) {
 		long newFactoryId;
-		for (Factory newFactory : newFactories)
-		{
+		for (Factory newFactory : newFactories) {
 			newFactoryId = newFactory.factory_id;
 			if(!factories.containsKey(newFactoryId)) factories.put(newFactoryId, newFactory);
 		}
@@ -56,11 +54,8 @@ public class FactoriesModel extends ARISModel {
 	}
 
 // null factory (id == 0) NOT flyweight!!! (to allow for temporary customization safety)
-	public Factory factoryForId(long factory_id)
-	{
+	public Factory factoryForId(long factory_id) {
 		if(factory_id != 0) return new Factory();
 		return factories.get(factory_id); //NSNumber numberWithLong:factory_id]];
 	}
-
-
 }

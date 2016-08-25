@@ -117,25 +117,24 @@ public class Instance {
 
 	public long icon_media_id() {
 		if (this.object_type.contentEquals("ITEM"))
-			return mGamePlayAct.mGame.itemsModel.itemForId(this.object_id).icon_media_id;
+			return mGamePlayAct.mGame.itemsModel.itemForId(this.object_id).icon_media_id();
 		if (this.object_type.contentEquals("PLAQUE"))
-			return mGamePlayAct.mGame.plaquesModel.plaqueForId(this.object_id).icon_media_id;
+			return mGamePlayAct.mGame.plaquesModel.plaqueForId(this.object_id).icon_media_id();
 		if (this.object_type.contentEquals("WEB_PAGE"))
-			return mGamePlayAct.mGame.webPagesModel.webPageForId(this.object_id).icon_media_id;
+			return mGamePlayAct.mGame.webPagesModel.webPageForId(this.object_id).icon_media_id();
 		if (this.object_type.contentEquals("DIALOG"))
-			return mGamePlayAct.mGame.dialogsModel.dialogForId(this.object_id).icon_media_id;
+			return mGamePlayAct.mGame.dialogsModel.dialogForId(this.object_id).icon_media_id();
 		if (this.object_type.contentEquals("EVENT_PACKAGE"))
-			return mGamePlayAct.mGame.eventsModel.eventPackageForId(this.object_id).icon_media_id;
+			return mGamePlayAct.mGame.eventsModel.eventPackageForId(this.object_id).icon_media_id();
 		if (this.object_type.contentEquals("SCENE"))
-			return mGamePlayAct.mGame.scenesModel.sceneForId(this.object_id).icon_media_id;
+			return mGamePlayAct.mGame.scenesModel.sceneForId(this.object_id).icon_media_id();
 		if (this.object_type.contentEquals("NOTE")) {
 			if (mGamePlayAct.mGame.notesModel.noteForId(this.object_id) == null) {
 				mGamePlayAct.mAppServices.fetchNoteById(this.object_id);
 			}
-			return mGamePlayAct.mGame.notesModel.noteForId(this.object_id).icon_media_id;
+			return mGamePlayAct.mGame.notesModel.noteForId(this.object_id).icon_media_id(mGamePlayAct.mGame);
 		}
 		return 0;
 	}
-
 
 }

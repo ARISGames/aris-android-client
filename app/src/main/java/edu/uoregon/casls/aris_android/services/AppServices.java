@@ -122,6 +122,7 @@ public class AppServices {
 	}
 
 	public void dropItem(long item_id, long qty) {
+		mGamePlayAct.mPlayer.updateToCurrentLocation(mGamePlayAct);
 		JSONObject jsonArgs = jsonGameId();
 		// add to params
 		try {
@@ -148,6 +149,7 @@ public class AppServices {
 	}
 
 	public void logPlayerMoved() {
+		mGamePlayAct.mPlayer.updateToCurrentLocation(mGamePlayAct);
 		JSONObject jsonArgs = jsonGameId();
 		// add to params
 		try {
