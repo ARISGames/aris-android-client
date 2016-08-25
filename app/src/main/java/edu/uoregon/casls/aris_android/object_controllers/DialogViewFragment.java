@@ -111,7 +111,7 @@ public class DialogViewFragment extends Fragment {
 		tvDialogTitle.setText(dialogCharacter.title);
 		WebView wvCharImage = (WebView) fragView.findViewById(R.id.wv_character_image);
 
-		// set character media (image)
+		// set character media (image); iOS = DialogScriptViewController.loadScript
 		if (dialogScript.dialog_character_id == 0) { // 0 = you
 //		if (dialogCharacter.media_id == 0 || Integer.getInteger(mGamePlayAct.mPlayer.media_id) == 0) { // zero id means there's no custom media for this; use default icon.
 			wvCharImage.setBackgroundColor(0x00000000);
@@ -144,24 +144,29 @@ public class DialogViewFragment extends Fragment {
 			}
 		}
 		else {
-			// get custom character media pic.
-			MediaModel mm = new MediaModel(mGamePlayAct);
-			// get mediaCD (from database)
-			dialogCharMedia = mm.mediaForId(dialogCharacter.media_id);
+			if (dialogCharacter.media_id != 0) {
+				// get custom character media pic.
+				MediaModel mm = new MediaModel(mGamePlayAct);
+				// get mediaCD (from database)
+				dialogCharMedia = mm.mediaForId(dialogCharacter.media_id);
 
-			// set dialog character image
-			wvCharImage.getSettings().setJavaScriptEnabled(true);
-			wvCharImage.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
-			wvCharImage.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
-			wvCharImage.getSettings().setUseWideViewPort(true); // constrain the image horizontally
-			// attempt to fit image to whole screen width
-			DisplayMetrics displaymetrics = new DisplayMetrics();
-			mGamePlayAct.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-			int screenWidth = displaymetrics.widthPixels;
-			int screenHeight = displaymetrics.heightPixels;
-			// from: http://stackoverflow.com/a/10395972
-			String data="<html><head><body><center><img width="+screenWidth+" src=\""+dialogCharMedia.mediaCD.remoteURL.toString()+"\" /></center></body></html>";
-			wvCharImage.loadData(data, "text/html", null);
+				// set dialog character image
+				wvCharImage.getSettings().setJavaScriptEnabled(true);
+				wvCharImage.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
+				wvCharImage.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
+				wvCharImage.getSettings().setUseWideViewPort(true); // constrain the image horizontally
+				// attempt to fit image to whole screen width
+				DisplayMetrics displaymetrics = new DisplayMetrics();
+				mGamePlayAct.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+				int screenWidth = displaymetrics.widthPixels;
+				int screenHeight = displaymetrics.heightPixels;
+				// from: http://stackoverflow.com/a/10395972
+				String data = "<html><head><body><center><img width=" + screenWidth + " src=\"" + dialogCharMedia.mediaCD.remoteURL.toString() + "\" /></center></body></html>";
+				wvCharImage.loadData(data, "text/html", null);
+			}
+			else {
+				wvCharImage.setBackgroundResource(R.drawable.default_character);
+			}
 		}
 
 		slideUpDialogScriptAndOptionsPanel = (ScrollView) fragView.findViewById(R.id.scrlv_dialog_text_w_options);
