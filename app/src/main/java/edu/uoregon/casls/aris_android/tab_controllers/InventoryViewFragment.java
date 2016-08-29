@@ -64,8 +64,8 @@ public class InventoryViewFragment extends Fragment {
 
 		// todo: need to examine code to make sure we're looking at the correct instances and to reinstate the qty == 0 filter loop below
 		for (Instance instance : instances) { //60832
-//				if (instance.qty == 0)
-//					continue;
+				if (instance.qty == 0)
+					continue;
 			mInstances.add(instance);
 		}
 		if (mInstances == null || mInstances.size() < 1) {
