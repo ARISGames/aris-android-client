@@ -387,7 +387,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	// Stubs from iOS RootViewController. May be unnecessary in Android vers. but included while developing App just in case they become useful.
 	public void gameBegan() { // stub for potential use later to duplicate RootViewController behaviours as exist in iOS vs.
 		// in iOS, initializes View Controller. Not much else.
-		// todo: excpet of course loading the tabViewController (load tab fragment first so that any
+		// todo: except of course loading the tabViewController (load tab fragment first so that any
 		// todo: exiting fragment popped off the stack will wind up back here.)
 
 //		gamePlayViewController = new GamePlayViewController alloc] initWithDelegate:self); // this initializer happens to be where the tabs get presented
@@ -603,7 +603,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	}
 
-	/*Todo: I will want to use show hide instead below:
+	/*
 	*
 	* "You should consider what you plan to do with the fragment to decide which path to follow.
 	* If you use a FragmentTransaction to hide the fragment, then it can still be in the running
@@ -814,7 +814,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 //			if (!viewingInstantiableObject) {  // todo: temporary in leu of showNav() call in fragment dismissSelf()
 //				this.showNavBar();
 //			}
-			this.hideNavBar(); // fixme: test to see if I can get the nav bar to not show on maps, etc.
+			this.hideNavBar();
 		}
 	}
 
