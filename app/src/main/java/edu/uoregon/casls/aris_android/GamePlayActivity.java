@@ -65,12 +65,13 @@ import edu.uoregon.casls.aris_android.tab_controllers.ScannerViewFragment;
 
 public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActivity
 		implements
-		GamePlayNavDrawerFragment.NavigationDrawerCallbacks,
-		MapViewFragment.OnFragmentInteractionListener,
-		PlaqueViewFragment.OnFragmentInteractionListener,
-		DialogViewFragment.OnFragmentInteractionListener,
-		WebPageViewFragment.OnFragmentInteractionListener,
-		ARISMediaViewFragment.OnFragmentInteractionListener {
+			GamePlayNavDrawerFragment.NavigationDrawerCallbacks,
+			MapViewFragment.OnFragmentInteractionListener,
+			PlaqueViewFragment.OnFragmentInteractionListener,
+			DialogViewFragment.OnFragmentInteractionListener,
+			ItemViewFragment.OnFragmentInteractionListener,
+			WebPageViewFragment.OnFragmentInteractionListener,
+			ARISMediaViewFragment.OnFragmentInteractionListener {
 
 
 	private final static String TAG_SERVER_SUCCESS      = "success";
@@ -823,6 +824,16 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		this.instantiableViewControllerRequestsDismissal(webPageViewFragment.instance);
 
 		if (webPageViewFragment != null) {
+			FragmentManager fm = getSupportFragmentManager();
+			fm.popBackStackImmediate(); // immediate?
+		}
+	}
+
+	@Override
+	public void fragmentItemViewDismiss() {
+		this.instantiableViewControllerRequestsDismissal(itemViewFragment.instance);
+
+		if (itemViewFragment != null) {
 			FragmentManager fm = getSupportFragmentManager();
 			fm.popBackStackImmediate(); // immediate?
 		}

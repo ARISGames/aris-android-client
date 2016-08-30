@@ -4,22 +4,23 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
+import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
+import edu.uoregon.casls.aris_android.data_objects.Item;
+import edu.uoregon.casls.aris_android.data_objects.Media;
+import edu.uoregon.casls.aris_android.media.ARISMediaViewFragment;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ItemViewFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ItemViewFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ItemViewFragment extends Fragment {
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,6 +33,11 @@ public class ItemViewFragment extends Fragment {
 
 	private OnFragmentInteractionListener mListener;
 	public GamePlayActivity mGamePlayActivity;
+
+	public Item mItem;
+	public Instance instance;
+	public ARISMediaViewFragment mediaViewFrag;
+	public View                  mItemFragView;
 
 	public ItemViewFragment() {
 		// Required empty public constructor
@@ -48,7 +54,9 @@ public class ItemViewFragment extends Fragment {
 	}
 
 	public void initWithInstance(Instance i) {
-
+		instance = i;
+		mItem = mGamePlayActivity.mGame.itemsModel.itemForId(i.object_id);
+		
 	}
 
 	public void initContext(GamePlayActivity gamePlayActivity) {
@@ -60,14 +68,53 @@ public class ItemViewFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_item_view, container, false);
+		mItemFragView = inflater.inflate(R.layout.fragment_item_view, container, false);
+
+		TextView tvItemName = (TextView) mItemFragView.findViewById(R.id.tv_item_name);
+		tvItemName.setText(mItem.name);
+		mediaViewFrag = new ARISMediaViewFragment();
+		mediaViewFrag.initContext(mGamePlayActivity);
+		// add a frag inside another (this) frag.
+		getChildFragmentManager().beginTransaction().add(R.id.fl_item_media_view_container, mediaViewFrag).commit();
+		getChildFragmentManager().executePendingTransactions();
+
+		ImageButton ibGoBack = (ImageButton) mItemFragView.findViewById(R.id.ib_item_go_back);
+		ibGoBack.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dismissSelf();
+			}
+		});
+		RelativeLayout rlPickUpClickArea = (RelativeLayout) mItemFragView.findViewById(R.id.rl_item_pick_up_footer);
+		rlPickUpClickArea.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Pick up item
+			}
+		});
+
+		loadItemMediaView();
+		
+		return mItemFragView;
 	}
 
-	// TODO: Rename method, update argument and hook method into UI event
-	public void onButtonPressed(Uri uri) {
-		if (mListener != null) {
-			mListener.onFragmentInteraction(uri);
+	private void loadItemMediaView() {
+		Media media = mGamePlayActivity.mMediaModel.mediaForId(mItem.media_id);
+		if (media != null) {
+			Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment. setting webview with Plaque media; ");
+			mediaViewFrag.setMedia(media);
+//			[mediaView setMedia:media];
 		}
+
+	}
+
+	private void dismissSelf() {
+//		if (tab != null) // todo
+//			this.showNav();
+		if (mListener != null) {
+			mListener.fragmentItemViewDismiss();
+		}
+		// the following iOS logic wil happen in GamePlayActivity.fragmentPlaqueExit();
 	}
 
 	@Override
@@ -88,18 +135,8 @@ public class ItemViewFragment extends Fragment {
 		mListener = null;
 	}
 
-	/**
-	 * This interface must be implemented by activities that contain this
-	 * fragment to allow an interaction in this fragment to be communicated
-	 * to the activity and potentially other fragments contained in that
-	 * activity.
-	 * <p/>
-	 * See the Android Training lesson <a href=
-	 * "http://developer.android.com/training/basics/fragments/communicating.html"
-	 * >Communicating with Other Fragments</a> for more information.
-	 */
 	public interface OnFragmentInteractionListener {
-		// TODO: Update argument type and name
+		void fragmentItemViewDismiss();
 		void onFragmentInteraction(Uri uri);
 	}
 }
