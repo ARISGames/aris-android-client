@@ -478,6 +478,7 @@ public class Game {
 
 		displayQueueModel.endPlay();
 		displayQueueModel    = null;
+
 	}
 
 	public void requestGameData() {
@@ -579,6 +580,9 @@ public class Game {
 		if (isServerPollerRunning) { // todo: clear/cancel all outstanding service requests for poll timer
 			mGamePlayAct.stopService(pollServerSvcIntent);
 			isServerPollerRunning = false;
+			// cancel all outstanding http requests.
+			if (mGamePlayAct.mAppServices.mClient != null)
+			mGamePlayAct.mAppServices.mClient.cancelRequests(mGamePlayAct, true); // perhaps cancelAllRequests which will kill requests from all contexts. Probably no difference in this case.
 		}
 		displayQueueModel.endPlay();
 	}

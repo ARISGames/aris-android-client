@@ -13,6 +13,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.VideoView;
@@ -364,12 +365,21 @@ public class ARISMediaViewFragment extends Fragment {
 //		this.addSubview:playIcon];
 	}
 
-	public static String getMimeTypeOfFile(String pathName) {
-		BitmapFactory.Options opt = new BitmapFactory.Options();
-		opt.inJustDecodeBounds = true;
-		BitmapFactory.decodeFile(pathName, opt);
-		return opt.outMimeType;
+	public static String getMimeTypeOfFile(String url) {
+		String type = null;
+		String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+		if (extension != null) {
+			type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+		}
+		return type;
 	}
+
+//	public static String getMimeTypeOfFile(String pathName) {
+//		BitmapFactory.Options opt = new BitmapFactory.Options();
+//		opt.inJustDecodeBounds = true;
+//		BitmapFactory.decodeFile(pathName, opt);
+//		return opt.outMimeType;
+//	}
 
 	public String contentTypeForImageData(Bitmap d) {
 		int c;

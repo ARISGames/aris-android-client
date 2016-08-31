@@ -297,8 +297,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 		if (AppUtils.isNetworkAvailable(getApplicationContext())) {
 			AsyncHttpClient client = new AsyncHttpClient();
 //			AsyncHttpClient client = new AsyncHttpClient(true, 80, 443);
-			client.setMaxRetriesAndTimeout(0,10000);
-			client.setTimeout(10000); // milliseconds
+			client.setMaxRetriesAndTimeout(2, 4000); // looks like timeout is =always= 10 seconds regardless of this setting.
+			client.setTimeout(4000); // milliseconds
 			client.post(context, request_url, entity, "application/json", new JsonHttpResponseHandler() {
 				@Override
 				public void onSuccess(int statusCode, Header[] headers, JSONObject jsonReturn) {

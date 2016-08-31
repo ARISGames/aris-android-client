@@ -6,7 +6,7 @@ package edu.uoregon.casls.aris_android.data_objects;
 public class Item implements InstantiableProtocol {
 	public long   item_id              = 0;
 	public String name                 = "Item";
-	public String desc                 = "";
+	public String description          = "";
 	public long   icon_media_id        = 0;
 	public long   media_id             = 0;
 	public long   droppable            = 0; // boolean as long

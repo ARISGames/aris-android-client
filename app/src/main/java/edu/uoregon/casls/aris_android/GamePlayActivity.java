@@ -172,6 +172,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 		mDispatch = new Dispatcher(); // Centralized place for object to object messaging
 		mAppServices = new AppServices(); // Centralized place for server calls.
+//		mAppServices.setCustomObjectListener(new AppServices.AppServicesListener() {
+//
+//		});
 		mResposeHandler = new ResponseHandler(); // Where calls to server return for landing.
 		mMediaModel = new MediaModel(this);
 		mUsersModel = new UsersModel(this);

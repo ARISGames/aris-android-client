@@ -11,7 +11,7 @@ public class Factory {
 	public long   factory_id                  = 0;
 	public long   game_id                     = 0;
 	public String name                        = "";
-	public String desc                        = "";
+	public String description                 = "";
 	public String object_type                 = ""; //PLAQUE,ITEM,DIALOG,WEB_PAGE
 	public long   object_id                   = 0;
 	public long   seconds_per_production      = 0;
@@ -51,7 +51,7 @@ public class Factory {
 		factory_id                          = f.factory_id;
 		game_id                             = f.game_id;
 		name                                = f.name;
-		desc                                = f.desc;
+		description                         = f.description;
 		object_type                         = f.object_type;
 		object_id                           = f.object_id;
 		seconds_per_production              = f.seconds_per_production;

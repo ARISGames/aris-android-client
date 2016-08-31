@@ -105,7 +105,7 @@ public class InventoryViewFragment extends Fragment {
 				tvItemName.setText(item.name());
 				TextView tvItemDesc = (TextView) itemView.findViewById(R.id.tv_inventory_item_desc);
 				Item i = (Item) item.object();
-				tvItemDesc.setText(i.desc);
+				tvItemDesc.setText(i.description);
 				TextView tvItemQty = (TextView) itemView.findViewById(R.id.tv_inventory_item_qty);
 				tvItemQty.setText(String.valueOf(item.qty));
 				llInventoryList.addView(itemView);

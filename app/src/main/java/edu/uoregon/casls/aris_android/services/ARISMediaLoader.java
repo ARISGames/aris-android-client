@@ -90,7 +90,9 @@ public class ARISMediaLoader {
 
 			if (mediaResult.connection != null) mediaResult.connection.cancelRequests(context, true);
 			mediaResult.connection = new AsyncHttpClient(); // storing client ref in the MR so it can be tracked and cancelled if necessary.
-			mediaResult.connection.setTimeout(6000); //set timeout for 60 sec. (6000ms)
+//			mediaResult.connection.setTimeout(6000); //set timeout for 60 sec. (6000ms)
+			mediaResult.connection.setMaxRetriesAndTimeout(2, 4000);
+
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "pollServerForMediaWithRemoteURL AsyncHttpClient Sending Req for Media Data: " + mediaResult.media.remoteURL());
 			mediaResult.connection.get(context, remoteURL, new BinaryHttpResponseHandler(allowedContentTypes /*, looper here? */) { // the looper might be able to handle failed attempts?
 				@Override
@@ -266,7 +268,7 @@ public class ARISMediaLoader {
 		// Get request
 		if (AppUtils.isNetworkAvailable(mGamePlayAct.getApplicationContext())) {
 			AsyncHttpClient client = new AsyncHttpClient();
-//			static String reqCall
+			client.setMaxRetriesAndTimeout(2, 4000);
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient Sending Req for Media Data: " + requestURL);
 			client.get(context, requestURL, new BinaryHttpResponseHandler(allowedContentTypes /*, looper here? */) { // the looper might be able to handle failed attempts?
 				@Override

@@ -232,7 +232,7 @@ public class MapViewFragment extends Fragment {
 			if (markerToRemove != null) { //if(mvao)
 				if (mMap != null) {
 					if (markerToRemove.triggerMarker != null) {
-						Log.d(AppConfig.LOGTAG_D2, "111 Removing Marker ID:" + markerToRemove.triggerMarker.getId()+" TriggerID:"+markerToRemove.trigger_id);
+//						Log.d(AppConfig.LOGTAG_D2, "111 Removing Marker ID:" + markerToRemove.triggerMarker.getId()+" TriggerID:"+markerToRemove.trigger_id);
 						markerToRemove.triggerMarker.remove();// [mapView removeAnnotation:mvao.annotation];
 					}
 					if (markerToRemove.triggerZoneCircle != null)
@@ -362,7 +362,7 @@ public class MapViewFragment extends Fragment {
 		//
 
 		//Remove locations
-		Log.d(AppConfig.LOGTAG_D2, "Looping through all markersAndCircles to look for triggers to REMOVE...");
+//		Log.d(AppConfig.LOGTAG_D2, "Looping through all markersAndCircles to look for triggers to REMOVE...");
 //		for (Trigger mapTrigger : markersAndCircles) { // markersAndCircles is "annotationOverlays" in iOS to match GoogleMap dialect.
 		for (int i=0; i < markersAndCircles.size(); i++) { // markersAndCircles is "annotationOverlays" in iOS to match GoogleMap dialect.
 			mapTrigger = markersAndCircles.get(i);
@@ -385,9 +385,9 @@ public class MapViewFragment extends Fragment {
 				}
 				//@formatter:on
 			}
-			if (shouldRemove) Log.d(AppConfig.LOGTAG_D2, "YES Marked for REMOVE TriggerID:"+mapTrigger.trigger_id);
-			else Log.d(AppConfig.LOGTAG_D2, "NOT Marked for remove TriggerID:"+mapTrigger.trigger_id);
-			if (mapTrigger.triggerMarker == null) Log.d(AppConfig.LOGTAG_D2, "...which has a NULL triggerMarker!");
+//			if (shouldRemove) Log.d(AppConfig.LOGTAG_D2, "YES Marked for REMOVE TriggerID:"+mapTrigger.trigger_id);
+//			else Log.d(AppConfig.LOGTAG_D2, "NOT Marked for remove TriggerID:"+mapTrigger.trigger_id);
+//			if (mapTrigger.triggerMarker == null) Log.d(AppConfig.LOGTAG_D2, "...which has a NULL triggerMarker!");
 
 			if (shouldRemove) { // remove the trigger point and its circle from the map
 				// for some reason the triggerMarker and triggerZoneMarker references get nulled.
@@ -395,13 +395,13 @@ public class MapViewFragment extends Fragment {
 
 				// remove marker
 				if (mapTrigger.triggerMarker != null) {
-					Log.d(AppConfig.LOGTAG_D2, "222 REMOVING Marker ID:" + mapTrigger.triggerMarker.getId()+" TriggerID:"+mapTrigger.trigger_id);
+//					Log.d(AppConfig.LOGTAG_D2, "222 REMOVING Marker ID:" + mapTrigger.triggerMarker.getId()+" TriggerID:"+mapTrigger.trigger_id);
 					mapTrigger.triggerMarker.remove();
 				}
 				else {
 					int size = markerCircleByTrigId.size();
 					String markerId = markerCircleByTrigId.get(mapTrigger.trigger_id).triggerMarker.getId();
-					Log.d(AppConfig.LOGTAG_D2, "222 Marker ID: WAS NULL. NOT removing TriggerID:"+mapTrigger.trigger_id);
+//					Log.d(AppConfig.LOGTAG_D2, "222 Marker ID: WAS NULL. NOT removing TriggerID:"+mapTrigger.trigger_id);
 					markerCircleByTrigId.get(mapTrigger.trigger_id).triggerMarker.remove();
 				}
 				// remove trigger zone Circle
@@ -439,7 +439,7 @@ public class MapViewFragment extends Fragment {
 		boolean showFirstMarkerTitle = true;
 
 		//Add locations
-		Log.d(AppConfig.LOGTAG_D2, "Looping through all triggersModel.playerTriggers to look for triggers to ADD...");
+//		Log.d(AppConfig.LOGTAG_D2, "Looping through all triggersModel.playerTriggers to look for triggers to ADD...");
 		for (Trigger modelTrigger : triggersModel.playerTriggers) { // walk through all playerTriggers
 			modelInstance = mGamePlayAct.mGame.instancesModel.instanceForId(modelTrigger.instance_id); // get instance
 			if ( modelInstance.instance_id == 0 || modelInstance.object() == null) continue; // bogus instance? skip it
@@ -495,7 +495,7 @@ public class MapViewFragment extends Fragment {
 
 				// todo for future consideration, add animated marker drop: http://stackoverflow.com/a/38008342
 				modelTrigger.triggerMarker = mMap.addMarker(markerOptions); // iOS: [mapView addAnnotation:mvao.annotation];
-				Log.d(AppConfig.LOGTAG_D2, "ADDING Marker ID:" + modelTrigger.triggerMarker.getId()+" TriggerID:"+modelTrigger.trigger_id);
+//				Log.d(AppConfig.LOGTAG_D2, "ADDING Marker ID:" + modelTrigger.triggerMarker.getId()+" TriggerID:"+modelTrigger.trigger_id);
 				if (showFirstMarkerTitle) { // just show the starting point.
 					modelTrigger.triggerMarker.showInfoWindow();
 					showFirstMarkerTitle = false;

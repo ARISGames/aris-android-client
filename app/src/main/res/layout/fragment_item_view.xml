@@ -2,14 +2,12 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".object_controllers.PlaqueViewFragment">
-
-    <!-- TODO: Update blank fragment layout -->
+                tools:context=".object_controllers.ItemViewFragment">
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ib_item_go_back"
+        android:id="@+id/ib_item_tabmenu_or_go_back"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -40,12 +38,23 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/rl_item_desc_and_media">
+            android:id="@+id/rl_item_desc_and_media"
+            >
 
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/fl_item_media_view_container"/>
+                android:id="@+id/fl_item_media_view_container"
+                android:background="@color/light_sky_blue"
+                android:minHeight="200dp"
+                android:minWidth="200dp">
+
+                <WebView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/wv_item_as_url"
+                    android:visibility="gone"/>
+            </FrameLayout>
 
             <!--<include-->
             <!--android:layout_width="wrap_content"-->
@@ -58,7 +67,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/wv_item_desc"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/fl_item_media_view_container"/>
+                android:layout_below="@+id/fl_item_media_view_container"
+                android:foregroundGravity="center_horizontal"/>
 
         </RelativeLayout>
     </ScrollView>
@@ -66,19 +76,35 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_above="@+id/rl_item_pick_up_footer"
+        android:layout_above="@+id/ll_item_pick_up_footer"
         android:layout_centerHorizontal="true"
-        android:background="@color/material_grey_600">
+        android:background="@color/material_grey_600"
+        android:id="@+id/fl_footer_bar">
     </FrameLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/rl_item_pick_up_footer">
+        android:id="@+id/ll_item_pick_up_footer"
+        android:gravity="center"
+        >
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Destroy"
+            android:id="@+id/tv_item_destroy"
+            android:background="#fffefefe"
+            android:textSize="@dimen/textsize_large"
+            android:paddingBottom="5dp"
+            android:paddingRight="10dp"
+            android:visibility="gone"
+            android:layout_weight="1"
+            android:gravity="center"
+            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,13 +112,25 @@
             android:id="@+id/tv_item_pick_up"
             android:background="#fffefefe"
             android:textSize="@dimen/textsize_large"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="10dp"
             android:paddingBottom="5dp"
             android:paddingRight="10dp"
-            android:layout_centerInParent="true"/>
+            android:visibility="gone"
+            android:layout_weight="1"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Drop"
+            android:id="@+id/tv_item_drop"
+            android:background="#fffefefe"
+            android:textSize="@dimen/textsize_large"
+            android:paddingBottom="5dp"
+            android:paddingRight="10dp"
+            android:visibility="gone"
+            android:layout_weight="1"
+            android:gravity="center"/>
         <!-- Right end arrow  -->
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>
