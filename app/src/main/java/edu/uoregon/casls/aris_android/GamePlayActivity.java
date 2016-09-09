@@ -69,6 +69,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			MapViewFragment.OnFragmentInteractionListener,
 			PlaqueViewFragment.OnFragmentInteractionListener,
 			DialogViewFragment.OnFragmentInteractionListener,
+//			InventoryViewFragment.OnFragmentInteractionListener,
 			ItemViewFragment.OnFragmentInteractionListener,
 			WebPageViewFragment.OnFragmentInteractionListener,
 			ARISMediaViewFragment.OnFragmentInteractionListener {
@@ -326,7 +327,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		this.requestPlayerData();
 	}
 
-	// todo: implement Android version of these iOS methods:
+	// todo: Android version of these iOS methods:
 /*
 	public void maintenancePercentLoaded:(NSNotification *)notif { maintenanceProgressBar.progress = [notif.userInfo["percent") floatValue); }
 	public void maintenanceFetchFailed { [self.view addSubview:maintenanceRetryLoadButton); }
@@ -337,10 +338,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	}
 */
 
-
 	//Player Data
 	public void requestPlayerData() {
-//		[self.view addSubview:playerProgressLabel); [self.view addSubview:playerProgressBar); // todo progress bar
+//		[self.view addSubview:playerProgressLabel); [self.view addSubview:playerProgressBar); // todo: game loading progress bar
 		mGame.requestPlayerData();
 	}
 
@@ -355,7 +355,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			this.beginGame();    //[_MODEL_ beginGame);
 	}
 
-	// todo: implement Android version of these iOS methods:
+	// todo: Android version of these iOS methods which show game loading progress bars, and http failure reload option:
 /*
 	public void playerPercentLoaded:(NSNotification *)notif { playerProgressBar.progress = [notif.userInfo["percent") floatValue); }
 	public void playerFetchFailed { [self.view addSubview:playerRetryLoadButton); }
@@ -378,7 +378,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	public void mediaDataComplete() {}
 
-	// todo: implement Android version of these iOS methods:
+	// todo: Android version of these iOS methods:
 /*
 	public void mediaPercentLoaded:(NSNotification *)notif { mediaProgressBar.progress = [notif.userInfo["percent") floatValue); }
 	public void mediaFetchFailed { [self.view addSubview:mediaRetryLoadButton); }
@@ -400,6 +400,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		// set up tab appropriate tab fragment()
 //		mGamePlayTabSelectorViewController.initContext(this); // also serves many of the functions of iOS GamePlayTabSelectorViewControllerinitWithDelegate
 //		mGamePlayTabSelectorViewController.setupDefaultTab();
+		// ANDROID: See the equivalent of this (above) in beginGame(): mGamePlayTabSelectorViewController.setupDefaultTab();
 
 //		this.displayContentController:gamePlayViewController);
 	}
@@ -426,7 +427,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				(DrawerLayout) findViewById(R.id.drawer_layout));
 
 		// set up background tab (see View Layer sermon below):
-		mGamePlayTabSelectorViewController.initContext(this); // also serves many of the functions of iOS GamePlayTabSelectorViewControllerinitWithDelegate
+		mGamePlayTabSelectorViewController.initContext(this); // also serves many of the functions of iOS GamePlayTabSelectorViewController.initWithDelegate
 		mGamePlayTabSelectorViewController.setupDefaultTab();
 		// set Title of action bar
 		mTitle = AppUtils.prettyName(mGame.tabsModel.playerTabs.get(0).type);
@@ -470,7 +471,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 		mGame.logsModel.playerEnteredGame(); //		mGame.logsModel.playerEnteredGame);
 		mDispatch.model_game_began(); // calls mGame.gameBegan() and mGamePlayAct.gameBegan()
-//		this.showNavBar(); // make sure it's there to start and hide if there's an instantiable displayed on top.// fixme: temp dsabled
+//		this.showNavBar(); // make sure it's there to start and hide if there's an instantiable displayed on top.// fixme: temp disabled
 	}
 
 	private void showInstantiableFragment(String fragTag, Instance i) {
@@ -498,33 +499,21 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		setAsFrontmostFragment(fragTag);
 	}
 
-//	private void showInstantiableFragment(String fragTag, Instance i) {
-//		// if somehow we tried to transition to the fragment already showing, bail.
-//		if (fragTag.contentEquals(mCurrentFragVisible)) return;
-//		// settle any outstanding fragment tasks
-//		getSupportFragmentManager().executePendingTransactions();
-//		// if there is no currently visible fragment, set incoming one to current.
-//		if (mCurrentFragVisible == null || mCurrentFragVisible.isEmpty())
-//			mCurrentFragVisible = fragTag;
-//		FragmentManager fm = getSupportFragmentManager();
-//		FragmentTransaction ft = fm.beginTransaction();
-//		// get specific fragments involved in transition
-//		Fragment currentVisibleFrag = fm.findFragmentByTag(mCurrentFragVisible);
-//		Fragment fragToDisplay = fm.findFragmentByTag(fragTag);
-//		// set transition
-//		ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-//		ft.hide(currentVisibleFrag); // hide old fragment view
-//		ft.show(fragToDisplay); // show new fragment
-//		ft.commit();
-//
-//		setAsFrontmostFragment(fragTag);
-//	}
-
-	public void setAsFrontmostFragment(String fragTag) {
+	public void setAsFrontmostFragment(String fragTag) { // todo: May need to rethink this fragment tracking and bolt it in as requisite for all fragment changes.
 		// set visibility tracking vars
 		fragVisible.put(mCurrentFragVisible, false);
 		fragVisible.put(fragTag, true);
 		mCurrentFragVisible = fragTag;
+	}
+
+	private Fragment getCurrentFrag() {
+		String cfv = mCurrentFragVisible; // dummy for debugging convenience.
+		FragmentManager fragmentManager = getSupportFragmentManager();
+//		String fragmentTag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
+		String fragmentTag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
+		Fragment currentFragment = getSupportFragmentManager()
+				.findFragmentByTag(fragmentTag);
+		return currentFragment;
 	}
 
 	public void dismissFragment() {
@@ -668,49 +657,57 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	@Override
 	public void onNavigationDrawerItemSelected(String itemName) {
-		// update the main content by replacing fragments
+//		Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + "onNavigationDrawerItemSelected with itemName: " + itemName + ", currently visible frag:" + mCurrentFragVisible );
+
+		if (mCurrentFragVisible.contentEquals(itemName)) { // don't recreate if switching back to current fragment.
+			closeNavDrawer();
+			return;
+		}
+			// update the main content by replacing fragments
 		FragmentManager fragmentManager = getSupportFragmentManager();
 
 		if (itemName.equals("Quests")) {
+			this.questsViewFragment = QuestsViewFragment.newInstance(itemName);
 			fragmentManager.beginTransaction()
 					.addToBackStack(itemName)
-					.replace(R.id.fragment_view_container, QuestsViewFragment.newInstance(itemName))
+					.replace(R.id.fragment_view_container, this.questsViewFragment, this.questsViewFragment.toString())
 					.commit();
 		}
 		else if (itemName.equals("Map")) {
+			Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + "item Map chosen. Replacing whatever was there with a map fragmene: " + itemName);
+			this.mapViewFragment = MapViewFragment.newInstance(itemName);
 			fragmentManager.beginTransaction()
-					.addToBackStack(itemName)
-					.replace(R.id.fragment_view_container, MapViewFragment.newInstance(itemName))
+					.replace(R.id.fragment_view_container, this.mapViewFragment, this.mapViewFragment.toString())
 					.commit();
 		}
 		else if (itemName.equals("Inventory")) {
+			this.inventoryViewFragment = new InventoryViewFragment();
 			fragmentManager.beginTransaction()
-					.addToBackStack(itemName)
-					.replace(R.id.fragment_view_container, new InventoryViewFragment())
+					.replace(R.id.fragment_view_container, this.inventoryViewFragment, this.inventoryViewFragment.toString())
 					.commit();
 		}
 		else if (itemName.equals("Scanner")) {
+			this.scannerViewFragment = ScannerViewFragment.newInstance(itemName);
 			fragmentManager.beginTransaction()
-					.addToBackStack(itemName)
-					.replace(R.id.fragment_view_container, ScannerViewFragment.newInstance(itemName))
+					.replace(R.id.fragment_view_container, this.scannerViewFragment, this.scannerViewFragment.toString())
 					.commit();
 		}
 		else if (itemName.equals("Decoder")) {
+			this.decoderViewFragment = DecoderViewFragment.newInstance(itemName);
 			fragmentManager.beginTransaction()
-					.addToBackStack(itemName)
-					.replace(R.id.fragment_view_container, DecoderViewFragment.newInstance(itemName))
+					.replace(R.id.fragment_view_container, this.decoderViewFragment , this.decoderViewFragment .toString())
 					.commit();
 		}
 		else if (itemName.equals("Player")) { // todo: GamePlayPlayerFragment? What is this? Does it need to exists?
+			this.playerViewFragment = GamePlayPlayerFragment.newInstance(itemName);
 			fragmentManager.beginTransaction()
-					.addToBackStack(itemName)
-					.replace(R.id.fragment_view_container, GamePlayPlayerFragment.newInstance(itemName))
+					.replace(R.id.fragment_view_container, this.playerViewFragment, this.playerViewFragment.toString())
 					.commit();
 		}
 		else if (itemName.equals("Notebook")) {
+			this.noteViewFragment = NoteViewFragment.newInstance(itemName);
 			fragmentManager.beginTransaction()
-					.addToBackStack(itemName)
-					.replace(R.id.fragment_view_container, NoteViewFragment.newInstance(itemName))
+					.replace(R.id.fragment_view_container, this.noteViewFragment, this.noteViewFragment.toString())
 					.commit();
 		}
 		else if (itemName.equals("Leave Game")) {
@@ -719,8 +716,21 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 		}
 
+		getSupportFragmentManager().executePendingTransactions();
+		setAsFrontmostFragment(itemName);
 //		setActionBarTitle(itemName);
 		onSectionAttached(itemName);
+
+//		this.listBackStackToLog(fragmentManager);
+	}
+
+
+	private void listBackStackToLog(FragmentManager fm) {
+		int count = fm.getBackStackEntryCount();
+		Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + "Listing of the current backstack (size = " + count + "):");
+		for (int i=0; i<count; i++) {
+			Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + "inx:" + i + " = " + fm.getBackStackEntryAt(i).getName() + ", id:" + fm.getBackStackEntryAt(i).getId());
+		}
 	}
 
 
@@ -781,6 +791,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	public void instantiableViewControllerRequestsDismissal(Instance ivc) {
 		// [((ARISViewController *)ivc).navigationController dismissViewControllerAnimated:NO completion:nil]; <-- I think this just the delegate. ?
 		viewingInstantiableObject = false;
+		Fragment currentFrag = this.getCurrentFrag();
+		if (currentFrag != null)
+			setAsFrontmostFragment(currentFrag.getTag());
+
 		// [self reSetOverlayControllersInVC:self atYDelta:-20]; <-- Sets up a gameNotificationView.  Not sure what a gameNotificationView is.
 		// [_MODEL_LOGS_ playerViewedContent:ivc.instance.object_type id:ivc.instance.object_id];
 		mGame.logsModel.playerViewedContent(ivc.object_type, ivc.object_id);
@@ -808,8 +822,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		// Android implementation of iOS GamePlayViewController.instantiableViewControllerRequestsDismissal:
 		// todo: make plaque fragment disband (stop) somewhere in here, but not before we're done referring to it.
 		// todo perhaps just hide it at this point and let it get replaced when the next view is enqueued. ?
+		// todo: Update: See that I now null it at bottom of method. Good move?
 		// this happens in [*]ViewController.dismissSelf() in iOS; in Android we stuff them all in this method.
-		this.instantiableViewControllerRequestsDismissal(plaqueViewFragment.mInstance);
 		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " fragmentPlaqueDismiss(). looking at plaqueViewFragment.tab: ");
 		// now tell this fragment to die
 		if (plaqueViewFragment != null) {
@@ -820,31 +834,34 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 //			}
 			this.hideNavBar();
 		}
+		this.instantiableViewControllerRequestsDismissal(plaqueViewFragment.mInstance);
+		plaqueViewFragment = null;
 	}
 
 	@Override
 	public void fragmentWebPageViewDismiss() {
-		this.instantiableViewControllerRequestsDismissal(webPageViewFragment.instance);
 
 		if (webPageViewFragment != null) {
 			FragmentManager fm = getSupportFragmentManager();
 			fm.popBackStackImmediate(); // immediate?
 		}
+		this.instantiableViewControllerRequestsDismissal(webPageViewFragment.instance);
+		webPageViewFragment = null;
 	}
 
 	@Override
 	public void fragmentItemViewDismiss() {
-		this.instantiableViewControllerRequestsDismissal(itemViewFragment.instance);
 
 		if (itemViewFragment != null) {
 			FragmentManager fm = getSupportFragmentManager();
 			fm.popBackStackImmediate(); // immediate?
 		}
+		this.instantiableViewControllerRequestsDismissal(itemViewFragment.instance);
+		itemViewFragment = null; // thought this would happen by default but the reference stays.
 	}
 
 	@Override
 	public void fragmentDialogDismiss() {
-		this.instantiableViewControllerRequestsDismissal(dialogViewFragment.instance);
 		// now tell this fragment to die
 		if (dialogViewFragment != null) {
 			FragmentManager fm = getSupportFragmentManager();
@@ -853,7 +870,21 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 //				this.showNavBar();
 //			}
 		}
+		this.instantiableViewControllerRequestsDismissal(dialogViewFragment.instance);
+		dialogViewFragment = null;
 	}
+
+//	@Override
+//	public void fragmentInventoryDismiss() {
+//		if (inventoryViewFragment != null) {
+//			FragmentManager fm = getSupportFragmentManager();
+//			fm.popBackStackImmediate(); // immediate?
+//		}
+////		this.instantiableViewControllerRequestsDismissal(inventoryViewFragment.instance);
+//		inventoryViewFragment = null; // thought this would happen by default but the reference stays.
+//
+//	}
+//
 
 	@Override
 	public void gamePlayTabBarViewControllerRequestsNav() {
@@ -870,6 +901,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		this.openNavDrawer();
 	}
 
+	public void onClickInventoryOpenDrawer(View v) {
+		this.openNavDrawer();
+	}
+
 
 	/*
 	*
@@ -881,8 +916,12 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Try Dequeue: viewingInstantiableObject = " + viewingInstantiableObject);
 		//Doesn't currently have the view-heirarchy authority to display.
 		//if(!(self.isViewLoaded && self.view.window)) //should work but apple's timing is terrible
-		if (viewingInstantiableObject)
+//		if (instantableViewController != null)
+//			return;
+		if (viewingInstantiableObject) {
+			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Try Dequeue: viewingInstantiableObject = " + viewingInstantiableObject);
 			return;
+		}
 		Object o;
 		o = mGame.displayQueueModel.dequeue();
 		if (o != null) {
@@ -954,7 +993,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		}
 		else if (i.object_type.contentEquals("ITEM")) {
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
-			if (itemViewFragment == null) {
+			if (itemViewFragment == null ) {
 				itemViewFragment = new ItemViewFragment();
 				itemViewFragment.initContext(this);
 				itemViewFragment.initWithInstance(i);
@@ -967,9 +1006,11 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				setAsFrontmostFragment(tag);
 			}
 			// if it's already visible and the frontmost fragment... bail, no further action here
-			else if (mCurrentFragVisible != null) if (itemViewFragment.isVisible()
+			else if (mCurrentFragVisible != null)
+				if (itemViewFragment.isVisible()
 					&& itemViewFragment.getTag().contentEquals(mCurrentFragVisible))
-				return;
+				{ return;
+					}
 
 			fragViewToDisplay = itemViewFragment.getTag(); // same end result as vc var in iOS
 //		vc = new ItemViewController(i delegate:self);
@@ -1323,7 +1364,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 //		Uri u = uri;
 //	}
 
-//	@Override
+	//	@Override
 //	protected void onCreate(Bundle savedInstanceState) {
 //		super.onCreate(savedInstanceState);
 //		setContentView(R.layout.activity_game_play);
