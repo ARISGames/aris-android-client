@@ -90,6 +90,7 @@ public class Calls {
 
 	public static final String HTTP_SET_PLAYER_GROUP = "v2.client.setPlayerGroup/";
 	public static final String HTTP_SET_PLAYER_SCENE = "v2.client.setPlayerScene/"; // "game_id","scene_id"
+	public static final String HTTP_SET_QTY_4_INSTANCE = "v2.client.setQtyForInstance";
 
 	// update things
 	public static final String HTTP_UPDATE_NOTE         = "v2.notes.updateNote/";
@@ -135,7 +136,8 @@ public class Calls {
 					HTTP_LOG_PLAYER_SET_SCENE,
 					HTTP_LOG_PLAYER_VIEWED_TAB,
 					HTTP_SET_PLAYER_SCENE,
-					HTTP_SET_PLAYER_GROUP
+					HTTP_SET_PLAYER_GROUP,
+					HTTP_SET_QTY_4_INSTANCE
 			}
 	));
 }

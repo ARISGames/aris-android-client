@@ -101,6 +101,15 @@ public class AppServices {
 	}
 
 	public void setQtyForInstanceId(long instance_id, long qty) {
+		JSONObject jsonArgs = jsonGameId();
+		// add to params
+		try {
+			jsonArgs.put("instance_id", instance_id);
+			jsonArgs.put("qty", qty);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		pollServer(Calls.HTTP_SET_QTY_4_INSTANCE, jsonArgs);
 
 	}
 

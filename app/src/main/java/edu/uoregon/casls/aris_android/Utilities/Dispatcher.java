@@ -303,15 +303,19 @@ public class Dispatcher {
 	//	MODEL_OVERLAYS_LESS_AVAILABLE",nil,@{@"removed":removedOverlays});
 	public void model_overlays_less_available(List<Overlay> removedOverlays) {
 		// todo: MapViewController.refreshViewFromModel()
-		if (mGamePlayAct.mapViewFragment != null && mGamePlayAct.mapViewFragment.isVisible())
+		if (mGamePlayAct.mapViewFragment != null && mGamePlayAct.mapViewFragment.isVisible()) {
+//			Log.d(AppConfig.LOGTAG_D2, "Calling refreshViewFromModel from model_overlays_less_available()" );
 			mGamePlayAct.mapViewFragment.refreshViewFromModel();
+		}
 	}
 
 	//	MODEL_OVERLAYS_NEW_AVAILABLE",nil,@{@"added":addedOverlays});
 	public void model_overlays_new_available(List<Overlay> addedOverlays) {
 		// todo: MapViewController.refreshViewFromModel()
-		if (mGamePlayAct.mapViewFragment != null && mGamePlayAct.mapViewFragment.isVisible())
+		if (mGamePlayAct.mapViewFragment != null && mGamePlayAct.mapViewFragment.isVisible()) {
+//			Log.d(AppConfig.LOGTAG_D2, "Calling refreshViewFromModel from model_overlays_new_available()");
 			mGamePlayAct.mapViewFragment.refreshViewFromModel();
+		}
 	}
 
 	//	MODEL_PLAQUES_AVAILABLE",nil,nil); // from plaquesModel; not listened to. -sem
@@ -336,9 +340,16 @@ public class Dispatcher {
 //	MODEL_PLAYER_SCRIPT_OPTIONS_AVAILABLE",nil,uInfo); // handled as internal method redirect in DialogsModel - sem
 //	MODEL_PLAYER_TRIGGERS_AVAILABLE",nil,nil);
 	public void model_player_triggers_available() {
-
-		if (mGamePlayAct.mapViewFragment != null && mGamePlayAct.mapViewFragment.isVisible())
+		if (mGamePlayAct.mapViewFragment != null && mGamePlayAct.mapViewFragment.isVisible()) {
+//			Log.d(AppConfig.LOGTAG_D2, "Calling refreshViewFromModel from model_player_triggers_available()" );
 			mGamePlayAct.mapViewFragment.refreshViewFromModel();
+		}
+//		else { // debugging calls
+//			if (mGamePlayAct.mapViewFragment == null)
+//				Log.d(AppConfig.LOGTAG_D2, "COULD NOT CALL refreshViewFromModel from model_player_triggers_available() because mapView is NULL. Why? Left's find out." );
+//			else if (!mGamePlayAct.mapViewFragment.isVisible())
+//				Log.d(AppConfig.LOGTAG_D2, "COULD NOT CALL refreshViewFromModel from model_player_triggers_available() because mapView is not visible" );
+//		}
 		// todo: NotebookNotesViewController.newNoteListAvailable()
 //		NotebookViewFragment notebookViewFragment = mGamePlayAct.getSupportFragmentManager().findFragmentById(R.id.fl_fragment_notebook_view)
 //		if (notebookViewFragment != null && mGamePlayAct.mCurrentFragVisible.equalsIgnoreCase(notebookViewFragment.getTag()))
@@ -659,6 +670,7 @@ public class Dispatcher {
 	public void services_player_triggers_received(List<Trigger> ptrigs) {
 		// todo: MapViewController.refreshViewFromModel(ptrigs)
 		// todo: NotebookNotesViewController.newNoteListAvailable()
+		Log.d(AppConfig.LOGTAG_D2, "Calling triggersModel.playerTriggersReceived from services_player_triggers_received() with this many triggers: " + ptrigs.size());
 		mGamePlayAct.mGame.triggersModel.playerTriggersReceived(ptrigs);
 	}
 

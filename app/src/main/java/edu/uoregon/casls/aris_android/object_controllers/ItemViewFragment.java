@@ -1,18 +1,25 @@
 package edu.uoregon.casls.aris_android.object_controllers;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
@@ -74,7 +81,6 @@ public class ItemViewFragment extends Fragment {
 		mGamePlayActivity = gamePlayActivity;
 	}
 
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
@@ -85,7 +91,7 @@ public class ItemViewFragment extends Fragment {
 		tvItemName.setText(mItem.name);
 
 		if (tab != null) {
-			ImageButton ibToggleTab = (ImageButton) mItemFragView.findViewById(R.id.ib_item_tabmenu_or_go_back);
+			ImageButton ibToggleTab = (ImageButton) mItemFragView.findViewById(R.id.ib_item_go_back);
 			ibToggleTab.setImageResource(R.drawable.threelines);
 			ibToggleTab.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -94,10 +100,9 @@ public class ItemViewFragment extends Fragment {
 					mGamePlayActivity.onClickMapOpenDrawer(mItemFragView); // todo: untested
 				}
 			});
-
 		}
 		else {
-			ImageButton ibGoBack = (ImageButton) mItemFragView.findViewById(R.id.ib_item_tabmenu_or_go_back);
+			ImageButton ibGoBack = (ImageButton) mItemFragView.findViewById(R.id.ib_item_go_back);
 			ibGoBack.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -110,57 +115,128 @@ public class ItemViewFragment extends Fragment {
 		return mItemFragView;
 	}
 
+	public void refreshTitle() { // todo: Necessary in android?
+//		if (instance.qty < 2 || instance.infinite_qty == 1) this.title = this.tabTitle;
+//		else this.title = [NSString stringWithFormat:@"%@ x%ld",self.tabTitle,instance.qty];
+	}
+
 	private void setUpButtons() {
-		if (true) { // todo: logic for buttons
-			TextView tvDestroy = (TextView) mItemFragView.findViewById(R.id.tv_item_destroy);
+		TextView tvDestroy = (TextView) mItemFragView.findViewById(R.id.tv_item_destroy);
+		TextView tvDrop = (TextView) mItemFragView.findViewById(R.id.tv_item_drop);
+		TextView tvPickUp = (TextView) mItemFragView.findViewById(R.id.tv_item_pick_up);
+
+		if (instance.owner_id == Long.getLong(mGamePlayActivity.mPlayer.user_id, 0) && mItem.destroyable == 1) { // show destroy button?
 			tvDestroy.setVisibility(View.VISIBLE);
 			tvDestroy.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					// Pick up item
-					destroyItem();
+					destroyItemClicked();
 				}
 			});
 		}
-		if (true) { // todo: logic for buttons
-			TextView tvPickUp = (TextView) mItemFragView.findViewById(R.id.tv_item_destroy);
-			tvPickUp.setVisibility(View.VISIBLE);
-			tvPickUp.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					// Pick up item
-					pickUpItem();
-				}
-			});
-		}
-		if (true) { // todo: logic for buttons
-			TextView tvDrop = (TextView) mItemFragView.findViewById(R.id.tv_item_destroy);
+		else tvDestroy.setVisibility(View.GONE);
+
+		if (instance.owner_id == Long.getLong(mGamePlayActivity.mPlayer.user_id, 0) && mItem.droppable == 1) { // show drop button?
 			tvDrop.setVisibility(View.VISIBLE);
 			tvDrop.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					// Pick up item
-					dropItem();
+					dropItemClicked();
 				}
 			});
 		}
+		else tvDrop.setVisibility(View.GONE);
+
+		if (instance.owner_id == 0 && (instance.qty > 0 || instance.infinite_qty == 1)) { // Pick up button visible?
+			tvPickUp.setVisibility(View.VISIBLE);
+			tvPickUp.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// Pick up item
+					pickUpItemClicked();
+				}
+			});
+		}
+		else tvPickUp.setVisibility(View.GONE);
+
 	}
 
-	private void destroyItem() {
+	private void destroyItemClicked() {
 
 	}
 
-	public void pickUpItem() {
+	private void dropItemClicked() {
 
 	}
 
-	private void dropItem() {
+	public void pickUpItemClicked() {
+//		lastbuttontouched = 2;
+		long amtMoreCanHold = mGamePlayActivity.mGame.playerInstancesModel.qtyAllowedToGiveForItem(mItem.item_id); //[_MODEL_PLAYER_INSTANCES_ qtyAllowedToGiveForItem:item.item_id];
+		long allowablePickupAmt = instance.infinite_qty == 1 ? 99999999 : instance.qty;
+		if (amtMoreCanHold < allowablePickupAmt) allowablePickupAmt = amtMoreCanHold;
 
+		if (allowablePickupAmt == 0) {
+//			[[ARISAlertHandler sharedAlertHandler] showAlertWithTitle:@"Unable to Pick Up" message:@"Max qty already owned."];
+			Toast t = Toast.makeText(mGamePlayActivity, "Unable to Pick Up this item. You already have as many as you are allowed.",
+					Toast.LENGTH_LONG);
+			t.setGravity(Gravity.BOTTOM, 0, 0);
+			t.show();
+
+			return;
+		}
+		else if(allowablePickupAmt > 1 && instance.infinite_qty == 0) {
+//			ItemActionViewController *itemActionVC = [[ItemActionViewController alloc] initWithPrompt:NSLocalizedString(@"ItemPickupKey", @"") positive:YES maxqty:allowablePickupAmt delegate:self];
+			final AlertDialog alertDialog = new AlertDialog.Builder(mGamePlayActivity).create();
+			final EditText input = new EditText(mGamePlayActivity);
+			input.setHint("Qty?");
+			input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+			alertDialog.setTitle("Pick Up How Many?");
+			alertDialog.setMessage("Enter quantity");
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,  "Pick Up", Message.obtain());
+			alertDialog.setView(input);
+			alertDialog.show();
+
+			pickupItemQty(1); // todo: present dialog with amount to pick up.
+//			[[self navigationController] pushViewController:itemActionVC animated:YES]; // iOS builds the popup alert then calls pickupItemQty
+
+		}
+		else this.pickupItemQty(1);
+	}
+
+	private void pickupItemQty(int q) {
+		// popup to tell player item is acquired. Calls giveItem along with presentation of dialog.
+//		mGamePlayActivity.mGame.playerInstancesModel.giveItemToPlayer(mItem.item_id, q); //	[_MODEL_PLAYER_INSTANCES_ giveItemToPlayer:item.item_id qtyToAdd:q];
+		Toast t = Toast.makeText(mGamePlayActivity, "+1 " + mItem.name +". Total: " + mGamePlayActivity.mGame.playerInstancesModel.giveItemToPlayer(mItem.item_id, q), // todo: user amount of item???
+				Toast.LENGTH_SHORT);
+		t.setGravity(Gravity.BOTTOM, 0, 0);
+		t.show();
+
+		long nq = instance.qty - q;
+		mGamePlayActivity.mGame.instancesModel.setQtyForInstanceId(mItem.item_id, nq); //[_MODEL_INSTANCES_ setQtyForInstanceId:instance.instance_id qty:nq];
+		instance.qty = nq; //should get set in above call- but if bogus instance, can't hurt to force it
+		this.setUpButtons(); //[self updateViewButtons];
+		this.refreshTitle(); // [self refreshTitle];
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		getView().setFocusableInTouchMode(true);
+		getView().requestFocus();
+		getView().setOnKeyListener(new View.OnKeyListener() {
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+					// handle back button's click listener
+					dismissSelf();
+					return true;
+				}
+				return false;
+			}
+		});
+
 		// presumably the media fragment has now loaded and passed initial lifecycle calls so we can
 		// tell it to load stuff.
 		if (mItem.type.equalsIgnoreCase("URL") && mItem.url != null && !mItem.url.isEmpty() & !mItem.url.contentEquals("0"))

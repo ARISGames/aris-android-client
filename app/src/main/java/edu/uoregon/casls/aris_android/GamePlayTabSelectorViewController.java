@@ -209,8 +209,7 @@ public class GamePlayTabSelectorViewController {
 //		if(this.view) [tableView reloadData];
 	}
 	
-	public void setupDefaultTab()
-	{
+	public void setupDefaultTab() {
 		String tag = "";
 		String fragViewToDisplay = "";
 		// sort playerTabs by "sort_index" field
@@ -220,8 +219,7 @@ public class GamePlayTabSelectorViewController {
 		Collections.sort(mPlayerTabs, new TabCompareBySortIndex());
 		Tab tab = mPlayerTabs.get(0); // get the first item on the list (which is sorted now by sort_index)
 
-		if (true) // todo: temp. do we have a need to check stuff here? nulls?
-		{
+		if (true) { // todo: temp. do we have a need to check stuff here? nulls?
 			if (tab.type.equalsIgnoreCase("QUESTS")) {
 				//if uses icon quest view
 				if (!tab.info.isEmpty() && !tab.info.contentEquals("")) { // todo: Android doesn't have icon view currently
@@ -317,6 +315,8 @@ public class GamePlayTabSelectorViewController {
 			}
 			else if (tab.type.equalsIgnoreCase("ITEM")) {
 //					ItemViewController *itemViewController = [[ItemViewController alloc] initWithTab:tab delegate:
+				// todo: can we assume that the itemViewFragment already exists? NPE possible here.
+				mGamePlayAct.itemViewFragment.initWithTab(tab);
 //					(id<ItemViewControllerDelegate>)delegate];
 //					vc = [[ARISNavigationController alloc] initWithRootViewController:itemViewController];
 			}

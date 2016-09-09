@@ -1,9 +1,11 @@
 package edu.uoregon.casls.aris_android.tab_controllers;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,16 +21,18 @@ import edu.uoregon.casls.aris_android.R;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
 import edu.uoregon.casls.aris_android.data_objects.Item;
 import edu.uoregon.casls.aris_android.data_objects.Media;
+import edu.uoregon.casls.aris_android.data_objects.Tab;
 import edu.uoregon.casls.aris_android.models.PlayerInstancesModel;
 
 
 public class InventoryViewFragment extends Fragment {
 
 	private transient GamePlayActivity mGamePlayAct;
-	public View mThisFragsView;
+	public static View mThisFragsView;
 	public Collection<Instance> mInstances = new ArrayList();
+	public Tab tab;
 
-//	private OnFragmentInteractionListener mListener;
+	private OnFragmentInteractionListener mListener;
 
 	public InventoryViewFragment() {
 		// Required empty public constructor
@@ -42,17 +46,34 @@ public class InventoryViewFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		// Inflate the layout for this fragment
-		mThisFragsView = inflater.inflate(R.layout.fragment_inventory_view, container, false);
+		// check for preexisting view; remove it if one is found. Otherwise get Duplicate Fragment error.
+		if (mThisFragsView != null) {
+			ViewGroup parent = (ViewGroup) mThisFragsView.getParent();
+			if (parent != null)
+				parent.removeView(mThisFragsView);
+		}
+
+		try {
+			// Inflate the layout for this fragment
+			mThisFragsView = inflater.inflate(R.layout.fragment_inventory_view, container, false);
+		}
+		catch(InflateException ie) {
+			// do nothing; just go on.
+		}
+
+//		mThisFragsView = inflater.inflate(R.layout.fragment_inventory_view, container, false);
+
+
 		if (mGamePlayAct == null)
 			mGamePlayAct = (GamePlayActivity) getActivity();
+		mGamePlayAct.showNavBar();
 
 		this.updateList();
 		mInstances = new ArrayList<>();
 		return mThisFragsView;
 	}
 
-	public void updateList() { // refreshViews in iOS InventoryViewController(
+	public void updateList() { // aka refreshViews in iOS InventoryViewController
 		LinearLayout llInventoryList = (LinearLayout) mThisFragsView.findViewById(R.id.ll_inventory_list);
 		llInventoryList.removeAllViews(); // refresh visible views so they don't accumulate
 		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -143,9 +164,36 @@ public class InventoryViewFragment extends Fragment {
 	 * "http://developer.android.com/training/basics/fragments/communicating.html"
 	 * >Communicating with Other Fragments</a> for more information.
 	 */
-//	public interface OnFragmentInteractionListener {
-//		// TODO: Update argument type and name
-//		public void onFragmentInteraction(Uri uri);
+	public interface OnFragmentInteractionListener {
+		// TODO: Update argument type and name
+		public void onFragmentInteraction(Uri uri);
+		void gamePlayTabBarViewControllerRequestsNav();
+		void fragmentInventoryDismiss();
+	}
+//
+//	private void dismissSelf() {
+//		if (tab != null)
+//			this.showNav();
+//		if (mListener != null) {
+//			mListener.fragmentInventoryDismiss();
+//		}
+//		// the following iOS logic wil happen in GamePlayActivity.fragmentPlaqueExit();
+//	}
+//
+//	private void showNav() {
+//		mListener.gamePlayTabBarViewControllerRequestsNav();
+//	}
+//
+//	@Override
+//	public void onAttach(Context context) {
+//		super.onAttach(context);
+//		if (context instanceof OnFragmentInteractionListener) {
+//			mListener = (OnFragmentInteractionListener) context;
+//		}
+//		else {
+//			throw new RuntimeException(context.toString()
+//					+ " must implement OnFragmentInteractionListener");
+//		}
 //	}
 
 }

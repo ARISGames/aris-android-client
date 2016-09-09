@@ -1,6 +1,7 @@
 package edu.uoregon.casls.aris_android.models;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
+import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
 import edu.uoregon.casls.aris_android.data_objects.Item;
@@ -162,6 +164,8 @@ public class PlayerInstancesModel extends ARISModel {
 	}
 
 	public long setItemsForPlayer(long item_id, long qty) {
+//		Log.d(AppConfig.LOGTAG_D2, "PlayerInstanceModel. setItemsForPlayer " + item_id + ", " + qty);
+
 		Instance pII = playerInstances.get(item_id);
 		if (pII == null) return 0; //UH OH! NO INSTANCE TO GIVE ITEM TO! (shouldn't happen if touchItemsForPlayer was called...)
 

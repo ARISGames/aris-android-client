@@ -68,6 +68,7 @@ import edu.uoregon.casls.aris_android.services.MediaResult;
  * Use the {@link MapViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
 public class MapViewFragment extends Fragment {
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -206,7 +207,7 @@ public class MapViewFragment extends Fragment {
 		player_latlng = new LatLng(l.getLatitude(), l.getLongitude());
 
 		setUpMap();
-//		if (mMap != null) {
+//		if (mMap != null) { // fixme: thought this would fix the "empty" instance item (those that when clicked View don't go to the respective view. They just sit there.
 //			refreshViewFromModel();
 //			refreshModels();
 //		}
@@ -318,6 +319,7 @@ public class MapViewFragment extends Fragment {
 //								return false;
 //							}
 //						});
+						Log.d(AppConfig.LOGTAG_D2, "Calling refreshViewFromModel from SetUpMap()" );
 						refreshViewFromModel();
  						refreshModels();
 					}
@@ -342,6 +344,7 @@ public class MapViewFragment extends Fragment {
 
 	public void refreshViewFromModel() {
 
+		Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + "refreshViewFromModel Called" );
 		if (mMap == null) return; // There might be calls arriving before the map is available; ignore them.
 
 		boolean shouldRemove;
@@ -421,8 +424,9 @@ public class MapViewFragment extends Fragment {
 
 			}
 		}
-		// remove any triggers designated for deletion;
-		// this is done directly in the shouldRemove block in iOS. Done separately here to avoid deforming the loop base while looping.
+
+		// remove any triggers designated for deletion; // == ORIGINAL (FAULTY) ANDROID LOGIC - REWRITTEN ABOVE ==
+		// this is done directly in the shouldRemove block in iOS. Done separately here to avoid deforming the loop base while looping. == NOW DONE INHERENTLY IN LOOP ABOVE - THIS LOOP NO LONGER USEFUL
 //		for (Trigger markerToRemove : markersAndCirclesToRemove) {
 ////			if (markerToRemove.triggerMarker != null) {
 ////				Log.d(AppConfig.LOGTAG_D2, "333 Removing Marker ID:" + markerToRemove.triggerMarker.getId());
@@ -528,6 +532,7 @@ public class MapViewFragment extends Fragment {
 
 			}
 		}
+		Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + "markersAndCircles have been updated with incoming/outgoing triggers. New size: " + markersAndCircles.size() + "\n\n" );
 
 		// In iOS, a clicked marker will result in a call to displayHUDWithTrigger via an internal MKMapView call;
 		// in Android we explicitly set up the onClickListener for the map markers all at once.
@@ -627,11 +632,15 @@ public class MapViewFragment extends Fragment {
 		mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 			@Override
 			public boolean onMarkerClick(Marker marker) {
+				boolean found = false;
 				for (final Trigger trigger : markersAndCircles) {
 					Instance  modelInstance = mGamePlayAct.mGame.instancesModel.instanceForId(trigger.instance_id);
-					String in = modelInstance.name();
-					String mt = marker.getTitle();
+					String modInstName = modelInstance.name(); // debugging convenience value
+					String mt = marker.getTitle(); // debugging convenience value
+		Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + "Marker Clicked. Looping thru markersAndCircles to find which was clicked. Marker Title: " + mt + " == " + modInstName + " ?");
+
 					if (modelInstance.name().equals(marker.getTitle())) {
+						Log.d(AppConfig.LOGTAG_D2, "=============== Found it! Marker Title: " + modInstName);
 						// get distance from player.
 						trigger.setLocationFromExistingLatLng();
 						// below is found in displayHUDWithTrigger in iOS
@@ -651,10 +660,10 @@ public class MapViewFragment extends Fragment {
 							String triggerType = trigger.name;
 							new AlertDialog.Builder(mGamePlayAct)
 									.setIcon(alertImage)
-//									.setIcon(ContextCompat.getDrawable(mGamePlayAct, R.drawable.plaque_icon_120))
+//									.setIcon(ContextCompat.getDrawable(mGamePlayAct, R.drawable.plaque_icon_120)) // todo: show an icon?
 //									.setIcon(mGamePlayAct.getResources().getDrawable(R.drawable.plaque_icon_120))
 									.setTitle("View?")
-//									.setMessage("Are you sure you want to quit Aris?")
+									.setMessage("DEBUG: Marker title: " + mt)
 									.setPositiveButton("View", new DialogInterface.OnClickListener() {
 										@Override
 										public void onClick(DialogInterface dialog, int which) {
@@ -677,11 +686,15 @@ public class MapViewFragment extends Fragment {
 						else {
 							float distanceToWalk = distance - trigger.distance;
 							Toast t = Toast.makeText(mGamePlayAct, "You are not in range to interact with this. Walk " + String.format("%.1f", distanceToWalk) + "m",
-									Toast.LENGTH_LONG);
-							t.setGravity(Gravity.CENTER, 0, 0);
+									Toast.LENGTH_SHORT);
+							t.setGravity(Gravity.BOTTOM, 0, 0);
 							t.show();
-
 						}
+						found = true;
+						break; // once found loop can stop
+					}
+					if (!found) {
+						Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + "=============== UNABLE to find this Marker! Marker Title: " + modInstName);
 					}
 				}
 
@@ -724,16 +737,6 @@ public class MapViewFragment extends Fragment {
 		mGamePlayAct = gamePlayAct;
 	}
 
-	/**
-	 * This interface must be implemented by activities that contain this
-	 * fragment to allow an interaction in this fragment to be communicated
-	 * to the activity and potentially other fragments contained in that
-	 * activity.
-	 * <p/>
-	 * See the Android Training lesson <a href=
-	 * "http://developer.android.com/training/basics/fragments/communicating.html"
-	 * >Communicating with Other Fragments</a> for more information.
-	 */
 	public interface OnFragmentInteractionListener {
 		// TODO: Update argument type and name
 		public void onFragmentInteraction(Uri uri);
