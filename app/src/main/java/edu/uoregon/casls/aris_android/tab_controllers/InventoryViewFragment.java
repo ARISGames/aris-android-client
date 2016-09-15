@@ -61,9 +61,6 @@ public class InventoryViewFragment extends Fragment {
 			// do nothing; just go on.
 		}
 
-//		mThisFragsView = inflater.inflate(R.layout.fragment_inventory_view, container, false);
-
-
 		if (mGamePlayAct == null)
 			mGamePlayAct = (GamePlayActivity) getActivity();
 		mGamePlayAct.showNavBar();

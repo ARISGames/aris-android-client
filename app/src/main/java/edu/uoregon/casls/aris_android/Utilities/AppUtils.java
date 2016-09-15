@@ -3,6 +3,7 @@ package edu.uoregon.casls.aris_android.Utilities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -27,6 +28,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.GamesListActivity;
+import edu.uoregon.casls.aris_android.R;
 
 /**
  * Created by smorison on 7/16/15.
@@ -207,4 +210,37 @@ public class AppUtils {
 		return uglyName.substring(0, 1).toUpperCase() + uglyName.substring(1).toLowerCase();
 	}
 
+	public static String getArisJs(Activity act) {
+		try {
+			Resources res = act.getResources();
+			InputStream inStream = res.openRawResource(R.raw.arisjs);
+
+			byte[] b = new byte[inStream.available()];
+			inStream.read(b);
+			return new String(b);
+		} catch (Exception e) {
+			// e.printStackTrace();
+			return "";
+		}
+	}
+
+	//	public static String convertStreamToString(InputStream is) throws Exception {
+//		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+//		StringBuilder sb = new StringBuilder();
+//		String line = null;
+//		while ((line = reader.readLine()) != null) {
+//			sb.append(line).append("\n");
+//		}
+//		reader.close();
+//		return sb.toString();
+//	}
+
+//	public static String getArisJsFromFile () throws Exception {
+//		File fl = new File();
+//		FileInputStream fin = new FileInputStream(fl);
+//		String ret = convertStreamToString(fin);
+//		//Make sure you close all streams.
+//		fin.close();
+//		return ret;
+//	}
 }

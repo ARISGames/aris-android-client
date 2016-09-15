@@ -1,6 +1,7 @@
 package edu.uoregon.casls.aris_android.object_controllers;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,14 +10,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.DownloadListener;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.FileInputStream;
+import java.util.List;
+
+import edu.uoregon.casls.aris_android.ARISWebView;
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
 import edu.uoregon.casls.aris_android.Utilities.AppConfig;
+import edu.uoregon.casls.aris_android.Utilities.AppUtils;
+import edu.uoregon.casls.aris_android.WebViewInterface;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
 import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.data_objects.Plaque;
@@ -26,23 +36,14 @@ import edu.uoregon.casls.aris_android.models.InstancesModel;
 
 public class PlaqueViewFragment extends Fragment {
 
-	public Plaque mPlaque;
-	public Instance mInstance;
-	public InstancesModel instancesModel;
-	public Tab tab;
-	public ARISMediaViewFragment mediaViewFrag;
-	public View                  mPlaqueView;
+	public        Plaque                mPlaque;
+	public        Instance              mInstance;
+	public        InstancesModel        instancesModel;
+	public        Tab                   tab;
+	public        ARISMediaViewFragment mediaViewFrag;
+	public static View                  mPlaqueView;
 
 	public GamePlayActivity mGamePlayActivity;
-
-	// TODO: Rename parameter arguments, choose names that match
-	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-	private static final String ARG_PARAM1 = "param1";
-	private static final String ARG_PARAM2 = "param2";
-
-	// TODO: Rename and change types of parameters
-	private String mParam1;
-	private String mParam2;
 
 	private OnFragmentInteractionListener mListener;
 
@@ -59,14 +60,13 @@ public class PlaqueViewFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		mGamePlayActivity = (GamePlayActivity) getActivity();
 		if (getArguments() != null) {
-			mParam1 = getArguments().getString(ARG_PARAM1);
-			mParam2 = getArguments().getString(ARG_PARAM2);
+//            mParam1 = getArguments().getString(ARG_PARAM1);
 		}
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                         Bundle savedInstanceState) {
+							 Bundle savedInstanceState) {
 
 		// Inflate the layout for this fragment
 		mPlaqueView = inflater.inflate(R.layout.fragment_plaque_view, container, false);
@@ -86,13 +86,13 @@ public class PlaqueViewFragment extends Fragment {
 		super.onResume();
 		// presumably the media fragment has now loaded and passed initial lifecycle calls so we can
 		// tell it to load stuff.
-		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment.onResume; ");
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, "PlaqueViewFragment.onResume; ");
 		this.loadView();
 	}
 
 	public void initWithInstance(Instance i) {
 //		delegate = d; // Android app eschews the delegates (for now, anyway)
-		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment.initWithInstance called; " );
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, "PlaqueViewFragment.initWithInstance called; ");
 		mInstance = i;
 		mPlaque = mGamePlayActivity.mGame.plaquesModel.plaqueForId(mInstance.object_id);
 		if (mPlaque.event_package_id > 0)
@@ -111,8 +111,7 @@ public class PlaqueViewFragment extends Fragment {
 	}
 
 	// todo: call from onCreateView?
-	public void loadView()
-	{
+	public void loadView() {
 
 //		mediaView = [[ARISMediaView alloc] initWithDelegate:self];
 //		[mediaView setDisplayMode:ARISMediaDisplayModeTopAlignAspectFitWidthAutoResizeHeight];
@@ -126,7 +125,7 @@ public class PlaqueViewFragment extends Fragment {
 
 		// Show Continue text and forward button if continue_function != NONE
 		// In Android: Hide these features if continue_function == NONE
-		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment.loadView; looking at continue_function: " + mPlaque.continue_function);
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, "PlaqueViewFragment.loadView; looking at continue_function: " + mPlaque.continue_function);
 		if (mPlaque.continue_function.contentEquals("NONE")) { //fixme: NPE here: Attempt to read from field 'java.lang.String edu.uoregon.casls.aris_android.data_objects.Plaque.continue_function' on a null object reference
 			RelativeLayout continueFooter = (RelativeLayout) mPlaqueView.findViewById(R.id.rl_plaque_footer);
 			continueFooter.setVisibility(View.INVISIBLE);
@@ -146,44 +145,44 @@ public class PlaqueViewFragment extends Fragment {
 		this.loadPlaque();
 	}
 
-	public void loadPlaque()
-	{
-		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment.loadPlaque; ");
+	public void loadPlaque() {
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, "PlaqueViewFragment.loadPlaque; ");
 
 		if (!mPlaque.name.isEmpty()) { // set plaqueue title
 			TextView tvPlaqueueTitle = (TextView) mPlaqueView.findViewById(R.id.tv_plaque_title);
 			tvPlaqueueTitle.setText(mPlaque.name);
 		}
 		if (!mPlaque.description.contentEquals("")) { // load the description webview
-			Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment.load the description webview; ");
-//			[scrollView addSubview:webView];
-//			webView.frame = CGRectMake(0, 0, self.view.bounds.size.width, 10);//Needs correct width to calc height
-//			[webView loadHTMLString:[NSString stringWithFormat:[ARISTemplate ARISHtmlTemplate], plaque.description] baseURL:nil];
-			WebView wvDialogOptionPrompt = (WebView) mPlaqueView.findViewById(R.id.wv_plaque_desc);
-			wvDialogOptionPrompt.getSettings().setJavaScriptEnabled(true);
-			wvDialogOptionPrompt.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
-			wvDialogOptionPrompt.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
-//		    	wvDialogOptionPrompt.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-			String dialogOptionHtml = "<html><body>" + mPlaque.description + "</body></html>";
-			wvDialogOptionPrompt.loadData(dialogOptionHtml, "text/html", null);
+			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, "PlaqueViewFragment.load the description webview; ");
+
+			final ARISWebView wvPlaqueDescription = (ARISWebView) mPlaqueView.findViewById(R.id.wv_plaque_desc);
+			wvPlaqueDescription.initWithContext(mGamePlayActivity);
+			String finalHtml = "<html><head><script type=\"text/javascript\">"
+					+ "</script></head>"
+					+ "<body>" + mPlaque.description + "</body></html>";
+
+			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, " loading HTML string into Plaque's decription webView: " + finalHtml);
+			wvPlaqueDescription.loadData(finalHtml, "text/html", null);
+
 		}
 
 		// load associated media into media fragment todo: may just want to put fragment into includable view with ordinary class?
-		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment. looking for Plaque media; ");
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, "PlaqueViewFragment. looking for Plaque media; ");
 		Media media = mGamePlayActivity.mMediaModel.mediaForId(mPlaque.media_id);
 		if (media != null) {
-			Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "PlaqueViewFragment. setting webview with Plaque media; ");
+			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, "PlaqueViewFragment. setting webview with Plaque media; ");
 			mediaViewFrag.setMedia(media);
 //			[mediaView setMedia:media];
 		}
 	}
 
 	public void continueButtonTouched(View v) {
-		Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " continueButtonTouched. mPlaque.continue_function = " + mPlaque.continue_function);
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " continueButtonTouched. mPlaque.continue_function = " + mPlaque.continue_function);
 
 		if (mPlaque.continue_function.contentEquals("JAVASCRIPT")) {
 			// todo: [webView hookWithParams:@""];
-		} else if (mPlaque.continue_function.contentEquals("EXIT")) {
+		}
+		else if (mPlaque.continue_function.contentEquals("EXIT")) {
 			this.dismissSelf();
 		}
 	}
@@ -238,7 +237,9 @@ public class PlaqueViewFragment extends Fragment {
 	public interface OnFragmentInteractionListener {
 		// TODO: Update argument type and name
 		void fragmentPlaqueDismiss();
+
 		void onFragmentInteraction(Uri uri);
+
 		void gamePlayTabBarViewControllerRequestsNav();
 	}
 }

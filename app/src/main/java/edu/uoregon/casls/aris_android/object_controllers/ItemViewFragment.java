@@ -181,7 +181,7 @@ public class ItemViewFragment extends Fragment {
 //			[[ARISAlertHandler sharedAlertHandler] showAlertWithTitle:@"Unable to Pick Up" message:@"Max qty already owned."];
 			Toast t = Toast.makeText(mGamePlayActivity, "Unable to Pick Up this item. You already have as many as you are allowed.",
 					Toast.LENGTH_LONG);
-			t.setGravity(Gravity.BOTTOM, 0, 0);
+			t.setGravity(Gravity.TOP, 0, 0);
 			t.show();
 
 			return;
@@ -210,7 +210,7 @@ public class ItemViewFragment extends Fragment {
 //		mGamePlayActivity.mGame.playerInstancesModel.giveItemToPlayer(mItem.item_id, q); //	[_MODEL_PLAYER_INSTANCES_ giveItemToPlayer:item.item_id qtyToAdd:q];
 		Toast t = Toast.makeText(mGamePlayActivity, "+1 " + mItem.name +". Total: " + mGamePlayActivity.mGame.playerInstancesModel.giveItemToPlayer(mItem.item_id, q), // todo: user amount of item???
 				Toast.LENGTH_SHORT);
-		t.setGravity(Gravity.BOTTOM, 0, 0);
+		t.setGravity(Gravity.TOP, 0, 0);
 		t.show();
 
 		long nq = instance.qty - q;

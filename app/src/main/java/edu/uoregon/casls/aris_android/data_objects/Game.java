@@ -66,7 +66,7 @@ public class Game {
 	public int listen_game_piece_available        = 1;
 	public int listen_maintenance_piece_available = 1;
 	public int listen_media_piece_available       = 1;
-	public int listen_model_game_began       = 1;
+	public int listen_model_game_began            = 1;
 
 	private static final String HTTP_GET_FULL_GAME_REQ_API = "v2.games.getFullGame/";
 	public long game_id;
@@ -135,7 +135,7 @@ public class Game {
 	public LogsModel            logsModel;
 	public QuestsModel          questsModel;
 	public TriggersModel        triggersModel;
-	public DisplayQueueModel 	displayQueueModel;
+	public DisplayQueueModel    displayQueueModel;
 	// medias (in GamePlayAct
 
 	//local stuff
@@ -145,7 +145,7 @@ public class Game {
 
 	//	PollTimer vars
 	public  Boolean isServerPollerRunning = false;
-	private Intent  pollServerSvcIntent = null;
+	private Intent  pollServerSvcIntent   = null;
 
 	// FYI transient indicates "do not serialize"; gson will die a recursive death if it did.
 	public transient GamePlayActivity mGamePlayAct; // For reference to GamePlayActivity; do not instantiate (new) object or circular references will ensue.
@@ -477,7 +477,7 @@ public class Game {
 		logsModel = null;
 
 		displayQueueModel.endPlay();
-		displayQueueModel    = null;
+		displayQueueModel = null;
 
 	}
 
@@ -499,7 +499,7 @@ public class Game {
 	public void requestPlayerDataUnlessBusy() { // new in iOS 8/16; stubbed in for Android; might be useful to mitigated net traffic jams.
 		// todo: look at a way to see if server calls are backing up or app is really busy; use for condition below.
 		if (true) //(![[[RootViewController sharedRootViewController] gamePlayViewController] viewingObject])
-		    this.requestPlayerData();
+			this.requestPlayerData();
 	}
 
 	public void requestPlayerData() {
@@ -582,7 +582,7 @@ public class Game {
 			isServerPollerRunning = false;
 			// cancel all outstanding http requests.
 			if (mGamePlayAct.mAppServices.mClient != null)
-			mGamePlayAct.mAppServices.mClient.cancelRequests(mGamePlayAct, true); // perhaps cancelAllRequests which will kill requests from all contexts. Probably no difference in this case.
+				mGamePlayAct.mAppServices.mClient.cancelRequests(mGamePlayAct, true); // perhaps cancelAllRequests which will kill requests from all contexts. Probably no difference in this case.
 		}
 		displayQueueModel.endPlay();
 	}
@@ -643,7 +643,7 @@ public class Game {
 	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, getClass().getSimpleName() + " PollTimer has Cycled  - - - - - - - - DING!");
+			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " PollTimer has Cycled  - - - - - - - - DING!");
 			handleServerPollerMessage(intent);
 		}
 	};

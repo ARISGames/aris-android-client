@@ -302,7 +302,6 @@ public class Dispatcher {
 
 	//	MODEL_OVERLAYS_LESS_AVAILABLE",nil,@{@"removed":removedOverlays});
 	public void model_overlays_less_available(List<Overlay> removedOverlays) {
-		// todo: MapViewController.refreshViewFromModel()
 		if (mGamePlayAct.mapViewFragment != null && mGamePlayAct.mapViewFragment.isVisible()) {
 //			Log.d(AppConfig.LOGTAG_D2, "Calling refreshViewFromModel from model_overlays_less_available()" );
 			mGamePlayAct.mapViewFragment.refreshViewFromModel();
@@ -311,7 +310,6 @@ public class Dispatcher {
 
 	//	MODEL_OVERLAYS_NEW_AVAILABLE",nil,@{@"added":addedOverlays});
 	public void model_overlays_new_available(List<Overlay> addedOverlays) {
-		// todo: MapViewController.refreshViewFromModel()
 		if (mGamePlayAct.mapViewFragment != null && mGamePlayAct.mapViewFragment.isVisible()) {
 //			Log.d(AppConfig.LOGTAG_D2, "Calling refreshViewFromModel from model_overlays_new_available()");
 			mGamePlayAct.mapViewFragment.refreshViewFromModel();

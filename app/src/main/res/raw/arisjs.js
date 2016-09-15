@@ -3,7 +3,7 @@ var ARISJS = function(_ARIS)
     _ARIS.requestsQueue = new Array();
     _ARIS.currentlyCalling = false;
 
-    _ARIS.enqueueRequest = function(nextRequest)
+    _ARIS.enqueueRequest = function(nextRequest) // nextRequest is name of call to send
     {
         _ARIS.requestsQueue.push(nextRequest);
         if(!_ARIS.currentlyCalling)
@@ -13,7 +13,7 @@ var ARISJS = function(_ARIS)
         }
     }
 
-    _ARIS.isCurrentlyCalling = function()
+    _ARIS.isCurrentlyCalling = function() // getter for currentlyCalling bool
     {
         _ARIS.currentlyCalling = true;
     }
@@ -23,7 +23,7 @@ var ARISJS = function(_ARIS)
         if(_ARIS.requestsQueue.length)
         {
             var req = _ARIS.requestsQueue.shift();
-            window.location = req;
+            window.location = req; // does this call send the request out to www?
         }
     }
 
@@ -76,7 +76,6 @@ var ARISJS = function(_ARIS)
     //Call ARIS API directly (USE WITH CAUTION)
     _ARIS.callService = function(serviceName, body, auth, callback)
     {
-//        var ROOT_URL = "http://10.223.178.105" //localhost SEM at casls
         var ROOT_URL = "http://arisgames.org"
         var url = ROOT_URL+'/server/json.php/v2.'+serviceName;
 
@@ -124,8 +123,9 @@ var ARISJS = function(_ARIS)
     /*
      * ARIS CALLBACK FUNCTIONS
      */
-    var callbacks_enabled = (typeof(_ARIS.callbacksEnabled)     === 'undefined' || _ARIS.callbacksEnabled);
+    var callbacks_enabled = (typeof(_ARIS.callbacksEnabled)     === 'undefined' || _ARIS.callbacksEnabled); // true if undefined or callbacksEnabled else false
 
+    // looks like all of these are going to provide a noop function (that returns 'undefined') if the function itself is 'undefined'. Perhaps this prevents runtime errors?
     if(!callbacks_enabled || typeof(_ARIS.didUpdateItemQty)       === 'undefined') { _ARIS.didUpdateItemQty       = function(updatedItemId,qty) {} }
     if(!callbacks_enabled || typeof(_ARIS.didUpdatePlayerItemQty) === 'undefined') { _ARIS.didUpdatePlayerItemQty = function(updatedItemId,qty) {} }
     if(!callbacks_enabled || typeof(_ARIS.didUpdateGameItemQty)   === 'undefined') { _ARIS.didUpdateGameItemQty   = function(updatedItemId,qty) {} }
@@ -212,13 +212,19 @@ var ARISJS = function(_ARIS)
     return _ARIS;
 }
 
-if(typeof(ARIS) === 'undefined') var ARIS = ARISJS({});
+// execution untimately starts down here...
+
+if(typeof(ARIS) === 'undefined') var ARIS = ARISJS({}); // instantiate ARIS if it isn't already
 else
-{
-  if(typeof ARIS.dataCacheEnabled === 'undefined')
+{   // ARIS is already instantiated. where? I dunno...Carl?
+  if(typeof ARIS.dataCacheEnabled === 'undefined') // make sure dataCacheEnabled is instantiated and set
     ARIS.dataCacheEnabled = true;
+     // call main ARISJS function. Return value is what? big indexed array of above child function return values, keyed by child function name??
   ARIS = ARISJS(ARIS);
 }
 
+// now,, finally call ARIS.ready() or ARIS.cache.preload, whatever the **** that is.
 if(ARIS.dataCacheEnabled) ARIS.cache.preload();
+// by making a call to ARIS.ready here we are calling the user defined function, and anthing inside it. If user has not defined .ready()
+// then the empty noop .ready gets called above(?)
 else ARIS.ready();

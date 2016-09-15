@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -52,12 +51,9 @@ import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
 import edu.uoregon.casls.aris_android.data_objects.Media;
-import edu.uoregon.casls.aris_android.data_objects.Overlay;
 import edu.uoregon.casls.aris_android.data_objects.Trigger;
-import edu.uoregon.casls.aris_android.models.InstancesModel;
 import edu.uoregon.casls.aris_android.models.TriggersModel;
 import edu.uoregon.casls.aris_android.services.ARISMediaLoader;
-import edu.uoregon.casls.aris_android.services.MediaResult;
 
 
 /**
@@ -73,54 +69,38 @@ public class MapViewFragment extends Fragment {
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_SECTION_NUMBER = "section_number";
-	private static final String ARG_PARAM1 = "param1";
-	private static final String ARG_PARAM2 = "param2";
+	private static final String ARG_PARAM1         = "param1";
+	private static final String ARG_PARAM2         = "param2";
 
 	// TODO: Rename and change types of parameters
 	private String mParam1;
 	private String mParam2;
 
 	private OnFragmentInteractionListener mListener;
-	private GamePlayActivity mGamePlayAct;
+	private GamePlayActivity              mGamePlayAct;
 
 	private SupportMapFragment mSupportMapFragment;
-	double latitude = 44.047822;
-	double longitude = -123.0695084;
 	private final static int MY_PERMISSION_ACCESS_COURSE_LOCATION = 22; // arbitrary?
-	LatLng marker_latlng  = new LatLng(latitude, longitude);
-	LatLng player_latlng  = new LatLng(0,0); // todo: set to current player location
-	LatLng marker_latlng2 = new LatLng(latitude + 0.0008, longitude - 0.0002);
+	LatLng player_latlng = new LatLng(0, 0); // todo: set to current player location
+	// testing values. Discard after dev cycle.
+//	double latitude = 44.047822;
+//	double longitude = -123.0695084;
+//	LatLng marker_latlng  = new LatLng(latitude, longitude);
+//	LatLng marker_latlng2 = new LatLng(latitude + 0.0008, longitude - 0.0002);
 
-	public GoogleMap mMap;
+	private static View      mMapFragView;
+	public         GoogleMap mMap;
 	private boolean firstLoad = true;
 
 	public class MapViewMarkerCircle {
 		public Marker triggerMarker; // Google Marker - set when map is generated (aka annotation in iOS)
 		public Circle triggerZoneCircle; // Circle is like anMKOverlay in iOS
+
 		public MapViewMarkerCircle(Marker m, Circle c) {triggerMarker = m; triggerZoneCircle = c;}
 	}
-	public List<Trigger> markersAndCircles = new ArrayList<>();
-//	public List<MapViewMarkerCircle> markerCirclesList = new ArrayList<>();
-	public Map<Long, MapViewMarkerCircle> markerCircleByTrigId = new HashMap<>();
-//	public List<Circle> circleList = new ArrayList<>();
 
-	/**
-	 * Use this factory method to create a new instance of
-	 * this fragment using the provided parameters.
-	 *
-	 * @param param1 Parameter 1.
-	 * @param param2 Parameter 2.
-	 * @return A new instance of fragment GamePlayMapFragment.
-	 */
-	// TODO: Rename and change types and number of parameters
-//	public static GamePlayMapFragment newInstance(String param1, String param2) {
-//		GamePlayMapFragment fragment = new GamePlayMapFragment();
-//		Bundle args = new Bundle();
-//		args.putString(ARG_PARAM1, param1);
-//		args.putString(ARG_PARAM2, param2);
-//		fragment.setArguments(args);
-//		return fragment;
-//	}
+	public List<Trigger>                  markersAndCircles    = new ArrayList<>();
+	public Map<Long, MapViewMarkerCircle> markerCircleByTrigId = new HashMap<>();
 
 	/**
 	 * Returns a new instance of this fragment for the given section
@@ -134,7 +114,6 @@ public class MapViewFragment extends Fragment {
 		return fragment;
 	}
 
-
 	public static MapViewFragment newInstance(String sectionName) {
 		MapViewFragment fragment = new MapViewFragment();
 		Bundle args = new Bundle();
@@ -146,7 +125,6 @@ public class MapViewFragment extends Fragment {
 	public MapViewFragment() {
 		// Required empty public constructor
 	}
-
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) { // similar to viewWillAppear in iOS (?)
@@ -169,7 +147,7 @@ public class MapViewFragment extends Fragment {
 	public void onAttach(Context context) {
 		super.onAttach(context);
 
-		if (context instanceof GamePlayActivity){
+		if (context instanceof GamePlayActivity) {
 			mGamePlayAct = (GamePlayActivity) context;
 		}
 		try {
@@ -178,26 +156,22 @@ public class MapViewFragment extends Fragment {
 			throw new ClassCastException(context.toString()
 					+ " must implement OnFragmentInteractionListener");
 		}
-
 	}
-
-	private static View v;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) { // similar to viewDidAppear or possibly viewWillAppear in iOS
 		// check for preexisting view; remove it if one is found. Otherwise get Duplicate Fragment error.
-		if (v != null) {
-			ViewGroup parent = (ViewGroup) v.getParent();
+		if (mMapFragView != null) {
+			ViewGroup parent = (ViewGroup) mMapFragView.getParent();
 			if (parent != null)
-				parent.removeView(v);
+				parent.removeView(mMapFragView);
 		}
 
 		try {
 			// Inflate the layout for this fragment
-			v = inflater.inflate(R.layout.fragment_map_view, container, false);
-		}
-		catch(InflateException ie) {
+			mMapFragView = inflater.inflate(R.layout.fragment_map_view, container, false);
+		} catch (InflateException ie) {
 			// do nothing; just go on.
 		}
 
@@ -207,12 +181,8 @@ public class MapViewFragment extends Fragment {
 		player_latlng = new LatLng(l.getLatitude(), l.getLongitude());
 
 		setUpMap();
-//		if (mMap != null) { // fixme: thought this would fix the "empty" instance item (those that when clicked View don't go to the respective view. They just sit there.
-//			refreshViewFromModel();
-//			refreshModels();
-//		}
 
-		return v;
+		return mMapFragView;
 	}
 
 	private void refreshModels() {
@@ -221,7 +191,6 @@ public class MapViewFragment extends Fragment {
 	}
 
 	public void triggersInvalidated(List<Trigger> invalidated) {
-
 		for (Trigger invalidatedTrigger : invalidated) {
 //			List<Trigger> markersAndCirclesToRemove = new LinkedList<>();
 			Trigger markerToRemove = null;
@@ -247,7 +216,7 @@ public class MapViewFragment extends Fragment {
 		}
 	}
 
-	public void clearLocalData () {
+	public void clearLocalData() {
 		// stub. not used
 	}
 
@@ -265,13 +234,13 @@ public class MapViewFragment extends Fragment {
 				@Override
 				public void onMapReady(GoogleMap googleMap) {
 					if (googleMap != null) {
-						if ( ContextCompat.checkSelfPermission(mGamePlayAct, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
-							ActivityCompat.requestPermissions(mGamePlayAct, new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  },
-									MY_PERMISSION_ACCESS_COURSE_LOCATION );
+						if (ContextCompat.checkSelfPermission(mGamePlayAct, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+							ActivityCompat.requestPermissions(mGamePlayAct, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION},
+									MY_PERMISSION_ACCESS_COURSE_LOCATION);
 						}
-						if ( Build.VERSION.SDK_INT >= 23 &&
-								ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED
-								&& ContextCompat.checkSelfPermission( getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+						if (Build.VERSION.SDK_INT >= 23 &&
+								ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+								&& ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
 //								&& isLocationEnabled(context)
 								) {
 							return;
@@ -279,7 +248,7 @@ public class MapViewFragment extends Fragment {
 
 						googleMap.getUiSettings().setAllGesturesEnabled(true);
 						googleMap.getUiSettings().setMapToolbarEnabled(false); // gets rid of the google links at the bottom
-						googleMap.setPadding(0,0,0,0);
+						googleMap.setPadding(0, 0, 0, 0);
 						googleMap.setMyLocationEnabled(true);
 
 
@@ -319,9 +288,9 @@ public class MapViewFragment extends Fragment {
 //								return false;
 //							}
 //						});
-						Log.d(AppConfig.LOGTAG_D2, "Calling refreshViewFromModel from SetUpMap()" );
+						Log.d(AppConfig.LOGTAG_D2, "Calling refreshViewFromModel from SetUpMap()");
 						refreshViewFromModel();
- 						refreshModels();
+						refreshModels();
 					}
 				}
 			});
@@ -340,18 +309,14 @@ public class MapViewFragment extends Fragment {
 	  so it's commented out.
 	 */
 
-	int testcount = 0;
-
 	public void refreshViewFromModel() {
 
-		Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + "refreshViewFromModel Called" );
-		if (mMap == null) return; // There might be calls arriving before the map is available; ignore them.
+		Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + ": refreshViewFromModel Called");
+		if (mMap == null)
+			return; // There might be calls arriving before the map is available; ignore them.
 
 		boolean shouldRemove;
 		boolean shouldAdd;
-		// reset old markersAndCircles; start fresh each time. ?
-//		markersAndCircles.clear();
-
 		TriggersModel triggersModel = mGamePlayAct.mGame.triggersModel;
 		Trigger mapTrigger;
 
@@ -366,8 +331,7 @@ public class MapViewFragment extends Fragment {
 
 		//Remove locations
 //		Log.d(AppConfig.LOGTAG_D2, "Looping through all markersAndCircles to look for triggers to REMOVE...");
-//		for (Trigger mapTrigger : markersAndCircles) { // markersAndCircles is "annotationOverlays" in iOS to match GoogleMap dialect.
-		for (int i=0; i < markersAndCircles.size(); i++) { // markersAndCircles is "annotationOverlays" in iOS to match GoogleMap dialect.
+		for (int i = 0; i < markersAndCircles.size(); i++) { // markersAndCircles is "annotationOverlays" in iOS to match GoogleMap dialect.
 			mapTrigger = markersAndCircles.get(i);
 			shouldRemove = true;
 
@@ -402,8 +366,8 @@ public class MapViewFragment extends Fragment {
 					mapTrigger.triggerMarker.remove();
 				}
 				else {
-					int size = markerCircleByTrigId.size();
-					String markerId = markerCircleByTrigId.get(mapTrigger.trigger_id).triggerMarker.getId();
+//					int size = markerCircleByTrigId.size(); // debugging convenience value
+//					String markerId = markerCircleByTrigId.get(mapTrigger.trigger_id).triggerMarker.getId(); // debugging convenience value
 //					Log.d(AppConfig.LOGTAG_D2, "222 Marker ID: WAS NULL. NOT removing TriggerID:"+mapTrigger.trigger_id);
 					markerCircleByTrigId.get(mapTrigger.trigger_id).triggerMarker.remove();
 				}
@@ -413,15 +377,11 @@ public class MapViewFragment extends Fragment {
 				else
 					markerCircleByTrigId.get(mapTrigger.trigger_id).triggerZoneCircle.remove();
 
-//				if (mapTrigger.triggerMarker != null) {
-					Trigger mvao = markersAndCircles.get(i); // same as mapTrigger set above???
-					markersAndCircles.remove(mvao); // [annotationOverlays removeObject:mvao];
-					i--; // remove one from running count.
-					// add to list of triggers objects to remove from List. (Done afterward to avoid innerloop conflicts
-//				markersAndCirclesToRemove.add(mapTrigger);
-//				}
-				markerCircleByTrigId.remove(mapTrigger.trigger_id);
+				Trigger mvao = markersAndCircles.get(i); // same as mapTrigger set above???
+				markersAndCircles.remove(mvao); // [annotationOverlays removeObject:mvao];
+				i--; // remove one from running count.
 
+				markerCircleByTrigId.remove(mapTrigger.trigger_id);
 			}
 		}
 
@@ -446,7 +406,8 @@ public class MapViewFragment extends Fragment {
 //		Log.d(AppConfig.LOGTAG_D2, "Looping through all triggersModel.playerTriggers to look for triggers to ADD...");
 		for (Trigger modelTrigger : triggersModel.playerTriggers) { // walk through all playerTriggers
 			modelInstance = mGamePlayAct.mGame.instancesModel.instanceForId(modelTrigger.instance_id); // get instance
-			if ( modelInstance.instance_id == 0 || modelInstance.object() == null) continue; // bogus instance? skip it
+			if (modelInstance.instance_id == 0 || modelInstance.object() == null)
+				continue; // bogus instance? skip it
 			//@formatter:off
 			if (    ( //trigger not eligible for map
 					    !modelTrigger.type.equals("LOCATION") || modelTrigger.hidden != 0
@@ -465,12 +426,13 @@ public class MapViewFragment extends Fragment {
 			//todo: markers that have previously been added. Perhaps we can maintain a list of those that are visible
 			//todo: instead of checking those that are just in a data list.
 			for (Trigger mapTrig : markersAndCircles) { // look through any/all locations already in list
-				if (mapTrig.trigger_id == modelTrigger.trigger_id) shouldAdd = false; // revoke their shouldAdd pass if they're already in the list.
+				if (mapTrig.trigger_id == modelTrigger.trigger_id)
+					shouldAdd = false; // revoke their shouldAdd pass if they're already in the list.
 			}
 			if (shouldAdd) { // having vetted this location as one to be added...
 				// get any custom icon media if there was a valid media id provided; otherwise use default icon.
 				Media m;
-				if (modelTrigger.icon_media_id(mGamePlayAct.mGame) != 0 )
+				if (modelTrigger.icon_media_id(mGamePlayAct.mGame) != 0)
 					m = mGamePlayAct.mMediaModel.mediaForId(modelTrigger.icon_media_id(mGamePlayAct.mGame));
 				else
 					m = mGamePlayAct.mMediaModel.mediaForId(Media.STAR_BLUE_ICON_MEDIA_ID);
@@ -509,7 +471,7 @@ public class MapViewFragment extends Fragment {
 				modelTrigger.triggerZoneCircle = mMap.addCircle(new CircleOptions()
 						.center(new LatLng(modelTrigger.latitude, modelTrigger.longitude))
 						.radius(modelTrigger.distance)
-						.fillColor(Color.argb(128,0,255,110))
+						.fillColor(Color.argb(128, 0, 255, 110))
 						.strokeWidth(1)
 				);
 				markersAndCircles.add(modelTrigger);
@@ -532,7 +494,7 @@ public class MapViewFragment extends Fragment {
 
 			}
 		}
-		Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + "markersAndCircles have been updated with incoming/outgoing triggers. New size: " + markersAndCircles.size() + "\n\n" );
+		Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + ": markersAndCircles have been updated with incoming/outgoing triggers. New size: " + markersAndCircles.size() + "\n\n");
 
 		// In iOS, a clicked marker will result in a call to displayHUDWithTrigger via an internal MKMapView call;
 		// in Android we explicitly set up the onClickListener for the map markers all at once.
@@ -541,6 +503,7 @@ public class MapViewFragment extends Fragment {
 		//
 		//OVERLAYS
 		//
+		if (false) {}// dummy line to break the comment folding continuum.
 		// TODO: looks like overlays are an unused concept in Aris. Leaving this un translated code in in the
 		// TODO: event that it ever become necessary.
 		//Remove overlays
@@ -582,9 +545,9 @@ public class MapViewFragment extends Fragment {
 		// todo: below
 //		[mapView setCenterCoordinate:mapView.region.center animated:NO]; // map should already be centered on user location, as set in setUpMap()
 		if (firstLoad) {
-			if     (mGamePlayAct.mGame.map_focus.contentEquals("PLAYER"))        this.centerMapOnPlayer();
-			else if(mGamePlayAct.mGame.map_focus.contentEquals("LOCATION"))      this.centerMapOnLoc(mGamePlayAct.mGame.map_location, mGamePlayAct.mGame.map_zoom_level);
-			else if(mGamePlayAct.mGame.map_focus.contentEquals("FIT_LOCATIONS")) this.zoomToFitAnnotations(false);
+			if (mGamePlayAct.mGame.map_focus.contentEquals("PLAYER")) this.centerMapOnPlayer();
+			else if (mGamePlayAct.mGame.map_focus.contentEquals("LOCATION")) this.centerMapOnLoc(mGamePlayAct.mGame.map_location, mGamePlayAct.mGame.map_zoom_level);
+			else if (mGamePlayAct.mGame.map_focus.contentEquals("FIT_LOCATIONS")) this.zoomToFitAnnotations(false);
 		}
 		firstLoad = false;
 	}
@@ -605,7 +568,7 @@ public class MapViewFragment extends Fragment {
 	public void centerMapOnLoc(Location loc, double map_zoom_level) {
 		CameraPosition cameraPosition = new CameraPosition.Builder()
 				.target(new LatLng(loc.getLatitude(), loc.getLongitude()))
-				.zoom((float)map_zoom_level == 0.0 ? 17.0f : (float)map_zoom_level) // if zoom level is 0 set arbitrarily to a sensible value of roughly 1/4 mile diagonally
+				.zoom((float) map_zoom_level == 0.0 ? 17.0f : (float) map_zoom_level) // if zoom level is 0 set arbitrarily to a sensible value of roughly 1/4 mile diagonally
 				.build();
 		CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
 //		mMap.moveCamera(cameraUpdate);
@@ -634,10 +597,10 @@ public class MapViewFragment extends Fragment {
 			public boolean onMarkerClick(Marker marker) {
 				boolean found = false;
 				for (final Trigger trigger : markersAndCircles) {
-					Instance  modelInstance = mGamePlayAct.mGame.instancesModel.instanceForId(trigger.instance_id);
+					Instance modelInstance = mGamePlayAct.mGame.instancesModel.instanceForId(trigger.instance_id);
 					String modInstName = modelInstance.name(); // debugging convenience value
 					String mt = marker.getTitle(); // debugging convenience value
-		Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + "Marker Clicked. Looping thru markersAndCircles to find which was clicked. Marker Title: " + mt + " == " + modInstName + " ?");
+					Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + ": Marker Clicked. Looping thru markersAndCircles to find which was clicked. Marker Title: " + mt + " == " + modInstName + " ?");
 
 					if (modelInstance.name().equals(marker.getTitle())) {
 						Log.d(AppConfig.LOGTAG_D2, "=============== Found it! Marker Title: " + modInstName);
@@ -646,9 +609,8 @@ public class MapViewFragment extends Fragment {
 						// below is found in displayHUDWithTrigger in iOS
 						float distance = trigger.location.distanceTo(mGamePlayAct.mPlayer.location);
 						if (mGamePlayAct.mGame.map_offsite_mode != 0
-							|| trigger.infinite_distance != 0
-							|| (distance <= trigger.distance && mGamePlayAct.mPlayer.location != null))
-						{
+								|| trigger.infinite_distance != 0
+								|| (distance <= trigger.distance && mGamePlayAct.mPlayer.location != null)) {
 							// todo: custom icon not getting displayed
 							Drawable alertImage;
 							if (modelInstance.icon_media_id() == 0)
@@ -663,7 +625,7 @@ public class MapViewFragment extends Fragment {
 //									.setIcon(ContextCompat.getDrawable(mGamePlayAct, R.drawable.plaque_icon_120)) // todo: show an icon?
 //									.setIcon(mGamePlayAct.getResources().getDrawable(R.drawable.plaque_icon_120))
 									.setTitle("View?")
-									.setMessage("DEBUG: Marker title: " + mt)
+									.setMessage(mt)
 									.setPositiveButton("View", new DialogInterface.OnClickListener() {
 										@Override
 										public void onClick(DialogInterface dialog, int which) {
@@ -675,7 +637,8 @@ public class MapViewFragment extends Fragment {
 											}
 
 											// enqueueTrigger (found in interactWithLocation in iOS)
-											if (trigger != null) mGamePlayAct.mGame.displayQueueModel.enqueueTrigger(trigger);
+											if (trigger != null)
+												mGamePlayAct.mGame.displayQueueModel.enqueueTrigger(trigger);
 										}
 									})
 									.setNegativeButton("Back", null)
@@ -694,7 +657,7 @@ public class MapViewFragment extends Fragment {
 						break; // once found loop can stop
 					}
 					if (!found) {
-						Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + "=============== UNABLE to find this Marker! Marker Title: " + modInstName);
+						Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + ": =============== UNABLE to find this Marker! Marker Title: " + modInstName);
 					}
 				}
 
