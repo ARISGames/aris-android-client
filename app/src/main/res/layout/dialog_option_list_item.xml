@@ -16,8 +16,8 @@
         android:layout_toLeftOf="@+id/iv_game_item_right_arrow"
         android:paddingTop="5dp"
         android:paddingBottom="5dp">
-        <WebView
-            android:id="@+id/wv_dialog_option_prompt"
+        <view
+            class="edu.uoregon.casls.aris_android.ARISWebView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

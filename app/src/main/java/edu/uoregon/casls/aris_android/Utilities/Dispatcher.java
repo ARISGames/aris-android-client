@@ -756,6 +756,7 @@ public class Dispatcher {
 	public void player_percent_loaded(float v) {
 	}
 
+//	public void model_logged_out() {}
 
 
 //	WIFI_CONNECTED",self,nil); break;

@@ -1350,6 +1350,15 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mDispatch.model_game_left();
 	}
 
+	public void logOut() {
+		if(mGame != null) this.leaveGame();
+		mPlayer = null; //_MODEL_PLAYER_ = nil;
+//		[_DEFAULTS_ saveUserDefaults]; // todo save defaults?
+//		[_PUSHER_ logoutPlayer];
+		this.finish(); // mDispatch.model_logged_out(); //_ARIS_NOTIF_SEND_(@"MODEL_LOGGED_OUT",nil,nil);
+	}
+
+
 //	public void presentDisplay(UIViewController vc)
 //	{
 //		this.presentViewController:vc animated:NO completion:nil);

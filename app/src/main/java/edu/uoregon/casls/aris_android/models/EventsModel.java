@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import edu.uoregon.casls.aris_android.ARISWebView;
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.data_objects.Event;
 import edu.uoregon.casls.aris_android.data_objects.EventPackage;
@@ -21,8 +22,7 @@ public class EventsModel extends ARISModel {
 	public transient GamePlayActivity mGamePlayAct;
 	public transient Game mGame;
 
-	// todo: Create Android equivalent functionality of this:
-//	ARISWebView *runner; //only running one at once
+	ARISWebView mRunner; //only running one at once
 
 
 	public void initContext(GamePlayActivity gamePlayAct) {
@@ -98,10 +98,12 @@ public class EventsModel extends ARISModel {
 				mGame.groupsModel.setPlayerGroup(mGame.groupsModel.groupForId(e.content_id));
 
 			if (e.event.contentEquals("RUN_SCRIPT")) {
-				// todo: Android version of this:
 //				runner = [[ARISWebView alloc) initWithDelegate:self);
 //				runner.userInteractionEnabled = NO;
 //				[runner loadHTMLString:[NSString stringWithFormat:[ARISTemplate ARISHtmlTemplate], e.script] baseURL:nil];
+				mRunner = new ARISWebView(mGamePlayAct);
+				mRunner.setWillNotDraw(true);
+				mRunner.loadHTMLString(e.script);
 			}
 		}
 		mGame.logsModel.playerRanEventPackageId(event_package_id);

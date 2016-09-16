@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +16,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Collection;
 
+import edu.uoregon.casls.aris_android.ARISWebView;
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
 import edu.uoregon.casls.aris_android.Utilities.AppConfig;
@@ -194,9 +193,9 @@ public class DialogViewFragment extends Fragment {
 		LinearLayout llDialogOptionsListLayout = (LinearLayout) fragView.findViewById(R.id.ll_dialog_options_list);
 		llDialogOptionsListLayout.removeAllViews(); // refresh visible views so they don't accumulate
 
-		String[] tempText = {"This is the first dialog option, but it is a really long one <i>with some tags also</i>. This will help me align the web layout so long stuff <b>fits properly</b>.",
-				"This is the <b>second</b> diolog option",
-				"<font color=\"red\">This is the third diolog option</font>"};
+//		String[] tempText = {"This is the first dialog option, but it is a really long one <i>with some tags also</i>. This will help me align the web layout so long stuff <b>fits properly</b>.",
+//				"This is the <b>second</b> diolog option",
+//				"<font color=\"red\">This is the third diolog option</font>"};
 		Collection<DialogOption> dialogOptions =  dialogsModel.dialogOptions.values();
 		// loop through set of all dialog options for this dialog; add them to list.
 
@@ -207,13 +206,17 @@ public class DialogViewFragment extends Fragment {
 				final View dialogOptionItemView = inflater.inflate(R.layout.dialog_option_list_item, null);
 
 				// set webview to display dialog option prompt
-				WebView wvDialogOptionPrompt = (WebView) dialogOptionItemView.findViewById(R.id.wv_dialog_option_prompt);
-				wvDialogOptionPrompt.getSettings().setJavaScriptEnabled(true);
-				wvDialogOptionPrompt.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
-				wvDialogOptionPrompt.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
-//		    	wvDialogOptionPrompt.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-				String dialogOptionHtml = "<html><body>" + dialogOption.prompt + "</body></html>";
-				wvDialogOptionPrompt.loadData(dialogOptionHtml, "text/html", null);
+				ARISWebView wvDialogOptionPrompt = (ARISWebView) fragView.findViewById(R.id.wv_dialog_option_prompt);
+				wvDialogOptionPrompt.initContextAndInjectJavaScript(mGamePlayAct);
+				wvDialogOptionPrompt.loadHTMLString(dialogOption.prompt);
+
+//				WebView wvDialogOptionPrompt = (WebView) dialogOptionItemView.findViewById(R.id.wv_dialog_option_prompt);
+//				wvDialogOptionPrompt.getSettings().setJavaScriptEnabled(true);
+//				wvDialogOptionPrompt.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
+//				wvDialogOptionPrompt.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
+////		    	wvDialogOptionPrompt.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+//				String dialogOptionHtml = "<html><body>" + dialogOption.prompt + "</body></html>";
+//				wvDialogOptionPrompt.loadData(dialogOptionHtml, "text/html", null);
 
 				final int dialogOptionId = (int)dialogOption.dialog_option_id;
 				dialogOptionItemView.setId(dialogOptionId);
@@ -223,11 +226,6 @@ public class DialogViewFragment extends Fragment {
 				dialogFwdButton.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						// popup for onscreen debugging. Turn off when not needed.
-//						Toast t = Toast.makeText(getActivity(), "You selected item #" + dialogOptionId,
-//								Toast.LENGTH_SHORT);
-//						t.setGravity(Gravity.CENTER, 0, 0);
-//						t.show();
 						dialogOptionSelected(dialogOptionId);
 					}
 				});

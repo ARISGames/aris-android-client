@@ -1,32 +1,21 @@
 package edu.uoregon.casls.aris_android.object_controllers;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.DownloadListener;
-import android.webkit.WebResourceResponse;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import java.io.FileInputStream;
-import java.util.List;
 
 import edu.uoregon.casls.aris_android.ARISWebView;
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
 import edu.uoregon.casls.aris_android.Utilities.AppConfig;
-import edu.uoregon.casls.aris_android.Utilities.AppUtils;
-import edu.uoregon.casls.aris_android.WebViewInterface;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
 import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.data_objects.Plaque;
@@ -153,17 +142,11 @@ public class PlaqueViewFragment extends Fragment {
 			tvPlaqueueTitle.setText(mPlaque.name);
 		}
 		if (!mPlaque.description.contentEquals("")) { // load the description webview
-			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, "PlaqueViewFragment.load the description webview; ");
+			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, "PlaqueViewFragment.loadPlaque with description webview; ");
 
-			final ARISWebView wvPlaqueDescription = (ARISWebView) mPlaqueView.findViewById(R.id.wv_plaque_desc);
-			wvPlaqueDescription.initWithContext(mGamePlayActivity);
-			String finalHtml = "<html><head><script type=\"text/javascript\">"
-					+ "</script></head>"
-					+ "<body>" + mPlaque.description + "</body></html>";
-
-			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, " loading HTML string into Plaque's decription webView: " + finalHtml);
-			wvPlaqueDescription.loadData(finalHtml, "text/html", null);
-
+			ARISWebView wvPlaqueDescription = (ARISWebView) mPlaqueView.findViewById(R.id.wv_plaque_desc);
+			wvPlaqueDescription.initContextAndInjectJavaScript(mGamePlayActivity);
+			wvPlaqueDescription.loadHTMLString(mPlaque.description);
 		}
 
 		// load associated media into media fragment todo: may just want to put fragment into includable view with ordinary class?
