@@ -9,5 +9,7 @@ public class Event {
 	public String event            = "GIVE_ITEM_PLAYER";
 	public long   content_id       = 0;
 	public long   qty              = 0;
-	public String script           = "";
+	public long   icon_media_id    = 0; // may be irrelevant
+	public String name             = ""; // may be irrelevant
+	public String script             = "";
 }

@@ -18,6 +18,7 @@
         android:paddingBottom="5dp">
         <view
             class="edu.uoregon.casls.aris_android.ARISWebView"
+            android:id="@+id/wv_dialog_option_prompt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

@@ -33,7 +33,7 @@ public class PlaqueViewFragment extends Fragment {
 	public static View                  mPlaqueView;
 	public ARISWebView                  webView;
 
-	public GamePlayActivity mGamePlayActivity;
+	public transient GamePlayActivity mGamePlayActivity;
 
 	private OnFragmentInteractionListener mListener;
 

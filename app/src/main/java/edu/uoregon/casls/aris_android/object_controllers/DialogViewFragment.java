@@ -46,7 +46,7 @@ public class DialogViewFragment extends Fragment {
 
 	public Instance instance;
 	public Tab tab;
-	public GamePlayActivity mGamePlayAct;
+	public transient GamePlayActivity mGamePlayAct;
 
 	ScrollView slideUpDialogScriptAndOptionsPanel;
 	View       fragView;

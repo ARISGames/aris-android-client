@@ -22,7 +22,7 @@ public class EventsModel extends ARISModel {
 	public transient GamePlayActivity mGamePlayAct;
 	public transient Game mGame;
 
-	ARISWebView mRunner; //only running one at once
+	private transient ARISWebView mRunner; //only running one at once
 
 
 	public void initContext(GamePlayActivity gamePlayAct) {
@@ -103,6 +103,7 @@ public class EventsModel extends ARISModel {
 //				[runner loadHTMLString:[NSString stringWithFormat:[ARISTemplate ARISHtmlTemplate], e.script] baseURL:nil];
 				mRunner = new ARISWebView(mGamePlayAct);
 				mRunner.setWillNotDraw(true);
+//				mRunner.disableUserInteraction();
 				mRunner.loadHTMLString(e.script);
 			}
 		}

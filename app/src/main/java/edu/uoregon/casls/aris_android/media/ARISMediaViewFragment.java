@@ -214,7 +214,9 @@ public class ARISMediaViewFragment extends Fragment {
 			case ARISMediaContentTypeDefault:
 			default:
 				if (type.contentEquals("IMAGE")) {
+					// todo: getting a NPE on media.mediaCD.localURL - debug and fix
 					String dataType = this.getMimeTypeOfFile(media.mediaCD.localURL.toString());
+//					String dataType = this.getMimeTypeOfFile(media.mediaCD.localURL.toString() != null ? media.mediaCD.localURL.toString() : "");
 //				    String dataType = this.contentTypeForImageData:media.data];
 					if (dataType.contentEquals("image/gif")) { // do a gif display
 //					    image = UIImage animatedImageWithAnimatedGIFData:media.data);

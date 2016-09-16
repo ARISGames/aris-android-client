@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -388,6 +390,15 @@ public class ARISWebView extends WebView {
 //		[webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"ARIS.tick(%@);",params]];
 		evaluateJavascript("ARIS.tick(" + params + ");", null);
 		return false;
+	}
+
+	public void disableUserInteraction() {
+		this.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) { // capture and ignore all touch events.
+				return true;
+			}
+		});
 	}
 
 	private void clear() {

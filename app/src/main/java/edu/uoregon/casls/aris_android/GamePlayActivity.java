@@ -113,7 +113,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	public HashMap<String, Boolean> fragVisible = new HashMap<>();
 	public String mCurrentFragVisible;
-	public String currentFragVisibl2e;
+	public ARISWebView ticker;
+
 
 	public boolean    viewingInstantiableObject = false;
 	public List<Long> local_inst_queue          = new ArrayList<>();
@@ -1239,6 +1240,11 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	public void displayScannerWithPrompt(String p) {
 //todo:		gamePlayTabSelectorController.requestDisplayScannerWithPrompt(p);
+	}
+
+	// method is never called. stub is here just for jollies.
+	public void tickTicker() {
+		ticker.tickWithParams("");
 	}
 
 	// dialog option was selected; determine desired course of action
