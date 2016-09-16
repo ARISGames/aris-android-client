@@ -31,6 +31,7 @@ public class PlaqueViewFragment extends Fragment {
 	public        Tab                   tab;
 	public        ARISMediaViewFragment mediaViewFrag;
 	public static View                  mPlaqueView;
+	public ARISWebView                  webView;
 
 	public GamePlayActivity mGamePlayActivity;
 
@@ -144,9 +145,9 @@ public class PlaqueViewFragment extends Fragment {
 		if (!mPlaque.description.contentEquals("")) { // load the description webview
 			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, "PlaqueViewFragment.loadPlaque with description webview; ");
 
-			ARISWebView wvPlaqueDescription = (ARISWebView) mPlaqueView.findViewById(R.id.wv_plaque_desc);
-			wvPlaqueDescription.initContextAndInjectJavaScript(mGamePlayActivity);
-			wvPlaqueDescription.loadHTMLString(mPlaque.description);
+			webView = (ARISWebView) mPlaqueView.findViewById(R.id.wv_plaque_desc);
+			webView.initContextAndInjectJavaScript(mGamePlayActivity);
+			webView.loadHTMLString(mPlaque.description);
 		}
 
 		// load associated media into media fragment todo: may just want to put fragment into includable view with ordinary class?
@@ -163,7 +164,7 @@ public class PlaqueViewFragment extends Fragment {
 		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " continueButtonTouched. mPlaque.continue_function = " + mPlaque.continue_function);
 
 		if (mPlaque.continue_function.contentEquals("JAVASCRIPT")) {
-			// todo: [webView hookWithParams:@""];
+			webView.hookWithParams("");
 		}
 		else if (mPlaque.continue_function.contentEquals("EXIT")) {
 			this.dismissSelf();
