@@ -1,5 +1,6 @@
 package edu.uoregon.casls.aris_android;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
 import java.util.ArrayList;
@@ -7,9 +8,14 @@ import java.util.Collections;
 import java.util.List;
 
 import edu.uoregon.casls.aris_android.data_objects.Tab;
+import edu.uoregon.casls.aris_android.object_controllers.DialogViewFragment;
+import edu.uoregon.casls.aris_android.object_controllers.ItemViewFragment;
+import edu.uoregon.casls.aris_android.object_controllers.PlaqueViewFragment;
+import edu.uoregon.casls.aris_android.object_controllers.WebPageViewFragment;
 import edu.uoregon.casls.aris_android.services.TabCompareBySortIndex;
 import edu.uoregon.casls.aris_android.tab_controllers.MapViewFragment;
 import edu.uoregon.casls.aris_android.tab_controllers.QuestsViewFragment;
+import edu.uoregon.casls.aris_android.tab_controllers.ScannerViewFragment;
 
 /**
  * Created by smorison on 3/23/16.
@@ -17,19 +23,20 @@ import edu.uoregon.casls.aris_android.tab_controllers.QuestsViewFragment;
 public class GamePlayTabSelectorViewController {
 
 	public transient GamePlayActivity mGamePlayAct;
-	public List<Tab> mPlayerTabs = new ArrayList<>();
+	public List<Tab>     mPlayerTabs         = new ArrayList<>();
+	public List<Integer> viewControllersDict = new ArrayList<>();
 
 	//	- (id) initWithDelegate:(id<GamePlayTabSelectorViewControllerDelegate>)d;
 	public void initContext(GamePlayActivity gamePlayActivity) {
 		mGamePlayAct = gamePlayActivity;
-		this.refreshFromModel();
+		viewControllersDict.clear();
+		this.refreshFromModel(); // todo: instead of calling setUpDefautTab() ??
 //			_ARIS_NOTIF_LISTEN_(@"MODEL_TABS_NEW_AVAILABLE",  self, @selector(refreshFromModel), nil); // done in dispatcher.
 //			_ARIS_NOTIF_LISTEN_(@"MODEL_TABS_LESS_AVAILABLE", self, @selector(refreshFromModel), nil); // done in dispatcher.
 
 	}
 
-	public void loadView()
-	{
+	public void loadView() {
 //		[super loadView];
 //		this.view.backgroundColor = [ARISTemplate ARISColorSideNavigationBackdrop];
 
@@ -85,8 +92,7 @@ public class GamePlayTabSelectorViewController {
 //		if(_MODEL_.leave_game_enabled) [this.view addSubview:leaveGameButton];
 	}
 
-	public void viewWillLayoutSubviews()
-	{
+	public void viewWillLayoutSubviews() {
 //		[super viewWillLayoutSubviews];
 
 //		tableView.frame = this.view.bounds;
@@ -106,8 +112,9 @@ public class GamePlayTabSelectorViewController {
 //	}
 
 	// were sort of already doing all this in the NavBar fragment, right?
-	public void refreshFromModel()
-	{
+	public void refreshFromModel() {
+		String tag = "";
+
 		// sort playerTabs by "sort_index" field
 //		playerTabs = _ARIS_ARRAY_SORTED_ON_(_MODEL_TABS_.playerTabs,@"sort_index");
 //		Collections.sort(mGamePlayAct.mGame.tabsModel.playerTabs, new TabCompareBySortIndex());
@@ -115,103 +122,158 @@ public class GamePlayTabSelectorViewController {
 //		viewControllers = [[NSMutableArray alloc] initWithCapacity:playerTabs.count];
 
 //		this.mPlayerTabs = mGamePlayAct.mGame.tabsModel.playerTabs; // convenience ref
-//		Tab tab;
-//		for(long i = 0; i < playerTabs.count; i++)
-//		for (Tab tab : playerTabs)
-//		{
-//			if(!viewControllersDict[[NSNumber numberWithLong:tab.tab_id]))
-//			{
-//				ARISNavigationController *vc;
-//				if(tab.type.contentEquals("QUESTS"))
-//				{
-//					//if uses icon quest view
-//					if(tab.info && ![tab.info.contentEquals(""))
-//					{
-//						IconQuestsViewController *iconQuestsViewController = [[IconQuestsViewController alloc] initWithTab:tab delegate:
-//						(id<QuestsViewControllerDelegate>)delegate];
-//						vc = [[ARISNavigationController alloc] initWithRootViewController:iconQuestsViewController];
+//		Collections.sort(mPlayerTabs, new TabCompareBySortIndex());
+//
+////		Tab tab;
+////		for(long i = 0; i < playerTabs.count; i++)
+//		for (Tab tab : this.mPlayerTabs) {
+////			if(!viewControllersDict[[NSNumber numberWithLong:tab.tab_id])) // doesn't already exists in list
+//			if (!viewControllersDict.contains(tab.tab_id)) {
+////				ARISNavigationController *vc; // Android fragment.
+//				Fragment vc = null;
+//				if (tab.type.contentEquals("QUESTS")) {
+////						//if uses icon quest view
+//					vc = new QuestsViewFragment();
+//					if (!tab.info.isEmpty() && !tab.info.contentEquals("")) { // todo: Android doesn't have icon view currently
+//						if (mGamePlayAct.questsViewFragment == null) {
+//							mGamePlayAct.questsViewFragment = (QuestsViewFragment) vc;
+//							if (mGamePlayAct.questsViewFragment.isAdded()) return;
+//							mGamePlayAct.questsViewFragment.initContext(mGamePlayAct);
+//							//						mGamePlayAct.questsViewFragment.initWithInstance(i);
+//							tag = mGamePlayAct.questsViewFragment.toString();
+//							FragmentTransaction ft = mGamePlayAct.getSupportFragmentManager().beginTransaction();
+////						ft.add(R.id.fragment_view_container, mGamePlayAct.questsViewFragment, tag); //set tag.
+//							ft.addToBackStack(tag);
+////						ft.attach(mGamePlayAct.questsViewFragment); // was .show()
+//							ft.replace(R.id.fragment_view_container, mGamePlayAct.questsViewFragment, tag);
+//							ft.commit();
+////						mGamePlayAct.getSupportFragmentManager().executePendingTransactions();
+//							mGamePlayAct.setAsFrontmostFragment(tag);
+//						}
 //					}
-//					else
-//					{
-//						QuestsViewController *questsViewController = [[QuestsViewController alloc] initWithTab:tab delegate:
-//						(id<QuestsViewControllerDelegate>)delegate];
-//						vc = [[ARISNavigationController alloc] initWithRootViewController:questsViewController];
+//					else {
+////						QuestsViewController *questsViewController = [[QuestsViewController alloc] initWithTab:tab delegate:
+////						(id<QuestsViewControllerDelegate>)delegate];
+////						vc = [[ARISNavigationController alloc] initWithRootViewController:questsViewController];
+//						if (mGamePlayAct.questsViewFragment == null) {
+//							mGamePlayAct.questsViewFragment = (QuestsViewFragment) vc;
+//							if (mGamePlayAct.questsViewFragment.isAdded()) return;
+//							mGamePlayAct.questsViewFragment.initContext(mGamePlayAct);
+//							//						mGamePlayAct.questsViewFragment.initWithInstance(i);
+//							tag = mGamePlayAct.questsViewFragment.toString();
+//							FragmentTransaction ft = mGamePlayAct.getSupportFragmentManager().beginTransaction();
+////						ft.add(R.id.fragment_view_container, mGamePlayAct.questsViewFragment, tag); //set tag.
+//							ft.addToBackStack(tag);
+////						ft.attach(mGamePlayAct.questsViewFragment); // was .show()
+//							ft.replace(R.id.fragment_view_container, mGamePlayAct.questsViewFragment, tag);
+//							ft.commit();
+//							mGamePlayAct.getSupportFragmentManager().executePendingTransactions();
+//							vc = new QuestsViewFragment();
+//							mGamePlayAct.setAsFrontmostFragment(tag);
+//						}
+//
 //					}
 //				}
-//				else if(tab.type.contentEquals("MAP"))
-//				{
-//					MapViewController *mapViewController = [[MapViewController alloc] initWithTab:tab delegate:
-//					(id<MapViewControllerDelegate>)delegate];
-//					vc = [[ARISNavigationController alloc] initWithRootViewController:mapViewController];
+//				else if (tab.type.contentEquals("MAP")) {
+////					MapViewController *mapViewController = [[MapViewController alloc] initWithTab:tab delegate:
+////					(id<MapViewControllerDelegate>)delegate];
+////					vc = [[ARISNavigationController alloc] initWithRootViewController:mapViewController];
+//					vc = new MapViewFragment();
+//					if (mGamePlayAct.mapViewFragment == null) {
+//						mGamePlayAct.mapViewFragment = (MapViewFragment) vc;
+//						mGamePlayAct.mapViewFragment.initContext(mGamePlayAct);
+//						//						mGamePlayAct.mapViewFragment.initWithInstance(i);
+//						tag = mGamePlayAct.mapViewFragment.toString();
+//						FragmentTransaction ft = mGamePlayAct.getSupportFragmentManager().beginTransaction();
+//						ft.add(R.id.fragment_view_container, mGamePlayAct.mapViewFragment, tag); //set tag.
+//						ft.addToBackStack(tag);
+//						ft.attach(mGamePlayAct.mapViewFragment); // was .show()
+//						ft.commit();
+//						mGamePlayAct.getSupportFragmentManager().executePendingTransactions();
+//						mGamePlayAct.setAsFrontmostFragment(tag);
+//
+//					}
 //				}
-//				else if(tab.type.contentEquals("INVENTORY"))
-//				{
-//					InventoryViewController *inventoryViewController = [[InventoryViewController alloc] initWithTab:tab delegate:
-//					(id<InventoryViewControllerDelegate>)delegate];
-//					vc = [[ARISNavigationController alloc] initWithRootViewController:inventoryViewController];
+//				else if (tab.type.contentEquals("INVENTORY")) {
+//					vc = new InventoryViewFragment();
+//
+////					InventoryViewController *inventoryViewController = [[InventoryViewController alloc] initWithTab:tab delegate:
+////					(id<InventoryViewControllerDelegate>)delegate];
+////					vc = [[ARISNavigationController alloc] initWithRootViewController:inventoryViewController];
 //				}
-//				else if(tab.type.contentEquals("DECODER")) //text only
+//				else if (tab.type.contentEquals("DECODER")) //text only
 //				{
-//					DecoderViewController *decoderViewController = [[DecoderViewController alloc] initWithTab:tab delegate:
-//					(id<DecoderViewControllerDelegate>)delegate];
-//					vc = [[ARISNavigationController alloc] initWithRootViewController:decoderViewController];
+//					vc = new DecoderViewFragment();
+//
+////					DecoderViewController *decoderViewController = [[DecoderViewController alloc] initWithTab:tab delegate:
+////					(id<DecoderViewControllerDelegate>)delegate];
+////					vc = [[ARISNavigationController alloc] initWithRootViewController:decoderViewController];
 //				}
-//				else if(tab.type.contentEquals("SCANNER")) //will be scanner only- supports both for legacy
+//				else if (tab.type.contentEquals("SCANNER")) //will be scanner only- supports both for legacy
 //				{
-//					ScannerViewController *scannerViewController = [[ScannerViewController alloc] initWithTab:tab delegate:
-//					(id<ScannerViewControllerDelegate>)delegate];
-//					vc = [[ARISNavigationController alloc] initWithRootViewController:scannerViewController];
+//					vc = new ScannerViewFragment();
+//
+////					ScannerViewController *scannerViewController = [[ScannerViewController alloc] initWithTab:tab delegate:
+////					(id<ScannerViewControllerDelegate>)delegate];
+////					vc = [[ARISNavigationController alloc] initWithRootViewController:scannerViewController];
 //				}
-//				else if(tab.type.contentEquals("PLAYER"))
-//				{
-//					AttributesViewController *attributesViewController = [[AttributesViewController alloc] initWithTab:tab delegate:
-//					(id<AttributesViewControllerDelegate>)delegate];
-//					vc = [[ARISNavigationController alloc] initWithRootViewController:attributesViewController];
+//				else if (tab.type.contentEquals("PLAYER")) {
+//					vc = new AttributesViewFragment();
+//
+////					AttributesViewController *attributesViewController = [[AttributesViewController alloc] initWithTab:tab delegate:
+////					(id<AttributesViewControllerDelegate>)delegate];
+////					vc = [[ARISNavigationController alloc] initWithRootViewController:attributesViewController];
 //				}
-//				else if(tab.type.contentEquals("NOTEBOOK"))
-//				{
-//					NotebookViewController *notesViewController = [[NotebookViewController alloc] initWithTab:tab delegate:
-//					(id<NotebookViewControllerDelegate>)delegate];
-//					vc = [[ARISNavigationController alloc] initWithRootViewController:notesViewController];
+//				else if (tab.type.contentEquals("NOTEBOOK")) {
+//					vc = new NoteViewFragment();
+////					NotebookViewController *notesViewController = [[NotebookViewController alloc] initWithTab:tab delegate:
+////					(id<NotebookViewControllerDelegate>)delegate];
+////					vc = [[ARISNavigationController alloc] initWithRootViewController:notesViewController];
 //				}
 //				//non-standard
-//				else if(tab.type.contentEquals("DIALOG"))
-//				{
-//					DialogViewController *dialogViewController = [[DialogViewController alloc] initWithTab:tab delegate:
-//					(id<DialogViewControllerDelegate>)delegate];
-//					vc = [[ARISNavigationController alloc] initWithRootViewController:dialogViewController];
+//				else if (tab.type.contentEquals("DIALOG")) {
+//					vc = new DialogViewFragment();
+////					DialogViewController *dialogViewController = [[DialogViewController alloc] initWithTab:tab delegate:
+////					(id<DialogViewControllerDelegate>)delegate];
+////					vc = [[ARISNavigationController alloc] initWithRootViewController:dialogViewController];
 //				}
-//				else if(tab.type.contentEquals("ITEM"))
-//				{
-//					ItemViewController *itemViewController = [[ItemViewController alloc] initWithTab:tab delegate:
-//					(id<ItemViewControllerDelegate>)delegate];
-//					vc = [[ARISNavigationController alloc] initWithRootViewController:itemViewController];
+//				else if (tab.type.contentEquals("ITEM")) {
+//					vc = new ItemViewFragment();
+////					ItemViewController *itemViewController = [[ItemViewController alloc] initWithTab:tab delegate:
+////					(id<ItemViewControllerDelegate>)delegate];
+////					vc = [[ARISNavigationController alloc] initWithRootViewController:itemViewController];
 //				}
-//				else if(tab.type.contentEquals("PLAQUE"))
-//				{
-//					PlaqueViewController *plaqueViewController = [[PlaqueViewController alloc] initWithTab:tab delegate:
-//					(id<PlaqueViewControllerDelegate>)delegate];
-//					vc = [[ARISNavigationController alloc] initWithRootViewController:plaqueViewController];
+//				else if (tab.type.contentEquals("PLAQUE")) {
+//					vc = new PlaqueViewFragment();
+////					PlaqueViewController *plaqueViewController = [[PlaqueViewController alloc] initWithTab:tab delegate:
+////					(id<PlaqueViewControllerDelegate>)delegate];
+////					vc = [[ARISNavigationController alloc] initWithRootViewController:plaqueViewController];
 //				}
-//				else if(tab.type.contentEquals("WEB_PAGE"))
-//				{
-//					WebPageViewController *webPageViewController = [[WebPageViewController alloc] initWithTab:tab delegate:
-//					(id<WebPageViewControllerDelegate>)delegate];
-//					vc = [[ARISNavigationController alloc] initWithRootViewController:webPageViewController];
+//				else if (tab.type.contentEquals("WEB_PAGE")) {
+//					vc = new WebPageViewFragment();
+////					WebPageViewController *webPageViewController = [[WebPageViewController alloc] initWithTab:tab delegate:
+////					(id<WebPageViewControllerDelegate>)delegate];
+////					vc = [[ARISNavigationController alloc] initWithRootViewController:webPageViewController];
 //				}
-//				if(vc) [viewControllersDict setObject:vc forKey:[NSNumber numberWithLong:tab.tab_id]];
+//				if (vc != null)
+//					viewControllersDict.add(tab.tab_id); // setObject:vc forKey:[NSNumber numberWithLong:tab.tab_id]];
 //			}
-//
-//			if(viewControllersDict[[NSNumber numberWithLong:tab.tab_id])) [viewControllers addObject:viewControllersDict[[NSNumber numberWithLong:tab.tab_id]]];
-//			else _ARIS_LOG_(@"ERROR: Tab from server could not be created. KeyString %ld should exist but does not have a matching VC", tab.tab_id);
+////
+////			if(viewControllersDict[[NSNumber numberWithLong:tab.tab_id])) [viewControllers addObject:viewControllersDict[[NSNumber numberWithLong:tab.tab_id]]];
+//			if (viewControllersDict.contains(tab.tab_id)) {
+//				// todo: fragment add here??
+//			}
+////			else _ARIS_LOG_(@"ERROR: Tab from server could not be created. KeyString %ld should exist but does not have a matching VC", tab.tab_id);
 //		}
-//
-//		if(this.view) [tableView reloadData];
+////
+////		if(this.view) [tableView reloadData];
 	}
-	
+
 	public void setupDefaultTab() {
+
 		String tag = "";
 		String fragViewToDisplay = "";
+		Fragment vc = null;
 		// sort playerTabs by "sort_index" field
 //		Collections.sort(mGamePlayAct.mGame.tabsModel.playerTabs, new TabCompareBySortIndex());
 
@@ -222,9 +284,10 @@ public class GamePlayTabSelectorViewController {
 		if (true) { // todo: temp. do we have a need to check stuff here? nulls?
 			if (tab.type.equalsIgnoreCase("QUESTS")) {
 				//if uses icon quest view
+				vc = new QuestsViewFragment();
 				if (!tab.info.isEmpty() && !tab.info.contentEquals("")) { // todo: Android doesn't have icon view currently
 					if (mGamePlayAct.questsViewFragment == null) {
-						mGamePlayAct.questsViewFragment = new QuestsViewFragment();
+						mGamePlayAct.questsViewFragment = (QuestsViewFragment) vc;
 						if (mGamePlayAct.questsViewFragment.isAdded()) return;
 						mGamePlayAct.questsViewFragment.initContext(mGamePlayAct);
 						//						mGamePlayAct.questsViewFragment.initWithInstance(i);
@@ -244,7 +307,7 @@ public class GamePlayTabSelectorViewController {
 //						(id<QuestsViewControllerDelegate>)delegate];
 //						vc = [[ARISNavigationController alloc] initWithRootViewController:questsViewController];
 					if (mGamePlayAct.questsViewFragment == null) {
-						mGamePlayAct.questsViewFragment = new QuestsViewFragment();
+						mGamePlayAct.questsViewFragment = (QuestsViewFragment) vc;
 						if (mGamePlayAct.questsViewFragment.isAdded()) return;
 						mGamePlayAct.questsViewFragment.initContext(mGamePlayAct);
 						//						mGamePlayAct.questsViewFragment.initWithInstance(i);
@@ -265,8 +328,10 @@ public class GamePlayTabSelectorViewController {
 //					MapViewController *mapViewController = [[MapViewController alloc] initWithTab:tab delegate:
 //					(id<MapViewControllerDelegate>)delegate];
 //					vc = [[ARISNavigationController alloc] initWithRootViewController:mapViewController];
+				vc = new MapViewFragment();
+
 				if (mGamePlayAct.mapViewFragment == null) {
-					mGamePlayAct.mapViewFragment = new MapViewFragment();
+					mGamePlayAct.mapViewFragment = (MapViewFragment) vc;
 					mGamePlayAct.mapViewFragment.initContext(mGamePlayAct);
 					//						mGamePlayAct.mapViewFragment.initWithInstance(i);
 					tag = mGamePlayAct.mapViewFragment.toString();
@@ -345,56 +410,128 @@ public class GamePlayTabSelectorViewController {
 //		return viewControllers[0];
 //	}
 
-	public void leaveGameButtonTouched()
-	{
+	public void leaveGameButtonTouched() {
 		mGamePlayAct.leaveGame();
 	}
 
 
-	public void requestDisplayTab(Tab t)
-	{
+	public void requestDisplayTab(Tab t) {
+
+		// testing!! This shorcuts a whole lot of iOS structures concerning what to display.
+		// but I want to try it to show that the relatively simple fragment transaction code in
+		// onNavDrawerItemSelected() could be used here. Maybe it could even work correctly in place of
+		// all the lofty iOS display controller stuff.
+		mGamePlayAct.onNavigationDrawerItemSelected(t.type); if (true) return; // testing wildly it the dark
+
 //		Tab tab;
-//
+//    ARISNavigationController *vc;
+		String tag = "";
+		Fragment vc = null; //placeholder
 //		for(long i = 0; i < playerTabs.count; i++)
-//		{
+		for (Tab tab : this.mPlayerTabs) {
 //			tab = playerTabs[i];
-//			if(tab == t)
-//			{
-//				if(tab.type.contentEquals("SCANNER"))
-//				{
+			if (tab == t) {
+				//
+				// Beginning of my version
+				//
+				if (tab.type.equalsIgnoreCase("QUESTS")) {
+					//if uses icon quest view
+					if (!tab.info.isEmpty() && !tab.info.contentEquals("")) { // todo: Android doesn't have icon view currently
+						if (mGamePlayAct.questsViewFragment == null) {
+							mGamePlayAct.questsViewFragment = new QuestsViewFragment();
+							if (mGamePlayAct.questsViewFragment.isAdded()) return;
+							mGamePlayAct.questsViewFragment.initContext(mGamePlayAct);
+							//						mGamePlayAct.questsViewFragment.initWithInstance(i);
+							tag = mGamePlayAct.questsViewFragment.toString();
+							FragmentTransaction ft = mGamePlayAct.getSupportFragmentManager().beginTransaction();
+//						ft.add(R.id.fragment_view_container, mGamePlayAct.questsViewFragment, tag); //set tag.
+							ft.addToBackStack(tag);
+//						ft.attach(mGamePlayAct.questsViewFragment); // was .show()
+							ft.replace(R.id.fragment_view_container, mGamePlayAct.questsViewFragment, tag);
+							ft.commit();
+//						mGamePlayAct.getSupportFragmentManager().executePendingTransactions();
+//						mGamePlayAct.setAsFrontmostFragment(tag);
+						}
+					}
+					else {
+//						QuestsViewController *questsViewController = [[QuestsViewController alloc] initWithTab:tab delegate:
+//						(id<QuestsViewControllerDelegate>)delegate];
+//						vc = [[ARISNavigationController alloc] initWithRootViewController:questsViewController];
+						if (mGamePlayAct.questsViewFragment == null) {
+							mGamePlayAct.questsViewFragment = new QuestsViewFragment();
+							if (mGamePlayAct.questsViewFragment.isAdded()) return;
+							mGamePlayAct.questsViewFragment.initContext(mGamePlayAct);
+							//						mGamePlayAct.questsViewFragment.initWithInstance(i);
+							tag = mGamePlayAct.questsViewFragment.toString();
+							FragmentTransaction ft = mGamePlayAct.getSupportFragmentManager().beginTransaction();
+//						ft.add(R.id.fragment_view_container, mGamePlayAct.questsViewFragment, tag); //set tag.
+							ft.addToBackStack(tag);
+//						ft.attach(mGamePlayAct.questsViewFragment); // was .show()
+							ft.replace(R.id.fragment_view_container, mGamePlayAct.questsViewFragment, tag);
+							ft.commit();
+							mGamePlayAct.getSupportFragmentManager().executePendingTransactions();
+//						mGamePlayAct.setAsFrontmostFragment(tag);
+						}
+
+					}
+				}
+				else if (tab.type.equalsIgnoreCase("MAP")) {
+//					MapViewController *mapViewController = [[MapViewController alloc] initWithTab:tab delegate:
+//					(id<MapViewControllerDelegate>)delegate];
+//					vc = [[ARISNavigationController alloc] initWithRootViewController:mapViewController];
+					if (mGamePlayAct.mapViewFragment == null) {
+						mGamePlayAct.mapViewFragment = new MapViewFragment();
+						mGamePlayAct.mapViewFragment.initContext(mGamePlayAct);
+						//						mGamePlayAct.mapViewFragment.initWithInstance(i);
+						tag = mGamePlayAct.mapViewFragment.toString();
+						FragmentTransaction ft = mGamePlayAct.getSupportFragmentManager().beginTransaction();
+						ft.add(R.id.fragment_view_container, mGamePlayAct.mapViewFragment, tag); //set tag.
+						ft.addToBackStack(tag);
+						ft.attach(mGamePlayAct.mapViewFragment); // was .show()
+						ft.commit();
+						mGamePlayAct.getSupportFragmentManager().executePendingTransactions();
+						mGamePlayAct.setAsFrontmostFragment(tag);
+					}
+
+				}
+
+				//
+				// end of my version
+				//
+				if (tab.type.contentEquals("SCANNER")) {
+					vc = new ScannerViewFragment();
 //					ARISNavigationController *navigation = (ARISNavigationController*)viewControllersDict[[NSNumber numberWithLong:tab.tab_id]];
 //					[((ScannerViewController *)navigation.topViewController) setPrompt:tab.info];
 //					// clean this up later.
 //					tab.info = @"";
 //
-//				}
-//				else if(tab.type.contentEquals("DIALOG"))
-//				{
+				}
+				else if (tab.type.contentEquals("DIALOG")) {
+					vc = new DialogViewFragment();
 //					DialogViewController *dialogViewController = [[DialogViewController alloc] initWithTab:tab delegate:
 //					(id<DialogViewControllerDelegate>)delegate];
 //					vc = [[ARISNavigationController alloc] initWithRootViewController:dialogViewController];
-//				}
-//				else if(tab.type.contentEquals("ITEM"))
-//				{
+				}
+				else if (tab.type.contentEquals("ITEM")) {
+					vc = new ItemViewFragment();
 //					ItemViewController *itemViewController = [[ItemViewController alloc] initWithTab:tab delegate:
 //					(id<ItemViewControllerDelegate>)delegate];
 //					vc = [[ARISNavigationController alloc] initWithRootViewController:itemViewController];
-//				}
-//				else if(tab.type.contentEquals("PLAQUE"))
-//				{
+				}
+				else if (tab.type.contentEquals("PLAQUE")) {
+					vc = new PlaqueViewFragment();
 //					PlaqueViewController *plaqueViewController = [[PlaqueViewController alloc] initWithTab:tab delegate:
 //					(id<PlaqueViewControllerDelegate>)delegate];
 //					vc = [[ARISNavigationController alloc] initWithRootViewController:plaqueViewController];
-//				}
-//				else if(tab.type.contentEquals("WEB_PAGE"))
-//				{
+				}
+				else if (tab.type.contentEquals("WEB_PAGE")) {
+					vc = new WebPageViewFragment();
 //					WebPageViewController *webPageViewController = [[WebPageViewController alloc] initWithTab:tab delegate:
 //					(id<WebPageViewControllerDelegate>)delegate];
 //					vc = [[ARISNavigationController alloc] initWithRootViewController:webPageViewController];
-//				}
+				}
 //
-//				if(vc) //new vc was created- replace old one
-//				{
+				if (vc != null) { //new vc was created- replace old one
 //					for(long i = 0; i < viewControllers.count; i++)
 //					{
 //						if(viewControllers[i] == viewControllersDict[[NSNumber numberWithLong:tab.tab_id]))
@@ -403,17 +540,16 @@ public class GamePlayTabSelectorViewController {
 //							[viewControllers setObject:vc atIndexedSubscript:(NSUInteger)i];
 //						}
 //					}
-//				}
+				}
 //
 //				[delegate viewControllerRequestedDisplay:viewControllersDict[[NSNumber numberWithLong:tab.tab_id]]];
+
 //				return;
-//			}
-//		}
-		
+			}
+		}
 	}
 
-	public void requestDisplayScannerWithPrompt(String p)
-	{
+	public void requestDisplayScannerWithPrompt(String p) {
 //		Tab *tab;
 //		for(long i = 0; i < playerTabs.count; i++)
 //		{
@@ -433,8 +569,7 @@ public class GamePlayTabSelectorViewController {
 //		[self requestDisplayTab:tab];
 //	}
 
-	public void refreshTabTable()
-	{
+	public void refreshTabTable() {
 //		[tableView reloadData];
 	}
 

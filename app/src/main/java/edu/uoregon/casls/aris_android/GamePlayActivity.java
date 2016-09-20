@@ -98,7 +98,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	// (may want to centralize these in a Navigation Controller)
 	public GamePlayPlayerFragment playerViewFragment;
 	// tab_controllers
-	public AttributesViewFragment attributesViewController;
+	public AttributesViewFragment attributesViewController; // aka PlayerView
 	public DecoderViewFragment    decoderViewFragment;
 	public InventoryViewFragment  inventoryViewFragment;
 	public MapViewFragment        mapViewFragment;
@@ -429,7 +429,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 		// set up background tab (see View Layer sermon below):
 		mGamePlayTabSelectorViewController.initContext(this); // also serves many of the functions of iOS GamePlayTabSelectorViewController.initWithDelegate
-		mGamePlayTabSelectorViewController.setupDefaultTab();
+		mGamePlayTabSelectorViewController.setupDefaultTab(); // todo: should be refreshFromModel() called in the initContext above. this is a stand-in call.
 		// set Title of action bar
 		mTitle = AppUtils.prettyName(mGame.tabsModel.playerTabs.get(0).type);
 		mActionBar.setTitle(mTitle);
@@ -667,39 +667,39 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			// update the main content by replacing fragments
 		FragmentManager fragmentManager = getSupportFragmentManager();
 
-		if (itemName.equals("Quests")) {
+		if (itemName.equalsIgnoreCase("Quests")) {
 			this.questsViewFragment = QuestsViewFragment.newInstance(itemName);
 			fragmentManager.beginTransaction()
 					.addToBackStack(itemName)
 					.replace(R.id.fragment_view_container, this.questsViewFragment, this.questsViewFragment.toString())
 					.commit();
 		}
-		else if (itemName.equals("Map")) {
+		else if (itemName.equalsIgnoreCase("Map")) {
 			Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + "item Map chosen. Replacing whatever was there with a map fragmene: " + itemName);
 			this.mapViewFragment = MapViewFragment.newInstance(itemName);
 			fragmentManager.beginTransaction()
 					.replace(R.id.fragment_view_container, this.mapViewFragment, this.mapViewFragment.toString())
 					.commit();
 		}
-		else if (itemName.equals("Inventory")) {
+		else if (itemName.equalsIgnoreCase("Inventory")) {
 			this.inventoryViewFragment = new InventoryViewFragment();
 			fragmentManager.beginTransaction()
 					.replace(R.id.fragment_view_container, this.inventoryViewFragment, this.inventoryViewFragment.toString())
 					.commit();
 		}
-		else if (itemName.equals("Scanner")) {
+		else if (itemName.equalsIgnoreCase("Scanner")) {
 			this.scannerViewFragment = ScannerViewFragment.newInstance(itemName);
 			fragmentManager.beginTransaction()
 					.replace(R.id.fragment_view_container, this.scannerViewFragment, this.scannerViewFragment.toString())
 					.commit();
 		}
-		else if (itemName.equals("Decoder")) {
+		else if (itemName.equalsIgnoreCase("Decoder")) {
 			this.decoderViewFragment = DecoderViewFragment.newInstance(itemName);
 			fragmentManager.beginTransaction()
 					.replace(R.id.fragment_view_container, this.decoderViewFragment , this.decoderViewFragment .toString())
 					.commit();
 		}
-		else if (itemName.equals("Player")) { // todo: GamePlayPlayerFragment? What is this? Does it need to exists?
+		else if (itemName.equalsIgnoreCase("Player")) { // todo: GamePlayPlayerFragment? What is this? Does it need to exists?
 			this.playerViewFragment = GamePlayPlayerFragment.newInstance(itemName);
 			fragmentManager.beginTransaction()
 					.replace(R.id.fragment_view_container, this.playerViewFragment, this.playerViewFragment.toString())
@@ -711,7 +711,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 					.replace(R.id.fragment_view_container, this.noteViewFragment, this.noteViewFragment.toString())
 					.commit();
 		}
-		else if (itemName.equals("Leave Game")) {
+		else if (itemName.equalsIgnoreCase("Leave Game")) {
 			fragmentManager.popBackStack(); // leave this fragment
 			onBackPressed(); // leave GamePlayActivity
 
@@ -1234,7 +1234,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	// This (I'm guessing) is handling a selection in what we are calling the Nav Drawer
 	public void displayTab(Tab t) {
 		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Entering displayTab tabid: " + t.tab_id);
-//todo:		gamePlayTabSelectorController.requestDisplayTab(t);
+//		instantiableViewController = nil; todo: Android?
+		mGamePlayTabSelectorViewController.requestDisplayTab(t);
 		this.tryDequeue(); //no 'closing event' for tab
 	}
 

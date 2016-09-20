@@ -24,6 +24,7 @@ import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
 import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.services.ARISMediaLoader;
+import edu.uoregon.casls.aris_android.services.AppServices;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -132,6 +133,15 @@ public class ARISMediaViewFragment extends Fragment {
 		// I think in Android it'll be much easier to just point UI elements at the LocalURL (assuming it's avalailable.)
 		// todo: check that we have a valid mediaCD.localURL. if not look for remoteURL and load it (to device?).
 		// todo: if no remoteURL? well uhm...
+
+		if ( m.data == null) {
+			//dowload remote file and return local URL.
+			this.clear();
+			media = m;
+			ARISMediaLoader mediaLoader = new ARISMediaLoader(mGamePlayAct);
+			mediaLoader.loadMedia(m);
+		}
+
 //		if (m.data == null) {
 //			this.clear();
 //			media = m;
@@ -215,7 +225,17 @@ public class ARISMediaViewFragment extends Fragment {
 			default:
 				if (type.contentEquals("IMAGE")) {
 					// todo: getting a NPE on media.mediaCD.localURL - debug and fix
-					String dataType = this.getMimeTypeOfFile(media.mediaCD.localURL.toString());
+
+					String dataType;
+					if (media.mediaCD.localURL != null) {
+						dataType = this.getMimeTypeOfFile(media.mediaCD.localURL.toString());
+					}
+					else if (media.mediaCD.remoteURL != null) {
+						dataType = this.getMimeTypeOfFile(media.mediaCD.remoteURL.toString());
+					}
+					else
+						dataType = "image/jpeg"; // just guess
+
 //					String dataType = this.getMimeTypeOfFile(media.mediaCD.localURL.toString() != null ? media.mediaCD.localURL.toString() : "");
 //				    String dataType = this.contentTypeForImageData:media.data];
 					if (dataType.contentEquals("image/gif")) { // do a gif display
@@ -275,7 +295,10 @@ public class ARISMediaViewFragment extends Fragment {
 		// show an image file from interal storage...
 		//preview.setImageURI(Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Echo/Images/"+file_name));
 //		imageView.setImageDrawable(getResources().getDrawable(R.drawable.raw_image_sample));
-		imageView.setImageURI(Uri.parse(media.mediaCD.localURL.toString()));
+		if (media.mediaCD.localURL != null)
+			imageView.setImageURI(Uri.parse(media.mediaCD.localURL.toString()));
+		else if (media.mediaCD.remoteURL != null)
+			imageView.setImageURI(Uri.parse(media.mediaCD.remoteURL.toString()));
 		imageView.setVisibility(View.VISIBLE);
 
 	}

@@ -13,13 +13,13 @@
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/tv_plaque_title"/>
+        android:id="@+id/tv_note_title"/>
 
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/scrlv_plaque_desc_and_media"
-        android:layout_below="@+id/tv_plaque_title"
+        android:layout_below="@+id/tv_note_title"
         android:layout_centerHorizontal="true">
 
         <RelativeLayout

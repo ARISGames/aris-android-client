@@ -139,7 +139,7 @@ public class PlaqueViewFragment extends Fragment {
 		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, "PlaqueViewFragment.loadPlaque; ");
 
 		if (!mPlaque.name.isEmpty()) { // set plaqueue title
-			TextView tvPlaqueueTitle = (TextView) mPlaqueView.findViewById(R.id.tv_plaque_title);
+			TextView tvPlaqueueTitle = (TextView) mPlaqueView.findViewById(R.id.tv_note_title);
 			tvPlaqueueTitle.setText(mPlaque.name);
 		}
 		if (!mPlaque.description.contentEquals("")) { // load the description webview

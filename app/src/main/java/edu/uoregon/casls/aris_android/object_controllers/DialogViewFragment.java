@@ -180,8 +180,11 @@ public class DialogViewFragment extends Fragment {
 		});
 
 		// set Dialog Script Text:
-		TextView tvScriptText = (TextView) fragView.findViewById(R.id.tv_dialog_script_text);
-		tvScriptText.setText(dialogScript.text);
+//		TextView tvScriptText = (TextView) fragView.findViewById(R.id.tv_dialog_script_text);
+//		tvScriptText.setText(dialogScript.text);
+		ARISWebView wvScriptPrompt = (ARISWebView) fragView.findViewById(R.id.wv_dialog_prompt);
+		wvScriptPrompt.initContextAndInjectJavaScript(mGamePlayAct);
+		wvScriptPrompt.loadHTMLString(dialogScript.text);
 
 		// build Dialog Options List
 		populateDialogOptionsList(fragView);
@@ -206,7 +209,7 @@ public class DialogViewFragment extends Fragment {
 				final View dialogOptionItemView = inflater.inflate(R.layout.dialog_option_list_item, null);
 
 				// set webview to display dialog option prompt
-				ARISWebView wvDialogOptionPrompt = (ARISWebView) fragView.findViewById(R.id.wv_dialog_option_prompt);
+				ARISWebView wvDialogOptionPrompt = (ARISWebView) dialogOptionItemView.findViewById(R.id.wv_dialog_option);
 				wvDialogOptionPrompt.initContextAndInjectJavaScript(mGamePlayAct);
 				wvDialogOptionPrompt.loadHTMLString(dialogOption.prompt);
 
@@ -265,8 +268,8 @@ public class DialogViewFragment extends Fragment {
 			this.dialogScriptChosen(dialogsModel.scriptForId(d.intro_dialog_script_id));
 		}
 		else if (op.link_type.contentEquals("EXIT_TO_TAB")) {
-			mGamePlayAct.mGame.displayQueueModel.enqueueTab(mGamePlayAct.mGame.tabsModel.tabForId(op.link_id));
 			this.dismissSelf();
+			mGamePlayAct.mGame.displayQueueModel.enqueueTab(mGamePlayAct.mGame.tabsModel.tabForId(op.link_id));
 		}
 //		else
 //			mListener.onOtherDialogOptionSelected(dialogOptionId);

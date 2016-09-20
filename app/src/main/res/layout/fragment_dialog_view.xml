@@ -61,15 +61,26 @@
             android:id="@+id/ll_dialog_script_w_options_container"
             android:orientation="vertical"
             android:alpha=".9">
-            <TextView
+
+            <view
+                class="edu.uoregon.casls.aris_android.ARISWebView"
+                android:id="@+id/wv_dialog_prompt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="I have a layout hidden from the view. On a button click I want it to slide up from the bottom covering over the existing layout, very similar to how whatsapp shows emoticons panel in chat screen."
-                android:id="@+id/tv_dialog_script_text"
-                android:background="#ffffffff"
-                android:alpha=".98"
-                android:padding="10dp"
-                android:textSize="@dimen/textsize_large"/>
+                android:layout_gravity="center_vertical"
+                android:background="#fffefefe"
+                android:alpha=".98"/>
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="I have a layout hidden from the view. On a button click I want it to slide up from the bottom covering over the existing layout, very similar to how whatsapp shows emoticons panel in chat screen."-->
+                <!--android:id="@+id/tv_dialog_script_text"-->
+                <!--android:background="#ffffffff"-->
+                <!--android:alpha=".98"-->
+                <!--android:padding="10dp"-->
+                <!--android:textSize="@dimen/textsize_large"/>-->
+
             <!-- Dialog Options List -->
             <LinearLayout
                 android:id="@+id/ll_dialog_options_list"

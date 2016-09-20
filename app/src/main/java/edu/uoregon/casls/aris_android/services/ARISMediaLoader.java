@@ -69,8 +69,11 @@ public class ARISMediaLoader {
 	public void loadMediaFromMR(MediaResult mr) {
 		if (mr.media.thumb != null) { this.mediaLoadedForMR(mr); }
 		else if (mr.media.data != null) { this.deriveThumbForMR(mr); }
-		else if (mr.media.localURL() != null) { // get from the file if it already has been loaded
-			mr.media.data = BitmapFactory.decodeFile(mr.media.localURL().getPath());//.decodeStream(mr.media.localURL.openConnection().getInputStream());
+		else if (mr.media.localURL() != null) { // get from the file if it already has been loaded // fixme: YIKES: out of mmory error here on games w/a lot of media. runaway
+			// from suggestion: http://stackoverflow.com/a/29862162
+			File f = new File(mr.media.localURL().getPath());
+			mr.media.data = AppUtils.decodeImageFile(f, 1280, 720);//.decodeStream(mr.media.localURL.openConnection().getInputStream());
+//			mr.media.data = BitmapFactory.decodeFile(mr.media.localURL().getPath());//.decodeStream(mr.media.localURL.openConnection().getInputStream());
 		}
 		else if (mr.media.remoteURL() != null) { // todo: call a pollServer type method to get media data, but one that can handle load failure and schedule to reload.
 			// set up an async server request to get Media data
@@ -78,6 +81,27 @@ public class ARISMediaLoader {
 		}
 		else if (mr.media.remoteURL() == null) { this.loadMetaDataForMR(mr); }
 	}
+//stack trace for above memory fail:
+/*	java.lang.OutOfMemoryError: Failed to allocate a 1408012 byte allocation with 141495 free bytes and 138KB until OOM
+at dalvik.system.VMRuntime.newNonMovableArray(Native Method)
+	at android.graphics.BitmapFactory.nativeDecodeStream(Native Method)
+	at android.graphics.BitmapFactory.decodeStreamInternal(BitmapFactory.java:635)
+	at android.graphics.BitmapFactory.decodeStream(BitmapFactory.java:611)
+	at android.graphics.BitmapFactory.decodeFile(BitmapFactory.java:391)
+	at android.graphics.BitmapFactory.decodeFile(BitmapFactory.java:417)
+	at edu.uoregon.casls.aris_android.services.ARISMediaLoader.loadMediaFromMR(ARISMediaLoader.java:73)
+	at edu.uoregon.casls.aris_android.services.ARISMediaLoader.loadMedia(ARISMediaLoader.java:66)
+	at edu.uoregon.casls.aris_android.models.MediaModel.deferedLoadMedia(MediaModel.java:245)
+	at edu.uoregon.casls.aris_android.models.MediaModel$1.run(MediaModel.java:236)
+	at android.os.Handler.handleCallback(Handler.java:739)
+	at android.os.Handler.dispatchMessage(Handler.java:95)
+	at android.os.Looper.loop(Looper.java:135)
+	at android.app.ActivityThread.main(ActivityThread.java:5376)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at java.lang.reflect.Method.invoke(Method.java:372)
+	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:908)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:703)*/
+
 
 	private void pollServerForMediaWithRemoteURL(final MediaResult mediaResult) {
 		final Context context = mGamePlayAct;

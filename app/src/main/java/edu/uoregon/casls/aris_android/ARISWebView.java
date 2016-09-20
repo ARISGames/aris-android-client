@@ -48,9 +48,13 @@ public class ARISWebView extends WebView {
 		super(context, attrs, defStyleAttr);
 	}
 
-	public void initContextAndInjectJavaScript(Activity act) {
+	public void initContext(Activity act) {
 		mGamePlayAct = (GamePlayActivity) act;
 		mGame = mGamePlayAct.mGame;
+	}
+
+	public void initContextAndInjectJavaScript(Activity act) {
+		this.initContext(act);
 		// standard settings for most ARISWebViews. Override for specific cases.
 		this.getSettings().setJavaScriptEnabled(true);
 		this.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
