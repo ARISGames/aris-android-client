@@ -869,6 +869,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		if (dialogViewFragment != null) {
 			FragmentManager fm = getSupportFragmentManager();
 			fm.popBackStack(); // immediate?
+//			fm.
 //			if (!viewingInstantiableObject) { // todo: temporary in leu of showNav() call in fragment dismissSelf()
 //				this.showNavBar();
 //			}

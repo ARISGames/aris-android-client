@@ -275,13 +275,14 @@ public class MediaModel extends ARISModel {
 			mediaCD.media_id = media_id;
 			mediaCD.game_id = 0;
 			mediaCD.user_id = 0;
+			mediaCD.localURL = "file:///android_res/drawable/plaque_icon_120.png"; // for use when we need the local file
 			Media media = new Media(mediaCD);
 			// UIImagePNGRepresentation = Return the data for the specified image in PNG format
 			// get data from drawable image and lode into object field
 			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.plaque_icon_120);
 			media.data = ((BitmapDrawable)drawable).getBitmap();
 			media.thumb = media.data;
-			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
+//			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
 		if (media_id == Media.DEFAULT_ITEM_ICON_MEDIA_ID) {
@@ -289,11 +290,12 @@ public class MediaModel extends ARISModel {
 			mediaCD.media_id = media_id;
 			mediaCD.game_id = 0;
 			mediaCD.user_id = 0;
+			mediaCD.localURL = "file:///android_res/drawable/item_icon_120.png"; // for use when we need the local file
 			Media media = new Media(mediaCD);
 			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.item_icon_120);
 			media.data = ((BitmapDrawable)drawable).getBitmap();
 			media.thumb = media.data;
-			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
+//			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
 		if (media_id == Media.DEFAULT_DIALOG_ICON_MEDIA_ID) {
@@ -301,11 +303,12 @@ public class MediaModel extends ARISModel {
 			mediaCD.media_id = media_id;
 			mediaCD.game_id = 0;
 			mediaCD.user_id = 0;
+			mediaCD.localURL = "file:///android_res/drawable/conversation_icon_120.png"; // for use when we need the local file
 			Media media = new Media(mediaCD);
 			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.conversation_icon_120);
 			media.data = ((BitmapDrawable)drawable).getBitmap();
 			media.thumb = media.data;
-			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
+//			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
 		if (media_id == Media.DEFAULT_WEB_PAGE_ICON_MEDIA_ID) {
@@ -313,11 +316,12 @@ public class MediaModel extends ARISModel {
 			mediaCD.media_id = media_id;
 			mediaCD.game_id = 0;
 			mediaCD.user_id = 0;
+			mediaCD.localURL = "file:///android_res/drawable/webpage_icon_120.png"; // for use when we need the local file
 			Media media = new Media(mediaCD);
 			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.webpage_icon_120);
 			media.data = ((BitmapDrawable)drawable).getBitmap();
 			media.thumb = media.data;
-			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
+//			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
 		if (media_id == Media.LOGO_ICON_MEDIA_ID) {
@@ -325,11 +329,12 @@ public class MediaModel extends ARISModel {
 			mediaCD.media_id = media_id;
 			mediaCD.game_id = 0;
 			mediaCD.user_id = 0;
+			mediaCD.localURL = "file:///android_res/drawable/logo_icon.png"; // for use when we need the local file
 			Media media = new Media(mediaCD);
 			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.logo_icon);
 			media.data = ((BitmapDrawable)drawable).getBitmap();
 			media.thumb = media.data;
-			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
+//			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
 		if (media_id == Media.DEFAULT_NOTE_ICON_MEDIA_ID) {
@@ -337,11 +342,12 @@ public class MediaModel extends ARISModel {
 			mediaCD.media_id = media_id;
 			mediaCD.game_id = 0;
 			mediaCD.user_id = 0;
+			mediaCD.localURL = "file:///android_res/drawable/note_icon.png"; // for use when we need the local file
 			Media media = new Media(mediaCD);
 			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.note_icon);
 			media.data = ((BitmapDrawable)drawable).getBitmap();
 			media.thumb = media.data;
-			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
+//			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
 
@@ -350,11 +356,12 @@ public class MediaModel extends ARISModel {
 			mediaCD.media_id = media_id;
 			mediaCD.game_id = 0;
 			mediaCD.user_id = 0;
+			mediaCD.localURL = "file:///android_res/drawable/star_blue.png"; // for use when we need the local file
 			Media media = new Media(mediaCD);
 			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.star_blue);
 			media.data = ((BitmapDrawable)drawable).getBitmap();
 			media.thumb = media.data;
-			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
+//			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
 		}
 

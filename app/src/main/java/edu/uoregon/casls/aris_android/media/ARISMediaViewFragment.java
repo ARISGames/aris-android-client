@@ -146,6 +146,13 @@ public class ARISMediaViewFragment extends Fragment {
 		this.setMedia(m);
 	}
 
+	public void setImageFromDrawableRes(String drawableResourceFileName) {
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+		Bitmap bitmap = BitmapFactory.decodeFile("file:///android_res/drawable/" + drawableResourceFileName, options);
+		setImage(bitmap);
+	}
+
 	public void setImage(Bitmap i) {
 		this.clear();
 		image = i;

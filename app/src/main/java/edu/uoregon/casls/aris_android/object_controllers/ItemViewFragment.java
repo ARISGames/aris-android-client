@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
@@ -41,7 +42,7 @@ public class ItemViewFragment extends Fragment {
 	private String mParam2;
 
 	private OnFragmentInteractionListener mListener;
-	public GamePlayActivity mGamePlayActivity;
+	public  GamePlayActivity              mGamePlayActivity;
 
 	public Item                  mItem;
 	public Tab                   tab;
@@ -55,7 +56,7 @@ public class ItemViewFragment extends Fragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		mGamePlayActivity = (GamePlayActivity)getActivity();
+		mGamePlayActivity = (GamePlayActivity) getActivity();
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null) {
 			mParam1 = getArguments().getString(ARG_PARAM1);
@@ -66,7 +67,7 @@ public class ItemViewFragment extends Fragment {
 	public void initWithInstance(Instance i) {
 		instance = i;
 		mItem = mGamePlayActivity.mGame.itemsModel.itemForId(i.object_id);
-		
+
 	}
 
 	public void initWithTab(Tab t) {
@@ -83,12 +84,11 @@ public class ItemViewFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                         Bundle savedInstanceState) {
+							 Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		mItemFragView = inflater.inflate(R.layout.fragment_item_view, container, false);
 
-		TextView tvItemName = (TextView) mItemFragView.findViewById(R.id.tv_item_name);
-		tvItemName.setText(mItem.name);
+		refreshTitle();
 
 		if (tab != null) {
 			ImageButton ibToggleTab = (ImageButton) mItemFragView.findViewById(R.id.ib_item_go_back);
@@ -111,21 +111,24 @@ public class ItemViewFragment extends Fragment {
 			});
 		}
 		LinearLayout llPickUpClickArea = (LinearLayout) mItemFragView.findViewById(R.id.ll_item_pick_up_footer);
-		setUpButtons();
+		updateViewButtons();
 		return mItemFragView;
 	}
 
 	public void refreshTitle() { // todo: Necessary in android?
-//		if (instance.qty < 2 || instance.infinite_qty == 1) this.title = this.tabTitle;
-//		else this.title = [NSString stringWithFormat:@"%@ x%ld",self.tabTitle,instance.qty];
+		TextView tvItemName = (TextView) mItemFragView.findViewById(R.id.tv_item_name);
+		if (instance.qty < 2 || instance.infinite_qty == 1)
+			tvItemName.setText(mItem.name);
+		else
+			tvItemName.setText(mItem.name + " x" + instance.qty);
 	}
 
-	private void setUpButtons() {
+	private void updateViewButtons() {
 		TextView tvDestroy = (TextView) mItemFragView.findViewById(R.id.tv_item_destroy);
 		TextView tvDrop = (TextView) mItemFragView.findViewById(R.id.tv_item_drop);
 		TextView tvPickUp = (TextView) mItemFragView.findViewById(R.id.tv_item_pick_up);
 
-		if (instance.owner_id == Long.getLong(mGamePlayActivity.mPlayer.user_id, 0) && mItem.destroyable == 1) { // show destroy button?
+		if (instance.owner_id == Long.decode(mGamePlayActivity.mPlayer.user_id) && mItem.destroyable == 1) { // show destroy button?
 			tvDestroy.setVisibility(View.VISIBLE);
 			tvDestroy.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -137,7 +140,7 @@ public class ItemViewFragment extends Fragment {
 		}
 		else tvDestroy.setVisibility(View.GONE);
 
-		if (instance.owner_id == Long.getLong(mGamePlayActivity.mPlayer.user_id, 0) && mItem.droppable == 1) { // show drop button?
+		if (instance.owner_id == Long.decode(mGamePlayActivity.mPlayer.user_id) && mItem.droppable == 1) { // show drop button?
 			tvDrop.setVisibility(View.VISIBLE);
 			tvDrop.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -164,10 +167,79 @@ public class ItemViewFragment extends Fragment {
 	}
 
 	private void destroyItemClicked() {
+		long amtCanDestroy = mGamePlayActivity.mGame.playerInstancesModel.qtyOwnedForItem(mItem.item_id);
+
+		if (amtCanDestroy > 1) {
+			final AlertDialog alertDialog = new AlertDialog.Builder(mGamePlayActivity).create();
+			final EditText etQty = new EditText(mGamePlayActivity);
+			etQty.setHint("Qty?");
+			etQty.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+			alertDialog.setTitle("Destroy How Many?");
+			alertDialog.setMessage("Enter quantity to destroy");
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Destroy", Message.obtain());
+			alertDialog.setView(etQty);
+			alertDialog.show();
+
+			long qty = Long.decode(etQty.getText().toString().isEmpty() ? "1" : etQty.getText().toString());
+			destroyItemQty(qty);
+		}
+		else if (amtCanDestroy > 0)
+			destroyItemQty(1);
 
 	}
 
+	private void destroyItemQty(long qty) {
+		if (mGamePlayActivity.mGame.playerInstancesModel.takeItemFromPlayer(mItem.item_id, qty) == 0) {
+			this.dismissSelf();
+		}
+		else {
+			this.updateViewButtons();
+			this.refreshTitle();
+		}
+	}
+
+//	public long qty;
 	private void dropItemClicked() {
+		long amtCanDrop = mGamePlayActivity.mGame.playerInstancesModel.qtyOwnedForItem(mItem.item_id);
+
+		if (amtCanDrop > 1) {
+//			long qty;
+			AlertDialog.Builder alertDialog = new AlertDialog.Builder(mGamePlayActivity);
+			final EditText etQty = new EditText(mGamePlayActivity);
+			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+					LinearLayout.LayoutParams.MATCH_PARENT,
+					LinearLayout.LayoutParams.MATCH_PARENT);
+			lp.setMargins(10, 0, 10, 0);
+			etQty.setLayoutParams(lp);
+			etQty.setHint("Qty?");
+			etQty.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+			alertDialog.setView(etQty);
+			alertDialog.setTitle("Drop How Many?");
+			alertDialog.setMessage("Enter quantity to drop");
+			alertDialog.setPositiveButton("Drop", new DialogInterface.OnClickListener(){
+				public void onClick(DialogInterface dialog, int whichButton) {
+//					qty = Long.decode(etQty.getText().toString().isEmpty() ? "1" : etQty.getText().toString());
+//					String YouEditTextValue = etQty.getText().toString();
+					long qty = Long.decode(etQty.getText().toString().isEmpty() ? "1" : etQty.getText().toString());
+					dropItemQty(qty);
+				}
+			} );
+//			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Drop", Message.obtain());
+			alertDialog.show();
+
+		}
+		else if (amtCanDrop > 0)
+			dropItemQty(1);
+	}
+
+	private void dropItemQty(long qty) {
+		if (mGamePlayActivity.mGame.playerInstancesModel.dropItemFromPlayer(mItem.item_id, qty) == 0) {
+			this.dismissSelf();
+		}
+		else {
+			this.updateViewButtons();
+			this.refreshTitle();
+		}
 
 	}
 
@@ -186,29 +258,28 @@ public class ItemViewFragment extends Fragment {
 
 			return;
 		}
-		else if(allowablePickupAmt > 1 && instance.infinite_qty == 0) {
+		else if (allowablePickupAmt > 1 && instance.infinite_qty == 0) {
 //			ItemActionViewController *itemActionVC = [[ItemActionViewController alloc] initWithPrompt:NSLocalizedString(@"ItemPickupKey", @"") positive:YES maxqty:allowablePickupAmt delegate:self];
 			final AlertDialog alertDialog = new AlertDialog.Builder(mGamePlayActivity).create();
-			final EditText input = new EditText(mGamePlayActivity);
-			input.setHint("Qty?");
-			input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+			final EditText etQty = new EditText(mGamePlayActivity);
+			etQty.setHint("Qty?");
+			etQty.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
 			alertDialog.setTitle("Pick Up How Many?");
 			alertDialog.setMessage("Enter quantity");
-			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,  "Pick Up", Message.obtain());
-			alertDialog.setView(input);
+			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Pick Up", Message.obtain());
+			alertDialog.setView(etQty);
 			alertDialog.show();
 
-			pickupItemQty(1); // todo: present dialog with amount to pick up.
-//			[[self navigationController] pushViewController:itemActionVC animated:YES]; // iOS builds the popup alert then calls pickupItemQty
-
+			long qty = Long.decode(etQty.getText().toString().isEmpty() ? "1" : etQty.getText().toString());
+			pickupItemQty(qty);
 		}
 		else this.pickupItemQty(1);
 	}
 
-	private void pickupItemQty(int q) {
+	private void pickupItemQty(long q) {
 		// popup to tell player item is acquired. Calls giveItem along with presentation of dialog.
 //		mGamePlayActivity.mGame.playerInstancesModel.giveItemToPlayer(mItem.item_id, q); //	[_MODEL_PLAYER_INSTANCES_ giveItemToPlayer:item.item_id qtyToAdd:q];
-		Toast t = Toast.makeText(mGamePlayActivity, "+1 " + mItem.name +". Total: " + mGamePlayActivity.mGame.playerInstancesModel.giveItemToPlayer(mItem.item_id, q), // todo: user amount of item???
+		Toast t = Toast.makeText(mGamePlayActivity, "+1 " + mItem.name + ". Total: " + mGamePlayActivity.mGame.playerInstancesModel.giveItemToPlayer(mItem.item_id, q),
 				Toast.LENGTH_SHORT);
 		t.setGravity(Gravity.TOP, 0, 0);
 		t.show();
@@ -216,7 +287,7 @@ public class ItemViewFragment extends Fragment {
 		long nq = instance.qty - q;
 		mGamePlayActivity.mGame.instancesModel.setQtyForInstanceId(mItem.item_id, nq); //[_MODEL_INSTANCES_ setQtyForInstanceId:instance.instance_id qty:nq];
 		instance.qty = nq; //should get set in above call- but if bogus instance, can't hurt to force it
-		this.setUpButtons(); //[self updateViewButtons];
+		this.updateViewButtons(); //[self updateViewButtons];
 		this.refreshTitle(); // [self refreshTitle];
 	}
 
@@ -267,14 +338,13 @@ public class ItemViewFragment extends Fragment {
 
 		Media media = mGamePlayActivity.mMediaModel.mediaForId(mItem.media_id);
 		if (media != null) {
-			Log.d(AppConfig.LOGTAG+AppConfig.LOGTAG_D1, "ItemViewFragment. setting webview with Item media; ");
+			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, "ItemViewFragment. setting webview with Item media; ");
 			mediaViewFrag.setMedia(media);
 //			[mediaView setMedia:media];
 		}
-		else {
-			// todo: show default icon
-		}
-
+//		else {
+//			// show default icon
+//		}
 	}
 
 	private void loadItemDescriptionWebView() {
@@ -316,6 +386,7 @@ public class ItemViewFragment extends Fragment {
 
 	public interface OnFragmentInteractionListener {
 		void fragmentItemViewDismiss();
+
 		void onFragmentInteraction(Uri uri);
 	}
 }

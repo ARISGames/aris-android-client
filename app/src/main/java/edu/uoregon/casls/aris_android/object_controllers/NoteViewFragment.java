@@ -161,7 +161,7 @@ public class NoteViewFragment extends Fragment {
 			public void onClick(View v) { // in iOS this is all in NoteViewController.commentConfirmed
 				NoteComment noteComment = new NoteComment();
 				noteComment.note_id = note.note_id;
-				noteComment.user_id = Long.getLong(mGamePlayAct.mPlayer.user_id);
+				noteComment.user_id = Long.decode(mGamePlayAct.mPlayer.user_id);
 				noteComment.description = etComment.getText().toString();
 				notesModel.createNoteComment(noteComment);
 				List<NoteComment> newComments = notesModel.noteCommentsForNoteId(note.note_id);

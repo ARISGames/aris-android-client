@@ -3,13 +3,17 @@ package edu.uoregon.casls.aris_android.tab_controllers;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.AttributeSet;
+import android.view.Choreographer;
 import android.view.Gravity;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,15 +26,17 @@ import edu.uoregon.casls.aris_android.data_objects.Instance;
 import edu.uoregon.casls.aris_android.data_objects.Item;
 import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.data_objects.Tab;
+import edu.uoregon.casls.aris_android.media.ARISMediaViewFragment;
 import edu.uoregon.casls.aris_android.models.PlayerInstancesModel;
 
 
 public class InventoryViewFragment extends Fragment {
 
 	private transient GamePlayActivity mGamePlayAct;
-	public static View mThisFragsView;
+	public static     View             mThisFragsView;
 	public Collection<Instance> mInstances = new ArrayList();
-	public Tab tab;
+	public Tab                   tab;
+//	public ARISMediaViewFragment mediaViewFrag;
 
 	private OnFragmentInteractionListener mListener;
 
@@ -45,7 +51,7 @@ public class InventoryViewFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-							 Bundle savedInstanceState) {
+							 Bundle savedInstanceState) {//1
 		// check for preexisting view; remove it if one is found. Otherwise get Duplicate Fragment error.
 		if (mThisFragsView != null) {
 			ViewGroup parent = (ViewGroup) mThisFragsView.getParent();
@@ -56,18 +62,39 @@ public class InventoryViewFragment extends Fragment {
 		try {
 			// Inflate the layout for this fragment
 			mThisFragsView = inflater.inflate(R.layout.fragment_inventory_view, container, false);
-		}
-		catch(InflateException ie) {
+		} catch (InflateException ie) {
 			// do nothing; just go on.
 		}
 
-		if (mGamePlayAct == null)
-			mGamePlayAct = (GamePlayActivity) getActivity();
+
+//		if (mGamePlayAct == null)
+		mGamePlayAct = (GamePlayActivity) getActivity();
 		mGamePlayAct.showNavBar();
 
-		this.updateList();
+//		this.updateList(); // maybe move to onResume?
 		mInstances = new ArrayList<>();
 		return mThisFragsView;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();//4
+		this.updateList(); // maybe move to onResume?
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();//3
+	}
+
+	@Override
+	public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
+		super.onInflate(context, attrs, savedInstanceState);
+	}
+
+	@Override
+	public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+		super.onViewStateRestored(savedInstanceState);//2
 	}
 
 	public void updateList() { // aka refreshViews in iOS InventoryViewController
@@ -82,8 +109,8 @@ public class InventoryViewFragment extends Fragment {
 
 		// todo: need to examine code to make sure we're looking at the correct instances and to reinstate the qty == 0 filter loop below
 		for (Instance instance : instances) { //60832
-				if (instance.qty == 0)
-					continue;
+			if (instance.qty == 0)
+				continue;
 			mInstances.add(instance);
 		}
 		if (mInstances == null || mInstances.size() < 1) {
@@ -97,16 +124,45 @@ public class InventoryViewFragment extends Fragment {
 		}
 		// populate with inventory items.
 		else {
-			for (Instance item : mInstances) {
+			for (final Instance itemInstance : mInstances) {
+//				Item item = itemInstance.mGamePlayAct.mGame.instancesModel.
 				LayoutInflater inflater = (LayoutInflater) mGamePlayAct.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				final View itemView = inflater.inflate(R.layout.inventory_list_item, null);
 				// icon/graphic
+//				FrameLayout flIconMediaView = (FrameLayout) itemView.findViewById(R.id.fl_inventory_item_icon_media_view_container);
 				WebView wvItemIcon = (WebView) itemView.findViewById(R.id.wv_inventory_item_icon);
-				if (item.icon_media_id() == 0) {
+				if (itemInstance.icon_media_id() == 0) {
 					wvItemIcon.setBackgroundColor(0x00000000);
 					wvItemIcon.setBackgroundResource(R.drawable.logo_icon); //todo: default item icon here.
 				}
 				else {
+//				ARISMediaViewFragment mediaViewFrag = new ARISMediaViewFragment();
+//				mediaViewFrag.initContext(mGamePlayAct);
+//				// add media  frag inside this frag.
+//				getChildFragmentManager().beginTransaction().add(flIconMediaView.getId(), mediaViewFrag).commit();
+//				getChildFragmentManager().executePendingTransactions();
+//
+//				Media iconMedia;
+////						iconMedia = mGamePlayAct.mMediaModel.mediaForId(itemInstance.icon_media_id())
+//					if (itemInstance.icon_media_id() != 0)
+//						iconMedia = mGamePlayAct.mMediaModel.mediaForId(itemInstance.icon_media_id());
+//					else
+//						iconMedia = mGamePlayAct.mMediaModel.mediaForId(Media.DEFAULT_ITEM_ICON_MEDIA_ID);
+////						else if(itemInstance.media_id != 0) iconMedia = [_MODEL_MEDIA_ mediaForId:item.media_id];
+//
+//					if (iconMedia != null && iconMedia.type().contentEquals("IMAGE")) {
+////						[iconCache setObject:iconMedia forKey:[NSNumber numberWithLong:item.item_id]];
+//						mediaViewFrag.setMedia(iconMedia);
+//					}
+//					else if (iconMedia != null) {
+//						if (iconMedia.type().contentEquals("AUDIO"))
+//							mediaViewFrag.setImageFromDrawableRes("defaultAudioIcon.png");
+//						if (iconMedia.type().contentEquals("VIDEO"))
+//							mediaViewFrag.setImageFromDrawableRes("defaultVideoIcon.png");
+//					}
+
+//					mediaViewFrag.setMedia(media);
+
 					wvItemIcon.getSettings().setJavaScriptEnabled(false);
 					wvItemIcon.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
 					wvItemIcon.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
@@ -114,19 +170,39 @@ public class InventoryViewFragment extends Fragment {
 //					Media itemIconMedia = mGamePlayAct.mGameMedia.get(item.icon_media_id());
 //					Media media = mGamePlayActivity.mMediaModel.mediaForId(mPlaque.media_id);
 
-					Media itemIconMedia = mGamePlayAct.mMediaModel.mediaForId(item.icon_media_id());
-					String item_icon_URL = itemIconMedia.mediaCD.remoteURL;
-					String iconAsHtmlImg = "<html><body style=\"margin: 0; padding: 0\"><img src=\"" + item_icon_URL + "\" width=\"100%\" height=\"100%\"/></body></html>";
-					wvItemIcon.loadData(iconAsHtmlImg, "text/html", null);
+					Media itemIconMedia = mGamePlayAct.mMediaModel.mediaForId(itemInstance.icon_media_id());
+					String item_icon_URL;
+					if (itemIconMedia.mediaCD.remoteURL != null) {
+						item_icon_URL = itemIconMedia.mediaCD.remoteURL;
+						String iconAsHtmlImg = "<html><body style=\"margin: 0; padding: 0\"><img src=\"" + item_icon_URL + "\" width=\"100%\" height=\"100%\"/></body></html>";
+						wvItemIcon.loadData(iconAsHtmlImg, "text/html", null);
+					}
+					else if (itemIconMedia.mediaCD.localURL != null) {
+						item_icon_URL = itemIconMedia.mediaCD.localURL;
+						wvItemIcon.loadUrl(item_icon_URL);
+					}
+					else {
+						item_icon_URL = "file:///android_res/drawable/logo_icon.png"; // when all else fails
+						wvItemIcon.loadUrl(item_icon_URL);
+					}
+
+//					String iconAsHtmlImg = "<html><body style=\"margin: 0; padding: 0\"><img src=\"" + item_icon_URL + "\" width=\"100%\" height=\"100%\"/></body></html>";
+//					wvItemIcon.loadData(iconAsHtmlImg, "text/html", null);
 				}
 				TextView tvItemName = (TextView) itemView.findViewById(R.id.tv_inventory_item_name);
-				tvItemName.setText(item.name());
+				tvItemName.setText(itemInstance.name());
 				TextView tvItemDesc = (TextView) itemView.findViewById(R.id.tv_inventory_item_desc);
-				Item i = (Item) item.object();
+				Item i = (Item) itemInstance.object();
 				tvItemDesc.setText(i.description);
 				TextView tvItemQty = (TextView) itemView.findViewById(R.id.tv_inventory_item_qty);
-				tvItemQty.setText(String.valueOf(item.qty));
+				tvItemQty.setText(String.valueOf(itemInstance.qty));
 				llInventoryList.addView(itemView);
+				itemView.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						mGamePlayAct.mGame.displayQueueModel.enqueueInstance(itemInstance); // can I do this, this way, or should I just do a fragment replace here?
+					}
+				});
 			}
 		}
 	}
@@ -164,7 +240,9 @@ public class InventoryViewFragment extends Fragment {
 	public interface OnFragmentInteractionListener {
 		// TODO: Update argument type and name
 		public void onFragmentInteraction(Uri uri);
+
 		void gamePlayTabBarViewControllerRequestsNav();
+
 		void fragmentInventoryDismiss();
 	}
 //
