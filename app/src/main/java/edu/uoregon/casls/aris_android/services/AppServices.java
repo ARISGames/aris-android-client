@@ -452,7 +452,7 @@ public class AppServices {
 		try {
 			jsonArgs.put("user_id", mGamePlayAct.mPlayer.user_id);
 			jsonArgs.put("name", n.name);
-			jsonArgs.put("description", n.desc);
+			jsonArgs.put("description", n.description);
 			if (m != null) {
 				// convert to base64 string
 				// Note may crash some devices. If so perhaps consider converting the local media file
@@ -490,7 +490,7 @@ public class AppServices {
 			jsonArgs.put("note_id", n.note_id);
 			jsonArgs.put("user_id", mGamePlayAct.mPlayer.user_id);
 			jsonArgs.put("name", n.name);
-			jsonArgs.put("description", n.desc);
+			jsonArgs.put("description", n.description);
 			if (m != null) {
 				// convert to base64 string
 				// Note may crash some devices. If so perhaps consider converting the local media file

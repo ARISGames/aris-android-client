@@ -65,14 +65,15 @@ import edu.uoregon.casls.aris_android.tab_controllers.ScannerViewFragment;
 
 public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActivity
 		implements
-			GamePlayNavDrawerFragment.NavigationDrawerCallbacks,
-			MapViewFragment.OnFragmentInteractionListener,
-			PlaqueViewFragment.OnFragmentInteractionListener,
-			DialogViewFragment.OnFragmentInteractionListener,
+		ARISMediaViewFragment.OnFragmentInteractionListener,
+		DialogViewFragment.OnFragmentInteractionListener,
+		GamePlayNavDrawerFragment.NavigationDrawerCallbacks,
 //			InventoryViewFragment.OnFragmentInteractionListener,
-			ItemViewFragment.OnFragmentInteractionListener,
-			WebPageViewFragment.OnFragmentInteractionListener,
-			ARISMediaViewFragment.OnFragmentInteractionListener {
+		ItemViewFragment.OnFragmentInteractionListener,
+			MapViewFragment.OnFragmentInteractionListener,
+			NoteViewFragment.OnFragmentInteractionListener,
+			PlaqueViewFragment.OnFragmentInteractionListener,
+			WebPageViewFragment.OnFragmentInteractionListener {
 
 
 	private final static String TAG_SERVER_SUCCESS      = "success";
@@ -660,7 +661,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	public void onNavigationDrawerItemSelected(String itemName) {
 //		Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + "onNavigationDrawerItemSelected with itemName: " + itemName + ", currently visible frag:" + mCurrentFragVisible );
 
-		if (mCurrentFragVisible.contentEquals(itemName)) { // don't recreate if switching back to current fragment.
+		if (mCurrentFragVisible != null && mCurrentFragVisible.contentEquals(itemName)) { // don't recreate if switching back to current fragment.
 			closeNavDrawer();
 			return;
 		}
@@ -707,6 +708,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		}
 		else if (itemName.equals("Notebook")) {
 			this.noteViewFragment = NoteViewFragment.newInstance(itemName);
+			noteViewFragment.initContext(this);
 			fragmentManager.beginTransaction()
 					.replace(R.id.fragment_view_container, this.noteViewFragment, this.noteViewFragment.toString())
 					.commit();
@@ -888,6 +890,16 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 //
 
 	@Override
+	public void fragmentNoteDismiss() {
+		if (noteViewFragment != null) {
+			FragmentManager fm = getSupportFragmentManager();
+			fm.popBackStack(); // immediate?
+		}
+		this.instantiableViewControllerRequestsDismissal(noteViewFragment.instance);
+		noteViewFragment = null;
+	}
+
+	@Override
 	public void gamePlayTabBarViewControllerRequestsNav() {
 		// Display the nav drawer at this point, until/unless the next UI view is triggered.
 		this.showNav();
@@ -1064,6 +1076,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
 			if (noteViewFragment == null) {
 				noteViewFragment = new NoteViewFragment();
+				noteViewFragment.initContext(this);
 				noteViewFragment.initWithInstance(i);
 				tag = noteViewFragment.toString();
 				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

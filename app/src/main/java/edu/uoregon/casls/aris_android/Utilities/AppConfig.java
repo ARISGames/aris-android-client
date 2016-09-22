@@ -35,6 +35,7 @@ public class AppConfig {
 
 	public static final String APP_PREFS_FILE_NAME = "LFO_ToGo_Prefs";
 	public static final String GAME_DATE_FORMAT    = "yyyy-MM-dd hh:mm:ss";
+	public static final String DATE_FORMAT_MMDDYY    = "MM-dd-yy";
 
 	public static final String[] gameDrawerList = {
 			// moved to strings.xml for proper internationalization potential

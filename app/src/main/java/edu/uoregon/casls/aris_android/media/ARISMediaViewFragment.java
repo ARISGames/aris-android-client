@@ -26,14 +26,6 @@ import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.services.ARISMediaLoader;
 import edu.uoregon.casls.aris_android.services.AppServices;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ARISMediaViewFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ARISMediaViewFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ARISMediaViewFragment extends Fragment {
 
 	public  Media          media;
@@ -67,13 +59,6 @@ public class ARISMediaViewFragment extends Fragment {
 	// set to default to start.
 	public ARISMediaContentType contentType = ARISMediaContentType.ARISMediaContentTypeDefault;
 
-	private static final String ARG_PARAM1 = "param1";
-	private static final String ARG_PARAM2 = "param2";
-
-	// TODO: Rename and change types of parameters
-	private String mParam1;
-	private String mParam2;
-
 	private OnFragmentInteractionListener mListener;
 
 	/**
@@ -87,21 +72,16 @@ public class ARISMediaViewFragment extends Fragment {
 	// TODO: Rename and change types and number of parameters
 	public static ARISMediaViewFragment newInstance(String param1, String param2) {
 		ARISMediaViewFragment fragment = new ARISMediaViewFragment();
-		Bundle args = new Bundle();
-		args.putString(ARG_PARAM1, param1);
-		args.putString(ARG_PARAM2, param2);
-		fragment.setArguments(args);
+//		Bundle args = new Bundle();
+//		args.putString(ARG_PARAM1, param1);
+//		args.putString(ARG_PARAM2, param2);
+//		fragment.setArguments(args);
 		return fragment;
 	}
 
 	public ARISMediaViewFragment() {
 		// Required empty public constructor
 	}
-
-//	// Don't forget to init context!
-//	public ARISMediaView(GamePlayActivity gamePlayActivity) {
-//		initContext(gamePlayActivity);
-//	}
 
 	public void initContext(GamePlayActivity gamePlayActivity) {
 		mGamePlayAct = gamePlayActivity;
@@ -110,10 +90,10 @@ public class ARISMediaViewFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (getArguments() != null) {
-			mParam1 = getArguments().getString(ARG_PARAM1);
-			mParam2 = getArguments().getString(ARG_PARAM2);
-		}
+//		if (getArguments() != null) {
+//			mParam1 = getArguments().getString(ARG_PARAM1);
+//			mParam2 = getArguments().getString(ARG_PARAM2);
+//		}
 	}
 
 	@Override
@@ -127,9 +107,9 @@ public class ARISMediaViewFragment extends Fragment {
 
 
 	public void setMedia(Media m) {
+
 		// make sure we have this view inflated
-//		if (fragView == null) fragView = inflater.inflate(R.layout.fragment_arismedia_view, container, false);
-		// in iOS they seem to want to pass the raw binary data for the media from place to place.
+		// in iOS they seem to want to pass the raw binary data for the media from place to place or at least a pointer to it.
 		// I think in Android it'll be much easier to just point UI elements at the LocalURL (assuming it's avalailable.)
 		// todo: check that we have a valid mediaCD.localURL. if not look for remoteURL and load it (to device?).
 		// todo: if no remoteURL? well uhm...
@@ -139,6 +119,8 @@ public class ARISMediaViewFragment extends Fragment {
 			this.clear();
 			media = m;
 			ARISMediaLoader mediaLoader = new ARISMediaLoader(mGamePlayAct);
+			// mediaLoader.loadMedia will call loadMediaFromMR which will attempt to pull in bitmap (.data) from previously downloaded file
+			// if the media file hasn't yet been downloaded loadMediaFromMR will attempt to do so. This is essentially the same sequence as in iOS.
 			mediaLoader.loadMedia(m);
 		}
 
@@ -155,6 +137,7 @@ public class ARISMediaViewFragment extends Fragment {
 //			return;
 //		}
 		this.clear();
+
 		media = m;
 		this.displayMedia();
 	}
@@ -194,29 +177,21 @@ public class ARISMediaViewFragment extends Fragment {
 			case ARISMediaContentTypeThumb:
 				if (type.contentEquals("IMAGE")) {
 					String dataType = this.getMimeTypeOfFile(media.mediaCD.localURL.toString());
-					// if that couldn't find the MIME type try this
 //				if (dataType == null)
 //					dataType = this.contentTypeForImageData(media.data);
 
-					if (dataType.contentEquals("image/gif")) { // do a gif diaplay
-//					image = UIImage animatedImageWithAnimatedGIFData:media.data);
-//					this.displayImage];
+					if (dataType.contentEquals("image/gif")) { // do a gif display
 						this.displayGif();
 					}
 					else if (dataType.contentEquals("image/jpeg") ||
 							dataType.contentEquals("image/png")) {
-//					image = UIImage imageWithData:media.thumb];
 						this.displayImage();
 					}
 				}
 				else if (type.contentEquals("VIDEO")) {
-//				image = UIImage imageWithData:media.thumb];
-//				this.displayImage];
 					displayVideo();
 				}
 				else if (type.contentEquals("AUDIO")) {
-//				image = UIImage imageWithData:media.thumb];
-//				this.displayImage];
 					displayAudio();
 				}
 				break;
@@ -234,29 +209,22 @@ public class ARISMediaViewFragment extends Fragment {
 						dataType = this.getMimeTypeOfFile(media.mediaCD.remoteURL.toString());
 					}
 					else
-						dataType = "image/jpeg"; // just guess
+						dataType = "image/jpeg"; // just guess - todo: ensure we never have to guess like this.
 
 //					String dataType = this.getMimeTypeOfFile(media.mediaCD.localURL.toString() != null ? media.mediaCD.localURL.toString() : "");
 //				    String dataType = this.contentTypeForImageData:media.data];
 					if (dataType.contentEquals("image/gif")) { // do a gif display
-//					    image = UIImage animatedImageWithAnimatedGIFData:media.data);
-//					    this.displayImage];
 						this.displayGif();
 					}
 					else if (dataType.contentEquals("image/jpeg") ||
 							dataType.contentEquals("image/png")) {
-//					    image = UIImage imageWithData:media.thumb];
 						this.displayImage();
 					}
 				}
 				else if (type.contentEquals("VIDEO")) {
-//				    image = UIImage imageWithData:media.thumb];
-//				    this.displayImage];
 					displayVideo();
 				}
 				else if (type.contentEquals("AUDIO")) {
-//				    image = UIImage imageWithData:media.thumb];
-//				    this.displayImage];
 					displayAudio();
 				}
 				break;
@@ -274,7 +242,7 @@ public class ARISMediaViewFragment extends Fragment {
 		mGamePlayAct.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 		int screenWidth = displaymetrics.widthPixels;
 		String mediaUrl = media.mediaCD.localURL.toString();
-//		String mediaUrl = "file:///android_res/drawable/dancing_peaks.gif";
+//		String mediaUrl = "file:///android_res/drawable/dancing_peaks.gif"; // local sample for testing
 		String data = "<html><head></head><body><img width=" + screenWidth + " src=\"" + mediaUrl + "\" /></body></html>";
 		webView.loadDataWithBaseURL(null, data, "text/html", "UTF-8", null);
 
@@ -283,18 +251,10 @@ public class ARISMediaViewFragment extends Fragment {
 	}
 
 	public void displayImage() {
-//		imageView removeFromSuperview();
-//		imageView = UIImageView alloc] init];
-//		this.addSubview:imageView];
-//		if(playIcon) this.addPlayIcon]; //to ensure it's on top of imageView
-//		imageView setImage:image];
-//		this.conformFrameToMode];
-
-//		imageView = (ImageView) mGamePlayAct.findViewById(R.id.imgvw_media_image);
+		// NPE Note: Make sure any fragments using this sub-fragment wait until their respective
+		// onResume() to call setMedia() or the following line will throw NPE.
 		imageView = (ImageView) fragView.findViewById(R.id.imgvw_media_image);
-		// show an image file from interal storage...
-		//preview.setImageURI(Uri.parse(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Echo/Images/"+file_name));
-//		imageView.setImageDrawable(getResources().getDrawable(R.drawable.raw_image_sample));
+		// show an image file from internal storage...
 		if (media.mediaCD.localURL != null)
 			imageView.setImageURI(Uri.parse(media.mediaCD.localURL.toString()));
 		else if (media.mediaCD.remoteURL != null)
@@ -398,13 +358,6 @@ public class ARISMediaViewFragment extends Fragment {
 		}
 		return type;
 	}
-
-//	public static String getMimeTypeOfFile(String pathName) {
-//		BitmapFactory.Options opt = new BitmapFactory.Options();
-//		opt.inJustDecodeBounds = true;
-//		BitmapFactory.decodeFile(pathName, opt);
-//		return opt.outMimeType;
-//	}
 
 	public String contentTypeForImageData(Bitmap d) {
 		int c;

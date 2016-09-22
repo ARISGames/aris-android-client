@@ -13,14 +13,12 @@ public class Note implements InstantiableProtocol {
 	public  long   note_id           = 0;
 	public  long   user_id           = 0;
 	public  String name              = "";
-	public  String desc              = "";
-	public  String user_display_name = "";
+	public  String description       = "";
 	public  long   media_id          = 0;
 	public  long   tag_id            = 0;
 	public  long   object_tag_id     = 0;
-	//	public Date created = new Date();
-
 	private String created = new SimpleDateFormat(AppConfig.GAME_DATE_FORMAT).format(new Date()); // use set/get
+	public User user = null;
 
 	public long icon_media_id = 0; // irrelevant?
 
@@ -39,6 +37,15 @@ public class Note implements InstantiableProtocol {
 			e.printStackTrace();
 		}
 		return null; // satisfy default return obligation.
+	}
+
+	public String getCreatedMMDDYY() {
+		try {
+			return new SimpleDateFormat(AppConfig.DATE_FORMAT_MMDDYY).parse(created).toString();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 
 	public long icon_media_id(Game game) {

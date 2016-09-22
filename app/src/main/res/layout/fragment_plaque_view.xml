@@ -42,7 +42,7 @@
                 class="edu.uoregon.casls.aris_android.ARISWebView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/wv_plaque_desc"
+                android:id="@+id/awv_plaque_desc"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/fl_plaque_media_view_container"/>
 

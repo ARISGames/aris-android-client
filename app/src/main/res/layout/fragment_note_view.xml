@@ -7,7 +7,7 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ib_item_go_back"
+        android:id="@+id/ib_note_go_back"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -35,15 +35,12 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/rl_plaque_desc_and_media">
+            android:id="@+id/rl_note_desc_and_media">
 
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/fl_note_media_view_container"
-                android:minHeight="6dp"
-                android:minWidth="6dp"
-                android:layout_centerHorizontal="true"/>
+                android:id="@+id/fl_note_media_view_container"/>
 
             <!--<include-->
             <!--android:layout_width="wrap_content"-->
@@ -51,11 +48,10 @@
             <!--layout="@layout/fragment_arismedia_view"-->
             <!--android:id="@+id/include_arismedia_frag"/>-->
 
-            <view
-                class="edu.uoregon.casls.aris_android.ARISWebView"
-                android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/wv_note_desc"
+                android:id="@+id/tv_note_desc"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/fl_note_media_view_container"/>
 
@@ -68,5 +64,43 @@
 
         </RelativeLayout>
     </ScrollView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/scrlv_note_text_and_media"
+        android:layout_centerHorizontal="true"
+        android:background="@color/common_action_bar_splitter"
+        android:id="@+id/fl_divider_line">
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_note_comment_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fl_divider_line"
+        android:layout_centerHorizontal="true"
+        >
+
+        <Button
+            android:id="@+id/btn_note_comment_post"
+            android:text="Post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:visibility="invisible"/>
+
+        <EditText
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/et_note_comment"
+            android:hint="Enter Comment"
+            android:layout_width="wrap_content"
+            android:layout_alignBottom="@+id/btn_note_comment_post"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/btn_note_comment_post"/>
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -77,7 +77,6 @@ public class DialogViewFragment extends Fragment {
 
 	public void initContext(GamePlayActivity gamePlayActivity) {
 		mGamePlayAct = gamePlayActivity;
-
 	}
 
 	@Override
@@ -182,9 +181,9 @@ public class DialogViewFragment extends Fragment {
 		// set Dialog Script Text:
 //		TextView tvScriptText = (TextView) fragView.findViewById(R.id.tv_dialog_script_text);
 //		tvScriptText.setText(dialogScript.text);
-		ARISWebView wvScriptPrompt = (ARISWebView) fragView.findViewById(R.id.wv_dialog_prompt);
-		wvScriptPrompt.initContextAndInjectJavaScript(mGamePlayAct);
-		wvScriptPrompt.loadHTMLString(dialogScript.text);
+		ARISWebView awvScriptPrompt = (ARISWebView) fragView.findViewById(R.id.awv_script_prompt);
+		awvScriptPrompt.initContextAndInjectJavaScript(mGamePlayAct);
+		awvScriptPrompt.loadHTMLString(dialogScript.text);
 
 		// build Dialog Options List
 		populateDialogOptionsList(fragView);
@@ -209,9 +208,9 @@ public class DialogViewFragment extends Fragment {
 				final View dialogOptionItemView = inflater.inflate(R.layout.dialog_option_list_item, null);
 
 				// set webview to display dialog option prompt
-				ARISWebView wvDialogOptionPrompt = (ARISWebView) dialogOptionItemView.findViewById(R.id.wv_dialog_option);
-				wvDialogOptionPrompt.initContextAndInjectJavaScript(mGamePlayAct);
-				wvDialogOptionPrompt.loadHTMLString(dialogOption.prompt);
+				ARISWebView awvDialogOptionPrompt = (ARISWebView) dialogOptionItemView.findViewById(R.id.awv_dialog_option);
+				awvDialogOptionPrompt.initContextAndInjectJavaScript(mGamePlayAct);
+				awvDialogOptionPrompt.loadHTMLString(dialogOption.prompt);
 
 //				WebView wvDialogOptionPrompt = (WebView) dialogOptionItemView.findViewById(R.id.wv_dialog_option_prompt);
 //				wvDialogOptionPrompt.getSettings().setJavaScriptEnabled(true);
@@ -348,8 +347,6 @@ public class DialogViewFragment extends Fragment {
 	}
 
 	public interface OnFragmentInteractionListener {
-		// TODO: Update argument type and name
-//		public void onFragmentInteraction(Uri uri);
 		 void onOtherDialogOptionSelected(long dialogOptionId);
 
 		 void fragmentDialogDismiss();
@@ -361,18 +358,4 @@ public class DialogViewFragment extends Fragment {
 //		mListener = null;
 	}
 
-	/**
-	 * This interface must be implemented by activities that contain this
-	 * fragment to allow an interaction in this fragment to be communicated
-	 * to the activity and potentially other fragments contained in that
-	 * activity.
-	 * <p/>
-	 * See the Android Training lesson <a href=
-	 * "http://developer.android.com/training/basics/fragments/communicating.html"
-	 * >Communicating with Other Fragments</a> for more information.
-	 */
-//	public interface OnFragmentInteractionListener {
-//		// TODO: Update argument type and name
-//		void onFragmentInteraction(Uri uri);
-//	}
 }

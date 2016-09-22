@@ -64,7 +64,7 @@
 
             <view
                 class="edu.uoregon.casls.aris_android.ARISWebView"
-                android:id="@+id/wv_dialog_prompt"
+                android:id="@+id/awv_script_prompt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
