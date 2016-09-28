@@ -288,7 +288,6 @@ public class MapViewFragment extends Fragment {
 //								return false;
 //							}
 //						});
-						Log.d(AppConfig.LOGTAG_D2, "Calling refreshViewFromModel from SetUpMap()");
 						refreshViewFromModel();
 						refreshModels();
 					}
@@ -311,7 +310,6 @@ public class MapViewFragment extends Fragment {
 
 	public void refreshViewFromModel() {
 
-		Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + ": refreshViewFromModel Called");
 		if (mMap == null)
 			return; // There might be calls arriving before the map is available; ignore them.
 
@@ -494,7 +492,7 @@ public class MapViewFragment extends Fragment {
 
 			}
 		}
-		Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + ": markersAndCircles have been updated with incoming/outgoing triggers. New size: " + markersAndCircles.size() + "\n\n");
+//		Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + ": markersAndCircles have been updated with incoming/outgoing triggers. New size: " + markersAndCircles.size() + "\n\n");
 
 		// In iOS, a clicked marker will result in a call to displayHUDWithTrigger via an internal MKMapView call;
 		// in Android we explicitly set up the onClickListener for the map markers all at once.
@@ -600,10 +598,9 @@ public class MapViewFragment extends Fragment {
 					Instance modelInstance = mGamePlayAct.mGame.instancesModel.instanceForId(trigger.instance_id);
 					String modInstName = modelInstance.name(); // debugging convenience value
 					String mt = marker.getTitle(); // debugging convenience value
-					Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + ": Marker Clicked. Looping thru markersAndCircles to find which was clicked. Marker Title: " + mt + " == " + modInstName + " ?");
+//					Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + ": Marker Clicked. Looping thru markersAndCircles to find which was clicked. Marker Title: " + mt + " == " + modInstName + " ?");
 
 					if (modelInstance.name().equals(marker.getTitle())) {
-						Log.d(AppConfig.LOGTAG_D2, "=============== Found it! Marker Title: " + modInstName);
 						// get distance from player.
 						trigger.setLocationFromExistingLatLng();
 						// below is found in displayHUDWithTrigger in iOS

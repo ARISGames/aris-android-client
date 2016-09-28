@@ -26,15 +26,15 @@ import edu.uoregon.casls.aris_android.media.ARISDelegateHandle;
  */
 public class MediaModel extends ARISModel {
 
-	public Map<Long, Media> medias = new LinkedHashMap<>();//light cache on mediaCD wrappers ('Media' objects)
-	public List<Integer> mediaIDsToLoad = new LinkedList<>();
+	public Map<Long, Media> medias         = new LinkedHashMap<>();//light cache on mediaCD wrappers ('Media' objects)
+	public List<Integer>    mediaIDsToLoad = new LinkedList<>();
 	public transient GamePlayActivity mGamePlayAct;
 	public List<ARISDelegateHandle> mediaDataLoadDelegateHandles = new ArrayList<>(); //	NSMutableArray *mediaDataLoadDelegateHandles; // todo: Android relevant?
-	public List<Media> mediaDataLoadMedia = new ArrayList<>(); //	NSMutableArray *mediaDataLoadMedia;
+	public List<Media>              mediaDataLoadMedia           = new ArrayList<>(); //	NSMutableArray *mediaDataLoadMedia;
 	int mediaDataLoaded;
 
 	private SQLiteDatabase db;
-	private DBDealer dbDealer;
+	private DBDealer       dbDealer;
 
 
 	public MediaModel(GamePlayActivity gamePlayActivity) {
@@ -185,11 +185,15 @@ public class MediaModel extends ARISModel {
 				tmpMediaCD.localURL = "";
 			tmpMediaCD.remoteURL = remoteURL; // 4c. set tmpMedia to incoming URL from server
 			// 5. Set the game id and user ids to incoming values.
-			if (mediaDict.containsKey("game_id")) tmpMediaCD.game_id = Integer.parseInt(mediaDict.get("game_id"));
-			if (mediaDict.containsKey("user_id")) tmpMediaCD.user_id = Integer.parseInt(mediaDict.get("user_id"));
+			if (mediaDict.containsKey("game_id"))
+				tmpMediaCD.game_id = Integer.parseInt(mediaDict.get("game_id"));
+			if (mediaDict.containsKey("user_id"))
+				tmpMediaCD.user_id = Integer.parseInt(mediaDict.get("user_id"));
 
 			// add this item, stub or fleshed to DB
 			Cursor mediasAlreadyInDB = dbDealer.getMedias("");
+			// todo: wouldn't you think something useful should go here?
+			mediasAlreadyInDB.close(); // close cursor.
 			if (dbDealer.addOrUpdateMediaCD(tmpMediaCD))
 				Log.i(AppConfig.LOGTAG, getClass().getSimpleName() + "Media cache   : Media id:" + media_id + " cached:" + tmpMediaCD.remoteURL);
 			else
@@ -207,13 +211,13 @@ public class MediaModel extends ARISModel {
 	public long requestMediaData() {
 		List<Integer> media_ids = mediaIDsToLoad;  // allKeys];
 		Media m;
-		ARISDelegateHandle d; //todo
+//		ARISDelegateHandle d;
 
 		mediaDataLoadDelegateHandles.clear();
 		mediaDataLoadMedia.clear();
 		mediaDataLoaded = 0;
 
-		for(int i = 0; i < media_ids.size(); i++) {
+		for (int i = 0; i < media_ids.size(); i++) {
 			m = this.mediaForId(media_ids.get(i));
 			if (m.data == null) {
 				// not going to use the delegateHandle layer at this point in Android dev. 11/19/2015
@@ -226,17 +230,14 @@ public class MediaModel extends ARISModel {
 		if (mediaDataLoadMedia.size() == 0) // use actual media array until/unless the delegateHandle layer gets implemented
 			this.mediaLoaded(null);
 
-		// Explanation of performSelector in iOS: http://stackoverflow.com/a/11539658
-		// In short "[it] lets you call a method that you do not know at compile time.
-		//   You need to know only the name of a method as a string in order to call it."
-		// Java rough equivalent of runtime method invocation: http://stackoverflow.com/a/161005
-//		this.performSelector:@selector(deferedLoadMedia) withObject:nil afterDelay:1.];
+		// Load any media that has not yet been loaded
 		mGamePlayAct.performSelector.postDelayed(new Runnable() {
 			@Override
 			public void run() { deferedLoadMedia(); }
-		},1000); // delay 1000ms = 1sec
+		}, 1000); // delay 1000ms = 1sec
 
-		return mediaDataLoadDelegateHandles.size();
+		return mediaDataLoadMedia.size(); // Android way of tracking loaded media
+//		return mediaDataLoadDelegateHandles.size(); // iOS way
 	}
 
 	public void deferedLoadMedia() {
@@ -246,18 +247,27 @@ public class MediaModel extends ARISModel {
 		}
 	}
 
-	public long numMediaTryingToLoad()
-	{
-		if (mediaDataLoadDelegateHandles == null || mediaDataLoadDelegateHandles.isEmpty()) return 9999;
-		return mediaDataLoadDelegateHandles.size();
+	public long numMediaTryingToLoad() {
+		if (mediaDataLoadMedia == null || mediaDataLoadMedia.isEmpty())
+			return 9999;
+		return mediaDataLoadMedia.size();
 	}
+
+	// delegateHandle version
+//	public long numMediaTryingToLoad() {
+//		if (mediaDataLoadDelegateHandles == null || mediaDataLoadDelegateHandles.isEmpty())
+//			return 9999;
+//		return mediaDataLoadDelegateHandles.size();
+//	}
 
 	public void mediaLoaded(Media m) {
 		mediaDataLoaded++;
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, getClass().getSimpleName() + " Calling media_piece_available(): " + m.mediaCD.media_id);
 		mGamePlayAct.mDispatch.media_piece_available(); //_ARIS_NOTIF_SEND_(@"MEDIA_PIECE_AVAILABLE",nil,nil);
-		if(mediaDataLoaded >= mediaDataLoadDelegateHandles.size()) {
+//		if (mediaDataLoaded >= mediaDataLoadDelegateHandles.size()) {
+		if (mediaDataLoaded >= mediaDataLoadMedia.size()) {
 			mediaDataLoadMedia.clear();
-			mediaDataLoadDelegateHandles.clear();
+//			mediaDataLoadDelegateHandles.clear();
 		}
 	}
 
@@ -280,7 +290,7 @@ public class MediaModel extends ARISModel {
 			// UIImagePNGRepresentation = Return the data for the specified image in PNG format
 			// get data from drawable image and lode into object field
 			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.plaque_icon_120);
-			media.data = ((BitmapDrawable)drawable).getBitmap();
+			media.data = ((BitmapDrawable) drawable).getBitmap();
 			media.thumb = media.data;
 //			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
@@ -293,7 +303,7 @@ public class MediaModel extends ARISModel {
 			mediaCD.localURL = "file:///android_res/drawable/item_icon_120.png"; // for use when we need the local file
 			Media media = new Media(mediaCD);
 			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.item_icon_120);
-			media.data = ((BitmapDrawable)drawable).getBitmap();
+			media.data = ((BitmapDrawable) drawable).getBitmap();
 			media.thumb = media.data;
 //			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
@@ -306,7 +316,7 @@ public class MediaModel extends ARISModel {
 			mediaCD.localURL = "file:///android_res/drawable/conversation_icon_120.png"; // for use when we need the local file
 			Media media = new Media(mediaCD);
 			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.conversation_icon_120);
-			media.data = ((BitmapDrawable)drawable).getBitmap();
+			media.data = ((BitmapDrawable) drawable).getBitmap();
 			media.thumb = media.data;
 //			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
@@ -319,7 +329,7 @@ public class MediaModel extends ARISModel {
 			mediaCD.localURL = "file:///android_res/drawable/webpage_icon_120.png"; // for use when we need the local file
 			Media media = new Media(mediaCD);
 			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.webpage_icon_120);
-			media.data = ((BitmapDrawable)drawable).getBitmap();
+			media.data = ((BitmapDrawable) drawable).getBitmap();
 			media.thumb = media.data;
 //			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
@@ -332,7 +342,7 @@ public class MediaModel extends ARISModel {
 			mediaCD.localURL = "file:///android_res/drawable/logo_icon.png"; // for use when we need the local file
 			Media media = new Media(mediaCD);
 			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.logo_icon);
-			media.data = ((BitmapDrawable)drawable).getBitmap();
+			media.data = ((BitmapDrawable) drawable).getBitmap();
 			media.thumb = media.data;
 //			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
@@ -345,7 +355,7 @@ public class MediaModel extends ARISModel {
 			mediaCD.localURL = "file:///android_res/drawable/note_icon.png"; // for use when we need the local file
 			Media media = new Media(mediaCD);
 			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.note_icon);
-			media.data = ((BitmapDrawable)drawable).getBitmap();
+			media.data = ((BitmapDrawable) drawable).getBitmap();
 			media.thumb = media.data;
 //			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;
@@ -359,7 +369,7 @@ public class MediaModel extends ARISModel {
 			mediaCD.localURL = "file:///android_res/drawable/star_blue.png"; // for use when we need the local file
 			Media media = new Media(mediaCD);
 			Drawable drawable = mGamePlayAct.getResources().getDrawable(R.drawable.star_blue);
-			media.data = ((BitmapDrawable)drawable).getBitmap();
+			media.data = ((BitmapDrawable) drawable).getBitmap();
 			media.thumb = media.data;
 //			media.setPartialLocalURL("blah.png"); //fake name to get it to know it's of type "IMAGE"
 			return media;

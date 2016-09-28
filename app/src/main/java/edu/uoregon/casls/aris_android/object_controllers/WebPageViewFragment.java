@@ -38,6 +38,10 @@ public class WebPageViewFragment extends Fragment {
 		mGamePlayActivity = (GamePlayActivity) getActivity();
 	}
 
+	public void initContext(GamePlayActivity gamePlayAct) {
+		mGamePlayActivity = gamePlayAct;
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

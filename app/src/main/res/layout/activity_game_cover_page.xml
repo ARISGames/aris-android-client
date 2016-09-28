@@ -60,10 +60,8 @@
             <WebView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Medium Text"
                 android:background="#fffefefe"
-                android:id="@+id/tv_game_desc"
+                android:id="@+id/wv_game_desc"
                 android:layout_below="@+id/iv_game_designer_logo"
                 android:layout_centerHorizontal="true"/>
         </RelativeLayout>
@@ -141,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="New Game"
-                android:id="@+id/tv_resume"
+                android:id="@+id/tv_new_game"
                 android:layout_gravity="center"
                 android:textColor="@android:color/white"
                 android:clickable="true"

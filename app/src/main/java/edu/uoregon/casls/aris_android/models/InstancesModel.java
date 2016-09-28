@@ -254,8 +254,9 @@ public class InstancesModel extends ARISModel {
 		List<Instance> gInstances = new ArrayList<>();
 		Collection<Instance> allInstances = instances.values();
 		for (Instance inst : allInstances) {
-			if (inst.owner_type.contentEquals("GROUP") &&
-					inst.owner_id == mGamePlayAct.mGame.groupsModel.playerGroup.group_id) // todo: double check this last group_id field. It was questionable when translated from iOS.
+			if (inst.owner_type.contentEquals("GROUP"))
+					if (mGamePlayAct.mGame.groupsModel.playerGroup != null // todo: first condition is band-aid over the NPE that happens below.
+							&& inst.owner_id == mGamePlayAct.mGame.groupsModel.playerGroup.group_id) // fixme: playerGroup is not getting set (ie: null)
 				gInstances.add(inst);
 		}
 		return gInstances;

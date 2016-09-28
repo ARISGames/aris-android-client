@@ -70,7 +70,7 @@ public class ARISWebView extends WebView {
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				webViewPreviousState = PAGE_REDIRECTED;
 				if (url.startsWith("aris:")) { // aka isARISRequest
-					Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, "Caught a call to 'aris:' from the webview. ");
+//					Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, "Caught a call to 'aris:' from the webview. ");
 					handleARISRequest(url);
 					return true; // App will handle it
 				}

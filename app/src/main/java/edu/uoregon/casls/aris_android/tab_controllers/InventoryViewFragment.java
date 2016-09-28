@@ -135,7 +135,7 @@ public class InventoryViewFragment extends Fragment {
 					wvItemIcon.setBackgroundColor(0x00000000);
 					wvItemIcon.setBackgroundResource(R.drawable.logo_icon); //todo: default item icon here.
 				}
-				else {
+				else {  // todo: use ARISMediaView for item icons instead of webview. (?)
 //				ARISMediaViewFragment mediaViewFrag = new ARISMediaViewFragment();
 //				mediaViewFrag.initContext(mGamePlayAct);
 //				// add media  frag inside this frag.

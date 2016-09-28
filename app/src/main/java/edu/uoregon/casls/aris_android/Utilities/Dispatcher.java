@@ -229,7 +229,10 @@ public class Dispatcher {
 
 	//	MODEL_INSTANCES_PLAYER_AVAILABLE",nil,playerDeltas);
 	public void model_instances_player_available(Map<String, Map<String, Object>> playerDeltas) {
+		mGamePlayAct.mGame.gameInstancesModel.gameInstancesAvailable();
+		mGamePlayAct.mGame.groupInstancesModel.groupInstancesAvailable();
 		mGamePlayAct.mGame.playerInstancesModel.playerInstancesAvailable(playerDeltas);
+		mGamePlayAct.flushBufferQueuedInstances();
 	}
 
 	//	MODEL_INSTANCES_PLAYER_GAINED",nil,playerDeltas);
@@ -480,8 +483,7 @@ public class Dispatcher {
 
 	//	PLAYER_DATA_LOADED", nil, nil);
 	public void game_player_data_loaded() {
-		// todo: LoadingViewController.playerDataLoaded();
-		mGamePlayAct.playerDataLoaded();
+		mGamePlayAct.playerDataLoaded();  // in iOS: LoadingViewController.playerDataLoaded;
 	}
 
 	//	PLAYER_PIECE_AVAILABLE",nil,nil);
@@ -668,7 +670,7 @@ public class Dispatcher {
 	public void services_player_triggers_received(List<Trigger> ptrigs) {
 		// todo: MapViewController.refreshViewFromModel(ptrigs)
 		// todo: NotebookNotesViewController.newNoteListAvailable()
-		Log.d(AppConfig.LOGTAG_D2, "Calling triggersModel.playerTriggersReceived from services_player_triggers_received() with this many triggers: " + ptrigs.size());
+//		Log.d(AppConfig.LOGTAG_D2, "Calling triggersModel.playerTriggersReceived from services_player_triggers_received() with this many triggers: " + ptrigs.size());
 		mGamePlayAct.mGame.triggersModel.playerTriggersReceived(ptrigs);
 	}
 

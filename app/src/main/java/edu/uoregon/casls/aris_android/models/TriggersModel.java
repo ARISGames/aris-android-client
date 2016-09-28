@@ -224,7 +224,7 @@ public class TriggersModel extends ARISModel {
 				ptrigs.add(t);
 			}
 			Log.i(AppConfig.LOGTAG, getClass().getSimpleName() + "Accepted: " + ptrigs.size() + ", Rejected: " + rejected.size());
-			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, getClass().getSimpleName() + " Finishing requestPlayerTriggers(). calling mDispatch.services_player_triggers_received(ptrigs). ptrigs size = " + ptrigs.size());
+//			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, getClass().getSimpleName() + " Finishing requestPlayerTriggers(). calling mDispatch.services_player_triggers_received(ptrigs). ptrigs size = " + ptrigs.size());
 			mGamePlayAct.mDispatch.services_player_triggers_received(ptrigs); //("SERVICES_PLAYER_TRIGGERS_RECEIVED", null, @{@"triggers":ptrigs});
 		} // for now treat every game as HYBRID, since that's really all we need to worry about in v1.0 of Android
 		if (!this.playerDataReceived() || mGame.network_level.equals("HYBRID") || mGame.network_level.equals("REMOTE")) {

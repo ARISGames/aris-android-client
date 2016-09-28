@@ -52,11 +52,13 @@ public class NoteViewFragment extends Fragment {
 		Bundle args = new Bundle();
 //		args.putString(ARG_SECTION_NUMBER, sectionName);
 //		fragment.setArguments(args);
+
 		return fragment;
 	}
 
 	public NoteViewFragment() {
 		// Required empty public constructor
+		mGamePlayAct = (GamePlayActivity) getActivity();
 	}
 
 	public void initContext(GamePlayActivity gamePlayAct) {

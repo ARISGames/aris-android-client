@@ -1,6 +1,7 @@
 package edu.uoregon.casls.aris_android.models;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -15,8 +16,8 @@ import edu.uoregon.casls.aris_android.data_objects.Item;
  */
 public class GameInstancesModel extends ARISModel {
 
-	public Map<Long, Instance> instances;
-	public List<Instance> gameOwnedInstances;
+	public Map<Long, Instance> instances = new HashMap<>();
+	public List<Instance> gameOwnedInstances = new LinkedList<>();
 	public long currentWeight;
 
 

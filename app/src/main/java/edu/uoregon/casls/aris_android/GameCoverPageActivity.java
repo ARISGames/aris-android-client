@@ -8,17 +8,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -45,21 +42,21 @@ import edu.uoregon.casls.aris_android.data_objects.User;
 
 public class GameCoverPageActivity extends AppCompatActivity {
 	private static final String HTTP_GET_PLAYER_PLAYED_GAME_REQ_API = "v2.client.getPlayerPlayedGame/";
-	private static final String HTTP_LOG_PLAYER_RESET_GAME = "v2.client.logPlayerResetGame/";
-	private final static String TAG_SERVER_SUCCESS = "success";
-	public Bundle mTransitionAnimationBndl;
-	public User mUser;
-	protected Game mGame;
-	private View mProgressView;
-	private LinearLayout mLlFooter;
-	private FrameLayout mFlReset, mFlResume, mFlNewGame;
-	public JSONObject mJsonAuth;
-	private boolean mHasPlayed;
-	private ImageView ivGameLogo;
-	private TextView tvGameName;
-	private WebView wvGameDesc;
-//	private TextView tvGameDesc;
-	private WebView wvGamePic;
+	private static final String HTTP_LOG_PLAYER_RESET_GAME          = "v2.client.logPlayerResetGame/";
+	private final static String TAG_SERVER_SUCCESS                  = "success";
+	public    Bundle       mTransitionAnimationBndl;
+	public    User         mUser;
+	protected Game         mGame;
+	private   View         mProgressView;
+	private   LinearLayout mLlFooter;
+	private   FrameLayout  mFlReset, mFlResume, mFlNewGame;
+	public  JSONObject mJsonAuth;
+	private boolean    mHasPlayed;
+	private ImageView  ivGameLogo;
+	private TextView   tvGameName;
+	private WebView    wvGameDesc;
+	//	private TextView tvGameDesc;
+	private WebView    wvGamePic;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +83,7 @@ public class GameCoverPageActivity extends AppCompatActivity {
 //		ImageView ivGameIcon = (ImageView) findViewById(R.id.iv_game_icon);
 		ivGameLogo = (ImageView) findViewById(R.id.iv_game_designer_logo);
 		tvGameName = (TextView) findViewById(R.id.tv_game_cover_name);
-		wvGameDesc = (WebView) findViewById(R.id.tv_game_desc);
+		wvGameDesc = (WebView) findViewById(R.id.wv_game_desc);
 //		tvGameDesc = (TextView) findViewById(R.id.tv_game_desc);
 		mProgressView = findViewById(R.id.network_req_progress);
 		mLlFooter = (LinearLayout) findViewById(R.id.ll_game_cover_pg_footer);
@@ -147,6 +144,7 @@ public class GameCoverPageActivity extends AppCompatActivity {
 					}
 
 				}
+
 				@Override
 				public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 					Log.w(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient failed server call. ", throwable);
@@ -169,7 +167,7 @@ public class GameCoverPageActivity extends AppCompatActivity {
 
 	private void processJsonHttpResponse(String callingReq, String returnStatus, JSONObject jsonReturn) throws JSONException {
 		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "Return status to server Req: " + jsonReturn.toString());
-		if (callingReq.contentEquals(HTTP_GET_PLAYER_PLAYED_GAME_REQ_API) ) { //
+		if (callingReq.contentEquals(HTTP_GET_PLAYER_PLAYED_GAME_REQ_API)) { //
 			// Response looks like this: {"data":{"game_id":"1","has_played":false},"returnCode":0,"returnCodeDescription":null}
 			try {
 				// process incoming json data
@@ -195,7 +193,7 @@ public class GameCoverPageActivity extends AppCompatActivity {
 				updateAllViews();
 			}
 			else {
-				Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "Attempt to reset game from GameCoverPageActivity failed; server returned code: "  + jsonReturn.getLong("returnCode"));
+				Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + "Attempt to reset game from GameCoverPageActivity failed; server returned code: " + jsonReturn.getLong("returnCode"));
 			}
 		}
 		else { // unknown callinRequest
@@ -214,7 +212,7 @@ public class GameCoverPageActivity extends AppCompatActivity {
 		wvGameDesc.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
 		wvGameDesc.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
 		wvGameDesc.getSettings().setUseWideViewPort(true); // constrain the image horizontally
-		wvGameDesc.loadData(mGame.desc, "text/html", null); // was a text view and would not handle html
+		wvGameDesc.loadData("<html><head><body><center>" + mGame.desc + "</center></body></html>", "text/html", null); // was a text view and would not handle html
 //		tvGameDesc.setText(mGame.desc);
 		wvGamePic = (WebView) findViewById(R.id.wv_game_pic);
 		if (mGame.media.media_id == 0) { // 0 = no custom icon
@@ -239,7 +237,7 @@ public class GameCoverPageActivity extends AppCompatActivity {
 			int screenWidth = displaymetrics.widthPixels;
 			int screenHeight = displaymetrics.heightPixels;
 			// from: http://stackoverflow.com/a/10395972
-			String data="<html><head><body><center><img width="+screenWidth+" src=\""+mGame.media.remoteURL.toString()+"\" /></center></body></html>";
+			String data = "<html><head><body><center><img width=" + screenWidth + " src=\"" + mGame.media.remoteURL.toString() + "\" /></center></body></html>";
 			wvGamePic.loadData(data, "text/html", null);
 		}
 
@@ -256,7 +254,7 @@ public class GameCoverPageActivity extends AppCompatActivity {
 		mLlFooter.setVisibility(View.VISIBLE);
 	}
 
-	public void onClickResetGame (View v) {
+	public void onClickResetGame(View v) {
 /* iOS reference code for your convenience
 		[_MODEL_GAMES_ playerResetGame:game.game_id];
 		game.begin_fresh = YES;
@@ -269,11 +267,12 @@ public class GameCoverPageActivity extends AppCompatActivity {
 
 	}
 
-	public void onClickResumeGame (View v) {
+	public void onClickResumeGame(View v) {
 		// start game play activity.
 		startGamePlay();
 	}
-	public void onClickNewGame (View v) {
+
+	public void onClickNewGame(View v) {
 		// start game play activity.
 		startGamePlay();
 	}
@@ -281,11 +280,11 @@ public class GameCoverPageActivity extends AppCompatActivity {
 	private void startGamePlay() {
 		Intent i = new Intent(GameCoverPageActivity.this, GamePlayActivity.class);
 		i.putExtra("json_auth", mJsonAuth.toString());
-		i.putExtra("user", 		mUser.toJsonStr());
+		i.putExtra("user", mUser.toJsonStr());
 //		i.putExtra("game_id", 	mGame.game_id); //todo: do I need the entire game object or just the game id. ei. does it just reload everything in gameplay?
 		Gson gson = new Gson();
 		i.putExtra("game", gson.toJson(mGame));
- 		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(i, mTransitionAnimationBndl);
 		finish();
 

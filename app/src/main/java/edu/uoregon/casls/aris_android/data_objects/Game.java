@@ -419,7 +419,7 @@ public class Game {
 		tabsModel = new TabsModel();                       models.add(tabsModel);
 		logsModel = new LogsModel();                       models.add(logsModel);
 		questsModel = new QuestsModel();                   models.add(questsModel);
-		displayQueueModel = new DisplayQueueModel(mGamePlayAct);       models.add(displayQueueModel);
+		displayQueueModel = new DisplayQueueModel(mGamePlayAct); models.add(displayQueueModel);
 		//@formatter:on
 		models.add(mGamePlayAct.mUsersModel); //		[models addObject:_MODEL_USERS_];
 		models.add(mGamePlayAct.mMediaModel); //		[models addObject:_MODEL_MEDIA_];
@@ -484,12 +484,14 @@ public class Game {
 	public void requestGameData() {
 		n_game_data_received = 0;
 		// loop through all models and call requestGameData()
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, getClass().getSimpleName() + " Requesting Game Data");
 		for (ARISModel model : models) {
 			model.requestGameData();
 		}
 	}
 
 	public void requestMaintenanceData() {
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, getClass().getSimpleName() + " Requesting Maintenance Data");
 		n_maintenance_data_received = 0; //
 		for (ARISModel model : models) {
 			model.requestMaintenanceData();
@@ -504,14 +506,19 @@ public class Game {
 
 	public void requestPlayerData() {
 		n_player_data_received = 0;
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, getClass().getSimpleName() + " Requesting Player Data");
 		for (ARISModel model : models) {
 			model.requestPlayerData();
 		}
 	}
 
 	public void requestMediaData() {
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, getClass().getSimpleName() + " Requesting Media Data");
 		n_media_data_received = 0;
+		// requestMediaData() looks through all media included in this game and ensures that the MediaResult (MR) binary is loaded,
+		// the thumbnail is built and all associated metadata is set, then returns the total number of media(s) for game.
 		n_media_data_to_receive = mGamePlayAct.mMediaModel.requestMediaData(); //[_MODEL_MEDIA_ requestMediaData];
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, getClass().getSimpleName() + " Returned from requestMediaData; n_media_data_to_receive = " + n_media_data_to_receive);
 
 		if (n_media_data_to_receive == 0) {
 			//hack to quickly check if already done
@@ -555,6 +562,7 @@ public class Game {
 		mGamePlayAct.mDispatch.media_percent_loaded((float) n_media_data_received / (float) n_media_data_to_receive); //_ARIS_NOTIF_SEND_(@"MEDIA_PERCENT_LOADED", nil,
 		// @{@"percent":[NSNumber numberWithfloat:(float)n_media_data_received/(float)n_media_data_to_receive]});
 		if (this.allMediaDataReceived()) {
+			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, getClass().getSimpleName() + " All Media Data Has Been Received Calling Begin Game.");
 			n_media_data_received = n_media_data_to_receive; //should already be exactly this...
 			mGamePlayAct.mDispatch.model_media_data_loaded(); //_ARIS_NOTIF_SEND_(@"MEDIA_DATA_LOADED", nil, nil);
 		}
@@ -577,7 +585,7 @@ public class Game {
 	}
 
 	public void gameLeft() {
-		if (isServerPollerRunning) { // todo: clear/cancel all outstanding service requests for poll timer
+		if (isServerPollerRunning) {
 			mGamePlayAct.stopService(pollServerSvcIntent);
 			isServerPollerRunning = false;
 			// cancel all outstanding http requests.
@@ -687,26 +695,26 @@ public class Game {
 	}
 
 	public boolean begin_fresh() {
-		return begin_fresh == 1;
+		return begin_fresh == 1; // convert from numerical (1/0) boolean to Java boolean
 	}
 
 	public boolean preload_media() {
-		return preload_media == 1;
+		return preload_media == 1; // convert from numerical (1/0) boolean to Java boolean
 	}
 
 	public boolean listen_game_piece_available() {
-		return listen_game_piece_available == 1;
+		return listen_game_piece_available == 1; // convert from numerical (1/0) boolean to Java boolean
 	}
 
 	public boolean listen_maintenance_piece_available() {
-		return listen_maintenance_piece_available == 1;
+		return listen_maintenance_piece_available == 1; // convert from numerical (1/0) boolean to Java boolean
 	}
 
 	public boolean listen_media_piece_available() {
-		return listen_media_piece_available == 1;
+		return listen_media_piece_available == 1; // convert from numerical (1/0) boolean to Java boolean
 	}
 
 	public boolean listen_player_piece_available() {
-		return listen_player_piece_available == 1;
+		return listen_player_piece_available == 1; // convert from numerical (1/0) boolean to Java boolean
 	}
 }

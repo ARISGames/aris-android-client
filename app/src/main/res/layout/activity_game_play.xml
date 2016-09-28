@@ -19,7 +19,7 @@
             style="?android:attr/progressBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/progressBar"
+            android:id="@+id/prog_bar_gameplayfrag"
             android:visibility="gone"
             android:layout_gravity="center_horizontal|top"/>
     </FrameLayout>

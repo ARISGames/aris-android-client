@@ -10,6 +10,8 @@ import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.BinaryHttpResponseHandler;
@@ -67,43 +69,46 @@ public class ARISMediaLoader {
 	}
 
 	public void loadMediaFromMR(MediaResult mr) {
-		if (mr.media.thumb != null) { this.mediaLoadedForMR(mr); }
-		else if (mr.media.data != null) { this.deriveThumbForMR(mr); }
-		else if (mr.media.localURL() != null) { // get from the file if it already has been loaded // fixme: YIKES: out of mmory error here on games w/a lot of media. runaway
+		Log.e(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, " Load Media from MR Id:" + mr.media.mediaCD.media_id );
+		if (mr.media.thumb != null) {
+			Log.e(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, " Load Media from MR Id:" + mr.media.mediaCD.media_id + " Has Thumnail. All Done Loading");
+			this.mediaLoadedForMR(mr);
+		} // done. Media is fully loaded — presumably
+		else if (mr.media.data != null) {
+			Log.e(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, " Load Media from MR Id:" + mr.media.mediaCD.media_id + " Get Thumnail.");
+			this.deriveThumbForMR(mr); }
+		else if (mr.media.localURL() != null) { // get from the file if it already has been loaded
 			// from suggestion: http://stackoverflow.com/a/29862162
+			Log.e(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, " Load Media from MR Id:" + mr.media.mediaCD.media_id + " Get Binary from File. mr.media.localURL().getPath(): " + mr.media.localURL().getPath());
 			File f = new File(mr.media.localURL().getPath());
-			mr.media.data = AppUtils.decodeImageFile(f, 1280, 720);//.decodeStream(mr.media.localURL.openConnection().getInputStream());
-//			mr.media.data = BitmapFactory.decodeFile(mr.media.localURL().getPath());//.decodeStream(mr.media.localURL.openConnection().getInputStream());
+//			mr.media.data = AppUtils.decodeImageFile(f, 1280, 720);//.decodeStream(mr.media.localURL.openConnection().getInputStream());
+			mr.media.data = BitmapFactory.decodeFile(mr.media.localURL().getPath());//.decodeStream(mr.media.localURL.openConnection().getInputStream());
+			if (mr.media.data != null) loadMediaFromMR(mr); // possible infinite loop ?
+			else { // Should never happen, but media is essential to game, so if it does, well, no point in trying to play game. fix it.
+				this.mediaLoadFailed(mr);
+			}
 		}
 		else if (mr.media.remoteURL() != null) { // todo: call a pollServer type method to get media data, but one that can handle load failure and schedule to reload.
 			// set up an async server request to get Media data
+			Log.e(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, " Load Media from MR Id:" + mr.media.mediaCD.media_id + " Get Media Data from URL.");
 			pollServerForMediaWithRemoteURL(mr);
 		}
-		else if (mr.media.remoteURL() == null) { this.loadMetaDataForMR(mr); }
+		else if (mr.media.remoteURL() == null) {
+			Log.e(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, " Load Media from MR Id:" + mr.media.mediaCD.media_id + " Got Nothing Yet. Calling Load From MR.");
+			this.loadMetaDataForMR(mr); } // populate remoteURL
 	}
-//stack trace for above memory fail:
-/*	java.lang.OutOfMemoryError: Failed to allocate a 1408012 byte allocation with 141495 free bytes and 138KB until OOM
-at dalvik.system.VMRuntime.newNonMovableArray(Native Method)
-	at android.graphics.BitmapFactory.nativeDecodeStream(Native Method)
-	at android.graphics.BitmapFactory.decodeStreamInternal(BitmapFactory.java:635)
-	at android.graphics.BitmapFactory.decodeStream(BitmapFactory.java:611)
-	at android.graphics.BitmapFactory.decodeFile(BitmapFactory.java:391)
-	at android.graphics.BitmapFactory.decodeFile(BitmapFactory.java:417)
-	at edu.uoregon.casls.aris_android.services.ARISMediaLoader.loadMediaFromMR(ARISMediaLoader.java:73)
-	at edu.uoregon.casls.aris_android.services.ARISMediaLoader.loadMedia(ARISMediaLoader.java:66)
-	at edu.uoregon.casls.aris_android.models.MediaModel.deferedLoadMedia(MediaModel.java:245)
-	at edu.uoregon.casls.aris_android.models.MediaModel$1.run(MediaModel.java:236)
-	at android.os.Handler.handleCallback(Handler.java:739)
-	at android.os.Handler.dispatchMessage(Handler.java:95)
-	at android.os.Looper.loop(Looper.java:135)
-	at android.app.ActivityThread.main(ActivityThread.java:5376)
-	at java.lang.reflect.Method.invoke(Native Method)
-	at java.lang.reflect.Method.invoke(Method.java:372)
-	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:908)
-	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:703)*/
 
+	private void mediaLoadFailed(MediaResult mr) { // you don't want to go here.
+		Log.e(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, "FAILURE in ARISMediaLoader.. Unable to load binary data from local file. localURL = " + mr.media.localURL);
+		Toast t = Toast.makeText(mGamePlayAct.getApplicationContext(), "There was a problem loading the media data for this game. Please report this to ARIS (Android) team.",
+				Toast.LENGTH_SHORT);
+		t.setGravity(Gravity.CENTER, 0, 0);
+		t.show();
+		mGamePlayAct.leaveGame();
+	}
 
 	private void pollServerForMediaWithRemoteURL(final MediaResult mediaResult) {
+		mGamePlayAct.showProgress(true);
 		final Context context = mGamePlayAct;
 		final String remoteURL = mediaResult.media.remoteURL().toString();
 		String[] allowedContentTypes = new String[]{"image/png", "image/jpeg", "image/gif",
@@ -112,21 +117,25 @@ at dalvik.system.VMRuntime.newNonMovableArray(Native Method)
 			// todo: loading status bar here.
 			// showProgress(true);
 
-			if (mediaResult.connection != null) mediaResult.connection.cancelRequests(context, true);
+//			if (mediaResult.connection != null) mediaResult.connection.cancelRequests(context, true); // todo: why?
 			mediaResult.connection = new AsyncHttpClient(); // storing client ref in the MR so it can be tracked and cancelled if necessary.
 //			mediaResult.connection.setTimeout(6000); //set timeout for 60 sec. (6000ms)
 			mediaResult.connection.setMaxRetriesAndTimeout(2, 4000);
+			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, getClass().getSimpleName() + " SENDING request for mediaResult.media.mediaCD.media_id: " + mediaResult.media.mediaCD.media_id + " remoteURL: " + mediaResult.media.remoteURL());
 
-			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "pollServerForMediaWithRemoteURL AsyncHttpClient Sending Req for Media Data: " + mediaResult.media.remoteURL());
 			mediaResult.connection.get(context, remoteURL, new BinaryHttpResponseHandler(allowedContentTypes /*, looper here? */) { // the looper might be able to handle failed attempts?
 				@Override
 				public void onSuccess(int statusCode, Header[] headers, byte[] mediaBytes) {
+					mGamePlayAct.showProgress(false);
 					processLoadedBitmapForMR(mediaBytes, mediaResult);
 				}
 				@Override
 				public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
+					mGamePlayAct.showProgress(false);
 					processFailedMRLoad(mediaResult);
+					Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, getClass().getSimpleName() + " ## FAILED ## request for mediaResult.media.mediaCD.media_id: " + mediaResult.media.mediaCD.media_id + " remoteURL: " + mediaResult.media.remoteURL());
 				}
+
 //				@Override
 //				public void onProgress(int remaining, int total) {
 ////					Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient Progress for Req: " + requestApi + ". Progress: " + remaining + "/" + total);
@@ -136,10 +145,16 @@ at dalvik.system.VMRuntime.newNonMovableArray(Native Method)
 		}
 		else {
 			// todo: handle network unavailable.
+			mGamePlayAct.showProgress(false);
+
 		}
 	}
 
+	// In iOS this would be more like  (void) connection:(NSURLConnection *)c didReceiveData:(NSData *)d
+	//  and connectionDidFinishLoading()
 	private void processLoadedBitmapForMR(byte[] mediaBytes, MediaResult mr) {
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, getClass().getSimpleName() + "RECEIVING request for mediaResult.media.mediaCD.media_id:" + mr.media.mediaCD.media_id);
+
 		// save the returned data directly into the media.data field.
 		mr.data = BitmapFactory.decodeByteArray(mediaBytes, 0, mediaBytes.length);
 		mr.media.data = mr.data; // saving the data in two places or are these sharing a reference? Hopefully the latter.
@@ -164,6 +179,7 @@ at dalvik.system.VMRuntime.newNonMovableArray(Native Method)
 		}
 
 		mr.media.setPartialLocalURL(localMediaPath.getAbsolutePath());
+		// like saveAlteredMedia in iOS
 		mGamePlayAct.mMediaModel.addOrUpdateMediaCD(mr.media.mediaCD); // todo: not sure if this is required or desired here. Remove if it's wrong.
 
 		try {
@@ -171,24 +187,30 @@ at dalvik.system.VMRuntime.newNonMovableArray(Native Method)
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
+
+		this.loadMediaFromMR(mr);
 	}
 
 	private void processFailedMRLoad(MediaResult mediaToLoad) {
 		// todo: handle download fail.
+		Log.e(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, " FAILURE in ARISMediaLoader..processFailedMRLoad() Unable to load binary data from local file. localURL = " + mediaToLoad.media.localURL);
 	}
 
 	public void loadMetaDataForMR(MediaResult mr) {
+		// todo: this looks all wrong.
 		for (int i = 0; i < metaConnections.size(); i++) {
 //		for (MediaResult existingMR : metaConnections) { //not sure if this iteration style will allow proper referencing to original MR objects or spin off new one's that will dissolve after the loop.
 			MediaResult existingMR = metaConnections.get(i);
 			if (existingMR.media.media_id() == mr.media.media_id()) { // this makes the bold assumption that mediaid is not 0.
 				// If mediaresult already exists, merge delegates to notify rather than 1.Throwing new request out (need to keep delegate) or 2.Redundantly requesting
 //				existingMR.delegateHandles = existingMR.delegateHandles arrayByAddingObjectsFromArray:mr.delegateHandles;
-				existingMR.delegateHandles.addAll(mr.delegateHandles);
+//				existingMR.delegateHandles.addAll(mr.delegateHandles);
 				return;
 			}
 		}
 		metaConnections.add(mr);// addObject:mr;
+		Log.e(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, " Calling Fetch Media by ID:" + mr.media.media_id );
+
 		mGamePlayAct.mAppServices.fetchMediaById(mr.media.media_id()); //_SERVICES_ fetchMediaById:mr.media.media_id;
 	}
 
@@ -215,13 +237,18 @@ at dalvik.system.VMRuntime.newNonMovableArray(Native Method)
 	}
 
 	public void mediaLoadedForMR(MediaResult mr) {
-		//This is so ugly. See comments in ARISDelegateHandle.h for reasoning
-		for (int i = 0; i < mr.delegateHandles.size(); i++) {
-			ARISDelegateHandle dh = mr.delegateHandles.get(i);
-			if (dh.delegate() != null) { // todo see about a java equiv of this call: && dh.delegate class conformsToProtocol(protocol(ARISMediaLoaderDelegate))
-				MediaModel.class.cast(dh.delegate()).mediaLoaded(mr.media);       // mediaLoaded(mr.media);
+			if (mr.media != null) { // todo: rewrote this for delegate-less logic. Test. test. test.
+				Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, getClass().getSimpleName() + " Calling mediaLoaded(): " + mr.media.mediaCD.media_id);
+				mGamePlayAct.mMediaModel.mediaLoaded(mr.media);       // mediaLoaded(mr.media);
 			}
-		}
+
+		//deligateHandle way
+//		for (int i = 0; i < mr.delegateHandles.size(); i++) {
+//			ARISDelegateHandle dh = mr.delegateHandles.get(i);
+//			if (dh.delegate() != null) { // todo see about a java equiv of this call: && dh.delegate class conformsToProtocol(protocol(ARISMediaLoaderDelegate))
+//				MediaModel.class.cast(dh.delegate()).mediaLoaded(mr.media);       // mediaLoaded(mr.media);
+//			}
+//		}
 	}
 
 	public void deriveThumbForMR(MediaResult mr) {
@@ -236,6 +263,11 @@ at dalvik.system.VMRuntime.newNonMovableArray(Native Method)
 		}
 		else if (type.contentEquals("VIDEO")) {
 			mr.media.thumb = ThumbnailUtils.createVideoThumbnail(mr.media.localURL.getPath(), MediaStore.Images.Thumbnails.MINI_KIND);
+			if (mr.media.thumb == null) {
+				Resources res = mGamePlayAct.getResources();
+				Drawable drawable = res.getDrawable(R.drawable.notebk_video_2x);
+				mr.media.thumb = ((BitmapDrawable) drawable).getBitmap();
+			}
 //			AVAsset asset = AVAsset assetWithURL:mr.media.localURL;
 //			AVAssetImageGenerator imageGenerator = AVAssetImageGenerator allocinitWithAsset:asset;
 //			CMTime t = asset duration;
@@ -278,7 +310,7 @@ at dalvik.system.VMRuntime.newNonMovableArray(Native Method)
 	 * retrieve media bitmap data from server
 	 */
 	public void pollServerWithMediaCD(final String requestURL, final MediaCD mediaCDToLoad) {
-//		showProgress(true);
+		mGamePlayAct.showProgress(true);
 
 		RequestParams rqParams = new RequestParams();
 
@@ -291,17 +323,20 @@ at dalvik.system.VMRuntime.newNonMovableArray(Native Method)
 
 		// Get request
 		if (AppUtils.isNetworkAvailable(mGamePlayAct.getApplicationContext())) {
+
 			AsyncHttpClient client = new AsyncHttpClient();
-			client.setMaxRetriesAndTimeout(2, 4000);
+			client.setMaxRetriesAndTimeout(2, 10000);
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + "AsyncHttpClient Sending Req for Media Data: " + requestURL);
 			client.get(context, requestURL, new BinaryHttpResponseHandler(allowedContentTypes /*, looper here? */) { // the looper might be able to handle failed attempts?
 				@Override
 				public void onSuccess(int statusCode, Header[] headers, byte[] mediaBytes) {
+					mGamePlayAct.showProgress(false);
 					processLoadedMediaForCDToLocalFile(mediaBytes, mediaCDToLoad);
 				}
 
 				@Override
 				public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
+					mGamePlayAct.showProgress(false);
 					processFailedMediaForCDLoad(mediaCDToLoad);
 				}
 //				@Override
@@ -317,6 +352,7 @@ at dalvik.system.VMRuntime.newNonMovableArray(Native Method)
 //					Toast.LENGTH_SHORT);
 //			t.setGravity(Gravity.CENTER, 0, 0);
 //			t.show();
+			mGamePlayAct.showProgress(false);
 		}
 
 	}
