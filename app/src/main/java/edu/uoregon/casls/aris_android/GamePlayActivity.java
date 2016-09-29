@@ -689,7 +689,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		}
 	}
 
-
 	public void onSectionAttached(int number) {
 		switch (number) {
 			case 1:
@@ -715,6 +714,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mActionBar.setTitle(mTitle);
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -756,7 +759,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		mGame.logsModel.playerViewedContent(ivc.object_type, ivc.object_id);
 		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " instantiableViewControllerRequestsDismissal() called. about to call tryDequeue ");
 		// [self performSelector:@selector(tryDequeue) withObject:nil afterDelay:1];
-
 //		tryDequeue(); // jumping straight to tryDequeue will result in previous item in queue to not get dequeued.
 
 		this.performSelector.postDelayed(new Runnable() {
@@ -766,6 +768,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			}
 		}, 1000); //:@selector(tryDequeue) withObject:nil afterDelay:1);
 
+		// todo: do we need the following logic?
 //		if (!this.doDequeue && instantiableViewController.viewControllers[0] == ivc) {
 //			[self displayContentController:gamePlayRevealController];
 //			instantiableViewController = nil;
@@ -776,21 +779,14 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	public void fragmentPlaqueDismiss() {
 
 		// Android implementation of iOS GamePlayViewController.instantiableViewControllerRequestsDismissal:
-		// todo: make plaque fragment disband (stop) somewhere in here, but not before we're done referring to it.
-		// todo perhaps just hide it at this point and let it get replaced when the next view is enqueued. ?
-		// todo: Update: See that I now null it at bottom of method. Good move?
 		// this happens in [*]ViewController.dismissSelf() in iOS; in Android we stuff them all in this method.
-		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " fragmentPlaqueDismiss(). looking at plaqueViewFragment.tab: ");
 		// now tell this fragment to die
 		if (plaqueViewFragment != null) {
-			this.hideNavBar();
-			this.instantiableViewControllerRequestsDismissal(plaqueViewFragment.mInstance);
 			FragmentManager fm = getSupportFragmentManager();
 			fm.popBackStack();
-//			if (!viewingInstantiableObject) {  // todo: temporary in leu of showNav() call in fragment dismissSelf()
-//				this.showNavBar();
-//			}
+			this.hideNavBar();
 		}
+		this.instantiableViewControllerRequestsDismissal(plaqueViewFragment.mInstance); // todo: NPE sometimes here possibly due to double click on continue button
 		plaqueViewFragment = null;
 	}
 
@@ -800,8 +796,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		if (webPageViewFragment != null) {
 			FragmentManager fm = getSupportFragmentManager();
 			fm.popBackStackImmediate(); // immediate?
-			this.instantiableViewControllerRequestsDismissal(webPageViewFragment.instance);
 		}
+		this.instantiableViewControllerRequestsDismissal(webPageViewFragment.instance);
 		webPageViewFragment = null;
 	}
 
@@ -811,8 +807,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		if (itemViewFragment != null) {
 			FragmentManager fm = getSupportFragmentManager();
 			fm.popBackStackImmediate(); // immediate?
-			this.instantiableViewControllerRequestsDismissal(itemViewFragment.instance);
 		}
+		this.instantiableViewControllerRequestsDismissal(itemViewFragment.instance);
 		itemViewFragment = null; // thought this would happen by default but the reference stays.
 	}
 
@@ -822,12 +818,11 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		if (dialogViewFragment != null) {
 			FragmentManager fm = getSupportFragmentManager();
 			fm.popBackStack(); // immediate?
-//			fm.
 //			if (!viewingInstantiableObject) { // todo: temporary in leu of showNav() call in fragment dismissSelf()
 //				this.showNavBar();
 //			}
-			this.instantiableViewControllerRequestsDismissal(dialogViewFragment.instance);
 		}
+		this.instantiableViewControllerRequestsDismissal(dialogViewFragment.instance);
 		dialogViewFragment = null;
 	}
 
@@ -847,7 +842,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	public void fragmentNoteDismiss() {
 		if (noteViewFragment != null) {
 			FragmentManager fm = getSupportFragmentManager();
-			fm.popBackStack(); // immediate?
+			fm.popBackStackImmediate(); // immediate?
 		}
 		this.instantiableViewControllerRequestsDismissal(noteViewFragment.instance);
 		noteViewFragment = null;
@@ -868,11 +863,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		this.openNavDrawer();
 	}
 
-	public void onClickInventoryOpenDrawer(View v) {
-		this.openNavDrawer();
-	}
-
-
 	/*
 	*
 	*  GamePlayViewController Section (Separate class in iOS)
@@ -885,10 +875,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		//if(!(self.isViewLoaded && self.view.window)) //should work but apple's timing is terrible
 //		if (instantableViewController != null)
 //			return;
-//		if (viewingInstantiableObject) { // todo: disabled because it was preventing webPageViewFrags form displaying.
-//			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Try Dequeue: viewingInstantiableObject = " + viewingInstantiableObject);
-//			return;
-//		}
+		if (viewingInstantiableObject) { // todo: disabled because it was preventing webPageViewFrags form displaying. Causes looping Dialog scenes though without.
+			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Try Dequeue: viewingInstantiableObject = " + viewingInstantiableObject);
+			return;
+		}
 		Object o;
 		o = mGame.displayQueueModel.dequeue();
 		if (o != null) {
@@ -1028,7 +1018,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		}
 		else if (i.object_type.contentEquals("NOTE")) {
 			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
-			if (noteViewFragment == null || noteViewFragment.getTag() == null) {
+//			if (noteViewFragment == null || noteViewFragment.getTag() == null) {
+			if (noteViewFragment == null) {
 				noteViewFragment = new NoteViewFragment();
 				noteViewFragment.initContext(this);
 				noteViewFragment.initWithInstance(i);
@@ -1111,7 +1102,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 //		this.presentDisplay(nav);
 		viewingInstantiableObject = true; // iOS happens in presentDisplay
 	}
-
 
 	public void displayObject(Object o) // - (void) displayObject:(NSObject <InstantiableProtocol>*)o
 	{

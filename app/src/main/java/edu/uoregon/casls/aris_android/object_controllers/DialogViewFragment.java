@@ -278,6 +278,7 @@ public class DialogViewFragment extends Fragment {
 		if (tab != null) // todo: do we need this part to show the Nav Bar? It currently gets done in the dismiss routine.
 			this.showNav();
 		if (mListener != null) {
+//			Instance i = mGamePlayAct.dialogViewFragment.instance;
 			mListener.fragmentDialogDismiss();
 		}
 	}

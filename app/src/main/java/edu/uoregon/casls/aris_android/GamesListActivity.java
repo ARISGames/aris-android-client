@@ -449,7 +449,6 @@ public class GamesListActivity extends AppCompatActivity {
 		client.post(context, restApiUrl, entity, "application/json",
                 responseHandler);
 		 */
-		// post data should look like this: {"password":"123123","permission":"read_write","user_name":"scott"}
 		if (AppUtils.isNetworkAvailable(getApplicationContext())) {
 			AsyncHttpClient client = new AsyncHttpClient();
 

@@ -147,7 +147,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 	public void onResume() {
 		super.onResume();
 		if (AppConfig.DEBUG_ON) { // preset the input fields to save time during testing.
-			mEtUsername.setText("scotta"); // arisgames.org
+			mEtUsername.setText("scotta"); // test account on arisgames.org
 //			mEtUsername.setText("scott"); // localhost
 			mEtPassword.setText("123123");
 		}
@@ -158,40 +158,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 	}
 
-//	@Override // attempt to hide the qr code background when the keyboard is up.
-//	public boolean onTouchEvent(MotionEvent event) {
-//		// Hide qr thingie when entering text fields.
-//		ImageView qrImage  = (ImageView) findViewById(R.id.imageView);
-//		InputMethodManager imm = (InputMethodManager)
-//				this.getSystemService(Context.INPUT_METHOD_SERVICE);
-//
-//		if (imm.isAcceptingText()) {
-//			qrImage.setVisibility(View.INVISIBLE);
-//		} else {
-//			qrImage.setVisibility(View.VISIBLE);
-//		}
-//
-//		return true;
-//	}
-
-
-	private void populateAutoComplete() {
-		getLoaderManager().initLoader(0, null, this);
-	}
-
 	/**
 	 * Attempts to sign in or register the account specified by the login form.
 	 * If there are form errors (invalid email, missing fields, etc.), the
 	 * errors are presented and no actual login attempt is made.
 	 */
 	public void attemptLogin() {
-//		if (mAuthTask != null) {
-//			return;
-//		}
-		if (AppConfig.FAKE_GOOD_LOGIN) {
-			fakeLogin();
-			finish();
-		}
 		// Reset errors.
 		mEtUsername.setError(null);
 //		mAcTvEmail.setError(null);
@@ -551,84 +523,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 	public void loginButtonClick(View v) {
 		// user has clicked the login button
-		if (AppConfig.FAKE_GOOD_LOGIN)
-			fakeLogin();
-		else
-			attemptLogin();
+		attemptLogin();
 	}
-
-	public void fakeLogin () { // DEBUG MODE FOR NOT HAVING SERVER AVAIALBE
-		Intent i = new Intent(LoginActivity.this, GamesListActivity.class);
-		i.putExtra("user_name", mEtUsername.getText().toString());
-		i.putExtra("password", mEtPassword.getText().toString());
-		i.putExtra("user_id", mUserId);
-		i.putExtra("display_name", "FakeScott");
-		i.putExtra("media_id", "11111");
-		i.putExtra("read_write_key", "FABBED");
-		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(i);
-
-	}
-
-//	/**
-//	 * Represents an asynchronous login/registration task used to authenticate
-//	 * the user.
-//	 */
-//	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-//
-//		private final String mUsername;
-//		private final String mPassword;
-//
-//		UserLoginTask(String username, String password) {
-//			mUsername = username;
-//			mPassword = password;
-//		}
-//
-//		@Override
-//		protected Boolean doInBackground(Void... params) {
-//			// TODO: attempt authentication against a network service.
-//
-//			try {
-//				// Simulate network access.
-//				Thread.sleep(2000);
-//			} catch (InterruptedException e) {
-//				return false;
-//			}
-//
-//			for (String credential : DUMMY_CREDENTIALS) {
-//				String[] pieces = credential.split(":");
-//				if (pieces[0].equals(mUsername)) {
-//					// Account exists, return true if the password matches.
-//					return pieces[1].equals(mPassword);
-//				}
-//			}
-//
-//			// TODO: register the new account here.
-//			return true;
-//		}
-//
-//		@Override
-//		protected void onPostExecute(final Boolean success) {
-//			mAuthTask = null;
-//			showProgress(false);
-//
-//			if (success) {
-//				// todo: success should take them into the app flow.
-//				Toast.makeText(LoginActivity.this, "Pretend login successful", Toast.LENGTH_SHORT).show();
-//
-////				finish();
-//			}
-//			else {
-//				LoginActivity.this.mEtPassword.setError(getString(R.string.error_incorrect_password));
-//				LoginActivity.this.mEtPassword.requestFocus();
-//			}
-//		}
-//
-//		@Override
-//		protected void onCancelled() {
-//			mAuthTask = null;
-//			showProgress(false);
-//		}
-//	}
 }
 
