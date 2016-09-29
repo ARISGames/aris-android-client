@@ -36,8 +36,6 @@ import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.data_objects.cd_data_objects.MediaCD;
-import edu.uoregon.casls.aris_android.media.ARISDelegateHandle;
-import edu.uoregon.casls.aris_android.models.MediaModel;
 
 /*
 * Created by smorison on 11/18/15.
@@ -48,6 +46,8 @@ public class ARISMediaLoader {
 	public List<MediaResult>        metaConnections = new ArrayList<>();  //NSMutableArray metaConnections;
 
 	public transient GamePlayActivity mGamePlayAct;
+	private boolean preloadingToFile = false;
+	private boolean mediaPreloadInProgress = false;
 
 	public ARISMediaLoader(GamePlayActivity gamePlayActivity) {
 		this.initContext(gamePlayActivity);
@@ -68,6 +68,14 @@ public class ARISMediaLoader {
 		this.loadMediaFromMR(mr);
 	}
 
+	public void preloadMedia(Media m) { // media base values not getting set. mediaCD =is= though. This is by design. See Phil's comments at bottom of this file
+		if (m == null) return;
+		MediaResult mr = new MediaResult();
+		mr.media = m;
+
+		this.preloadMediaToLocalFile(mr);
+	}
+
 	public void loadMediaFromMR(MediaResult mr) {
 		Log.e(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, " Load Media from MR Id:" + mr.media.mediaCD.media_id );
 		if (mr.media.thumb != null) {
@@ -80,7 +88,7 @@ public class ARISMediaLoader {
 		else if (mr.media.localURL() != null) { // get from the file if it already has been loaded
 			// from suggestion: http://stackoverflow.com/a/29862162
 			Log.e(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, " Load Media from MR Id:" + mr.media.mediaCD.media_id + " Get Binary from File. mr.media.localURL().getPath(): " + mr.media.localURL().getPath());
-			File f = new File(mr.media.localURL().getPath());
+//			File f = new File(mr.media.localURL().getPath()); // loading local file.
 //			mr.media.data = AppUtils.decodeImageFile(f, 1280, 720);//.decodeStream(mr.media.localURL.openConnection().getInputStream());
 			mr.media.data = BitmapFactory.decodeFile(mr.media.localURL().getPath());//.decodeStream(mr.media.localURL.openConnection().getInputStream());
 			if (mr.media.data != null) loadMediaFromMR(mr); // possible infinite loop ?
@@ -105,6 +113,30 @@ public class ARISMediaLoader {
 		t.setGravity(Gravity.CENTER, 0, 0);
 		t.show();
 		mGamePlayAct.leaveGame();
+	}
+
+
+//	attmept to break preloadMedia into file upload only phase.
+	public void preloadMediaToLocalFile(MediaResult mr) {
+		if (mr.media.localURL() != null) { // don't count it until it's actually loaded form server
+			this.mediaPreloadedForMR(mr);
+			return;
+		}
+		mediaPreloadInProgress = true;
+		if (mr.media.remoteURL() != null) { // todo: call a pollServer type method to get media data, but one that can handle load failure and schedule to reload.
+			// set up an async server request to get Media data
+			Log.e(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, " Load Media from MR Id:" + mr.media.mediaCD.media_id + " Get Media Data from URL.");
+			preloadingToFile = true; // flag result that we're just preloading so it doesn't return to full media load aka: loadMediaFromMR()
+			pollServerForMediaWithRemoteURL(mr);
+			preloadingToFile = false;
+		}
+		else if (mr.media.remoteURL() == null) {
+			Log.e(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, " Load Media from MR Id:" + mr.media.mediaCD.media_id + " Got Nothing Yet. Calling Load From MR.");
+			this.loadMetaDataForMR(mr);
+			// remoteURL should now have a legit value; attempt to download media to local file again.
+			if (mr.media.remoteURL() != null) preloadMediaToLocalFile(mr);
+		}
+
 	}
 
 	private void pollServerForMediaWithRemoteURL(final MediaResult mediaResult) {
@@ -188,7 +220,11 @@ public class ARISMediaLoader {
 			e.printStackTrace();
 		}
 
-		this.loadMediaFromMR(mr);
+		if (preloadingToFile) // attempt to break preload into file upload only phase
+			this.preloadMediaToLocalFile(mr);
+		else
+			this.loadMediaFromMR(mr); // full media load.
+//		this.loadMediaFromMR(mr);
 	}
 
 	private void processFailedMRLoad(MediaResult mediaToLoad) {
@@ -249,6 +285,13 @@ public class ARISMediaLoader {
 //				MediaModel.class.cast(dh.delegate()).mediaLoaded(mr.media);       // mediaLoaded(mr.media);
 //			}
 //		}
+	}
+
+	public void mediaPreloadedForMR(MediaResult mr) {
+		if (mr.media != null) { // todo: rewrote this for delegate-less logic. Test. test. test.
+			Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, getClass().getSimpleName() + " Calling mediaLoaded(): " + mr.media.mediaCD.media_id);
+			mGamePlayAct.mMediaModel.mediaPreloaded(mr.media);       // mediaLoaded(mr.media);
+		}
 	}
 
 	public void deriveThumbForMR(MediaResult mr) {

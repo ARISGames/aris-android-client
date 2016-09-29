@@ -30,7 +30,7 @@ public class MediaModel extends ARISModel {
 	public List<Integer>    mediaIDsToLoad = new LinkedList<>();
 	public transient GamePlayActivity mGamePlayAct;
 	public List<ARISDelegateHandle> mediaDataLoadDelegateHandles = new ArrayList<>(); //	NSMutableArray *mediaDataLoadDelegateHandles; // todo: Android relevant?
-	public List<Media>              mediaDataLoadMedia           = new ArrayList<>(); //	NSMutableArray *mediaDataLoadMedia;
+	public List<Media>              mediaAwaitingDataLoad        = new ArrayList<>(); //	NSMutableArray *mediaDataLoadMedia;
 	int mediaDataLoaded;
 
 	private SQLiteDatabase db;
@@ -209,48 +209,59 @@ public class MediaModel extends ARISModel {
 	}
 
 	public long requestMediaData() {
-		List<Integer> media_ids = mediaIDsToLoad;  // allKeys];
+		List<Integer> mediaIDsToLoadNow = this.mediaIDsToLoad;  // local copy of ids - necessary?
 		Media m;
 //		ARISDelegateHandle d;
 
 		mediaDataLoadDelegateHandles.clear();
-		mediaDataLoadMedia.clear();
+		mediaAwaitingDataLoad.clear(); // called mediaDataLoadMedia in iOS. Confusing name IMO.
 		mediaDataLoaded = 0;
 
-		for (int i = 0; i < media_ids.size(); i++) {
-			m = this.mediaForId(media_ids.get(i));
+		for (int i = 0; i < mediaIDsToLoadNow.size(); i++) {
+			m = this.mediaForId(mediaIDsToLoadNow.get(i));
 			if (m.data == null) {
 				// not going to use the delegateHandle layer at this point in Android dev. 11/19/2015
 //				d = new ARISDelegateHandle(this); // d = [[ARISDelegateHandle alloc] initWithDelegate:self];
 //				mediaDataLoadDelegateHandles.add(d); // [mediaDataLoadDelegateHandles addObject:d];
-				mediaDataLoadMedia.add(m); // [mediaDataLoadMedia addObject:m];
+				mediaAwaitingDataLoad.add(m); // [mediaDataLoadMedia addObject:m];
 			}
 		}
 //		if (mediaDataLoadDelegateHandles.size() == 0)
-		if (mediaDataLoadMedia.size() == 0) // use actual media array until/unless the delegateHandle layer gets implemented
+		if (mediaAwaitingDataLoad.size() == 0) // use actual media array until/unless the delegateHandle layer gets implemented
 			this.mediaLoaded(null);
 
 		// Load any media that has not yet been loaded
 		mGamePlayAct.performSelector.postDelayed(new Runnable() {
 			@Override
-			public void run() { deferedLoadMedia(); }
+			public void run() { deferredLoadMedia(); }
 		}, 1000); // delay 1000ms = 1sec
 
-		return mediaDataLoadMedia.size(); // Android way of tracking loaded media
+		return mediaAwaitingDataLoad.size(); // Android way of tracking loaded media
 //		return mediaDataLoadDelegateHandles.size(); // iOS way
 	}
 
-	public void deferedLoadMedia() {
-		for (Media media : mediaDataLoadMedia) {
-			//[_SERVICES_MEDIA_ loadMedia:mediaDataLoadMedia[i] delegateHandle:mediaDataLoadDelegateHandles[i]]; //calls 'mediaLoaded' upon complete
-			mGamePlayAct.mAppServices.mMediaLoader.loadMedia(media);
+	public void deferredLoadMedia() {
+		Media media;
+//		for (Media media : mediaAwaitingDataLoad) { // can die if modified while iterating; using index counter.
+		for (int i=0; i < mediaAwaitingDataLoad.size(); i++) {
+			media  = mediaAwaitingDataLoad.get(i);
+			//  ARIS Android will die with OOM error (Out of Memory) if it tries to load each and every media bitmap
+			// into memory at the start of a game with a large media footprint. Android apps have a heap limit of between
+			// 16 and 128MB — way too small for games with huge amounts of media.
+			// To prevent this: Break the media preloading up so that only the media files themselves are
+			// downloaded initially and that loading the local file into the media.data (bitmap) field occurs only upon demand,
+			// during game play.
+			if (mGamePlayAct.mGame.preload_media()) // say, ain't that what it's there for.
+				mGamePlayAct.mAppServices.mMediaLoader.preloadMedia(media); //calls 'mediaLoaded' upon complete
+			else
+				mGamePlayAct.mAppServices.mMediaLoader.loadMedia(media); //calls 'mediaLoaded' upon complete
 		}
 	}
 
 	public long numMediaTryingToLoad() {
-		if (mediaDataLoadMedia == null || mediaDataLoadMedia.isEmpty())
+		if (mediaAwaitingDataLoad == null || mediaAwaitingDataLoad.isEmpty())
 			return 9999;
-		return mediaDataLoadMedia.size();
+		return mediaAwaitingDataLoad.size();
 	}
 
 	// delegateHandle version
@@ -265,8 +276,19 @@ public class MediaModel extends ARISModel {
 		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, getClass().getSimpleName() + " Calling media_piece_available(): " + m.mediaCD.media_id);
 		mGamePlayAct.mDispatch.media_piece_available(); //_ARIS_NOTIF_SEND_(@"MEDIA_PIECE_AVAILABLE",nil,nil);
 //		if (mediaDataLoaded >= mediaDataLoadDelegateHandles.size()) {
-		if (mediaDataLoaded >= mediaDataLoadMedia.size()) {
-			mediaDataLoadMedia.clear();
+		if (mediaDataLoaded >= mediaAwaitingDataLoad.size()) {
+			mediaAwaitingDataLoad.clear();
+//			mediaDataLoadDelegateHandles.clear();
+		}
+	}
+
+	public void mediaPreloaded(Media m) {
+		mediaDataLoaded++;
+		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, getClass().getSimpleName() + " Calling media_piece_available(): " + m.mediaCD.media_id);
+		mGamePlayAct.mDispatch.media_piece_available(); //_ARIS_NOTIF_SEND_(@"MEDIA_PIECE_AVAILABLE",nil,nil);
+//		if (mediaDataLoaded >= mediaDataLoadDelegateHandles.size()) {
+		if (mediaDataLoaded >= mediaAwaitingDataLoad.size()) {
+			mediaAwaitingDataLoad.clear();
 //			mediaDataLoadDelegateHandles.clear();
 		}
 	}

@@ -356,10 +356,12 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 	public void playerDataLoaded() { // gets called only after all game, player and maint data loaded
 		if (!mGame.hasLatestDownload()) {
-//			if (mGame.preload_media()) // todo: preloadMedia is not fully functional. Yet. For now force games to load-media-as-they-go
-//				this.requestMediaData(); // won't load until maintDataLoaded <-
-//			else
-			this.beginGame(); //[_MODEL_ beginGame);
+			// todo: preloadMedia is not fully functional. Yet. For now force games to load-media-as-they-go
+			// todo see comments in ARISMediaLoader.loadMedia and its upstream methods like MediaModel.deferredLoadMedia
+			if (mGame.preload_media())
+				this.requestMediaData();
+			else
+				this.beginGame(); //[_MODEL_ beginGame);
 		}
 		else
 			this.beginGame();    //[_MODEL_ beginGame);
@@ -781,13 +783,13 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " fragmentPlaqueDismiss(). looking at plaqueViewFragment.tab: ");
 		// now tell this fragment to die
 		if (plaqueViewFragment != null) {
+			this.hideNavBar();
+			this.instantiableViewControllerRequestsDismissal(plaqueViewFragment.mInstance);
 			FragmentManager fm = getSupportFragmentManager();
 			fm.popBackStack();
 //			if (!viewingInstantiableObject) {  // todo: temporary in leu of showNav() call in fragment dismissSelf()
 //				this.showNavBar();
 //			}
-			this.hideNavBar();
-			this.instantiableViewControllerRequestsDismissal(plaqueViewFragment.mInstance);
 		}
 		plaqueViewFragment = null;
 	}
