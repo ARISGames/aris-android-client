@@ -4,7 +4,7 @@
   The ARIS Android app code is substantially complete. It is capable of loading and playing most
   games with fairly straightforward common requirements including, maps, items, plaques, dialogs,
   and web page views. Scanner, Decoder and Notebook tabs are stubbed in but not functional. the Quests
-  tab is in place, but not tested. Sound media does not appear to be working at this point either.
+  tab is in place, but not tested. Sound media does not appear to be working.
 
   At this point the app is quite runnable, again, for simple game demonstrations, but do note that
   very little QA has been applied to this very raw collection of source code, and there WILL be bugs.
