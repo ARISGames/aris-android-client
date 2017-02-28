@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.1.1/support-annotations-23.1.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="8d680ba5a623724d1fb0e81c36a790f023a6cede">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-23.1.1_d784bc7ce4da4d78e0102cc9cbeb185a949fdfd6/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/git/Aris_Android/app/libs/android-async-http-1.4.6.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="a845a88238be0b5be9d238652c1bc0605ef91f52">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/2/android-async-http-1.4.6_f235eecdd2bbe3f7e67c3027f15d6448b66cec71/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.1.1/support-annotations-23.1.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="8d680ba5a623724d1fb0e81c36a790f023a6cede">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-23.1.1_d784bc7ce4da4d78e0102cc9cbeb185a949fdfd6/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/git/Aris_Android/app/libs/android-async-http-1.4.6.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="a845a88238be0b5be9d238652c1bc0605ef91f52">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/2/android-async-http-1.4.6_f235eecdd2bbe3f7e67c3027f15d6448b66cec71/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/10bb9527024c87ace0f97ac81b8266ee95add8bb/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="966e5771a5a2ebfb31bf00d7cd6cd2546d245517">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_d08a7f27751dc4b723994cdef462012207a489ca/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/5a95dad8363f4a7b534249ccb9266aaf5b9745c9/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="8e673cdfadd8f2d98fdb2fda2285c30f6e449782">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_89d28eea44f471b3233f76451d1bae9b347d1e94/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/8b7304df9a0848d945c97c28af6246b6bbad935f/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="1a78298e7724d5440d210bcb946b3493250d354d">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_f5688e5b387a132ba5fbbd4ce88472e60a95c135/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/8046cfc8013be80d6ad8b7b04337c70328b56be7/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="613298b7aa012f121ce542881c0a599ebd8078f2">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_ca83eea71f246d213fc8004e35cacefe0afbd99c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/617b83ff5b479a90008da615d3b52c75b80a9853/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="65d086ee9daaf87b5af62ad24471edafa433354c">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_3b8de71c21cf5340c31be9dde0600ab3b9f25986/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/5d741e8e00c82e37f27ccdbda38fd5d5db602598/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="78ea232052df889856dcb7b7b542707c89bb3bfb">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_2faf4e1f4e33d880e1331870a3165e77bc9e62d4/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/eeddd321883438e85b28bbdaba483e6a38518cd0/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="1c9f35e952b212c843f7bd2c7eec8e82ad95602e">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_a79154751610b3e2000d6f0821a8f743f38cee1f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/2202425722928c73be542562b4da19e0322c6b87/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="6cbc7773921fcfedbe55657578f0cbfe614778dc">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_c34e29f7f8f477825921141e5de2bca936c6400c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/7a53d86239bc436080096443b1c4e1e8b01c5347/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="a8412b654dab86d57bf90683367488211c8a81f1">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_aff42bc802967d0cda73e9c20d45e44af642d71f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/dbdf6c4176f989f015917d5a57e7010a0bead496/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="5c5699834e9722f1c288fea2de82725d078ba127">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_782e80e0fe9b6e4b12901b34a570e959298ad5db/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/2202425722928c73be542562b4da19e0322c6b87/output/jars/libs/internal_impl-23.1.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="a4de9c81ae239414e1ed0f86441b02abaf29bca9">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-23.1.1_1cbe42fee690ec12539b78ae63c46c4e7688af16/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/52ec0b612b6b1a6d0ba3965d38f780ca1b819201/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="2d7fe76982677315c4dc4edfb459c8ca718a9d4c">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_8914f0e053a02581dc4f6e8f05a647416b3fd5dd/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/826346d2c4164970852328965328a089339a1253/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="b5e7892fb0708e792e0e933c4c0a0ca0ac7831fb">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_ffd3aeb9f9d30e7e1970bb83844caeb92036b5ca/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/edca6cea7f71cd44d212456993ad338f598b1f92/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="9fe026fb4c7fce21bc5142f6e1bdf844f28061ac">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_36791f03c41e2a5b6da128c544bd00a5847a3048/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/git/Aris_Android/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="18a118ecb5a95868e6a3a66461eb76274c994e00">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_21810d367fc355c1b577a53c6d95219f6ab68bac/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/c18bedd1afab33c6cb0b3d486fde0c1ceac68e8b/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="e167a34eaca0b31704212f43f9576ea84e05046f">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_3d146cacc3669f8e54caee8a0953472aff3c12fb/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/799cda2fec21b8ff3b1337ba23767f7ec7ef1619/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="f2df436a8f02ce7e4d7d209671fc45f97c470f0e">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_7b919ced0629e797845460f339ee25b349241c42/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/89f4ee6ba56f8d46f9a4b312b917cb152bc92c90/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="dfecc4d835cdabcdecf7e95f0d20a3ef1e9d8ef4">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_7d57ba53fc6a3e8fa70fc7a3e92f7eb185d8628c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/af5b48409d43b090981378e69e0620e77db896f3/output/jars/libs/internal_impl-23.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="03d38bb042efe3e5ce27ba66b729a9523c36d8fe">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-23.0.0_89a7667bcb73d177341b97f2087baa2391f08e0b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/02a4b3b6ed9a633f9cb7468c19576549b044c54a/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="b82b8e847173c28efffcd291b2a0b1ae9ad17fa4">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_456104feb661f5a548c96055379c62424c87fb73/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/git/Aris_Android/app/libs/gson-2.3.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/2/gson-2.3.1_7633fa7fbfeaae9564dbf7de870c58bb8cbb4a93/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/a8dea38ae7fdeb7e3a414877dcc0da720e3d6e45/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="3a364cc6b698d1b3b2d284f64618daaa7fe77ddf">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_34ce5bbec2815cfb6f5306ec830499ab4a2b2762/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/git/Aris_Android/app/libs/gson-2.3.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/2/gson-2.3.1_7633fa7fbfeaae9564dbf7de870c58bb8cbb4a93/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/af5b48409d43b090981378e69e0620e77db896f3/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="d358b3dd49a7c67844622dcbc9cf4339e13952ce">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_7baa809132fc151797950a85bfe0b48f97e7f7af/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/878c8ece666c984cc932fd4888ba2a73c7f5f334/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c54246475c1bb64ac6857d1320364bfbfeda2c46">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_b75821f9c586c1bb49d0d4e9303013885a5f2c3a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/fb5b48576293553a3cc7fbb2c0168cca50122f55/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="fef2b3e4b6b1b0e5fe7b69fa137a5fa55a3182ab">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_3c9e72e50da9bcd20666127e6f2a0fd9816e5d42/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/git/Aris_Android/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="2fbdfef027f19939820542e6080e06ad9c1f8d21">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_1548ede33ebe6b0919d4cc909b9af3ff868e508a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/3f25c493671910095ac2049286a46cbb6d4cd7d9/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="08d34b2d135c1cc96ab506fd8bf6916d1e2f391a">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_b310c7b7521a743d13ae00398689fa85c883b459/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/2d00f93fd01a3eb18058b629dae5260b3a895043/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="b36f30ac5ee5d5214f4b1e2ac49f11889d58e71a">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_0654c7bded778d2b9df88b072f6817c6cb3535c2/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/5c1fbc84ae9cb39deaa3a2d5562cef0a23a325ad/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="9cad249cf62751a323d9af568caf12284b7d6062">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_031e3fc9c2191c832638e3a2e347d5d23b06445a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/8aafdbe96e12250ab45d9afae6417dd29f4edf6d/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="551e78f21acf69ebfb489c0e79647824c838013e">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_cb871d514cf71db3e6b8e7a7f4d37e7d77824be5/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/220dae403ecf79c328181eeef558e87a37eb2d6d/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="04de44f90606c77f3b28cf44861f306290505aac">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_fc3b52ceb31c529bfe2fb0ee25251ccff60c6b91/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/smorison/.android/build-cache/f497ceedc2bf728cb1600dd3f40f1ad8cdda34ae/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="0194a7409c40de94fb539d4ad9928ec5d47afeb7">
+        <dex dex="/Users/smorison/git/Aris_Android/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_d2f1fc7fbb9c0556d0e2b0864296a439365ea5ec/classes.dex" />
+    </item>
+
+</items>
