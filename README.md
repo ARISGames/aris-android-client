@@ -7,7 +7,7 @@
   games as tested on Android OS versions Lollipop (5.1), and KitKat (4.4.x). It appears to run less
   happily on OSs newer than those, at least in the brief attempts I made with a Samsung Galaxy S7
   running Marshmallow (6.0.1). The newer apk seemed to hate everything, but I put it up anyway in
-  case it might just be me.
+  case it might just be me useful.
 
   If you're not familiar with how to manually install an apk, it's pretty straightforward: Copy the
   apk file to (for instance) the Downloads folder on your device with something like Android File
