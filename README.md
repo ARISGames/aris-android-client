@@ -2,8 +2,8 @@
 
 ### 2/28/2017: Added Installable APK Builds for Brave and Intrepid Android Testers.
   The apk's can be found at the top level of the project tree. Currently there are two available:
-  one from October of 2016, which was the point at which the first development phase of the Android
-  build had come to an end, and another from 2/28/17. This older build was working with smaller
+  one from October of 2016, which was the point at which the first (and only) development phase of the
+  Android build had come to an end, and another from 2/28/17. This older build was working with smaller
   games as tested on Android OS versions Lollipop (5.1), and KitKat (4.4.x). It appears to run less
   happily on OSs newer than those, at least in the brief attempts I made with a Samsung Galaxy S7
   running Marshmallow (6.0.1). The newer apk seemed to hate everything, but I put it up anyway in
