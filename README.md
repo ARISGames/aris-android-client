@@ -1,6 +1,6 @@
 # aris-android-client
 
-### 9/29/2016: Added Installable APK Builds for Brave and Interested Android Testers.
+### 2/28/2017: Added Installable APK Builds for Brave and Intrepid Android Testers.
   The apk's can be found at the top level of the project tree. Currently there are two available:
   one from October of 2016, which was the point at which the first development phase of the Android
   build had come to an end, and another from 2/28/17. This older build was working with smaller
