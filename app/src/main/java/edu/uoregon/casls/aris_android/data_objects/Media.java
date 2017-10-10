@@ -116,7 +116,7 @@ public class Media {
 			File path = ArisApp.getContext().getFilesDir();
 
 			try {
-				if (mediaCD.localURL.startsWith("/data/data/"))
+				if (mediaCD.localURL.startsWith("/data/"))
 					url = new URL("file://" + mediaCD.localURL);
 				else
 					url = new URL("file://" + path.getPath() + mediaCD.localURL);
