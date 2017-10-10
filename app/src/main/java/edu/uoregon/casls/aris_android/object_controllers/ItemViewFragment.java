@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import edu.uoregon.casls.aris_android.ARISWebView;
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.R;
 import edu.uoregon.casls.aris_android.Utilities.AppConfig;
@@ -324,11 +325,9 @@ public class ItemViewFragment extends Fragment {
 	}
 
 	private void loadItemInWebView() {
-		WebView wvItemAsURL = (WebView) mItemFragView.findViewById(R.id.wv_item_as_url);
+		ARISWebView wvItemAsURL = (ARISWebView) mItemFragView.findViewById(R.id.wv_item_as_url);
 		wvItemAsURL.setVisibility(View.VISIBLE);
-		wvItemAsURL.getSettings().setJavaScriptEnabled(true);
-		wvItemAsURL.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
-		wvItemAsURL.getSettings().setLoadWithOverviewMode(true);
+		wvItemAsURL.initContextAndInjectJavaScript(mGamePlayActivity);
 		wvItemAsURL.loadUrl(mItem.url);
 //		String htmlBlock = "<html><body>" + mItem.url + "</body></html>";
 //		wvItemAsURL.loadData(htmlBlock, "text/html", null);
