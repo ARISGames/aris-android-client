@@ -212,7 +212,7 @@ public class GameCoverPageActivity extends AppCompatActivity {
 		wvGameDesc.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
 		wvGameDesc.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
 		wvGameDesc.getSettings().setUseWideViewPort(true); // constrain the image horizontally
-		wvGameDesc.loadData("<html><head><body><center>" + mGame.desc + "</center></body></html>", "text/html", null); // was a text view and would not handle html
+		wvGameDesc.loadData("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head><body><center>" + mGame.desc + "</center></body></html>", "text/html; charset=utf-8", null); // was a text view and would not handle html
 //		tvGameDesc.setText(mGame.desc);
 		wvGamePic = (WebView) findViewById(R.id.wv_game_pic);
 		if (mGame.media.media_id == 0) { // 0 = no custom icon
