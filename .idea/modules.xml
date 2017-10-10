@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Aris_Android.iml" filepath="$PROJECT_DIR$/Aris_Android.iml" />
       <module fileurl="file://$PROJECT_DIR$/android-async-http-1.4.6/android-async-http-1.4.6.iml" filepath="$PROJECT_DIR$/android-async-http-1.4.6/android-async-http-1.4.6.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aris-android-client.iml" filepath="$PROJECT_DIR$/aris-android-client.iml" />
     </modules>
   </component>
 </project>
