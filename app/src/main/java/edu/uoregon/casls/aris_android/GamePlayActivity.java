@@ -58,7 +58,6 @@ import edu.uoregon.casls.aris_android.models.MediaModel;
 import edu.uoregon.casls.aris_android.models.UsersModel;
 import edu.uoregon.casls.aris_android.object_controllers.DialogViewFragment;
 import edu.uoregon.casls.aris_android.object_controllers.ItemViewFragment;
-import edu.uoregon.casls.aris_android.object_controllers.NoteViewFragment;
 import edu.uoregon.casls.aris_android.object_controllers.PlaqueViewFragment;
 import edu.uoregon.casls.aris_android.object_controllers.WebPageViewFragment;
 import edu.uoregon.casls.aris_android.services.AppServices;
@@ -68,6 +67,7 @@ import edu.uoregon.casls.aris_android.tab_controllers.InventoryViewFragment;
 import edu.uoregon.casls.aris_android.tab_controllers.MapViewFragment;
 import edu.uoregon.casls.aris_android.tab_controllers.QuestsViewFragment;
 import edu.uoregon.casls.aris_android.tab_controllers.ScannerViewFragment;
+import edu.uoregon.casls.aris_android.tab_controllers.NotebookViewFragment;
 
 public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActivity
 		implements
@@ -77,7 +77,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 //			InventoryViewFragment.OnFragmentInteractionListener,
 		ItemViewFragment.OnFragmentInteractionListener,
 		MapViewFragment.OnFragmentInteractionListener,
-		NoteViewFragment.OnFragmentInteractionListener,
 		PlaqueViewFragment.OnFragmentInteractionListener,
 		WebPageViewFragment.OnFragmentInteractionListener {
 
@@ -111,10 +110,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	public MapViewFragment        mapViewFragment;
 	public QuestsViewFragment     questsViewFragment;
 	public ScannerViewFragment    scannerViewFragment;
+	public NotebookViewFragment   notebookViewFragment;
 	// object_controllers
 	public DialogViewFragment     dialogViewFragment;
 	public ItemViewFragment       itemViewFragment;
-	public NoteViewFragment       noteViewFragment;
 	public PlaqueViewFragment     plaqueViewFragment;
 	public WebPageViewFragment    webPageViewFragment;
 
@@ -230,8 +229,8 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			else if (fragment instanceof MapViewFragment) {
 				mapViewFragment = (MapViewFragment) fragment;
 			}
-			else if (fragment instanceof NoteViewFragment) {
-				noteViewFragment = (NoteViewFragment) fragment;
+			else if (fragment instanceof NotebookViewFragment) {
+				notebookViewFragment = (NotebookViewFragment) fragment;
 			}
 			else if (fragment instanceof GamePlayPlayerFragment) {
 				playerViewFragment = (GamePlayPlayerFragment) fragment;
@@ -660,10 +659,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 					.commit();
 		}
 		else if (itemName.equals("Notebook")) {
-			this.noteViewFragment = NoteViewFragment.newInstance(itemName);
-			noteViewFragment.initContext(this);
+			this.notebookViewFragment = NotebookViewFragment.newInstance(itemName);
 			fragmentManager.beginTransaction()
-					.replace(R.id.fragment_view_container, this.noteViewFragment, this.noteViewFragment.toString())
+					.replace(R.id.fragment_view_container, this.notebookViewFragment, this.notebookViewFragment.toString())
 					.commit();
 		}
 		else if (itemName.equalsIgnoreCase("Leave Game")) {
@@ -839,16 +837,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 //
 
 	@Override
-	public void fragmentNoteDismiss() {
-		if (noteViewFragment != null) {
-			FragmentManager fm = getSupportFragmentManager();
-			fm.popBackStackImmediate(); // immediate?
-		}
-		this.instantiableViewControllerRequestsDismissal(noteViewFragment.instance);
-		noteViewFragment = null;
-	}
-
-	@Override
 	public void gamePlayTabBarViewControllerRequestsNav() {
 		// Display the nav drawer at this point, until/unless the next UI view is triggered.
 		this.showNav();
@@ -1016,29 +1004,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			fragViewToDisplay = webPageViewFragment.getTag(); // same end result as vc var in iOS
 //		vc = new WebPageViewController(i delegate:self);
 		}
-		else if (i.object_type.contentEquals("NOTE")) {
-			Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Instance Type found to be: " + i.object_type);
-//			if (noteViewFragment == null || noteViewFragment.getTag() == null) {
-			if (noteViewFragment == null) {
-				noteViewFragment = new NoteViewFragment();
-				noteViewFragment.initContext(this);
-				noteViewFragment.initWithInstance(i);
-				tag = noteViewFragment.toString();
-				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-				ft.replace(R.id.fragment_view_container, noteViewFragment, tag); //set tag.
-				ft.addToBackStack(tag);
-				ft.commit();
-				getSupportFragmentManager().executePendingTransactions();
-				setAsFrontmostFragment(tag);
-			}
-			// if it's already visible and the frontmost fragment... bail, no further action here
-			else if (mCurrentFragVisible != null) if (noteViewFragment.isVisible()
-					&& noteViewFragment.getTag().contentEquals(mCurrentFragVisible))
-				return;
-
-			fragViewToDisplay = noteViewFragment.getTag(); // same end result as vc var in iOS
-//		vc = new NoteViewController(i delegate:self);
-		}
 
 		// Special Cases which do not "actually display anything"
 		if (i.object_type.contentEquals("EVENT_PACKAGE")) { //Special case (don't actually display anything)
@@ -1187,18 +1152,6 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 				}
 //				vc = new WebPageViewController(i delegate:self);
 			}
-		}
-		else if (o instanceof Note) {
-			Note n = (Note) o;
-			i.object_type = "NOTE";
-			i.object_id = n.note_id;
-			if (noteViewFragment == null) {
-				noteViewFragment = new NoteViewFragment();
-			}
-			noteViewFragment.initContext(this); // never hurts to reset this reference
-			noteViewFragment.initWithInstance(i);
-			fragViewToDisplay = noteViewFragment.getTag(); // same end result as vc var in iOS
-//			vc = new NoteViewController(i delegate:self);
 		}
 
 		showInstantiableFragment(fragViewToDisplay, i);
