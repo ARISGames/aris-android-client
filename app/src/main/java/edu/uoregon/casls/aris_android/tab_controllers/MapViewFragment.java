@@ -586,79 +586,93 @@ public class MapViewFragment extends Fragment {
 		mMap.animateCamera(cameraUpdate);
 	}
 
+	private void handleMarkerClick(Marker marker) {
+		// TODO (MT): this should be fixed to use trigger IDs or something else, not trigger titles which can collide
+
+		boolean found = false;
+		for (final Trigger trigger : markersAndCircles) {
+			Instance modelInstance = mGamePlayAct.mGame.instancesModel.instanceForId(trigger.instance_id);
+			String modInstName = modelInstance.name(); // debugging convenience value
+			String mt = marker.getTitle(); // debugging convenience value
+//					Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + ": Marker Clicked. Looping thru markersAndCircles to find which was clicked. Marker Title: " + mt + " == " + modInstName + " ?");
+
+			if (modelInstance.name().equals(marker.getTitle())) {
+				// get distance from player.
+				trigger.setLocationFromExistingLatLng();
+				// below is found in displayHUDWithTrigger in iOS
+				float distance = trigger.location.distanceTo(mGamePlayAct.mPlayer.location);
+				if (mGamePlayAct.mGame.map_offsite_mode != 0
+						|| trigger.infinite_distance != 0
+						|| (distance <= trigger.distance && mGamePlayAct.mPlayer.location != null)) {
+					// todo: custom icon not getting displayed
+					Drawable alertImage;
+					if (modelInstance.icon_media_id() == 0)
+						alertImage = ContextCompat.getDrawable(mGamePlayAct, R.drawable.plaque_icon_120);
+					else {
+						Media m = mGamePlayAct.mMediaModel.mediaForId(modelInstance.icon_media_id());
+						alertImage = new BitmapDrawable(getResources(), m.data);
+					}
+					String triggerType = trigger.name;
+					new AlertDialog.Builder(mGamePlayAct)
+							.setIcon(alertImage)
+//									.setIcon(ContextCompat.getDrawable(mGamePlayAct, R.drawable.plaque_icon_120)) // todo: show an icon?
+//									.setIcon(mGamePlayAct.getResources().getDrawable(R.drawable.plaque_icon_120))
+							.setTitle("View?")
+							.setMessage(mt)
+							.setPositiveButton("View", new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									//kill inner map fragment todo: put this in onDetsroyView/detach
+									FragmentManager fm = getChildFragmentManager();
+									Fragment innerMapFragment = fm.findFragmentById(R.id.inner_fragment_map);
+									if (innerMapFragment != null) {
+										fm.beginTransaction().remove(innerMapFragment).commit();
+									}
+
+									// enqueueTrigger (found in interactWithLocation in iOS)
+									if (trigger != null)
+										mGamePlayAct.mGame.displayQueueModel.enqueueTrigger(trigger);
+								}
+							})
+							.setNegativeButton("Back", null)
+							.show();
+
+					return;
+				}
+				else {
+					float distanceToWalk = distance - trigger.distance;
+					Toast t = Toast.makeText(mGamePlayAct, "You are not in range to interact with this. Walk " + String.format("%.1f", distanceToWalk) + "m",
+							Toast.LENGTH_SHORT);
+					t.setGravity(Gravity.BOTTOM, 0, 0);
+					t.show();
+				}
+				found = true;
+				break; // once found loop can stop
+			}
+			if (!found) {
+				Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + ": =============== UNABLE to find this Marker! Marker Title: " + modInstName);
+			}
+		}
+
+		return;
+	}
+
 	private void setOnclickListenerForMarkers() {
 		// In iOS, a clicked marker will result in a call to displayHUDWithTrigger via an internal MKMapView call;
 		// in Android we explicitly set up the onClickListener for the map markers all at once.
 		// todo: possibly move the logic for determining which Instance to reference based on the marker clicked, to a separate method? Any advantages?
+		final MapViewFragment mvf = this;
 		mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 			@Override
 			public boolean onMarkerClick(Marker marker) {
-				boolean found = false;
-				for (final Trigger trigger : markersAndCircles) {
-					Instance modelInstance = mGamePlayAct.mGame.instancesModel.instanceForId(trigger.instance_id);
-					String modInstName = modelInstance.name(); // debugging convenience value
-					String mt = marker.getTitle(); // debugging convenience value
-//					Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + ": Marker Clicked. Looping thru markersAndCircles to find which was clicked. Marker Title: " + mt + " == " + modInstName + " ?");
-
-					if (modelInstance.name().equals(marker.getTitle())) {
-						// get distance from player.
-						trigger.setLocationFromExistingLatLng();
-						// below is found in displayHUDWithTrigger in iOS
-						float distance = trigger.location.distanceTo(mGamePlayAct.mPlayer.location);
-						if (mGamePlayAct.mGame.map_offsite_mode != 0
-								|| trigger.infinite_distance != 0
-								|| (distance <= trigger.distance && mGamePlayAct.mPlayer.location != null)) {
-							// todo: custom icon not getting displayed
-							Drawable alertImage;
-							if (modelInstance.icon_media_id() == 0)
-								alertImage = ContextCompat.getDrawable(mGamePlayAct, R.drawable.plaque_icon_120);
-							else {
-								Media m = mGamePlayAct.mMediaModel.mediaForId(modelInstance.icon_media_id());
-								alertImage = new BitmapDrawable(getResources(), m.data);
-							}
-							String triggerType = trigger.name;
-							new AlertDialog.Builder(mGamePlayAct)
-									.setIcon(alertImage)
-//									.setIcon(ContextCompat.getDrawable(mGamePlayAct, R.drawable.plaque_icon_120)) // todo: show an icon?
-//									.setIcon(mGamePlayAct.getResources().getDrawable(R.drawable.plaque_icon_120))
-									.setTitle("View?")
-									.setMessage(mt)
-									.setPositiveButton("View", new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(DialogInterface dialog, int which) {
-											//kill inner map fragment todo: put this in onDetsroyView/detach
-											FragmentManager fm = getChildFragmentManager();
-											Fragment innerMapFragment = fm.findFragmentById(R.id.inner_fragment_map);
-											if (innerMapFragment != null) {
-												fm.beginTransaction().remove(innerMapFragment).commit();
-											}
-
-											// enqueueTrigger (found in interactWithLocation in iOS)
-											if (trigger != null)
-												mGamePlayAct.mGame.displayQueueModel.enqueueTrigger(trigger);
-										}
-									})
-									.setNegativeButton("Back", null)
-									.show();
-
-							return false;
-						}
-						else {
-							float distanceToWalk = distance - trigger.distance;
-							Toast t = Toast.makeText(mGamePlayAct, "You are not in range to interact with this. Walk " + String.format("%.1f", distanceToWalk) + "m",
-									Toast.LENGTH_SHORT);
-							t.setGravity(Gravity.BOTTOM, 0, 0);
-							t.show();
-						}
-						found = true;
-						break; // once found loop can stop
-					}
-					if (!found) {
-						Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + ": =============== UNABLE to find this Marker! Marker Title: " + modInstName);
-					}
-				}
-
+				mvf.handleMarkerClick(marker);
 				return false;
+			}
+		});
+		mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+			@Override
+			public void onInfoWindowClick(Marker marker) {
+				mvf.handleMarkerClick(marker);
 			}
 		});
 	}
