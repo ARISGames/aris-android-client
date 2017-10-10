@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<edu.uoregon.casls.aris_android.object_controllers.DialogOptionLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#fffefefe"
+                android:clickable="true"
+                android:focusable="true"
                 android:alpha=".9">
 
     <!-- Dialog Option HTML (text) -->
@@ -15,6 +17,8 @@
         android:background="#fffefefe"
         android:layout_toLeftOf="@+id/iv_game_item_right_arrow"
         android:paddingTop="5dp"
+        android:clickable="false"
+        android:focusable="false"
         android:paddingBottom="5dp">
         <!--<WebView-->
         <view
@@ -24,6 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:background="#fffefefe"
+            android:clickable="false"
+            android:focusable="false"
             android:alpha=".98"/>
     </LinearLayout>
 
@@ -37,7 +43,9 @@
         android:src="@drawable/arrow_forward_2x"
         android:layout_alignParentBottom="false"
         android:paddingBottom="5dp"
+        android:clickable="false"
+        android:focusable="false"
         android:layout_marginBottom="5dp"/>
 
 
-</RelativeLayout>
+</edu.uoregon.casls.aris_android.object_controllers.DialogOptionLayout>

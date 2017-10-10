@@ -223,9 +223,9 @@ public class DialogViewFragment extends Fragment {
 				final int dialogOptionId = (int)dialogOption.dialog_option_id;
 				dialogOptionItemView.setId(dialogOptionId);
 				dialogOptionItemView.setTag(dialogOptionId); // redundant but I might find a use for this later.
-				// set up forward button:
-				ImageView dialogFwdButton = (ImageView) dialogOptionItemView.findViewById(R.id.iv_game_item_right_arrow);
-				dialogFwdButton.setOnClickListener(new View.OnClickListener() {
+
+				awvDialogOptionPrompt.disableUserInteraction();
+				dialogOptionItemView.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						dialogOptionSelected(dialogOptionId);
