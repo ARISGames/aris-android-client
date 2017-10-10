@@ -279,16 +279,22 @@ public class ItemViewFragment extends Fragment {
 	private void pickupItemQty(long q) {
 		// popup to tell player item is acquired. Calls giveItem along with presentation of dialog.
 //		mGamePlayActivity.mGame.playerInstancesModel.giveItemToPlayer(mItem.item_id, q); //	[_MODEL_PLAYER_INSTANCES_ giveItemToPlayer:item.item_id qtyToAdd:q];
-		Toast t = Toast.makeText(mGamePlayActivity, "+1 " + mItem.name + ". Total: " + mGamePlayActivity.mGame.playerInstancesModel.giveItemToPlayer(mItem.item_id, q),
-				Toast.LENGTH_SHORT);
-		t.setGravity(Gravity.TOP, 0, 0);
-		t.show();
+		if (mItem.delta_notification != 0) {
+			Toast t = Toast.makeText(mGamePlayActivity, "+1 " + mItem.name + ". Total: " + mGamePlayActivity.mGame.playerInstancesModel.giveItemToPlayer(mItem.item_id, q),
+					Toast.LENGTH_SHORT);
+			t.setGravity(Gravity.TOP, 0, 0);
+			t.show();
+		} else {
+			mGamePlayActivity.mGame.playerInstancesModel.giveItemToPlayer(mItem.item_id, q);
+		}
 
 		long nq = instance.qty - q;
 		mGamePlayActivity.mGame.instancesModel.setQtyForInstanceId(mItem.item_id, nq); //[_MODEL_INSTANCES_ setQtyForInstanceId:instance.instance_id qty:nq];
 		instance.qty = nq; //should get set in above call- but if bogus instance, can't hurt to force it
 		this.updateViewButtons(); //[self updateViewButtons];
 		this.refreshTitle(); // [self refreshTitle];
+
+		this.dismissSelf();
 	}
 
 	@Override
