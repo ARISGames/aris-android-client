@@ -102,7 +102,6 @@ public class GamesListActivity extends AppCompatActivity {
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			user.user_name = 		extras.getString("user_name");
-			user.password = 		extras.getString("password");
 			user.user_id = 			extras.getString("user_id");
 			user.display_name = 	extras.getString("display_name");
 			user.media_id = 		extras.getString("media_id");
@@ -177,7 +176,6 @@ public class GamesListActivity extends AppCompatActivity {
 		// killed and restarted.
 		savedInstanceState.putString("user", 		user.toJsonStr());
 //		savedInstanceState.putString("user_name", 		user.user_name);
-//		savedInstanceState.putString("password", 		user.password);
 //		savedInstanceState.putString("user_id", 		user.user_id);
 //		savedInstanceState.putString("display_name", user.display_name);
 //		savedInstanceState.putString("media_id", 		user.media_id);
@@ -195,7 +193,6 @@ public class GamesListActivity extends AppCompatActivity {
 		user = new User(savedInstanceState.getString("user"));
 
 //		user.user_name = 	savedInstanceState.getString("user_name");
-//		user.password = 	savedInstanceState.getString("password");
 //		user.user_id = 		savedInstanceState.getString("user_id");
 //		user.display_name = savedInstanceState.getString("display_name");
 //		user.media_id = 	savedInstanceState.getString("media_id");
@@ -395,7 +392,6 @@ public class GamesListActivity extends AppCompatActivity {
 					jsonMain.put("latitude", user.location.getLatitude());
 					jsonMain.put("longitude", user.location.getLongitude());
 					jsonAuth.put("user_name", user.user_name);
-					jsonAuth.put("password", user.password);
 					break;
 				case (HTTP_GET_POPULAR_GAMES_REQ_API):
 					//sample: {"interval":"WEEK","longitude":"-89.409260","user_id":"1","latitude":"43.073128","page":0,"auth":{"user_id":1,"key":"F7...X4"}}
@@ -403,7 +399,6 @@ public class GamesListActivity extends AppCompatActivity {
 					jsonMain.put("interval", auxData);
 					jsonMain.put("latitude", user.location.getLatitude());
 					jsonAuth.put("user_name", user.user_name);
-					jsonAuth.put("password", user.password);
 					break;
 				case (HTTP_GET_PLAYER_GAMES_REQ_API):
 				case (HTTP_GET_RECENT_GAMES_REQ_API): // get player and get recent use the same Req param set.
@@ -411,7 +406,6 @@ public class GamesListActivity extends AppCompatActivity {
 					jsonMain.put("latitude", user.location.getLatitude());
 					jsonMain.put("longitude", user.location.getLongitude());
 					jsonAuth.put("user_name", user.user_name);
-					jsonAuth.put("password", user.password);
 					break;
 				case (HTTP_GET_SEARCH_GAMES_REQ_API):
 					//sample: {"auth":{"user_id":1,"key":"F7...zX4"},"longitude":"-89.409260","user_id":"1","latitude":"43.073128","text":"","page":0}
@@ -422,7 +416,6 @@ public class GamesListActivity extends AppCompatActivity {
 				case (HTTP_GET_FULL_GAME_REQ_API):
 					jsonMain.put("game_id", Long.parseLong(auxData));
 					jsonAuth.put("user_name", user.user_name);
-					jsonAuth.put("password", user.password);
 					break;
 				default:
 					break;

@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.IntegerRes;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -53,6 +54,11 @@ public class ProfileActivity extends AppCompatActivity {
 	}
 
 	public void onClickLogOut(View v) {
+		SharedPreferences.Editor editor = getSharedPreferences("ARIS_LOGIN", 0).edit();
+		editor.remove("user_id");
+		editor.remove("read_write_key");
+		editor.commit();
+
 		Bundle b = this.getIntent().getExtras();
 		b.clear(); // delete bundle data:
 		Intent i = new Intent(getApplicationContext(), LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

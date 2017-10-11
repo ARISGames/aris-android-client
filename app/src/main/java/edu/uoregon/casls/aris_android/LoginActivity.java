@@ -63,13 +63,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 	private static SharedPreferences appPrefs;
 
 	/**
-	 * A dummy authentication store containing known user names and passwords.
-	 * TODO: remove after connecting to a real authentication system.
-	 */
-	private static final String[] DUMMY_CREDENTIALS = new String[]{
-			"foo@example.com:hello", "bar@example.com:world"
-	};
-	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
 //	private UserLoginTask mAuthTask = null;
@@ -81,10 +74,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 	private View mLlBottomPageLinksView;
 	private View mProgressView;
 	private View mLoginFormView;
-	private String mUserId;
-	private String mDisplayName;
-	private String mMediaId;
-	private String mReadWriteKey;
 
 	// todo:
 	// todo:  Need to check for avatar pic, and redirect to camera if no pic exists and set Public Name field
@@ -141,6 +130,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 		mLoginFormView = findViewById(R.id.scrollvw_for_login_form);
 		mProgressView = findViewById(R.id.login_progress);
 
+		appPrefs = getSharedPreferences("ARIS_LOGIN", 0);
+		String user_id = appPrefs.getString("user_id", null);
+		String read_write_key = appPrefs.getString("read_write_key", null);
+		if (user_id != null && read_write_key != null) {
+			pollServer(null, null, user_id, read_write_key);
+		}
 	}
 
 	@Override
@@ -219,7 +214,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 			showProgress(true);
 //			mAuthTask = new UserLoginTask(username, password);
 //			mAuthTask.execute((Void) null);
-			pollServer();
+			pollServer(username, password, null, null);
 		}
 
 	}
@@ -232,7 +227,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 responseHandler);
 	 */
 
-	private void pollServer() {
+	private void pollServer(String user_name, String password, String user_id, String read_write_key) {
 		RequestParams rqParams = new RequestParams();
 //		JSONObject jsonParams = new JSONObject();
 
@@ -247,9 +242,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 		entity = null;
 
 		try {
-			jsonParams.put("user_name", mEtUsername.getText().toString());
-			jsonParams.put("password", mEtPassword.getText().toString());
-			jsonParams.put("permission", "read_write");
+			if (user_name != null && password != null) {
+				jsonParams.put("user_name", user_name);
+				jsonParams.put("password", password);
+				jsonParams.put("permission", "read_write");
+			} else if (user_id != null && read_write_key != null) {
+				JSONObject authObj = new JSONObject();
+				authObj.put("user_id", user_id);
+				authObj.put("key", read_write_key);
+				authObj.put("permission", "read_write");
+				jsonParams.put("auth", authObj);
+			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -326,20 +329,28 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //					int returnCode = (jsonReturn.has("returnCode")) ? jsonReturn.getInt("returnCode") : null; // what do I do?
 //					String returnCodeDescription = (jsonReturn.has("returnCode")) ? jsonReturn.getString("returnCodeDescription") : ""; // For what?
 						JSONObject jsonObj = jsonReturn.getJSONObject("data");
-						mUserId = jsonReturn.has("returnCode") ? jsonObj.getString("user_id") : "null";
+						String mUserId = jsonReturn.has("returnCode") ? jsonObj.getString("user_id") : "null";
 						if (mUserId != null && !mUserId.contentEquals("null")) { // login creds accepted
-							mDisplayName = jsonObj.getString("display_name");
-							mMediaId = jsonObj.getString("media_id");
-							mReadWriteKey = jsonObj.getString("read_write_key");
+						    String mReadWriteKey = jsonObj.getString("read_write_key");
+							SharedPreferences.Editor editor = appPrefs.edit();
+							editor.putString("user_id", mUserId);
+							editor.putString("read_write_key", mReadWriteKey);
+							editor.commit();
+							/*
+							appPrefs = getPreferences(0);
+							String user_name = appPrefs.getString("user_name", null);
+							String read_write_key = appPrefs.getString("read_write_key", null);
+							if (user_name != null && read_write_key != null) {
+								pollServer(user_name, null, read_write_key);
+							}
+							 */
 							// log in the user
 							Intent i = new Intent(LoginActivity.this, GamesListActivity.class);
-//						i.putExtra("user", 		user.toJsonStr());
-							i.putExtra("user_name", mEtUsername.getText().toString());
-							i.putExtra("password", mEtPassword.getText().toString());
+							i.putExtra("user_name", jsonObj.getString("user_name"));
 							i.putExtra("user_id", mUserId);
 							i.putExtra("display_name", jsonObj.getString("display_name"));
 							i.putExtra("media_id", jsonObj.getString("media_id"));
-							i.putExtra("read_write_key", jsonObj.getString("read_write_key"));
+							i.putExtra("read_write_key", mReadWriteKey);
 							i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 							startActivity(i, mTransitionAnimationBndl);
 							finish();

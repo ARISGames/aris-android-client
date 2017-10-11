@@ -15,7 +15,6 @@ public class User {
 
 	public String user_id   = "0";      // is Long in iOS, but never really used in as a long
 	public String user_name = "Unknown Player";
-	public String password;
 	public String   display_name   = "Unknown Player";
 	public String   email          = "";
 	public String   media_id       = "0";     // is Long in iOS, but never really used in as a long
@@ -56,8 +55,6 @@ public class User {
 			user_id = jsonUser.getString("user_id");
 		if (jsonUser.has("user_name"))
 			user_name = jsonUser.getString("user_name");
-		if (jsonUser.has("password"))
-			password = jsonUser.getString("password");
 		if (jsonUser.has("display_name"))
 			display_name = jsonUser.getString("display_name");
 		if (jsonUser.has("email"))
@@ -81,7 +78,6 @@ public class User {
 		try {
 			jsonUser.put("user_id", user_id);
 			jsonUser.put("user_name", user_name);
-			jsonUser.put("password", password);
 			jsonUser.put("display_name", display_name);
 			jsonUser.put("email", email);
 			jsonUser.put("media_id", media_id);
