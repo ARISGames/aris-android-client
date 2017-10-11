@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.view.Choreographer;
 import android.view.Gravity;
@@ -194,7 +195,7 @@ public class InventoryViewFragment extends Fragment {
 				tvItemName.setText(itemInstance.name());
 				TextView tvItemDesc = (TextView) itemView.findViewById(R.id.tv_inventory_item_desc);
 				Item i = (Item) itemInstance.object();
-				tvItemDesc.setText(i.description);
+				tvItemDesc.setText(Html.fromHtml(i.description));
 				TextView tvItemQty = (TextView) itemView.findViewById(R.id.tv_inventory_item_qty);
 				tvItemQty.setText(String.valueOf(itemInstance.qty));
 				llInventoryList.addView(itemView);
