@@ -73,7 +73,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
 
 
-	public void backButtonClick(View v) {
+	public void onBackButtonClick(View v) {
 		// kill activity - return to login
 		super.onBackPressed();
 	}
