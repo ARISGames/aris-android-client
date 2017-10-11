@@ -468,7 +468,7 @@ public class MapViewFragment extends Fragment {
 				// add the new trigger circle to map that accompanies the marker
 				modelTrigger.triggerZoneCircle = mMap.addCircle(new CircleOptions()
 						.center(new LatLng(modelTrigger.latitude, modelTrigger.longitude))
-						.radius(modelTrigger.distance)
+						.radius(Math.max(0, modelTrigger.distance))
 						.fillColor(Color.argb(128, 0, 255, 110))
 						.strokeWidth(1)
 				);
