@@ -135,13 +135,11 @@ public class MapViewFragment extends Fragment {
 		}
 	}
 
-//	@Override
-//	public void onResume() {
-//		super.onResume();
-//		if (mGamePlayAct == null) {
-//			mGamePlayAct = (GamePlayActivity) this.getActivity();
-//		}
-//	}
+	@Override
+	public void onResume() {
+		super.onResume();
+		firstLoad = true;
+	}
 
 	@Override
 	public void onAttach(Context context) {
@@ -419,14 +417,8 @@ public class MapViewFragment extends Fragment {
 				//@formatter:on
 
 			shouldAdd = true; // we found a good one to add.
-			//todo: in iOS the map view retains the old markers when redrawn after going out to a plaque (for example)
-			//todo: in Android the map is redrawn fresh each time, so decide if we need the loop below that excludes
-			//todo: markers that have previously been added. Perhaps we can maintain a list of those that are visible
-			//todo: instead of checking those that are just in a data list.
-			for (Trigger mapTrig : markersAndCircles) { // look through any/all locations already in list
-				if (mapTrig.trigger_id == modelTrigger.trigger_id)
-					shouldAdd = false; // revoke their shouldAdd pass if they're already in the list.
-			}
+			// (MT) previously there was code here that checked if there already was a marker for this trigger.
+			// it's not needed on Android as the old markers are gone after we come back from a trigger
 			if (shouldAdd) { // having vetted this location as one to be added...
 				// get any custom icon media if there was a valid media id provided; otherwise use default icon.
 				Media m;
