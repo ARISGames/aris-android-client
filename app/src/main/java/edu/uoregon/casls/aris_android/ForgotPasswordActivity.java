@@ -1,5 +1,6 @@
 package edu.uoregon.casls.aris_android;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -13,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -41,6 +43,8 @@ import java.util.List;
 import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.Utilities.Calls;
+
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 
 public class ForgotPasswordActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
@@ -73,7 +77,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements LoaderC
 	}
 
 	private void populateAutoComplete() {
-		getLoaderManager().initLoader(0, null, this);
+		if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PERMISSION_GRANTED) {
+			getLoaderManager().initLoader(0, null, this);
+		}
 	}
 
 
