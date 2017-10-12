@@ -278,16 +278,9 @@ public class ItemViewFragment extends Fragment {
 	}
 
 	private void pickupItemQty(long q) {
-		// popup to tell player item is acquired. Calls giveItem along with presentation of dialog.
 //		mGamePlayActivity.mGame.playerInstancesModel.giveItemToPlayer(mItem.item_id, q); //	[_MODEL_PLAYER_INSTANCES_ giveItemToPlayer:item.item_id qtyToAdd:q];
-		if (mItem.delta_notification != 0) {
-			Toast t = Toast.makeText(mGamePlayActivity, "+1 " + mItem.name + ". Total: " + mGamePlayActivity.mGame.playerInstancesModel.giveItemToPlayer(mItem.item_id, q),
-					Toast.LENGTH_SHORT);
-			t.setGravity(Gravity.TOP, 0, 0);
-			t.show();
-		} else {
-			mGamePlayActivity.mGame.playerInstancesModel.giveItemToPlayer(mItem.item_id, q);
-		}
+		// (MT) There used to be a Toast notification here; moved to Dispatcher.model_instances_player_{gained,lost}
+		mGamePlayActivity.mGame.playerInstancesModel.giveItemToPlayer(mItem.item_id, q);
 
 		long nq = instance.qty - q;
 		mGamePlayActivity.mGame.instancesModel.setQtyForInstanceId(mItem.item_id, nq); //[_MODEL_INSTANCES_ setQtyForInstanceId:instance.instance_id qty:nq];

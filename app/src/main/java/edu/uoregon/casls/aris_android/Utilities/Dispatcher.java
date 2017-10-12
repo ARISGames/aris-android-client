@@ -1,6 +1,8 @@
 package edu.uoregon.casls.aris_android.Utilities;
 
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,6 +21,7 @@ import edu.uoregon.casls.aris_android.data_objects.Factory;
 import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Group;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
+import edu.uoregon.casls.aris_android.data_objects.Item;
 import edu.uoregon.casls.aris_android.data_objects.Note;
 import edu.uoregon.casls.aris_android.data_objects.NoteComment;
 import edu.uoregon.casls.aris_android.data_objects.ObjectTag;
@@ -213,22 +216,22 @@ public class Dispatcher {
 	}
 
 	//	MODEL_INSTANCES_AVAILABLE",nil,gameDeltas);
-	public void model_instances_available(Map<String, Map<String, Object>> gameDeltas) {
+	public void model_instances_available(Map<String, List<Map<String, Object>>> gameDeltas) {
 		// sent by IntancesModel; listend to by nobody.
 	}
 
 	//	MODEL_INSTANCES_GAINED",nil,gameDeltas);
-	public void model_instances_gained(Map<String, Map<String, Object>> gameDeltas) {
+	public void model_instances_gained(Map<String, List<Map<String, Object>>> gameDeltas) {
 		// sent by IntancesModel; listend to by nobody.
 	}
 
 	//	MODEL_INSTANCES_LOST",  nil,gameDeltas);
-	public void model_instances_lost(Map<String, Map<String, Object>> gameDeltas) {
+	public void model_instances_lost(Map<String, List<Map<String, Object>>> gameDeltas) {
 		// sent by IntancesModel; listend to by nobody.
 	}
 
 	//	MODEL_INSTANCES_PLAYER_AVAILABLE",nil,playerDeltas);
-	public void model_instances_player_available(Map<String, Map<String, Object>> playerDeltas) {
+	public void model_instances_player_available(Map<String, List<Map<String, Object>>> playerDeltas) {
 		mGamePlayAct.mGame.gameInstancesModel.gameInstancesAvailable();
 		mGamePlayAct.mGame.groupInstancesModel.groupInstancesAvailable();
 		mGamePlayAct.mGame.playerInstancesModel.playerInstancesAvailable(playerDeltas);
@@ -236,13 +239,43 @@ public class Dispatcher {
 	}
 
 	//	MODEL_INSTANCES_PLAYER_GAINED",nil,playerDeltas);
-	public void model_instances_player_gained(Map<String, Map<String, Object>> playerDeltas) {
-		// todo: View update: GameNotificationViewController.parseReceivedInstancesIntoNotifications
+	public void model_instances_player_gained(Map<String, List<Map<String, Object>>> playerDeltas) {
+		for (Map<String, Object> gainedItem : playerDeltas.get("added")) {
+			Instance inst = (Instance) gainedItem.get("instance");
+			long delta = (long) gainedItem.get("delta");
+			if (delta != 0 && inst.object_type.equals("ITEM")) {
+				Item item = mGamePlayAct.mGame.itemsModel.itemForId(inst.object_id);
+				if (item != null && item.delta_notification != 0) {
+					Toast t = Toast.makeText
+						( mGamePlayAct
+						, "+" + delta + " " + item.name + ". Total: " + inst.qty
+						, Toast.LENGTH_SHORT
+						);
+					t.setGravity(Gravity.TOP, 0, 0);
+					t.show();
+				}
+			}
+		}
 	}
 
 	//	MODEL_INSTANCES_PLAYER_LOST",  nil,playerDeltas);
-	public void model_instances_player_lost(Map<String, Map<String, Object>> playerDeltas) {
-		// todo: see UI change behavour that this causes in (iOS) GameNotificationViewController.parseLostInstancesIntoNotifications()
+	public void model_instances_player_lost(Map<String, List<Map<String, Object>>> playerDeltas) {
+		for (Map<String, Object> gainedItem : playerDeltas.get("lost")) {
+			Instance inst = (Instance) gainedItem.get("instance");
+			long delta = (long) gainedItem.get("delta");
+			if (delta != 0 && inst.object_type.equals("ITEM")) {
+				Item item = mGamePlayAct.mGame.itemsModel.itemForId(inst.object_id);
+				if (item != null && item.delta_notification != 0) {
+					Toast t = Toast.makeText
+						( mGamePlayAct
+						, delta + " " + item.name + ". Total: " + inst.qty
+						, Toast.LENGTH_SHORT
+						);
+					t.setGravity(Gravity.TOP, 0, 0);
+					t.show();
+				}
+			}
+		}
 	}
 
 	//	MODEL_ITEMS_AVAILABLE",nil,nil);

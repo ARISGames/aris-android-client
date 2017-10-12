@@ -84,12 +84,12 @@ public class InstancesModel extends ARISModel {
 //		gameDeltas.put("added", new ArrayList<Object>());
 //		gameDeltas.put("lost", new ArrayList<Object>());
 
-		Map<String, Map<String, Object>> playerDeltas = new HashMap<>();
-		Map<String, Map<String, Object>> gameDeltas = new HashMap<>();
-		playerDeltas.put("added", new HashMap<String, Object>());
-		playerDeltas.put("lost", new HashMap<String, Object>());
-		gameDeltas.put("added", new HashMap<String, Object>());
-		gameDeltas.put("lost", new HashMap<String, Object>());
+		Map<String, List<Map<String, Object>>> playerDeltas = new HashMap<>();
+		Map<String, List<Map<String, Object>>> gameDeltas = new HashMap<>();
+		playerDeltas.put("added", new ArrayList<Map<String, Object>>());
+		playerDeltas.put("lost", new ArrayList<Map<String, Object>>());
+		gameDeltas.put("added", new ArrayList<Map<String, Object>>());
+		gameDeltas.put("lost", new ArrayList<Map<String, Object>>());
 
 		for (Instance newInstance : newInstances) {
 			newInstance.initContext(mGamePlayAct);
@@ -115,21 +115,21 @@ public class InstancesModel extends ARISModel {
 
 			if (existingInstance.owner_id == Long.parseLong(mGamePlayAct.mPlayer.user_id)) {
 				if (!this.playerDataReceived() || mGamePlayAct.mGame.network_level.contentEquals("REMOTE")) { //only local should be making changes to player. fixes race cond (+1, -1, +1 notifs)
-					if (delta > 0) playerDeltas.put("added", d); //) addObject:d;
-					if (delta < 0) playerDeltas.put("lost", d);
+					if (delta > 0) playerDeltas.get("added").add(d); //) addObject:d;
+					if (delta < 0) playerDeltas.get("lost").add(d);
 				}
 			}
 			else {
 				//race cond (above) still applies here, but notifs oughtn't be a problem, and fixes this.over time
-				if (delta > 0) gameDeltas.put("added", d);
-				if (delta < 0) gameDeltas.put("lost", d);
+				if (delta > 0) gameDeltas.get("added").add(d);
+				if (delta < 0) gameDeltas.get("lost").add(d);
 			}
 		}
 
 		this.sendNotifsForGameDeltas(gameDeltas, playerDeltas);
 	}
 
-	public void sendNotifsForGameDeltas(Map<String, Map<String, Object>> gameDeltas, Map<String, Map<String, Object>> playerDeltas) {
+	public void sendNotifsForGameDeltas(Map<String, List<Map<String, Object>>> gameDeltas, Map<String, List<Map<String, Object>>> playerDeltas) {
 		if (playerDeltas != null && playerDeltas.size() > 0) {
 			if (playerDeltas.containsKey("added"))
 				mGamePlayAct.mDispatch.model_instances_player_gained(playerDeltas); // _ARIS_NOTIF_SEND_(@"MODEL_INSTANCES_PLAYER_GAINED",nil,playerDeltas);
@@ -179,18 +179,20 @@ public class InstancesModel extends ARISModel {
 		if (!mGamePlayAct.mGame.network_level.contentEquals("REMOTE")) {
 			long oldQty = i.qty;
 			i.qty = qty;
-			Map<String, Map<String, Object>> deltas = new HashMap<>();
+			Map<String, List<Map<String, Object>>> deltas = new HashMap<>();
 			Map<String, Object> d = new HashMap<>();
 			d.put("instance", i);
 			d.put("delta", qty - oldQty);
+			ArrayList<Map<String, Object>> list = new ArrayList<>();
+			list.add(d);
 
 			if (qty > oldQty) {
-				deltas.put("added", d); //deltas = @{@"lost":@,@"added":@@{@"instance":i,@"delta":NSNumber numberWithLong:qty-oldQty}};
+				deltas.put("added", list); //deltas = @{@"lost":@,@"added":@@{@"instance":i,@"delta":NSNumber numberWithLong:qty-oldQty}};
 				deltas.put("lost", null);
 			}
 			if (qty < oldQty) {
 				deltas.put("added", null);
-				deltas.put("lost", d);  //deltas = @{@"added":@,@"lost":@@{@"instance":i,@"delta":NSNumber numberWithLong:qty-oldQty}};
+				deltas.put("lost", list);  //deltas = @{@"added":@,@"lost":@@{@"instance":i,@"delta":NSNumber numberWithLong:qty-oldQty}};
 			}
 
 			if (deltas != null && !deltas.isEmpty()) {

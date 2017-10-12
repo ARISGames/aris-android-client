@@ -108,7 +108,7 @@ public class PlayerInstancesModel extends ARISModel {
   _ARIS_NOTIF_SEND_(@"MODEL_PLAYER_INSTANCES_AVAILABLE",nil,nil);
 }
 */
-	public void playerInstancesAvailable(Map<String, Map<String, Object>> playerDeltas) {
+	public void playerInstancesAvailable(Map<String, List<Map<String, Object>>> playerDeltas) {
 		List<Instance> newInstances = new ArrayList<>();
 		newInstances = mGamePlayAct.mGame.instancesModel.playerInstances();
 //		NSArray *newInstances = [_MODEL_INSTANCES_ playerInstances];
