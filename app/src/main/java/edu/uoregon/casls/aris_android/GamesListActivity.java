@@ -580,6 +580,8 @@ public class GamesListActivity extends AppCompatActivity {
 				WebView wvGameIcon = (WebView) gameItemView.findViewById(R.id.wv_game_icon);
 				wvGameIcon.setWebViewClient(new AppWebViewClient());
 
+				// MT: hack to prevent NPE
+				if (gameItem.icon_media == null) continue;
 				if (gameItem.icon_media.media_id == 0) { // 0 = no custom icon
 					wvGameIcon.setBackgroundColor(0x00000000);
 					wvGameIcon.setBackgroundResource(R.drawable.logo_icon); // set to static aris icon
@@ -679,8 +681,11 @@ public class GamesListActivity extends AppCompatActivity {
 			JSONObject jsonFullGameData = jsonFullGameHTTPReturnSet.getJSONObject("data");
 			String game_id = jsonFullGameData.getString("game_id"); // get game id from json block
 			Game game = mListedGamesMap.get(game_id); // get game instance
-			game.initContext(this); // FIXME: NPE here if game selected by user before game list is completely populated. Solution: delay setting onClickListener until full pg load.
-			game.initFullGameDetailsWithJson(jsonFullGameHTTPReturnSet);
+			// MT: hack to prevent NPE
+			if (game != null) {
+				game.initContext(this); // FIXME: NPE here if game selected by user before game list is completely populated. Solution: delay setting onClickListener until full pg load.
+				game.initFullGameDetailsWithJson(jsonFullGameHTTPReturnSet);
+			}
 		}
 		else { //json "data" block was null
 			Log.e(AppConfig.LOGTAG, getClass().getSimpleName() + " Json \"data\" block returned was null in fillInFullGameData(). This is bad. You should have never arrived here.");
