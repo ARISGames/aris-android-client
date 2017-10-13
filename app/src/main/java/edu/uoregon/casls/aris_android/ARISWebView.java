@@ -7,20 +7,20 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Vibrator;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
 import edu.uoregon.casls.aris_android.data_objects.Game;
 import edu.uoregon.casls.aris_android.data_objects.Item;
@@ -58,7 +58,10 @@ public class ARISWebView extends WebView {
 		// standard settings for most ARISWebViews. Override for specific cases.
 		this.getSettings().setJavaScriptEnabled(true);
 		this.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
+		this.getSettings().setDomStorageEnabled(true);
 		this.getSettings().setLoadWithOverviewMode(true); // causes the content (image) to fit into webview's window size.
+
+		this.setWebChromeClient(new WebChromeClient());
 
 		this.setWebViewClient(new WebViewClient() {
 			private int webViewPreviousState;
@@ -103,15 +106,19 @@ public class ARISWebView extends WebView {
 	}
 
 	public void loadHTMLString(String htmlBodyBlock) {
-		loadData("<html><body>" + htmlBodyBlock + "</body></html>", "text/html", null);
+		// (MT) This used to be loadData(),
+		// but that apparently removes newlines in the input string,
+		// which usually breaks all your JS.
+		loadDataWithBaseURL(null, "<html><body>" + htmlBodyBlock + "</body></html>", "text/html", "UTF-8", null);
 	}
 
 	public void handleARISRequest(String request) {
 		Uri uri = Uri.parse(request);
 		String path = uri.getPath(); // should be "aris" here
 		String mainCommand = uri.getHost();
-		List<String> components = uri.getPathSegments();
+		List<String> components = new ArrayList<String>(uri.getPathSegments());
 //		String components = pathSegments.get(0);
+		components.add(0, "/"); // (MT) This is a hack to match the behavior of the iOS pathComponents function
 
 		if (mainCommand.contentEquals("cache")) {
 			long item_id;

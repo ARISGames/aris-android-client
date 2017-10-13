@@ -128,7 +128,8 @@ public class GroupInstancesModel extends ARISModel {
 	}
 
 	public long qtyOwnedForItem(long item_id) {
-		return instances.get(item_id).qty;
+		Instance inst = instances.get(item_id);
+		return inst == null ? 0 : inst.qty;
 	}
 
 	public long qtyOwnedForTag(long tag_id) {
