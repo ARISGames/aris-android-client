@@ -47,9 +47,14 @@ public class AppConfig {
 		put("INVENTORY", R.drawable.game_play_toolbox_2x);
 		put("SCANNER", R.drawable.game_play_qr_icon_2x);
 		put("DECODER", R.drawable.game_play_qr_icon_2x);
+		put("AUGMENTED", R.drawable.game_play_qr_icon_2x);
 		put("PLAYER", R.drawable.game_play_id_card_2x);
 		put("NOTEBOOK", R.drawable.game_play_notebook_2x);
-		put("INVENTORY", R.drawable.game_play_toolbox_2x);
+		put("NOTE", R.drawable.note_icon);
+		put("DIALOG", R.drawable.conversation_icon_120);
+		put("ITEM", R.drawable.item_icon_120);
+		put("PLAQUE", R.drawable.plaque_icon_120);
+		put("WEB_PAGE", R.drawable.webpage_icon_120);
 		put("EXIT", R.drawable.arrow_back_2x);
 	}};
 }

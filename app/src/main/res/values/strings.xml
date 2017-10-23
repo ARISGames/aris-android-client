@@ -43,8 +43,14 @@
         <item>Inventory</item>
         <item>Scanner</item>
         <item>Decoder</item>
+        <item>Augmented</item>
         <item>Player</item>
         <item>Notebook</item>
+        <item>Note</item>
+        <item>Dialog</item>
+        <item>Item</item>
+        <item>Plaque</item>
+        <item>Webpage</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
