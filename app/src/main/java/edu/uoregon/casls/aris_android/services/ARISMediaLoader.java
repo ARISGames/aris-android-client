@@ -42,6 +42,9 @@ import edu.uoregon.casls.aris_android.data_objects.cd_data_objects.MediaCD;
 */
 public class ARISMediaLoader {
 
+	private static final int LOAD_MEDIA_AT_ONCE = 5;
+	private int mediaDataLoaded = 0;
+
 	public Map<String, MediaResult> dataConnections = new LinkedHashMap<>(); //NSMutableDictionary dataConnections;
 	public List<MediaResult>        metaConnections = new ArrayList<>();  //NSMutableArray metaConnections;
 
@@ -262,8 +265,12 @@ public class ARISMediaLoader {
 	//  .........................GamePlayActivity.requestGameData()
 	//  .........................GamePlayActivity.onStart() <-- loading sequence at start of game (or continue game)
 	public void retryLoadingAllMedia() {
+		mediaDataLoaded = 0;
+		int initialLoadCount = mGamePlayAct.mMediaModel.mediaIDsToLoad.size();
+		if (initialLoadCount > LOAD_MEDIA_AT_ONCE) initialLoadCount = LOAD_MEDIA_AT_ONCE;
 		// walk through list of all media meta data MediaModel.mediaIdsToLoad array (ids of urls that need to gat their (binary) data from server)
-		for (int mediaIdToLoad : mGamePlayAct.mMediaModel.mediaIDsToLoad) {
+		for (int i = 0; i < initialLoadCount; i++) {
+			Integer mediaIdToLoad = mGamePlayAct.mMediaModel.mediaIDsToLoad.get(i);
 			// dispatch an async service to try and load this data into a MediaResult obj
 			Media mediaToLoad = mGamePlayAct.mMediaModel.mediaForId(mediaIdToLoad);
 			this.pollServerWithMediaCD(mediaToLoad.mediaCD.remoteURL, mediaToLoad.mediaCD);
@@ -428,6 +435,14 @@ public class ARISMediaLoader {
 
 		// update DB to reflect new local URL
 		mGamePlayAct.mMediaModel.addOrUpdateMediaCD(mediaCDToLoad);
+
+		// try loading another media if needed
+		int loadMediaNext = mediaDataLoaded + LOAD_MEDIA_AT_ONCE - 1;
+		if (loadMediaNext < mGamePlayAct.mMediaModel.mediaIDsToLoad.size()) {
+			Integer mediaIdToLoad = mGamePlayAct.mMediaModel.mediaIDsToLoad.get(loadMediaNext);
+			Media mediaToLoad = mGamePlayAct.mMediaModel.mediaForId(mediaIdToLoad);
+			this.pollServerWithMediaCD(mediaToLoad.mediaCD.remoteURL, mediaToLoad.mediaCD);
+		}
 
 		return mypath.getAbsolutePath();
 	}
