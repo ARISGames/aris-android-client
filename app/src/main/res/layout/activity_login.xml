@@ -56,10 +56,7 @@
                 android:hint="@string/username_prompt"
                 android:inputType="text"
                 android:maxLines="1"
-                android:singleLine="true"
-                android:imeActionId="@integer/loginImeActionId"
-                android:imeActionLabel="@string/action_sign_in_short"
-                android:imeOptions="actionUnspecified"
+                android:imeOptions="actionNext"
                 android:textColorHint="#ffbdbdbd"
                 android:layout_marginTop="12dp"
                 android:backgroundTint="#ffbdbdbd"/>
@@ -70,12 +67,9 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_password"
                 android:textColorHint="#ffbdbdbd"
-                android:imeActionId="@integer/loginImeActionId"
-                android:imeActionLabel="@string/action_sign_in_short"
-                android:imeOptions="actionUnspecified"
+                android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:singleLine="true"
                 android:backgroundTint="#ffbdbdbd"/>
 
             <ImageButton
