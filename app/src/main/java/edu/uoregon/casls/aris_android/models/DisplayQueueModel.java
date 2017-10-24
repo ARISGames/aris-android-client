@@ -145,7 +145,7 @@ public class DisplayQueueModel extends ARISModel {
 	public Object dequeue() { // problem: after arriving at a (plaque in this case, the queue should be empty. It's not. It has the Plaque in it.
 		this.purgeInvalidFromQueue();// displayQueue should be size = 0 after continue in plaquetest game
 		Object o = null;
-		if (!displayQueue.isEmpty()) {
+		if (displayQueue != null && !displayQueue.isEmpty()) {
 			o = displayQueue.get(0);
 			displayQueue.remove(o); //removeObject(o);
 

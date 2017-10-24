@@ -30,6 +30,7 @@ import java.util.List;
 
 import edu.uoregon.casls.aris_android.Utilities.AppConfig;
 import edu.uoregon.casls.aris_android.Utilities.AppUtils;
+import edu.uoregon.casls.aris_android.data_objects.Tab;
 
 
 public class GamePlayNavDrawerFragment extends Fragment {
@@ -241,8 +242,8 @@ public class GamePlayNavDrawerFragment extends Fragment {
 			mDrawerLayout.closeDrawer(mFragmentContainerView);
 		}
 		if (mCallbacks != null) {
-			mCallbacks.onNavigationDrawerItemSelected(itemName);
-//			mCallbacks.onNavigationDrawerItemSelected(position);
+			NavItem nav = mNavItems.get(position);
+			mCallbacks.onTabSelected(nav.mTab);
 		}
 	}
 
@@ -318,19 +319,22 @@ public class GamePlayNavDrawerFragment extends Fragment {
 	}
 
 	public void refreshFromModel() {
-		this.addItems(mGamePlayActivity.mGame.tabsModel.playerTabTypes());
+		this.addItems(mGamePlayActivity.mGame.tabsModel.playerTabs);
 	}
 
-	public void addItems(List<String> playerTabNames) {
+	public void addItems(List<Tab> playerTabs) {
 		String iconURL = "http://dummy.fillinlater.com/media.png";
-		for (String tabName : playerTabNames) {
-			if (AppConfig.gameDrawerItemIconByName.get(tabName) != null)
-				mNavItems.add(new NavItem(AppUtils.prettyName(tabName), "Nosubtitle", AppConfig.gameDrawerItemIconByName.get(tabName), iconURL));
+		for (Tab tab : playerTabs) {
+            String tabName = tab.name;
+            if (tabName == "" || tabName == null) tabName = AppUtils.prettyName(tab.type);
+			Integer tabIcon = AppConfig.gameDrawerItemIconByName.get(tab.type); // TODO use tab.icon_media_id if present
+            if (tabIcon == null) tabIcon = R.drawable.item_icon_120;
+            mNavItems.add(new NavItem(tabName, "", tabIcon, iconURL, tab));
 		}
 
 		// add the leave game option
 		if (mGamePlayActivity.leave_game_enabled) {
-			mNavItems.add(new NavItem("Leave Game", "Exit", AppConfig.gameDrawerItemIconByName.get("EXIT"), iconURL));
+			mNavItems.add(new NavItem("Leave Game", "Exit", AppConfig.gameDrawerItemIconByName.get("EXIT"), iconURL, null));
 		}
 
 		DrawerListAdapter adapter = new DrawerListAdapter(getActivity(), mNavItems);
@@ -347,24 +351,25 @@ public class GamePlayNavDrawerFragment extends Fragment {
 		/**
 		 * Called when an item in the navigation drawer is selected.
 		 */
-//		void onNavigationDrawerItemSelected(int position);
-		void onNavigationDrawerItemSelected(String itemName);
+		void onTabSelected(Tab t);
 	}
 
 	/**
 	 * classes for custom list item elements that have icons
 	 */
-	class NavItem {
+	private class NavItem {
 		String mTitle;
 		String mSubtitle;
 		int mIconResId;
 		String mIconURL;
+		Tab mTab;
 
-		public NavItem(String title, String subtitle, int iconResId, String iconURL) {
+		public NavItem(String title, String subtitle, int iconResId, String iconURL, Tab tab) {
 			mTitle = title;
 			mSubtitle = subtitle;
 			mIconResId = iconResId;
 			mIconURL = iconURL;
+			mTab = tab;
 		}
 	}
 

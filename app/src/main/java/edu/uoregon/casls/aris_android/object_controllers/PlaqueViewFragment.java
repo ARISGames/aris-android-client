@@ -172,9 +172,9 @@ public class PlaqueViewFragment extends Fragment {
 	}
 
 	private void dismissSelf() {
-		if (tab != null)
+		if (tab != null) {
 			this.showNav();
-		if (mListener != null) {
+		} else if (mListener != null) {
 			mListener.fragmentPlaqueDismiss();
 		}
 		// the following iOS logic wil happen in GamePlayActivity.fragmentPlaqueExit();

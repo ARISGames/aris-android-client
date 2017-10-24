@@ -130,12 +130,14 @@ public class WebPageViewFragment extends Fragment {
 	}
 
 	private void dismissSelf() {
-		wvMainWebView.destroy();
-		if (mListener != null) {
-			mListener.fragmentWebPageViewDismiss();
-		}
-		if (tab != null)
+		if (tab != null) {
 			this.showNav();
+		} else {
+			wvMainWebView.destroy();
+			if (mListener != null) {
+				mListener.fragmentWebPageViewDismiss();
+			}
+		}
 	}
 
 	private void showNav() {

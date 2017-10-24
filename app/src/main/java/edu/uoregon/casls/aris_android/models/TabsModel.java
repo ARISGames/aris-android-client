@@ -168,27 +168,4 @@ public class TabsModel extends ARISModel {
 		if (tab_id == 0) return new Tab();
 		return tabs.get(tab_id);// objectForKey:[NSNumber numberWithLong:tab_id]];
 	}
-
-//	public List<Tab> playerTabs() {
-//		return playerTabs;
-//	}
-
-	public List<String> playerTabNames() {
-		List<String> playerTabNames = new ArrayList<>(playerTabs.size());
-		for (Tab pTab : playerTabs) {
-			playerTabNames.add(pTab.name);
-		}
-		return playerTabNames;
-	}
-
-	public List<String> playerTabTypes() {
-		List<String> playerTabTypes = new ArrayList<>(playerTabs.size());
-		// sort by sort index first.
-		Collections.sort(playerTabs, new TabCompareBySortIndex());
-
-		for (Tab pTab : playerTabs) {
-			playerTabTypes.add(pTab.type);
-		}
-		return playerTabTypes;
-	}
 }

@@ -357,11 +357,15 @@ public class ItemViewFragment extends Fragment {
 	}
 
 	private void dismissSelf() {
-//		if (tab != null) // todo
-//			this.showNav();
-		if (mListener != null) {
+		if (tab != null) {
+			this.showNav();
+		} else if (mListener != null) {
 			mListener.fragmentItemViewDismiss();
 		}
+	}
+
+	private void showNav() {
+		mListener.gamePlayTabBarViewControllerRequestsNav();
 	}
 
 	@Override
@@ -386,5 +390,7 @@ public class ItemViewFragment extends Fragment {
 		void fragmentItemViewDismiss();
 
 		void onFragmentInteraction(Uri uri);
+
+		void gamePlayTabBarViewControllerRequestsNav();
 	}
 }

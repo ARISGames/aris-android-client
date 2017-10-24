@@ -432,7 +432,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			this.storeGame(); //we loaded fresh, so can store player data
 
 		// Game data should now be loaded. Populate the NavDrawer tabs.
-		mNavigationDrawerFragment.addItems(mGame.tabsModel.playerTabTypes());
+		mNavigationDrawerFragment.addItems(mGame.tabsModel.playerTabs);
 		mNavigationDrawerFragment.setUp(
 				R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
@@ -610,74 +610,17 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 // todo: perhaps consider putting some code here. Maybe this is not necessary.
 	}
 
-	@Override
-	public void onNavigationDrawerItemSelected(String itemName) {
-//		Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + "onNavigationDrawerItemSelected with itemName: " + itemName + ", currently visible frag:" + mCurrentFragVisible );
-
-		if (mCurrentFragVisible != null && mCurrentFragVisible.contentEquals(itemName)) { // don't recreate if switching back to current fragment.
-			closeNavDrawer();
-			return;
-		}
-		// update the main content by replacing fragments
-		FragmentManager fragmentManager = getSupportFragmentManager();
-
-		if (itemName.equalsIgnoreCase("Quests")) {
-			this.questsViewFragment = QuestsViewFragment.newInstance(itemName);
-			fragmentManager.beginTransaction()
-					.addToBackStack(itemName)
-					.replace(R.id.fragment_view_container, this.questsViewFragment, this.questsViewFragment.toString())
-					.commit();
-		}
-		else if (itemName.equalsIgnoreCase("Map")) {
-			this.mapViewFragment = MapViewFragment.newInstance(itemName);
-			fragmentManager.beginTransaction()
-					.replace(R.id.fragment_view_container, this.mapViewFragment, this.mapViewFragment.toString())
-					.commit();
-		}
-		else if (itemName.equalsIgnoreCase("Inventory")) {
-			this.inventoryViewFragment = new InventoryViewFragment();
-			fragmentManager.beginTransaction()
-					.replace(R.id.fragment_view_container, this.inventoryViewFragment, this.inventoryViewFragment.toString())
-					.commit();
-		}
-		else if (itemName.equalsIgnoreCase("Scanner")) {
-			this.scannerViewFragment = ScannerViewFragment.newInstance(itemName);
-			fragmentManager.beginTransaction()
-					.replace(R.id.fragment_view_container, this.scannerViewFragment, this.scannerViewFragment.toString())
-					.commit();
-		}
-		else if (itemName.equalsIgnoreCase("Decoder")) {
-			this.decoderViewFragment = DecoderViewFragment.newInstance(itemName);
-			fragmentManager.beginTransaction()
-					.replace(R.id.fragment_view_container, this.decoderViewFragment, this.decoderViewFragment.toString())
-					.commit();
-		}
-		else if (itemName.equalsIgnoreCase("Player")) { // todo: GamePlayPlayerFragment? What is this? Does it need to exists?
-			this.playerViewFragment = GamePlayPlayerFragment.newInstance(itemName);
-			fragmentManager.beginTransaction()
-					.replace(R.id.fragment_view_container, this.playerViewFragment, this.playerViewFragment.toString())
-					.commit();
-		}
-		else if (itemName.equals("Notebook")) {
-			this.notebookViewFragment = NotebookViewFragment.newInstance(itemName);
-			fragmentManager.beginTransaction()
-					.replace(R.id.fragment_view_container, this.notebookViewFragment, this.notebookViewFragment.toString())
-					.commit();
-		}
-		else if (itemName.equalsIgnoreCase("Leave Game")) {
+    @Override
+	public void onTabSelected(Tab t) {
+		if (t == null) {
+			FragmentManager fragmentManager = getSupportFragmentManager();
 			fragmentManager.popBackStack(); // leave this fragment — probably redundant since activity finish() will kill backStack. Whatever.
 			leaveGame(); // leave GamePlayActivity
-
+			getSupportFragmentManager().executePendingTransactions();
+		} else {
+			this.displayTab(t, false);
 		}
-
-		getSupportFragmentManager().executePendingTransactions();
-		setAsFrontmostFragment(itemName);
-//		setActionBarTitle(itemName);
-		onSectionAttached(itemName);
-
-//		this.listBackStackToLog(fragmentManager);
 	}
-
 
 	private void listBackStackToLog(FragmentManager fm) {
 		int count = fm.getBackStackEntryCount();
@@ -876,9 +819,9 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			else if (o instanceof Instance)
 				this.displayInstance((Instance) o);
 			else if (o instanceof Tab)
-				this.displayTab((Tab) o);
+				this.displayTab((Tab) o, false);
 			else if (InstantiableProtocol.class.isInstance(o))
-				this.displayObject(o);
+				this.displayObject(o, false);
 		}
 	}
 
@@ -1068,8 +1011,10 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		viewingInstantiableObject = true; // iOS happens in presentDisplay
 	}
 
-	public void displayObject(Object o) // - (void) displayObject:(NSObject <InstantiableProtocol>*)o
+	public void displayObject(Object o, boolean initialTab) // - (void) displayObject:(NSObject <InstantiableProtocol>*)o
 	{
+		// TODO use initialTab (copy logic from displayTab())
+
 //		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Entering displayObject instanceType: " + o.getClass().getName());
 		Log.d(AppConfig.LOGTAG + AppConfig.LOGTAG_D1, getClass().getSimpleName() + " Entering displayObject instanceType: " + o.getClass().getName());
 		String tag = "";
@@ -1162,10 +1107,151 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	}
 
 	// This (I'm guessing) is handling a selection in what we are calling the Nav Drawer
-	public void displayTab(Tab t) {
+	public void displayTab(Tab t, boolean initialTab) {
 		Log.d(AppConfig.LOGTAG, getClass().getSimpleName() + " Entering displayTab tabid: " + t.tab_id);
-//		instantiableViewController = nil; todo: Android?
-		mGamePlayTabSelectorViewController.requestDisplayTab(t);
+
+		String tabType = "";
+		if (t != null) tabType = t.type;
+
+//		Log.d(AppConfig.LOGTAG_D2, getClass().getSimpleName() + "onNavigationDrawerItemSelected with itemName: " + itemName + ", currently visible frag:" + mCurrentFragVisible );
+
+		if (mCurrentFragVisible != null && mCurrentFragVisible.contentEquals(tabType)) { // don't recreate if switching back to current fragment.
+			closeNavDrawer();
+			return;
+		}
+		// update the main content by replacing fragments
+		FragmentManager fragmentManager = getSupportFragmentManager();
+
+		if (tabType.equalsIgnoreCase("QUESTS")) {
+			this.questsViewFragment = QuestsViewFragment.newInstance(tabType);
+			String tag = this.questsViewFragment.toString();
+			if (initialTab) {
+				fragmentManager.beginTransaction()
+						.add(R.id.fragment_view_container, this.questsViewFragment, tag)
+						.addToBackStack(tag)
+						.attach(this.questsViewFragment)
+						.commit();
+			} else {
+				fragmentManager.beginTransaction()
+						.replace(R.id.fragment_view_container, this.questsViewFragment, tag)
+						.commit();
+			}
+		}
+		else if (tabType.equalsIgnoreCase("MAP")) {
+			this.mapViewFragment = MapViewFragment.newInstance(tabType);
+			String tag = this.mapViewFragment.toString();
+			if (initialTab) {
+				fragmentManager.beginTransaction()
+						.add(R.id.fragment_view_container, this.mapViewFragment, tag)
+						.addToBackStack(tag)
+						.attach(this.mapViewFragment)
+						.commit();
+			} else {
+				fragmentManager.beginTransaction()
+						.replace(R.id.fragment_view_container, this.mapViewFragment, tag)
+						.commit();
+			}
+		}
+		else if (tabType.equalsIgnoreCase("INVENTORY")) {
+			this.inventoryViewFragment = new InventoryViewFragment();
+			String tag = this.inventoryViewFragment.toString();
+			if (initialTab) {
+				fragmentManager.beginTransaction()
+						.add(R.id.fragment_view_container, this.inventoryViewFragment, tag)
+						.addToBackStack(tag)
+						.attach(this.inventoryViewFragment)
+						.commit();
+			} else {
+				fragmentManager.beginTransaction()
+						.replace(R.id.fragment_view_container, this.inventoryViewFragment, tag)
+						.commit();
+			}
+		}
+		else if (tabType.equalsIgnoreCase("SCANNER")) {
+			this.scannerViewFragment = ScannerViewFragment.newInstance(tabType);
+			String tag = this.scannerViewFragment.toString();
+			if (initialTab) {
+				fragmentManager.beginTransaction()
+						.add(R.id.fragment_view_container, this.scannerViewFragment, tag)
+						.addToBackStack(tag)
+						.attach(this.scannerViewFragment)
+						.commit();
+			} else {
+				fragmentManager.beginTransaction()
+						.replace(R.id.fragment_view_container, this.scannerViewFragment, tag)
+						.commit();
+			}
+		}
+		else if (tabType.equalsIgnoreCase("DECODER")) {
+			this.decoderViewFragment = DecoderViewFragment.newInstance(tabType);
+			String tag = this.decoderViewFragment.toString();
+			if (initialTab) {
+				fragmentManager.beginTransaction()
+						.add(R.id.fragment_view_container, this.decoderViewFragment, tag)
+						.addToBackStack(tag)
+						.attach(this.decoderViewFragment)
+						.commit();
+			} else {
+				fragmentManager.beginTransaction()
+						.replace(R.id.fragment_view_container, this.decoderViewFragment, tag)
+						.commit();
+			}
+		}
+		else if (tabType.equalsIgnoreCase("PLAYER")) { // todo: GamePlayPlayerFragment? What is this? Does it need to exists?
+			this.playerViewFragment = GamePlayPlayerFragment.newInstance(tabType);
+			String tag = this.playerViewFragment.toString();
+			if (initialTab) {
+				fragmentManager.beginTransaction()
+						.add(R.id.fragment_view_container, this.playerViewFragment, tag)
+						.addToBackStack(tag)
+						.attach(this.playerViewFragment)
+						.commit();
+			} else {
+				fragmentManager.beginTransaction()
+						.replace(R.id.fragment_view_container, this.playerViewFragment, tag)
+						.commit();
+			}
+		}
+		else if (tabType.equals("NOTEBOOK")) {
+			this.notebookViewFragment = NotebookViewFragment.newInstance(tabType);
+			String tag = this.notebookViewFragment.toString();
+			if (initialTab) {
+				fragmentManager.beginTransaction()
+						.add(R.id.fragment_view_container, this.notebookViewFragment, tag)
+						.addToBackStack(tag)
+						.attach(this.notebookViewFragment)
+						.commit();
+			} else {
+				fragmentManager.beginTransaction()
+						.replace(R.id.fragment_view_container, this.notebookViewFragment, tag)
+						.commit();
+			}
+		}
+		else if (tabType.equals("PLAQUE")) {
+			this.displayObject(mGame.plaquesModel.plaqueForId(t.content_id), initialTab);
+            this.plaqueViewFragment.tab = t;
+			return;
+		}
+		else if (tabType.equals("DIALOG")) {
+			this.displayObject(mGame.dialogsModel.dialogForId(t.content_id), initialTab);
+            this.dialogViewFragment.tab = t;
+			return;
+		}
+		else if (tabType.equals("ITEM")) {
+			this.displayObject(mGame.itemsModel.itemForId(t.content_id), initialTab);
+            this.itemViewFragment.tab = t;
+			return;
+		}
+		else if (tabType.equals("WEB_PAGE")) {
+			this.displayObject(mGame.webPagesModel.webPageForId(t.content_id), initialTab);
+            this.webPageViewFragment.tab = t;
+			return;
+		}
+
+		getSupportFragmentManager().executePendingTransactions();
+		setAsFrontmostFragment(tabType);
+		onSectionAttached(tabType);
+
 		this.tryDequeue(); //no 'closing event' for tab
 	}
 
