@@ -18,7 +18,7 @@ public class Instance {
 	public  String owner_type   = "";
 	public  long   owner_id     = 0;
 	public  long   qty          = 0;
-	public  long   infinite_qty = 0;  // Boolean as long
+	public  long   infinite_qty = 1;  // Boolean as long
 	public  long   factory_id   = 0;
 	//	public Date created;
 //	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");

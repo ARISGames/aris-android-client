@@ -1059,6 +1059,13 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			}
 			itemViewFragment.initContext(this);
 			itemViewFragment.initWithInstance(i);
+			if (itemViewFragment.getTag() == null) {
+				tag = itemViewFragment.toString();
+				FragmentTransaction ft = getSupportFragmentManager().beginTransaction(); // no change
+				ft.replace(R.id.fragment_view_container, itemViewFragment, tag); //set tag.
+				ft.addToBackStack(tag);
+				ft.commit();
+			}
 			fragViewToDisplay = itemViewFragment.getTag(); // same end result as vc var in iOS
 //			vc = new ItemViewController(i delegate:self);
 		}
@@ -1071,6 +1078,13 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 			}
 			dialogViewFragment.initContext(this);
 			dialogViewFragment.initWithInstance(i);
+			if (dialogViewFragment.getTag() == null) {
+				tag = dialogViewFragment.toString();
+				FragmentTransaction ft = getSupportFragmentManager().beginTransaction(); // no change
+				ft.replace(R.id.fragment_view_container, dialogViewFragment, tag); //set tag.
+				ft.addToBackStack(tag);
+				ft.commit();
+			}
 			fragViewToDisplay = dialogViewFragment.getTag(); // same end result as vc var in iOS
 //			vc = new DialogViewController(i delegate:self);
 		}
