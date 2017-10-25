@@ -170,6 +170,7 @@ public class QuestsViewFragment extends Fragment {
 								mGamePlayAct.displayQuest(q, "ACTIVE");
 							}
 						});
+						itemView.setClickable(true);
 						llQuestsListLayout.addView(itemView);
 					}
 				}
@@ -201,6 +202,7 @@ public class QuestsViewFragment extends Fragment {
 								mGamePlayAct.displayQuest(q, "COMPLETE");
 							}
 						});
+						itemView.setClickable(true);
 						llQuestsListLayout.addView(itemView);
 					}
 				}

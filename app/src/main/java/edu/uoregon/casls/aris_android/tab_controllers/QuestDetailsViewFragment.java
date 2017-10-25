@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -78,16 +79,66 @@ public class QuestDetailsViewFragment extends Fragment {
 
     // todo: call from onCreateView?
     public void loadView() {
+        String function = mMode.equals("ACTIVE") ? mQuest.active_function : mQuest.complete_function;
+        if (function.equals("NONE")) {
+            RelativeLayout continueFooter = (RelativeLayout) mQuestDetailsView.findViewById(R.id.rl_quest_footer);
+            continueFooter.setVisibility(View.INVISIBLE);
+        }
+        else {
+            ImageView ivContinueArrow = (ImageView) mQuestDetailsView.findViewById(R.id.iv_quest_footer_right_arrow);
+            ivContinueArrow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    continueButtonTouched(v);
+                }
+            });
+            ivContinueArrow.bringToFront();
+            ivContinueArrow.setClickable(true);
+        }
+
+        ImageButton ibGoBack = (ImageButton) mQuestDetailsView.findViewById(R.id.ib_quest_go_back);
+        ibGoBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissSelf();
+            }
+        });
+
         this.loadQuest();
     }
 
     public void loadQuest() {
+        if (!mQuest.name.isEmpty()) {
+            TextView tvQuestTitle = (TextView) mQuestDetailsView.findViewById(R.id.tv_note_title);
+            tvQuestTitle.setText(mQuest.name);
+        }
+        String description = mMode.equals("ACTIVE") ? mQuest.active_desc : mQuest.complete_desc;
+        if (!description.contentEquals("")) { // load the description webview
+            mAwvPlaqueDesc = (ARISWebView) mQuestDetailsView.findViewById(R.id.awv_plaque_desc);
+            mAwvPlaqueDesc.initContextAndInjectJavaScript(mGamePlayActivity);
+            mAwvPlaqueDesc.loadHTMLString(description);
+        }
+        long media_id = mMode.equals("ACTIVE") ? mQuest.active_media_id : mQuest.complete_media_id;
+        Media media = mGamePlayActivity.mMediaModel.mediaForId(media_id);
+        if (media != null) {
+            mediaViewFrag.setMedia(media);
+//			[mediaView setMedia:media];
+        }
     }
 
     public void continueButtonTouched(View v) {
+        String function = mMode.equals("ACTIVE") ? mQuest.active_function : mQuest.complete_function;
+
+        if (function.equals("JAVASCRIPT")) {} // [webView hookWithParams:@""];
+        else if (function.equals("NONE")) return;
+        else if (function.equals("PICKGAME")) {} // [_MODEL_ leaveGame];
+        else mGamePlayActivity.displayTab(mGamePlayActivity.mGame.tabsModel.tabForType(function), false);
     }
 
     private void dismissSelf() {
+        if (mListener != null) {
+            mListener.fragmentQuestDismiss();
+        }
     }
 
     @Override
