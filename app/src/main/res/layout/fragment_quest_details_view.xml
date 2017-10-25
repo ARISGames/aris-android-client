@@ -1,0 +1,94 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context=".tab_controllers.QuestDetailsViewFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text = "Quest"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/tv_note_title"/>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrlv_quest_desc_and_media"
+        android:layout_below="@+id/tv_note_title"
+        android:layout_centerHorizontal="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rl_quest_desc_and_media">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fl_quest_media_view_container"/>
+
+            <!--<include-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--layout="@layout/fragment_arismedia_view"-->
+                <!--android:id="@+id/include_arismedia_frag"/>-->
+
+            <view
+                class="edu.uoregon.casls.aris_android.ARISWebView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/awv_quest_desc"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/fl_quest_media_view_container"/>
+
+            <!--<edu.uoregon.casls.aris_android.ARISWebView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/wv_quest_desc"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:layout_below="@+id/fl_quest_media_view_container"/>-->
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/rl_quest_footer">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Continue"
+            android:id="@+id/tv_quest_continue"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/iv_quest_footer_right_arrow"
+            android:layout_toStartOf="@+id/iv_quest_footer_right_arrow"
+            android:background="#fffefefe"
+            android:textSize="@dimen/textsize_large"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:paddingBottom="5dp"
+            android:paddingRight="10dp"/>
+        <!-- Right end arrow  -->
+        <ImageView
+            android:id="@+id/iv_quest_footer_right_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/arrow_forward_2x"
+            android:layout_alignParentBottom="false"
+            android:paddingBottom="5dp"
+            android:layout_marginBottom="5dp"/>
+    </RelativeLayout>
+
+</RelativeLayout>

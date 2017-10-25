@@ -48,6 +48,7 @@ import edu.uoregon.casls.aris_android.data_objects.Item;
 import edu.uoregon.casls.aris_android.data_objects.Media;
 import edu.uoregon.casls.aris_android.data_objects.Note;
 import edu.uoregon.casls.aris_android.data_objects.Plaque;
+import edu.uoregon.casls.aris_android.data_objects.Quest;
 import edu.uoregon.casls.aris_android.data_objects.Scene;
 import edu.uoregon.casls.aris_android.data_objects.Tab;
 import edu.uoregon.casls.aris_android.data_objects.Trigger;
@@ -65,6 +66,7 @@ import edu.uoregon.casls.aris_android.tab_controllers.AttributesViewFragment;
 import edu.uoregon.casls.aris_android.tab_controllers.DecoderViewFragment;
 import edu.uoregon.casls.aris_android.tab_controllers.InventoryViewFragment;
 import edu.uoregon.casls.aris_android.tab_controllers.MapViewFragment;
+import edu.uoregon.casls.aris_android.tab_controllers.QuestDetailsViewFragment;
 import edu.uoregon.casls.aris_android.tab_controllers.QuestsViewFragment;
 import edu.uoregon.casls.aris_android.tab_controllers.ScannerViewFragment;
 import edu.uoregon.casls.aris_android.tab_controllers.NotebookViewFragment;
@@ -78,6 +80,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 		ItemViewFragment.OnFragmentInteractionListener,
 		MapViewFragment.OnFragmentInteractionListener,
 		PlaqueViewFragment.OnFragmentInteractionListener,
+		QuestDetailsViewFragment.OnFragmentInteractionListener,
 		WebPageViewFragment.OnFragmentInteractionListener {
 
 
@@ -109,6 +112,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	public InventoryViewFragment  inventoryViewFragment;
 	public MapViewFragment        mapViewFragment;
 	public QuestsViewFragment     questsViewFragment;
+	public QuestDetailsViewFragment questDetailsViewFragment;
 	public ScannerViewFragment    scannerViewFragment;
 	public NotebookViewFragment   notebookViewFragment;
 	// object_controllers
@@ -732,6 +736,17 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 	}
 
 	@Override
+	public void fragmentQuestDismiss() {
+		if (questDetailsViewFragment != null) {
+			FragmentManager fm = getSupportFragmentManager();
+			fm.popBackStack();
+			this.hideNavBar();
+		}
+		this.instantiableViewControllerRequestsDismissal(mGame.instancesModel.instanceForId(0));
+		questDetailsViewFragment = null;
+	}
+
+	@Override
 	public void fragmentWebPageViewDismiss() {
 
 		if (webPageViewFragment != null) {
@@ -1009,6 +1024,23 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 //		ARISNavigationController *nav = new ARISNavigationController alloc] initWithRootViewController:vc);
 //		this.presentDisplay(nav);
 		viewingInstantiableObject = true; // iOS happens in presentDisplay
+	}
+
+	public void displayQuest(Quest q, String mode) {
+		questDetailsViewFragment = new QuestDetailsViewFragment();
+		questDetailsViewFragment.initContext(this);
+		questDetailsViewFragment.mQuest = q;
+		questDetailsViewFragment.mMode = mode;
+
+		String tag = questDetailsViewFragment.toString();
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.replace(R.id.fragment_view_container, questDetailsViewFragment, tag);
+		ft.addToBackStack(tag);
+		ft.commit();
+		getSupportFragmentManager().executePendingTransactions();
+		setAsFrontmostFragment(tag);
+
+		showInstantiableFragment(tag, mGame.instancesModel.instanceForId(0));
 	}
 
 	public void displayObject(Object o, boolean initialTab) // - (void) displayObject:(NSObject <InstantiableProtocol>*)o

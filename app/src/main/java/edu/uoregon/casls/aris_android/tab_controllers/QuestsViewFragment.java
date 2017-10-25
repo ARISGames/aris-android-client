@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -158,11 +159,17 @@ public class QuestsViewFragment extends Fragment {
 				}
 				// populate with active quests.
 				else {
-					for (Quest q : activeQuests) {
+					for (final Quest q : activeQuests) {
 						LayoutInflater inflater = (LayoutInflater) mGamePlayAct.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 						final View itemView = inflater.inflate(R.layout.quests_list_item, null);
 						TextView tvItemName = (TextView) itemView.findViewById(R.id.tv_quest_item_name);
 						tvItemName.setText(q.name);
+						itemView.setOnClickListener(new View.OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								mGamePlayAct.displayQuest(q, "ACTIVE");
+							}
+						});
 						llQuestsListLayout.addView(itemView);
 					}
 				}
@@ -183,11 +190,17 @@ public class QuestsViewFragment extends Fragment {
 				}
 				// populate with completed quests.
 				else {
-					for (Quest q : completedQuests) {
+					for (final Quest q : completedQuests) {
 						LayoutInflater inflater = (LayoutInflater) mGamePlayAct.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 						final View itemView = inflater.inflate(R.layout.quests_list_item, null);
 						TextView tvItemName = (TextView) itemView.findViewById(R.id.tv_quest_item_name);
 						tvItemName.setText(q.name);
+						itemView.setOnClickListener(new View.OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								mGamePlayAct.displayQuest(q, "COMPLETE");
+							}
+						});
 						llQuestsListLayout.addView(itemView);
 					}
 				}
