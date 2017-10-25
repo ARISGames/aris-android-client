@@ -30,7 +30,7 @@ public class QuestDetailsViewFragment extends Fragment {
     public String mMode;
     public        ARISMediaViewFragment mediaViewFrag;
     public static View                  mQuestDetailsView;
-    public ARISWebView mAwvPlaqueDesc;
+    public ARISWebView mAwvQuestDesc;
 
     public transient GamePlayActivity mGamePlayActivity;
 
@@ -112,11 +112,11 @@ public class QuestDetailsViewFragment extends Fragment {
             TextView tvQuestTitle = (TextView) mQuestDetailsView.findViewById(R.id.tv_note_title);
             tvQuestTitle.setText(mQuest.name);
         }
-        String description = mMode.equals("ACTIVE") ? mQuest.active_desc : mQuest.complete_desc;
+        String description = mMode.equals("ACTIVE") ? mQuest.active_description : mQuest.complete_description;
         if (!description.contentEquals("")) { // load the description webview
-            mAwvPlaqueDesc = (ARISWebView) mQuestDetailsView.findViewById(R.id.awv_plaque_desc);
-            mAwvPlaqueDesc.initContextAndInjectJavaScript(mGamePlayActivity);
-            mAwvPlaqueDesc.loadHTMLString(description);
+            mAwvQuestDesc = (ARISWebView) mQuestDetailsView.findViewById(R.id.awv_quest_desc);
+            mAwvQuestDesc.initContextAndInjectJavaScript(mGamePlayActivity);
+            mAwvQuestDesc.loadHTMLString(description);
         }
         long media_id = mMode.equals("ACTIVE") ? mQuest.active_media_id : mQuest.complete_media_id;
         Media media = mGamePlayActivity.mMediaModel.mediaForId(media_id);
@@ -129,9 +129,11 @@ public class QuestDetailsViewFragment extends Fragment {
     public void continueButtonTouched(View v) {
         String function = mMode.equals("ACTIVE") ? mQuest.active_function : mQuest.complete_function;
 
-        if (function.equals("JAVASCRIPT")) {} // [webView hookWithParams:@""];
+        if (function.equals("JAVASCRIPT")) {
+            if (mAwvQuestDesc != null) mAwvQuestDesc.hookWithParams("");
+        }
         else if (function.equals("NONE")) return;
-        else if (function.equals("PICKGAME")) {} // [_MODEL_ leaveGame];
+        else if (function.equals("PICKGAME")) mGamePlayActivity.leaveGame();
         else mGamePlayActivity.displayTab(mGamePlayActivity.mGame.tabsModel.tabForType(function), false);
     }
 
