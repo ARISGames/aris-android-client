@@ -171,22 +171,28 @@ public class ItemViewFragment extends Fragment {
 		long amtCanDestroy = mGamePlayActivity.mGame.playerInstancesModel.qtyOwnedForItem(mItem.item_id);
 
 		if (amtCanDestroy > 1) {
-			final AlertDialog alertDialog = new AlertDialog.Builder(mGamePlayActivity).create();
+			AlertDialog.Builder alertDialog = new AlertDialog.Builder(mGamePlayActivity);
 			final EditText etQty = new EditText(mGamePlayActivity);
+			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+					LinearLayout.LayoutParams.MATCH_PARENT,
+					LinearLayout.LayoutParams.MATCH_PARENT);
+			lp.setMargins(10, 0, 10, 0);
+			etQty.setLayoutParams(lp);
 			etQty.setHint("Qty?");
 			etQty.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+			alertDialog.setView(etQty);
 			alertDialog.setTitle("Destroy How Many?");
 			alertDialog.setMessage("Enter quantity to destroy");
-			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Destroy", Message.obtain());
-			alertDialog.setView(etQty);
+			alertDialog.setPositiveButton("Destroy", new DialogInterface.OnClickListener(){
+				public void onClick(DialogInterface dialog, int whichButton) {
+					long qty = Long.decode(etQty.getText().toString().isEmpty() ? "1" : etQty.getText().toString());
+					destroyItemQty(qty);
+				}
+			} );
 			alertDialog.show();
-
-			long qty = Long.decode(etQty.getText().toString().isEmpty() ? "1" : etQty.getText().toString());
-			destroyItemQty(qty);
 		}
 		else if (amtCanDestroy > 0)
-			destroyItemQty(1);
-
+			dropItemQty(1);
 	}
 
 	private void destroyItemQty(long qty) {
@@ -219,13 +225,10 @@ public class ItemViewFragment extends Fragment {
 			alertDialog.setMessage("Enter quantity to drop");
 			alertDialog.setPositiveButton("Drop", new DialogInterface.OnClickListener(){
 				public void onClick(DialogInterface dialog, int whichButton) {
-//					qty = Long.decode(etQty.getText().toString().isEmpty() ? "1" : etQty.getText().toString());
-//					String YouEditTextValue = etQty.getText().toString();
 					long qty = Long.decode(etQty.getText().toString().isEmpty() ? "1" : etQty.getText().toString());
 					dropItemQty(qty);
 				}
 			} );
-//			alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Drop", Message.obtain());
 			alertDialog.show();
 
 		}

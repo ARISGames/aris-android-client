@@ -9,6 +9,7 @@ import java.util.Map;
 
 import edu.uoregon.casls.aris_android.GamePlayActivity;
 import edu.uoregon.casls.aris_android.data_objects.Instance;
+import edu.uoregon.casls.aris_android.tab_controllers.InventoryViewFragment;
 
 /**
  * Created by smorison on 8/20/15.
@@ -54,6 +55,11 @@ public class InstancesModel extends ARISModel {
 		n_player_data_received++;
 
 		mGamePlayAct.mDispatch.player_piece_available(); // _ARIS_NOTIF_SEND_(@"PLAYER_PIECE_AVAILABLE",nil,nil);
+
+		InventoryViewFragment inv = mGamePlayAct.inventoryViewFragment;
+		if (inv != null && mGamePlayAct.mCurrentFragVisible == inv.getTag()) {
+			inv.updateList();
+		}
 	}
 
 	public void gameInstancesReceived(List<Instance> instances) {
@@ -205,6 +211,9 @@ public class InstancesModel extends ARISModel {
 
 		if (!mGamePlayAct.mGame.network_level.contentEquals("LOCAL"))
 			mGamePlayAct.mAppServices.setQtyForInstanceId(instance_id, qty); // _SERVICES_ setQtyForInstanceId:instance_id qty:qty;
+
+		this.requestPlayerData();
+
 		return qty;
 	}
 
