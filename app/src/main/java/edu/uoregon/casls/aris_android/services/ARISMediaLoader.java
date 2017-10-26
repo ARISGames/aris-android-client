@@ -80,8 +80,9 @@ public class ARISMediaLoader {
 	}
 
 	public void loadMediaFromMR(MediaResult mr) {
+		boolean audioVideo = mr.media.type() != "IMAGE";
 		Log.e(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, " Load Media from MR Id:" + mr.media.mediaCD.media_id );
-		if (mr.media.thumb != null) {
+		if (mr.media.thumb != null || (audioVideo && mr.media.localURL() != null)) {
 			Log.e(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, " Load Media from MR Id:" + mr.media.mediaCD.media_id + " Has Thumnail. All Done Loading");
 			this.mediaLoadedForMR(mr);
 		} // done. Media is fully loaded — presumably

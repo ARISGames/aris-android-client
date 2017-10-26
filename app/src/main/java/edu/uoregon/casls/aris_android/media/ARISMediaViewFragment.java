@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import java.io.ByteArrayOutputStream;
@@ -295,7 +296,18 @@ public class ARISMediaViewFragment extends Fragment {
 		// sample URIs one local, one www
 //		videoView.setVideoURI(Uri.parse("https://linguafolio.uoregon.edu/uploads/video/201510/16/61712_20151016-071909_732.mp4"));
 //		videoView.setVideoURI(Uri.parse("android.resource://" + mGamePlayAct.getPackageName() + "/" + R.raw.raw_video_sample));
-		videoView.setVideoURI(Uri.parse(media.mediaCD.localURL.toString()));
+		if (media.mediaCD.localURL != null) {
+			videoView.setVideoURI(Uri.parse(media.localURL().toString()));
+		} else {
+			videoView.setVideoURI(Uri.parse(media.remoteURL().toString()));
+		}
+		videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+			@Override
+			public boolean onError(MediaPlayer mp, int what, int extra) {
+				Toast.makeText(mGamePlayAct, "Media error: " + what + ", " + extra, Toast.LENGTH_SHORT).show();
+				return true;
+			}
+		});
 		videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 			@Override
 			public void onPrepared(MediaPlayer mp) {
