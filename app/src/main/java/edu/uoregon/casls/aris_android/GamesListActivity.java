@@ -180,7 +180,9 @@ public class GamesListActivity extends AppCompatActivity {
 //		savedInstanceState.putString("display_name", user.display_name);
 //		savedInstanceState.putString("media_id", 		user.media_id);
 //		savedInstanceState.putString("read_write_key", 	user.read_write_key);
-		savedInstanceState.putString("games_map", mJsonGamesList.toString());
+		if (mJsonGamesList != null) {
+			savedInstanceState.putString("games_map", mJsonGamesList.toString());
+		}
 		savedInstanceState.putInt("total_games_count", mTotalGamesCount);
 		savedInstanceState.putInt("total_games_updated", mFullGamesUpdated);
 
@@ -363,21 +365,6 @@ public class GamesListActivity extends AppCompatActivity {
 		String request_url = AppConfig.SERVER_URL_MOBILE + requestApi;
 
 		user.location = AppUtils.getGeoLocation(context);
-		// todo: check for valid location before allowing server calls. NPE will result otherwise.
-		if (user.location == null ) {
-			new AlertDialog.Builder(this)
-					.setIcon(android.R.drawable.ic_dialog_alert)
-					.setTitle("No GPS Location Available")
-					.setMessage("Please make sure your device is GPS enabled before proceeding.")
-					.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-						}
-					})
-//					.setNegativeButton("No", null)
-					.show();
-
-		}
 		rqParams.put("request", requestApi);
 		StringEntity entity;
 		entity = null;
@@ -386,31 +373,37 @@ public class GamesListActivity extends AppCompatActivity {
 		try {
 			jsonMain.put("user_id", user.user_id);
 			jsonMain.put("page", 0); // todo: determine proper value for page. 0 is just a stand-in value.
+			double lat = 0;
+			double lng = 0;
+			if (user.location != null) {
+				lat = user.location.getLatitude();
+				lng = user.location.getLongitude();
+			}
 
 			switch (requestApi) {
 				case (HTTP_GET_NEARBY_GAMES_REQ_API):
-					jsonMain.put("latitude", user.location.getLatitude());
-					jsonMain.put("longitude", user.location.getLongitude());
+					jsonMain.put("latitude", lat);
+					jsonMain.put("longitude", lng);
 					jsonAuth.put("user_name", user.user_name);
 					break;
 				case (HTTP_GET_POPULAR_GAMES_REQ_API):
 					//sample: {"interval":"WEEK","longitude":"-89.409260","user_id":"1","latitude":"43.073128","page":0,"auth":{"user_id":1,"key":"F7...X4"}}
-					jsonMain.put("longitude", user.location.getLongitude());
+					jsonMain.put("latitude", lat);
+					jsonMain.put("longitude", lng);
 					jsonMain.put("interval", auxData);
-					jsonMain.put("latitude", user.location.getLatitude());
 					jsonAuth.put("user_name", user.user_name);
 					break;
 				case (HTTP_GET_PLAYER_GAMES_REQ_API):
 				case (HTTP_GET_RECENT_GAMES_REQ_API): // get player and get recent use the same Req param set.
 					//sample: {"longitude":"-89.409260","user_id":"1","latitude":"43.073128","page":0,"auth":{"user_id":1,"key":"F7...yzX4"}}
-					jsonMain.put("latitude", user.location.getLatitude());
-					jsonMain.put("longitude", user.location.getLongitude());
+					jsonMain.put("latitude", lat);
+					jsonMain.put("longitude", lng);
 					jsonAuth.put("user_name", user.user_name);
 					break;
 				case (HTTP_GET_SEARCH_GAMES_REQ_API):
 					//sample: {"auth":{"user_id":1,"key":"F7...zX4"},"longitude":"-89.409260","user_id":"1","latitude":"43.073128","text":"","page":0}
-					jsonMain.put("latitude", user.location.getLatitude());
-					jsonMain.put("longitude", user.location.getLongitude());
+					jsonMain.put("latitude", lat);
+					jsonMain.put("longitude", lng);
 					jsonMain.put("text", auxData);
 					break;
 				case (HTTP_GET_FULL_GAME_REQ_API):

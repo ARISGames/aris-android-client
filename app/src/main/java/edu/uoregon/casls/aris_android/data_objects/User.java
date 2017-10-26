@@ -45,8 +45,10 @@ public class User {
 
 	public void updateToCurrentLocation(Context context) {
 		location = AppUtils.getGeoLocation(context);
-		latitude = location.getLatitude();
-		longitude = location.getLongitude();
+		if (location != null) {
+			latitude = location.getLatitude();
+			longitude = location.getLongitude();
+		}
 	}
 
 	public void initWithJson(JSONObject jsonUser) throws JSONException {
@@ -82,8 +84,8 @@ public class User {
 			jsonUser.put("email", email);
 			jsonUser.put("media_id", media_id);
 			jsonUser.put("read_write_key", read_write_key);
-			jsonUser.put("latitude", String.valueOf(location.getLatitude()));
-			jsonUser.put("longitude", String.valueOf(location.getLongitude()));
+			jsonUser.put("latitude", location == null ? "0" : String.valueOf(location.getLatitude()));
+			jsonUser.put("longitude", location == null ? "0" : String.valueOf(location.getLongitude()));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

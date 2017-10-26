@@ -176,7 +176,11 @@ public class MapViewFragment extends Fragment {
 		mGamePlayAct.hideNavBar();
 		//get current location of player
 		Location l = AppUtils.getGeoLocation(mGamePlayAct);
-		player_latlng = new LatLng(l.getLatitude(), l.getLongitude());
+		if (l == null) {
+			player_latlng = new LatLng(0, 0);
+		} else {
+			player_latlng = new LatLng(l.getLatitude(), l.getLongitude());
+		}
 
 		setUpMap();
 
@@ -544,7 +548,8 @@ public class MapViewFragment extends Fragment {
 
 	public void centerMapOnPlayer() {
 		Location l = AppUtils.getGeoLocation(mGamePlayAct);
-		CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(l.getLatitude(), l.getLongitude())).zoom(17.0f).build();
+		LatLng latLng = l == null ? new LatLng(0, 0) : new LatLng(l.getLatitude(), l.getLongitude());
+		CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(17.0f).build();
 		CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
 //		mMap.moveCamera(cameraUpdate);
 		mMap.animateCamera(cameraUpdate);
@@ -592,7 +597,10 @@ public class MapViewFragment extends Fragment {
 				// get distance from player.
 				trigger.setLocationFromExistingLatLng();
 				// below is found in displayHUDWithTrigger in iOS
-				float distance = trigger.location.distanceTo(mGamePlayAct.mPlayer.location);
+				float distance = 40000000; // approx circumference of earth in meters
+				if (mGamePlayAct.mPlayer.location != null) {
+					distance = trigger.location.distanceTo(mGamePlayAct.mPlayer.location);
+				}
 				if (mGamePlayAct.mGame.map_offsite_mode != 0
 						|| trigger.infinite_distance != 0
 						|| (distance <= trigger.distance && mGamePlayAct.mPlayer.location != null)) {
