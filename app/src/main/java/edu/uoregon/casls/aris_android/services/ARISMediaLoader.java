@@ -80,9 +80,13 @@ public class ARISMediaLoader {
 	}
 
 	public void loadMediaFromMR(MediaResult mr) {
-		boolean audioVideo = mr.media.type() != "IMAGE";
+		boolean audioVideo = !(mr.media.type().equals("IMAGE"));
 		Log.e(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, " Load Media from MR Id:" + mr.media.mediaCD.media_id );
-		if (mr.media.thumb != null || (audioVideo && mr.media.localURL() != null)) {
+		if (audioVideo && mr.media.localURL() != null) {
+			Log.e(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, "Audio/video with media ID: " + mr.media.mediaCD.media_id + " downloaded to local URL");
+			this.mediaLoadedForMR(mr);
+		}
+		else if (mr.media.thumb != null) {
 			Log.e(AppConfig.LOGTAG + AppConfig.LOGTAG_D2, " Load Media from MR Id:" + mr.media.mediaCD.media_id + " Has Thumnail. All Done Loading");
 			this.mediaLoadedForMR(mr);
 		} // done. Media is fully loaded — presumably
@@ -438,6 +442,7 @@ public class ARISMediaLoader {
 		mGamePlayAct.mMediaModel.addOrUpdateMediaCD(mediaCDToLoad);
 
 		// try loading another media if needed
+		mediaDataLoaded++;
 		int loadMediaNext = mediaDataLoaded + LOAD_MEDIA_AT_ONCE - 1;
 		if (loadMediaNext < mGamePlayAct.mMediaModel.mediaIDsToLoad.size()) {
 			Integer mediaIdToLoad = mGamePlayAct.mMediaModel.mediaIDsToLoad.get(loadMediaNext);
