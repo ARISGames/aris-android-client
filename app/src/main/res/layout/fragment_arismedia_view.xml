@@ -15,8 +15,8 @@
         android:visibility="invisible"/>
 
     <VideoView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
         android:id="@+id/vidvw_media_video"
         android:layout_gravity="center"
         android:visibility="invisible"/>
@@ -25,5 +25,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/wv_media_gif"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:visibility="invisible"/>
 </FrameLayout>
