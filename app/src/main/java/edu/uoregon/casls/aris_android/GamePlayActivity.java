@@ -7,6 +7,7 @@ import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -1272,6 +1273,12 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 						.replace(R.id.fragment_view_container, this.notebookViewFragment, tag)
 						.commit();
 			}
+		}
+		else if (tabType.equals("SIFTR")) {
+			Intent intent = new Intent(Intent.ACTION_VIEW,
+			     Uri.parse("siftr://siftr?aris=1&siftr_id=" + mGame.game_id));
+			startActivity(intent);
+			return;
 		}
 		else if (tabType.equals("PLAQUE")) {
 			this.displayObject(mGame.plaquesModel.plaqueForId(t.content_id), initialTab);
