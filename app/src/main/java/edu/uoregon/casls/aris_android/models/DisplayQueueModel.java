@@ -238,8 +238,10 @@ public class DisplayQueueModel extends ARISModel {
 		for (Trigger t : pt) {
 			if (t.type.contentEquals("TIMER")) {
 				boolean inQueue = false;
-				for (Object o : displayQueue) {
-					if (o == t) inQueue = true;
+				if (displayQueue != null) {
+					for (Object o : displayQueue) {
+						if (o == t) inQueue = true;
+					}
 				}
 				if (!inQueue && t.time_left > 0)
 					t.time_left--;
