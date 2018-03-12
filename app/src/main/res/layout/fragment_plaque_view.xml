@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/scrlv_plaque_desc_and_media"
         android:layout_below="@+id/tv_note_title"
+        android:layout_above="@+id/rl_plaque_footer"
         android:layout_centerHorizontal="true">
 
         <RelativeLayout
