@@ -210,9 +210,12 @@ public class MapViewFragment extends Fragment {
 					if (markerToRemove.triggerZoneCircle != null)
 						markerToRemove.triggerZoneCircle.remove(); // [mapView removeOverlay:mvao.overlay];
 					markersAndCircles.remove(markerToRemove); // [annotationOverlays removeObject:mvao];
-					markerCircleByTrigId.get(markerToRemove.trigger_id).triggerMarker.remove();
-					markerCircleByTrigId.get(markerToRemove.trigger_id).triggerZoneCircle.remove();
-					markerCircleByTrigId.remove(markerToRemove.trigger_id);
+					MapViewMarkerCircle circle = markerCircleByTrigId.get(markerToRemove.trigger_id);
+					if (circle != null) {
+						circle.triggerMarker.remove();
+						circle.triggerZoneCircle.remove();
+						markerCircleByTrigId.remove(markerToRemove.trigger_id);
+					}
 				}
 			}
 		}
