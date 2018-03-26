@@ -27,8 +27,8 @@ public class Trigger {
 	public long     seconds       = 0;
 	public long     time_left     = 0;
 
-	public Marker triggerMarker; // Google Marker - set when map is generated (aka annotation in iOS)
-	public Circle triggerZoneCircle;
+	public transient Marker triggerMarker; // Google Marker - set when map is generated (aka annotation in iOS)
+	public transient Circle triggerZoneCircle;
 
 	public long requirement_root_package_id = 0;
 
