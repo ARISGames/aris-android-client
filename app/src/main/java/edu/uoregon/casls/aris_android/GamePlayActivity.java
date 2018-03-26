@@ -153,7 +153,7 @@ public class GamePlayActivity extends AppCompatActivity // <-- was ActionBarActi
 
 		mNavigationDrawerFragment = (GamePlayNavDrawerFragment)
 				getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-		mTitle = getTitle();
+		mTitle = "Loading...";
 		appPrefs = getSharedPreferences(AppConfig.APP_PREFS_FILE_NAME, MODE_PRIVATE);
 
 		Gson gson = new Gson();
