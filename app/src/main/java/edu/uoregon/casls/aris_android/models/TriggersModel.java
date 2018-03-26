@@ -76,6 +76,10 @@ public class TriggersModel extends ARISModel {
 		List<Trigger> invalidatedTriggers = new ArrayList<>();
 
 		for (Trigger newTrigger : newTriggers) {
+			if (newTrigger.type.contentEquals("TIMER")) {
+				newTrigger.time_left = newTrigger.seconds;
+			}
+
 			newTriggerId = newTrigger.trigger_id;
 
 			if (!triggers.containsKey(newTriggerId)) {
