@@ -1,0 +1,59 @@
+<resources>
+    <string name="app_name">Aris Android</string>
+    <string name="title_section1">Seção 1</string>
+    <string name="title_section2">Seção 2</string>
+    <string name="title_section3">Seção 3</string>
+
+    <string name="navigation_drawer_open">Abrir aba de navegação</string>
+    <string name="navigation_drawer_close">Fechar aba de navegação</string>
+
+    <string name="action_example">Ação exemplo</string>
+
+    <string name="action_settings">Configuraçães</string>
+    <string name="username">ID ARIS</string>
+    <string name="password">Senha</string>
+    <string name="password_again">/Confirme sua senha</string>
+    <string name="Login">Entrar</string>
+    <string name="Sign_Me_Up">Cadastrar</string>
+    <string name="sign_in_button">Botão de entrar</string>
+    <string name="create_account">Cadastrar nova conta</string>
+    <string name="forgot_password">Esqueceu sua senha?</string>
+    <string name="title_activity_create_account">Atividade de criação de conta</string>
+
+    <string name="hello_world">Olá mundo!</string>
+    <string name="title_activity_forgot_password">Atividade de esqueceu a senha</string>
+    <string name="username_prompt">ID ARIS</string>
+    <string name="error_field_too_short">A senha deve ter pelo menos 5 caracteres</string>
+    <string name="error_password_required">Digite uma senha</string>
+    <string name="error_password_again_required">Confirme sua senha</string>
+    <string name="error_passwords_must_match">As senhas devem ser iguais</string>
+    <string name="error_username_required">Digite seu nome de usuário</string>
+    <string name="prompt_email_to_reset">Email para envio da senha</string>
+    <string name="password_reset_message">Um email será enviado para o endereço acima com instruções para restaurar sua senha.</string>
+    <string name="title_activity_games_list_nearby">Lista de jogos nas proximidades</string>
+
+    <string name="title_activity_profile">Perfil da atividade</string>
+    <string name="title_activity_game_cover_page">Atividade da página da capa de jogo</string>
+    <string name="title_activity_game_play">Atividade do jogo</string>
+
+    <!-- any changes to this array must also be reflected in Config.gameDrawerItemIconByName[] array. -->
+    <string-array name="game_drawer_list_items">
+        <item>Missões</item>
+        <item>Mapa</item>
+        <item>Inventário</item>
+        <item>Scanner</item>
+        <item>Decodificador</item>
+        <item>Aumentado</item>
+        <item>Jogador</item>
+        <item>Caderno</item>
+        <item>Notas</item>
+        <item>Diálogo</item>
+        <item>Item</item>
+        <item>Placa</item>
+        <item>Página da web</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
